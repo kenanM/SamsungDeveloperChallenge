@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-
 import com.samsung.comp.football.Player.TeamColour;
 
 public class Game implements ApplicationListener {
@@ -20,34 +19,19 @@ public class Game implements ApplicationListener {
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
 
-	
-	public enum GameState {
-		INPUT, EXECUTION
-	}
-	
 	SpriteBatch batch;
 	OrthographicCamera camera;
 	List<Player> players;
-	private GameState gameState = GameState.INPUT;
-	
-	public GameState getGameState() {
-		return gameState;
-	}
-
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
-	}
 
 	@Override
 	public void create() {
+
 		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
 		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
-		int displayWidth = Gdx.graphics.getWidth();
-		int displayHeight = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, displayWidth, displayHeight);
+		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
 
 		// create the players
@@ -60,23 +44,8 @@ public class Game implements ApplicationListener {
 		// Randomly assign each player an X,Y coordinate
 		Random random = new Random();
 		for (Player player : players) {
-			
-			// Resolution based on display area (float)
-//			float x = random.nextFloat() * displayWidth;
-//			float y = random.nextFloat() * displayHeight;
-			
-			// Fixed resolution
-//			player.x = random.nextFloat() * 800;
-//			player.y = random.nextFloat() * 480;
-			
-			// Resolution based on display area (int)
-			int x = random.nextInt(displayWidth);
-			int y = random.nextInt(displayHeight);
-			
-			player.setPlayerPosition(x, y);
-			// Need to run a player.update() to set the draw locations 
-			player.update();
-			
+			player.x = random.nextFloat() * 800;
+			player.y = random.nextFloat() * 480;
 		}
 	}
 
@@ -95,23 +64,9 @@ public class Game implements ApplicationListener {
 		batch.setProjectionMatrix(camera.combined);
 
 		// Update each players position/status
-		for (Player player : players) {			
-			if (gameState == GameState.EXECUTION){
-				player.update();
-				
-				// Check if all actions are complete, end the execution phase if true.
-				boolean allActionsComplete=true;
-				for (Action action : player.getActions() ) {
-					allActionsComplete = allActionsComplete && action.isComplete();
-				}
-				
-				if (allActionsComplete){
-					gameState = GameState.INPUT;
-				}
-			}
-			
+		for (Player player : players) {
+			player.update();
 		}
-
 
 		// begin a new batch and draw the players
 		batch.begin();
