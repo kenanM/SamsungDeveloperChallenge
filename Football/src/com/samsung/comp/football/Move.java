@@ -1,36 +1,42 @@
 package com.samsung.comp.football;
 
-
 import android.graphics.Point;
 
-
-
 public class Move extends Action {
-	
-	private Point position;
-	
-	
-	public Move(int x, int y) {
-		position = new Point(x, y);
+
+	Point[] path;
+	int positionInPath;
+	Player player;
+	Action nextAction;
+
+	public Move(Player player, Point[] path) {
+		this.player = player;
+		this.path = path;
+		this.nextAction = new Stop();
 	}
 
-	
-	// TODO This currently just teleports the player. No checks on if the space is occupied or routing are done. 
-	// 
+	public Move(Player player, Point[] path, Action nextAction) {
+		this.player = player;
+		this.path = path;
+		this.nextAction = nextAction;
+	}
+
 	@Override
-	public boolean executeAction(Player player) {
-		
-		player.setPlayerPosition(position);
-		
-		// player moves towards the specified position,
-//		int xDistance = player.getPlayerPosition().x - this.position.x;
-//		int yDistance = player.getPlayerPosition().y - this.position.y;
+	public void executeNextStep() {
 
-		complete = player.getPlayerPosition() == position;
-		return true;
+		if (complete) {
+			nextAction.executeNextStep();
+			return;
+		}
+
+		positionInPath++;
+		Point nextPosition = path[positionInPath];
+		player.x = nextPosition.x;
+		player.y = nextPosition.y;
+
+		if (positionInPath == path.length) {
+			complete = true;
+		}
 	}
-			
-	
-	
-	
+
 }

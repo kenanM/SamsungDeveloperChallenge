@@ -19,9 +19,15 @@ public class Game implements ApplicationListener {
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
 
-	SpriteBatch batch;
-	OrthographicCamera camera;
-	List<Player> players;
+	public enum GameState {
+		INPUT, EXECUTION
+	}
+
+	private GameState gameState;
+	private SpriteBatch batch;
+	private OrthographicCamera camera;
+	private List<Player> players;
+	private List<Action> actions;
 
 	@Override
 	public void create() {
@@ -33,6 +39,8 @@ public class Game implements ApplicationListener {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
+
+		gameState = GameState.EXECUTION;
 
 		// create the players
 		players = new ArrayList<Player>(10);
@@ -63,9 +71,9 @@ public class Game implements ApplicationListener {
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
 
-		// Update each players position/status
-		for (Player player : players) {
-			player.update();
+		// Each action should update the player's X,Y coordinates
+		for (Action action : actions) {
+			action.executeNextStep();
 		}
 
 		// begin a new batch and draw the players
@@ -74,6 +82,15 @@ public class Game implements ApplicationListener {
 			batch.draw(player.getTexture(), player.x, player.y);
 		}
 		batch.end();
+	}
+
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public void setGameState(GameState gameState) {
+		// I think this should just be changeGameState()
+		this.gameState = gameState;
 	}
 
 	@Override

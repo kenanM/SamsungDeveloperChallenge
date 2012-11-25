@@ -13,8 +13,6 @@ public class Player extends Rectangle {
 	private static final int PLAYER_SIZE = 12;
 
 	public final TeamColour TEAM;
-	// TODO implement a Move interface/AbstractClass etc
-	private Move move;
 
 	public Player(TeamColour colour) {
 		this.TEAM = colour;
@@ -26,10 +24,6 @@ public class Player extends Rectangle {
 		return TEAM;
 	}
 
-	public void setMove(Move move) {
-		this.move = move;
-	}
-
 	public Texture getTexture() {
 		if (getTeam() == TeamColour.RED) {
 			return Game.redPlayerTexture;
@@ -37,9 +31,4 @@ public class Player extends Rectangle {
 			return Game.bluePlayerTexture;
 		}
 	}
-
-	public void update() {
-		// TODO update the player X,Y coordinates etc..
-	}
-
 }
