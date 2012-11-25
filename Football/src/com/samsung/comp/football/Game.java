@@ -24,8 +24,10 @@ public class Game implements ApplicationListener {
 	private GameState gameState;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
+
 	private List<Player> players;
 	private List<Action> actions;
+	private Ball ball;
 
 	@Override
 	public void create() {
@@ -52,6 +54,9 @@ public class Game implements ApplicationListener {
 		for (Player player : players) {
 			actions.add(new TestMove(player));
 		}
+
+		// Create a ball
+		ball = new Ball(400, 240);
 
 		// Randomly assign each player an X,Y coordinate
 		Random random = new Random();
@@ -80,11 +85,12 @@ public class Game implements ApplicationListener {
 			action.executeNextStep();
 		}
 
-		// begin a new batch and draw the players
+		// begin a new batch and draw the players and ball
 		batch.begin();
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
 		}
+		batch.draw(ball.getTexture(), ball.x, ball.y);
 		batch.end();
 	}
 
@@ -102,6 +108,7 @@ public class Game implements ApplicationListener {
 		// dispose of all the native resources
 		bluePlayerTexture.dispose();
 		redPlayerTexture.dispose();
+		ball.dispose();
 		batch.dispose();
 	}
 
