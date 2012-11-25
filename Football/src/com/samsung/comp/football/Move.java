@@ -20,10 +20,14 @@ public class Move extends Action {
 		this.path = path;
 		this.nextAction = nextAction;
 	}
-
+	
 	@Override
 	public void executeNextStep() {
 
+		if (positionInPath == path.length) {
+			complete = true;
+		}
+		
 		if (complete) {
 			nextAction.executeNextStep();
 			return;
@@ -34,9 +38,6 @@ public class Move extends Action {
 		player.x = nextPosition.x;
 		player.y = nextPosition.y;
 
-		if (positionInPath == path.length) {
-			complete = true;
-		}
 	}
 
 }

@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import com.samsung.comp.football.Player.TeamColour;
 
 public class Game implements ApplicationListener {
@@ -42,11 +40,17 @@ public class Game implements ApplicationListener {
 
 		gameState = GameState.EXECUTION;
 
-		// create the players
+		// create the players and test actions
 		players = new ArrayList<Player>(10);
 		for (int i = 0; i < 5; i++) {
 			players.add(new Player(TeamColour.RED));
 			players.add(new Player(TeamColour.BLUE));
+		}
+
+		// Create a TestAction for each player
+		actions = new ArrayList<Action>();
+		for (Player player : players) {
+			actions.add(new TestMove(player));
 		}
 
 		// Randomly assign each player an X,Y coordinate
