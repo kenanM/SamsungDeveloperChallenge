@@ -57,6 +57,7 @@ public class Game implements ApplicationListener {
 
 		// Create a ball
 		ball = new Ball(400, 240);
+		actions.add(new Kick(ball, 750, 250));
 
 		// Randomly assign each player an X,Y coordinate
 		Random random = new Random();
