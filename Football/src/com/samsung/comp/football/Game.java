@@ -40,7 +40,7 @@ public class Game implements ApplicationListener {
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, 480, 800);
 		batch = new SpriteBatch();
 
 		gameState = GameState.EXECUTION;
@@ -59,14 +59,14 @@ public class Game implements ApplicationListener {
 		}
 
 		// Create a ball
-		ball = new Ball(400, 240);
-		actions.add(new Kick(ball, 750, 250));
+		ball = new Ball(240, 400);
+		actions.add(new Kick(ball, 250, 720));
 
 		// Randomly assign each player an X,Y coordinate
 		Random random = new Random();
 		for (Player player : players) {
-			player.x = random.nextFloat() * 800;
-			player.y = random.nextFloat() * 480;
+			player.x = random.nextFloat() * 480;
+			player.y = random.nextFloat() * 800;
 		}
 	}
 
