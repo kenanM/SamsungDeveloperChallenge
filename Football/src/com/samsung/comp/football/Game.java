@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Kick;
+import com.samsung.comp.football.Actions.TestMove;
 import com.samsung.comp.football.Player.TeamColour;
 
 public class Game implements ApplicationListener {

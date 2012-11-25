@@ -1,4 +1,6 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Actions;
+
+import com.samsung.comp.football.Player;
 
 import android.graphics.Point;
 

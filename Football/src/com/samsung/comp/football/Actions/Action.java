@@ -1,4 +1,4 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Actions;
 
 public abstract class Action {
 

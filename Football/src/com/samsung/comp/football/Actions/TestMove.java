@@ -1,6 +1,8 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Actions;
 
 import java.util.Random;
+
+import com.samsung.comp.football.Player;
 
 public class TestMove extends Action {
 

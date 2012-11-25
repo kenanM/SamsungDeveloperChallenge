@@ -1,4 +1,5 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Actions;
+
 
 public class Stop extends Action {
 

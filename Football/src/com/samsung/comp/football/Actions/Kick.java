@@ -1,7 +1,9 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Actions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.samsung.comp.football.Ball;
 
 import android.graphics.Point;
 
