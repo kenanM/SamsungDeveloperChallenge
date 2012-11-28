@@ -23,8 +23,9 @@ public class Game implements ApplicationListener {
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
 	public static Texture pitchTexture;
-	private static Texture highlightTexture;
-
+	public static Texture blueHoverTexture;
+	public static Texture redHoverTexture;
+	
 	public enum GameState {
 		INPUT, EXECUTION
 	}
@@ -49,7 +50,8 @@ public class Game implements ApplicationListener {
 		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
 		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
-		highlightTexture = new Texture(Gdx.files.internal("highlight.png"));
+		redHoverTexture = new Texture(Gdx.files.internal("red hover.png"));
+		blueHoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
@@ -116,7 +118,7 @@ public class Game implements ApplicationListener {
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
 			if (player.isHighlighted()) {
-				batch.draw(highlightTexture, player.x, player.y);
+				batch.draw(player.getHighlightTexture(), player.x-16, player.y-16);
 			}
 		}
 		batch.draw(ball.getTexture(), ball.x, ball.y);

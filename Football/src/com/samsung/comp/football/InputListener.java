@@ -84,13 +84,14 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				return false;
 			} else {
 				// Being drawing a line
+				playerBeingDrawnFrom.highlight();
 				lineInProgress.clear();
 				lineInProgress.add(vector);
 			}
 		}
 		if (action == MotionEvent.ACTION_MOVE) {
 			Log.v("MOTION", "ACTION_MOVE");
-
+			playerBeingDrawnFrom.highlight();
 			for (int i = 0; i < motionEvent.getHistorySize(); i++) {
 				lineInProgress.add(new Vector2(motionEvent.getHistoricalX(i),
 						motionEvent.getHistoricalY(i)));

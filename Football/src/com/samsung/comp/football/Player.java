@@ -49,4 +49,12 @@ public class Player extends Rectangle {
 		}
 	}
 
+	public Texture getHighlightTexture() {
+		if (getTeam() == TeamColour.RED) {
+			return Game.redHoverTexture;
+		} else {
+			return Game.blueHoverTexture;
+		}
+	}
+
 }
