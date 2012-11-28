@@ -24,8 +24,9 @@ public class Move extends Action {
 	/** This constructor should only be used for test purposes */
 	public Move(Player player) {
 		this.player = player;
+		this.nextAction = new Stop();
 		this.path = new Vector2[5];
-
+		
 		Random random = new Random();
 
 		for (int a = 0; a < 5; a++) {
