@@ -17,13 +17,14 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private static final String TAG = "InputListener";
 	private List<Action> actions;
 	private final Game game;
-	private boolean detectPresses = true;
+	private boolean detectPresses = false;
 	private List<Player> players;
 
 	public InputListener(Game game) {
 		players = new ArrayList<Player>();
 		actions = new ArrayList<Action>();
 		this.game = game;
+		
 	}
 
 	public void beginInputStage(List<Player> players) {
@@ -35,8 +36,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		Log.v("hover", "hoverPoint " +hoverPoint.toString() + " player location: "+players.get(0).x+","+players.get(0).y);
 		Vector2 playerVector;
 		for (Player player : players) {
-			playerVector = new Vector2(player.x, player.y);
-			if (playerVector.epsilonEquals(hoverPoint, 10f)) {
+			playerVector = new Vector2(player.x+16, player.y+16);
+			if (playerVector.epsilonEquals(hoverPoint, 32f)) {
 				Log.v("Input", "Hover");
 				player.highlight();
 				return;

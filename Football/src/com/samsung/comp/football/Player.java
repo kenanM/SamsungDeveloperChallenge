@@ -10,14 +10,16 @@ public class Player extends Rectangle {
 	}
 
 	private static final long serialVersionUID = 1L;
-	private static final int PLAYER_SIZE = 12;
+	private static final int PLAYER_SIZE = 25;
 
 	private boolean isHighlighted=false;
 	
 	public final TeamColour TEAM;
 
-	public Player(TeamColour colour) {
+	public Player(TeamColour colour, float x, float y) {
 		this.TEAM = colour;
+		this.x = x;
+		this.y = y;
 		width = PLAYER_SIZE;
 		height = PLAYER_SIZE;
 	}

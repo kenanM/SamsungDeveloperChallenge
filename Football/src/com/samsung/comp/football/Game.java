@@ -2,7 +2,6 @@ package com.samsung.comp.football;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.util.Log;
 
@@ -30,7 +29,7 @@ public class Game implements ApplicationListener {
 		INPUT, EXECUTION
 	}
 
-	private GameState gameState = GameState.INPUT;
+	private GameState gameState = GameState.EXECUTION;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 
@@ -38,9 +37,12 @@ public class Game implements ApplicationListener {
 	private List<Action> actions;
 	private Ball ball;
 	private float totalTime = 0;
-
+	
 	private InputListener inputListener;
 
+	public static final int SCREEN_WIDTH = 800;
+	public static final int SCREEN_HEIGHT = 1200;
+	
 	@Override
 	public void create() {
 
@@ -52,18 +54,23 @@ public class Game implements ApplicationListener {
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight());
+		camera.setToOrtho(true, SCREEN_WIDTH, SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 
 		// create the players and test actions
 		players = new ArrayList<Player>(10);
-
-		for (int i = 0; i < 5; i++) {
-			players.add(new Player(TeamColour.RED));
-			players.add(new Player(TeamColour.BLUE));
-		}
-
+		players.add(new Player(TeamColour.RED, 400,700));
+		players.add(new Player(TeamColour.RED, 200,800));
+		players.add(new Player(TeamColour.RED, 600,800));
+		players.add(new Player(TeamColour.RED, 400,850));
+		players.add(new Player(TeamColour.RED, 400,1100));
+		
+		players.add(new Player(TeamColour.BLUE, 400,500));
+		players.add(new Player(TeamColour.BLUE, 200,400));
+		players.add(new Player(TeamColour.BLUE, 600,400));
+		players.add(new Player(TeamColour.BLUE, 400,350));
+		players.add(new Player(TeamColour.BLUE, 400,100));
+		
 		// Create a TestAction for each player
 		actions = new ArrayList<Action>();
 		for (Player player : players) {
@@ -71,15 +78,11 @@ public class Game implements ApplicationListener {
 		}
 
 		// Create a ball
-		ball = new Ball(240, 400);
+		ball = new Ball(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 		actions.add(new Kick(ball, 250, 720));
 
-		// Randomly assign each player an X,Y coordinate
-		Random random = new Random();
-		for (Player player : players) {
-			player.x = random.nextFloat() * 480;
-			player.y = random.nextFloat() * 800;
-		}
+		beginInputStage();
+		
 	}
 
 	@Override
@@ -114,7 +117,7 @@ public class Game implements ApplicationListener {
 		// begin a new batch and draw the players and ball
 		batch.begin();
 		// draw the background pitch
-		batch.draw(pitchTexture, 0, 0, 740, 800);
+		batch.draw(pitchTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 700, 1024, false, false);
 
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
