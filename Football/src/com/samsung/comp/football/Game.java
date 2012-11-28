@@ -14,13 +14,16 @@ import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.spen.lib.input.SPenEventLibrary;
+import com.samsung.spensdk.applistener.SPenHoverListener;
+import com.samsung.spensdk.applistener.SPenTouchListener;
 
 public class Game implements ApplicationListener {
 
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
 	public static Texture pitchTexture;
-	
+
 	public enum GameState {
 		INPUT, EXECUTION
 	}
@@ -28,7 +31,7 @@ public class Game implements ApplicationListener {
 	private GameState gameState;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
-	
+
 	private List<Player> players;
 	private List<Action> actions;
 	private Ball ball;
@@ -39,7 +42,7 @@ public class Game implements ApplicationListener {
 		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
 		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
-		
+
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
@@ -60,7 +63,7 @@ public class Game implements ApplicationListener {
 		for (Player player : players) {
 			actions.add(new Move(player));
 		}
-		
+
 		// Create a ball
 		ball = new Ball(240, 400);
 		actions.add(new Kick(ball, 250, 720));
