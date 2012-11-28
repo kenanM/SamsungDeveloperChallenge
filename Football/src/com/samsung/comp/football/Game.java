@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
-import com.samsung.comp.football.Actions.TestMove;
+import com.samsung.comp.football.Actions.Move;
 
 public class Game implements ApplicationListener {
 
@@ -55,7 +55,7 @@ public class Game implements ApplicationListener {
 		// Create a TestAction for each player
 		actions = new ArrayList<Action>();
 		for (Player player : players) {
-			actions.add(new TestMove(player));
+			actions.add(new Move(player));
 		}
 		
 		// Create a ball

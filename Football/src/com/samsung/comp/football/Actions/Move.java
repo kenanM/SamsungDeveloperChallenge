@@ -1,5 +1,9 @@
 package com.samsung.comp.football.Actions;
 
+import java.util.Random;
+
+import android.util.Log;
+
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player;
 
@@ -17,6 +21,20 @@ public class Move extends Action {
 		this.nextAction = new Stop();
 	}
 
+	/** This constructor should only be used for test purposes */
+	public Move(Player player) {
+		this.player = player;
+		this.path = new Vector2[5];
+
+		Random random = new Random();
+
+		for (int a = 0; a < 5; a++) {
+			path[a] = new Vector2(random.nextFloat() * 420,
+					random.nextFloat() * 800);
+		}
+		Log.w("Move", "Create a random path:" + path.toString());
+	}
+
 	public Move(Player player, Vector2[] path, Action nextAction) {
 		this.player = player;
 		this.path = path;
@@ -25,8 +43,6 @@ public class Move extends Action {
 
 	@Override
 	public void executeNextStep(float time) {
-		// WARNING:Untested
-		// TODO: Test this
 
 		if (complete) {
 			nextAction.executeNextStep(time);
@@ -51,12 +67,15 @@ public class Move extends Action {
 					return;
 				}
 			} else {
-				// Move towards the next position
+				// Move towards the next position (which is out of reach).
 				Vector2 movement = Utils.getMoveVector(position, target,
 						distance);
 				position.add(movement);
 				break;
 			}
 		}
+
+		player.x = position.x;
+		player.y = position.y;
 	}
 }
