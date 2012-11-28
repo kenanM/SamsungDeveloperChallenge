@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.util.Log;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -14,27 +16,30 @@ import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
-import com.samsung.spen.lib.input.SPenEventLibrary;
-import com.samsung.spensdk.applistener.SPenHoverListener;
-import com.samsung.spensdk.applistener.SPenTouchListener;
 
 public class Game implements ApplicationListener {
+
+	public static final long ROUND_TIME = 5;
 
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
 	public static Texture pitchTexture;
+	private static Texture highlightTexture;
 
 	public enum GameState {
 		INPUT, EXECUTION
 	}
 
-	private GameState gameState;
+	private GameState gameState = GameState.INPUT;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 
 	private List<Player> players;
 	private List<Action> actions;
 	private Ball ball;
+	private float totalTime = 0;
+
+	private InputListener inputListener;
 
 	@Override
 	public void create() {
@@ -42,17 +47,18 @@ public class Game implements ApplicationListener {
 		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
 		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
+		highlightTexture = new Texture(Gdx.files.internal("highlight.png"));
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 480, 800);
+		camera.setToOrtho(true, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
 		batch = new SpriteBatch();
-
-		gameState = GameState.EXECUTION;
 
 		// create the players and test actions
 		players = new ArrayList<Player>(10);
+
 		for (int i = 0; i < 5; i++) {
 			players.add(new Player(TeamColour.RED));
 			players.add(new Player(TeamColour.BLUE));
@@ -91,10 +97,18 @@ public class Game implements ApplicationListener {
 		batch.setProjectionMatrix(camera.combined);
 
 		float time = Gdx.graphics.getDeltaTime();
+		totalTime += time;
 
-		// Each action should update the player's X,Y coordinates
-		for (Action action : actions) {
-			action.executeNextStep(time);
+		if (totalTime >= ROUND_TIME && gameState == GameState.EXECUTION) {
+			gameState = GameState.INPUT;
+			inputListener.beginInputStage(players);
+		}
+
+		// Each action should update the player's X,Y coordines
+		if (gameState == GameState.EXECUTION) {
+			for (Action action : actions) {
+				action.executeNextStep(time);
+			}
 		}
 
 		// begin a new batch and draw the players and ball
@@ -104,6 +118,9 @@ public class Game implements ApplicationListener {
 
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
+			if (player.isHighlighted()) {
+				batch.draw(highlightTexture, player.x, player.y);
+			}
 		}
 		batch.draw(ball.getTexture(), ball.x, ball.y);
 		batch.end();
@@ -113,9 +130,24 @@ public class Game implements ApplicationListener {
 		return gameState;
 	}
 
-	public void setGameState(GameState gameState) {
-		// I think this should just be changeGameState()
-		this.gameState = gameState;
+	public void setInputListener(InputListener inputListener) {
+		this.inputListener = inputListener;
+	}
+
+	public void beginInputStage() {
+		gameState = GameState.INPUT;
+		inputListener.beginInputStage(players);
+	}
+
+	public void beginExecution(List<Action> actions) {
+		Log.v("Game", "Beginning execution");
+		// this.actions=actions;
+		totalTime = 0;
+		this.gameState = GameState.EXECUTION;
+	}
+
+	public List<Player> getPlayers() {
+		return new ArrayList<Player>(players);
 	}
 
 	@Override
@@ -138,4 +170,5 @@ public class Game implements ApplicationListener {
 	@Override
 	public void resume() {
 	}
+
 }

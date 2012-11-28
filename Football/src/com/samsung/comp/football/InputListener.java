@@ -1,15 +1,48 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Actions.Action;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 
 public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private static final String TAG = "InputListener";
+	private List<Action> actions;
+	private final Game game;
+	private boolean detectPresses = true;
+	private List<Player> players;
+
+	public InputListener(Game game) {
+		players = new ArrayList<Player>();
+		actions = new ArrayList<Action>();
+		this.game = game;
+	}
+
+	public void beginInputStage(List<Player> players) {
+		detectPresses = true;
+		this.players = players;
+	}
+
+	private void isHoveringOverPlayer(Vector2 hoverPoint) {
+		Log.v("hover", "hoverPoint " +hoverPoint.toString() + " player location: "+players.get(0).x+","+players.get(0).y);
+		Vector2 playerVector;
+		for (Player player : players) {
+			playerVector = new Vector2(player.x, player.y);
+			if (playerVector.epsilonEquals(hoverPoint, 10f)) {
+				Log.v("Input", "Hover");
+				player.highlight();
+				return;
+			}
+		}
+	}
 
 	@Override
 	public void onTouchButtonDown(View arg0, MotionEvent arg1) {
@@ -23,7 +56,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
-		Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
+		if (detectPresses) {
+			Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
+			detectPresses=false;
+			game.beginExecution(actions);
+		}
 		return false;
 	}
 
@@ -40,8 +77,12 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	@Override
-	public boolean onHover(View arg0, MotionEvent arg1) {
-		Log.v(TAG, "onHover: " + arg1.getX() + ", " + arg1.getY());
+	public boolean onHover(View arg0, MotionEvent event) {
+		if (detectPresses) {
+			//Log.v(TAG, "onHover: " + event.getX() + ", " + event.getY());
+			Vector2 hoverPoint = new Vector2(event.getX(), event.getY());
+			isHoveringOverPlayer(hoverPoint);
+		}
 		return false;
 	}
 

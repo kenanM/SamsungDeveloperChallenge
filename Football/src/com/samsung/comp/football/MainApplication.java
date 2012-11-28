@@ -19,13 +19,15 @@ public class MainApplication extends AndroidApplication {
 		cfg.useAccelerometer = false;
 		cfg.useCompass = false;
 		boolean useGL2 = false;
-		View game = initializeForView(new Game(), useGL2);
+		Game game = new Game();
+		InputListener inputListener = new InputListener(game);
+		game.setInputListener(inputListener);
+		View gameView = initializeForView(game, useGL2);
 		SPenEventLibrary spen = new SPenEventLibrary();
-		InputListener inputListener = new InputListener();
-		spen.setSPenTouchListener(game, inputListener);
-		spen.setSPenHoverListener(game, inputListener);
-		setContentView(game);
-
+		spen.setSPenTouchListener(gameView, inputListener);
+		spen.setSPenHoverListener(gameView, inputListener);
+		setContentView(gameView);
+		
 	}
 
 	@Override

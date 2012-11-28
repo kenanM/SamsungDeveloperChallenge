@@ -12,6 +12,8 @@ public class Player extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	private static final int PLAYER_SIZE = 12;
 
+	private boolean isHighlighted=false;
+	
 	public final TeamColour TEAM;
 
 	public Player(TeamColour colour) {
@@ -31,4 +33,18 @@ public class Player extends Rectangle {
 			return Game.bluePlayerTexture;
 		}
 	}
+
+	public void highlight() {
+		isHighlighted = true;
+	}
+
+	public boolean isHighlighted() {
+		if(isHighlighted){
+			isHighlighted=false;
+			return true;
+		} else{
+			return false;
+		}
+	}
+
 }
