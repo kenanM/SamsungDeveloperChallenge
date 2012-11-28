@@ -10,6 +10,7 @@ public class Ball extends Rectangle {
 			Gdx.files.internal("ball.png"));
 	private static final int BALL_SIZE = 4;
 	private float ballSpeed = 0.3f;
+	private Player owner;
 
 	public Ball(int x, int y) {
 		this.x = x;
@@ -25,6 +26,18 @@ public class Ball extends Rectangle {
 
 	public void dispose() {
 		TEXTURE.dispose();
+	}
+
+	public void setOwner(Player player) {
+		this.owner = player;
+	}
+
+	public Player getOwner() {
+		return owner;
+	}
+
+	public boolean hasOwner() {
+		return owner != null;
 	}
 
 }

@@ -28,7 +28,8 @@ public class Kick extends Action {
 		Vector2 position = new Vector2(ball.x, ball.y);
 		float distance = time * velocity;
 
-		//If the target is within range of our current position just move to the target.
+		// If the target is within range of our current position just move to
+		// the target.
 		if (position.dst(target) < distance) {
 			ball.x = target.x;
 			ball.y = target.y;
@@ -43,6 +44,10 @@ public class Kick extends Action {
 			ball.x = position.x;
 			ball.y = position.y;
 		}
-
 	}
+
+	public void cancel() {
+		complete = true;
+	}
+
 }

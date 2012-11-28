@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 
 public class Game implements ApplicationListener {
@@ -112,6 +113,34 @@ public class Game implements ApplicationListener {
 			}
 		}
 
+		for (Player player : players) {
+			boolean takePossesion = false;
+			if (ball.hasOwner()) {
+				if (player.contains(ball) && player != ball.getOwner()
+						&& ball.getOwner().getTeam() != player.getTeam()) {
+					takePossesion = true;
+				}
+			} else {
+				if (player.contains(ball)) {
+					takePossesion = true;
+				}
+			}
+			if (takePossesion) {
+				for (Action action : actions) {
+					if (action instanceof Kick) {
+						Kick kick = (Kick) action;
+						kick.cancel();
+					}
+				}
+				ball.setOwner(player);
+			}
+		}
+
+		if (ball.getOwner() != null) {
+			ball.x = ball.getOwner().x;
+			ball.y = ball.getOwner().y;
+		}
+
 		// begin a new batch and draw the players and ball
 		batch.begin();
 		// draw the background pitch
@@ -134,18 +163,23 @@ public class Game implements ApplicationListener {
 			shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(255, 255, 255, 255);
 			List<Vector2> lineInProgress = inputListener.getLineBeingDrawn();
+
 			for (int i = 0; i < lineInProgress.size() - 1; i++) {
 				Vector2 a = lineInProgress.get(i);
 				Vector2 b = lineInProgress.get(i + 1);
+				// TODO: Fix this
+				if (a == null || b == null)
+					continue;
 				shapeRenderer.line(a.x, a.y, b.x, b.y);
 			}
 			shapeRenderer.setColor(0, 0, 0, 0);
-			for(Action action:actions){
+			for (Action action : actions) {
 				if (action instanceof Move) {
 					Move movement = (Move) action;
 					Vector2[] path = movement.getPath();
-					for(int i=0;i<path.length-1;i++) {
-						shapeRenderer.line(path[i].x, path[i].y, path[i+1].x, path[i+1].y);
+					for (int i = 0; i < path.length - 1; i++) {
+						shapeRenderer.line(path[i].x, path[i].y, path[i + 1].x,
+								path[i + 1].y);
 					}
 				}
 			}
@@ -162,14 +196,14 @@ public class Game implements ApplicationListener {
 		this.inputListener = inputListener;
 	}
 
-	public void clearActions(){
+	public void clearActions() {
 		actions.clear();
 	}
-	
-	public void addAction(Action action){
+
+	public void addAction(Action action) {
 		actions.add(action);
 	}
-	
+
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
 		inputListener.beginInputStage(players);
