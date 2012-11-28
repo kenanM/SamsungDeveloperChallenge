@@ -52,6 +52,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return null;
 	}
 
+	public List<Vector2> getLineBeingDrawn(){
+		return lineInProgress;
+	}
+	
 	@Override
 	public void onTouchButtonDown(View arg0, MotionEvent arg1) {
 		Log.v(TAG, "onTouchButtonDown: " + arg1.getX() + ", " + arg1.getY());
@@ -106,6 +110,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					.getY()));
 			actions.add(new Move(playerBeingDrawnFrom, lineInProgress
 					.toArray(new Vector2[lineInProgress.size()])));
+			lineInProgress.clear();
 		}
 		return true;
 	}

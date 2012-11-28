@@ -11,10 +11,11 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.Kick;
-import com.samsung.comp.football.Actions.Move;
 
 public class Game implements ApplicationListener {
 
@@ -25,7 +26,7 @@ public class Game implements ApplicationListener {
 	public static Texture pitchTexture;
 	public static Texture blueHoverTexture;
 	public static Texture redHoverTexture;
-	
+
 	public enum GameState {
 		INPUT, EXECUTION
 	}
@@ -38,12 +39,12 @@ public class Game implements ApplicationListener {
 	private List<Action> actions;
 	private Ball ball;
 	private float totalTime = 0;
-	
+
 	private InputListener inputListener;
 
 	public static final int SCREEN_WIDTH = 800;
 	public static final int SCREEN_HEIGHT = 1200;
-	
+
 	@Override
 	public void create() {
 
@@ -61,24 +62,24 @@ public class Game implements ApplicationListener {
 
 		// create the players and test actions
 		players = new ArrayList<Player>(10);
-		players.add(new Player(TeamColour.RED, 400,700));
-		players.add(new Player(TeamColour.RED, 200,800));
-		players.add(new Player(TeamColour.RED, 600,800));
-		players.add(new Player(TeamColour.RED, 400,850));
-		players.add(new Player(TeamColour.RED, 400,1100));
-		
-		players.add(new Player(TeamColour.BLUE, 400,500));
-		players.add(new Player(TeamColour.BLUE, 200,400));
-		players.add(new Player(TeamColour.BLUE, 600,400));
-		players.add(new Player(TeamColour.BLUE, 400,350));
-		players.add(new Player(TeamColour.BLUE, 400,100));
-		
+		players.add(new Player(TeamColour.RED, 400, 700));
+		players.add(new Player(TeamColour.RED, 200, 800));
+		players.add(new Player(TeamColour.RED, 600, 800));
+		players.add(new Player(TeamColour.RED, 400, 850));
+		players.add(new Player(TeamColour.RED, 400, 1100));
+
+		players.add(new Player(TeamColour.BLUE, 400, 500));
+		players.add(new Player(TeamColour.BLUE, 200, 400));
+		players.add(new Player(TeamColour.BLUE, 600, 400));
+		players.add(new Player(TeamColour.BLUE, 400, 350));
+		players.add(new Player(TeamColour.BLUE, 400, 100));
+
 		// Create a ball
-		ball = new Ball(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-		//actions.add(new Kick(ball, 250, 720));
+		ball = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+		// actions.add(new Kick(ball, 250, 720));
 
 		beginInputStage();
-		
+
 	}
 
 	@Override
@@ -113,16 +114,33 @@ public class Game implements ApplicationListener {
 		// begin a new batch and draw the players and ball
 		batch.begin();
 		// draw the background pitch
-		batch.draw(pitchTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 700, 1024, false, false);
+		batch.draw(pitchTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 700,
+				1024, false, false);
 
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
 			if (player.isHighlighted()) {
-				batch.draw(player.getHighlightTexture(), player.x-16, player.y-16);
+				batch.draw(player.getHighlightTexture(), player.x - 16,
+						player.y - 16);
 			}
 		}
 		batch.draw(ball.getTexture(), ball.x, ball.y);
 		batch.end();
+
+		if (gameState == GameState.INPUT) {
+			ShapeRenderer shapeRenderer = new ShapeRenderer();
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(1, 1, 0, 1);
+			List<Vector2> lineInProgress = inputListener.getLineBeingDrawn();
+			for (int i = 0; i < lineInProgress.size() - 1; i++) {
+				Vector2 a = lineInProgress.get(i);
+				Vector2 b = lineInProgress.get(i + 1);
+				shapeRenderer.line(a.x, a.y, b.x, b.y);
+			}
+			shapeRenderer.end();
+
+		}
 	}
 
 	public GameState getGameState() {
@@ -140,7 +158,7 @@ public class Game implements ApplicationListener {
 
 	public void beginExecution(List<Action> actions) {
 		Log.v("Game", "Beginning execution");
-		this.actions=actions;
+		this.actions = actions;
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
 	}

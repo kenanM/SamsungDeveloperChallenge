@@ -27,7 +27,6 @@ public class MainApplication extends AndroidApplication {
 		spen.setSPenTouchListener(gameView, inputListener);
 		spen.setSPenHoverListener(gameView, inputListener);
 		setContentView(gameView);
-		
 	}
 
 	@Override
