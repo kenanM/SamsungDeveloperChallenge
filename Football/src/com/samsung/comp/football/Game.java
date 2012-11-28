@@ -19,7 +19,8 @@ public class Game implements ApplicationListener {
 
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
-
+	public static Texture pitchTexture;
+	
 	public enum GameState {
 		INPUT, EXECUTION
 	}
@@ -27,7 +28,7 @@ public class Game implements ApplicationListener {
 	private GameState gameState;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
-
+	
 	private List<Player> players;
 	private List<Action> actions;
 	private Ball ball;
@@ -37,6 +38,8 @@ public class Game implements ApplicationListener {
 
 		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
 		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
+		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
+		
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
@@ -93,6 +96,9 @@ public class Game implements ApplicationListener {
 
 		// begin a new batch and draw the players and ball
 		batch.begin();
+		// draw the background pitch
+		batch.draw(pitchTexture, 0, 0, 740, 800);
+
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
 		}
@@ -114,7 +120,7 @@ public class Game implements ApplicationListener {
 		// dispose of all the native resources
 		bluePlayerTexture.dispose();
 		redPlayerTexture.dispose();
-		ball.dispose();
+		pitchTexture.dispose();
 		batch.dispose();
 	}
 
