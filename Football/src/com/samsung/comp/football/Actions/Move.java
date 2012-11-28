@@ -13,7 +13,7 @@ public class Move extends Action {
 	int positionInPath;
 	Player player;
 	Action nextAction;
-	float velocity = 20;
+	float velocity = 200;
 
 	public Move(Player player, Vector2[] path) {
 		this.player = player;

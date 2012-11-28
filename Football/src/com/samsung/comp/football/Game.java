@@ -71,15 +71,9 @@ public class Game implements ApplicationListener {
 		players.add(new Player(TeamColour.BLUE, 400,350));
 		players.add(new Player(TeamColour.BLUE, 400,100));
 		
-		// Create a TestAction for each player
-		actions = new ArrayList<Action>();
-		for (Player player : players) {
-			actions.add(new Move(player));
-		}
-
 		// Create a ball
 		ball = new Ball(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-		actions.add(new Kick(ball, 250, 720));
+		//actions.add(new Kick(ball, 250, 720));
 
 		beginInputStage();
 		
@@ -144,7 +138,7 @@ public class Game implements ApplicationListener {
 
 	public void beginExecution(List<Action> actions) {
 		Log.v("Game", "Beginning execution");
-		// this.actions=actions;
+		this.actions=actions;
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
 	}
