@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.TestMove;
-import com.samsung.comp.football.Player.TeamColour;
 
 public class Game implements ApplicationListener {
 
@@ -57,7 +57,7 @@ public class Game implements ApplicationListener {
 		for (Player player : players) {
 			actions.add(new TestMove(player));
 		}
-
+		
 		// Create a ball
 		ball = new Ball(240, 400);
 		actions.add(new Kick(ball, 250, 720));
@@ -84,9 +84,11 @@ public class Game implements ApplicationListener {
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
 
+		float time = Gdx.graphics.getDeltaTime();
+
 		// Each action should update the player's X,Y coordinates
 		for (Action action : actions) {
-			action.executeNextStep();
+			action.executeNextStep(time);
 		}
 
 		// begin a new batch and draw the players and ball

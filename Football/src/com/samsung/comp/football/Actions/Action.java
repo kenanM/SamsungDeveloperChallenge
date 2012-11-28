@@ -8,6 +8,6 @@ public abstract class Action {
 		return complete;
 	}
 
-	public abstract void executeNextStep();
-
+	public abstract void executeNextStep(float time);
+	
 }
