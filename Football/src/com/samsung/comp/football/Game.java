@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Move;
 
 public class Game implements ApplicationListener {
 
@@ -36,7 +37,7 @@ public class Game implements ApplicationListener {
 	private OrthographicCamera camera;
 
 	private List<Player> players;
-	private List<Action> actions;
+	private List<Action> actions = new ArrayList<Action>();
 	private Ball ball;
 	private float totalTime = 0;
 
@@ -131,12 +132,22 @@ public class Game implements ApplicationListener {
 			ShapeRenderer shapeRenderer = new ShapeRenderer();
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeType.Line);
-			shapeRenderer.setColor(1, 1, 0, 1);
+			shapeRenderer.setColor(255, 255, 255, 255);
 			List<Vector2> lineInProgress = inputListener.getLineBeingDrawn();
 			for (int i = 0; i < lineInProgress.size() - 1; i++) {
 				Vector2 a = lineInProgress.get(i);
 				Vector2 b = lineInProgress.get(i + 1);
 				shapeRenderer.line(a.x, a.y, b.x, b.y);
+			}
+			shapeRenderer.setColor(0, 0, 0, 0);
+			for(Action action:actions){
+				if (action instanceof Move) {
+					Move movement = (Move) action;
+					Vector2[] path = movement.getPath();
+					for(int i=0;i<path.length-1;i++) {
+						shapeRenderer.line(path[i].x, path[i].y, path[i+1].x, path[i+1].y);
+					}
+				}
 			}
 			shapeRenderer.end();
 
@@ -151,14 +162,21 @@ public class Game implements ApplicationListener {
 		this.inputListener = inputListener;
 	}
 
+	public void clearActions(){
+		actions.clear();
+	}
+	
+	public void addAction(Action action){
+		actions.add(action);
+	}
+	
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
 		inputListener.beginInputStage(players);
 	}
 
-	public void beginExecution(List<Action> actions) {
+	public void beginExecution() {
 		Log.v("Game", "Beginning execution");
-		this.actions = actions;
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
 	}

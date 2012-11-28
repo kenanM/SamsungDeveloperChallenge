@@ -79,4 +79,8 @@ public class Move extends Action {
 		player.x = position.x;
 		player.y = position.y;
 	}
+
+	public Vector2[] getPath(){
+		return path;
+	}
 }

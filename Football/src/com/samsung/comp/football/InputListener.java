@@ -16,7 +16,6 @@ import com.samsung.spensdk.applistener.SPenTouchListener;
 public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private static final String TAG = "InputListener";
-	private List<Action> actions;
 	private final Game game;
 	private boolean detectPresses = false;
 	private List<Player> players;
@@ -25,14 +24,13 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	public InputListener(Game game) {
 		players = new ArrayList<Player>();
-		actions = new ArrayList<Action>();
 		this.game = game;
 	}
 
 	public void beginInputStage(List<Player> players) {
 		detectPresses = true;
 		this.players = players;
-		actions.clear();
+		game.clearActions();
 	}
 
 	/**
@@ -71,7 +69,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (detectPresses) {
 			Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
 			detectPresses = false;
-			game.beginExecution(actions);
+			game.beginExecution();
 		}
 		return false;
 	}
@@ -108,7 +106,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			// end of the line
 			lineInProgress.add(new Vector2(motionEvent.getX(), motionEvent
 					.getY()));
-			actions.add(new Move(playerBeingDrawnFrom, lineInProgress
+			game.addAction(new Move(playerBeingDrawnFrom, lineInProgress
 					.toArray(new Vector2[lineInProgress.size()])));
 			lineInProgress.clear();
 		}
