@@ -47,5 +47,9 @@ public class Kick extends Action {
 	public void cancel() {
 		complete = true;
 	}
+	
+	public Vector2 getTarget(){
+		return target;
+	}
 
 }

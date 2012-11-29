@@ -28,6 +28,9 @@ public class Game implements ApplicationListener {
 	public static Texture pitchTexture;
 	public static Texture blueHoverTexture;
 	public static Texture redHoverTexture;
+	public static Texture targetTexture;
+	public static Texture pauseTexture;
+	public static Texture playTexture;
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -50,14 +53,17 @@ public class Game implements ApplicationListener {
 	@Override
 	public void create() {
 
+		targetTexture = new Texture(Gdx.files.internal("target.png"));
 		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
 		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		redHoverTexture = new Texture(Gdx.files.internal("red hover.png"));
 		blueHoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
-
+		pauseTexture = new Texture(Gdx.files.internal("pauseIcon.png"));
+		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
+		
 		// create the camera and the SpriteBatch
-		// TODO these are not necessarily the dimensions we want.
+		// TODO ese are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, SCREEN_WIDTH, SCREEN_HEIGHT);
 		batch = new SpriteBatch();
@@ -160,9 +166,9 @@ public class Game implements ApplicationListener {
 		}
 
 		batch.draw(ball.getTexture(), ball.x, ball.y);
-		batch.end();
-		
+
 		if (gameState == GameState.INPUT) {
+			batch.draw(pauseTexture, 0, 0);
 			ShapeRenderer shapeRenderer = new ShapeRenderer();
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeType.Line);
@@ -187,20 +193,30 @@ public class Game implements ApplicationListener {
 								path[i + 1].y);
 					}
 				}
+
+				if (action instanceof Kick) {
+					Kick kick = (Kick) action;
+					Vector2 target = kick.getTarget();
+					batch.draw(targetTexture, target.x, target.y);
+				}
 			}
 			shapeRenderer.end();
+		} else {
+			// Execution stage
+			batch.draw(playTexture, 0, 0);
 
 		}
+		batch.end();
 	}
 
 	public GameState getGameState() {
 		return gameState;
 	}
 
-	public Ball getBall(){
+	public Ball getBall() {
 		return ball;
 	}
-	
+
 	public void setInputListener(InputListener inputListener) {
 		this.inputListener = inputListener;
 	}
@@ -219,7 +235,7 @@ public class Game implements ApplicationListener {
 	}
 
 	public void beginExecution() {
-		Log.v("Game", "Beginning execution");
+		Log.v("Game", "Beginning execution " + actions.size() + " actions.");
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
 	}
