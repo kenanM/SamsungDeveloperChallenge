@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.spensdk.applistener.SPenHoverListener;

@@ -1,13 +1,9 @@
 package com.samsung.comp.football.Actions;
 
-import android.util.Log;
-
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 
 public class Kick extends Action {
-
-	private static final String TAG = "ball";
 
 	private Ball ball;
 	private Vector2 target;
