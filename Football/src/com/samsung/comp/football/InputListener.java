@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
@@ -21,6 +22,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private List<Player> players;
 	private List<Vector2> lineInProgress = new ArrayList<Vector2>();
 	private Player playerBeingDrawnFrom;
+	private Player selectedPlayer;
 
 	public InputListener(Game game) {
 		players = new ArrayList<Player>();
@@ -50,10 +52,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return null;
 	}
 
-	public List<Vector2> getLineBeingDrawn(){
+	public List<Vector2> getLineBeingDrawn() {
 		return lineInProgress;
 	}
-	
+
 	@Override
 	public void onTouchButtonDown(View arg0, MotionEvent arg1) {
 		Log.v(TAG, "onTouchButtonDown: " + arg1.getX() + ", " + arg1.getY());
@@ -79,36 +81,63 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		int action = motionEvent.getAction();
 
 		if (action == MotionEvent.ACTION_DOWN) {
-			Log.v("MOTION", "ACTION_DOWN");
-			Vector2 vector = new Vector2(motionEvent.getX(), motionEvent.getY());
-			playerBeingDrawnFrom = findPlayer(vector);
-			if (playerBeingDrawnFrom == null) {
-				return false;
+			if (selectedPlayer == null) {
+				Log.v("MOTION", "ACTION_DOWN");
+				Vector2 vector = new Vector2(motionEvent.getX(),
+						motionEvent.getY());
+				playerBeingDrawnFrom = findPlayer(vector);
+				selectedPlayer = null;
+				if (playerBeingDrawnFrom == null) {
+					return false;
+				} else {
+					// Being drawing a line
+					playerBeingDrawnFrom.highlight();
+					lineInProgress.clear();
+					lineInProgress.add(vector);
+				}
 			} else {
-				// Being drawing a line
-				playerBeingDrawnFrom.highlight();
-				lineInProgress.clear();
-				lineInProgress.add(vector);
+				Ball ball = game.getBall();
+				if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
+					game.addAction(new Kick(ball, motionEvent.getX(),
+							motionEvent.getY()));
+				}
 			}
 		}
 		if (action == MotionEvent.ACTION_MOVE) {
-			Log.v("MOTION", "ACTION_MOVE");
-			playerBeingDrawnFrom.highlight();
-			for (int i = 0; i < motionEvent.getHistorySize(); i++) {
-				lineInProgress.add(new Vector2(motionEvent.getHistoricalX(i),
-						motionEvent.getHistoricalY(i)));
+			if (selectedPlayer != null) {
+				//
+			} else {
+				Log.v("MOTION", "ACTION_MOVE");
+				playerBeingDrawnFrom.highlight();
+				for (int i = 0; i < motionEvent.getHistorySize(); i++) {
+					lineInProgress.add(new Vector2(motionEvent
+							.getHistoricalX(i), motionEvent.getHistoricalY(i)));
+				}
+				lineInProgress.add(new Vector2(motionEvent.getX(), motionEvent
+						.getY()));
 			}
-			lineInProgress.add(new Vector2(motionEvent.getX(), motionEvent
-					.getY()));
 		}
 		if (action == MotionEvent.ACTION_UP) {
 			Log.v("MOTION", "ACTION_UP");
-			// end of the line
-			lineInProgress.add(new Vector2(motionEvent.getX(), motionEvent
-					.getY()));
-			game.addAction(new Move(playerBeingDrawnFrom, lineInProgress
-					.toArray(new Vector2[lineInProgress.size()])));
-			lineInProgress.clear();
+			if (selectedPlayer == null) {
+				Player player = findPlayer(new Vector2(motionEvent.getX(),
+						motionEvent.getY()));
+				if (player == null || player != playerBeingDrawnFrom) {
+					// end of the line
+					lineInProgress.add(new Vector2(motionEvent.getX(),
+							motionEvent.getY()));
+					game.addAction(new Move(playerBeingDrawnFrom,
+							lineInProgress.toArray(new Vector2[lineInProgress
+									.size()])));
+					lineInProgress.clear();
+				} else {
+					lineInProgress.clear();
+					selectedPlayer = player;
+				}
+
+			} else {
+				selectedPlayer = null;
+			}
 		}
 		return true;
 	}
@@ -130,6 +159,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			}
 		}
 		return false;
+	}
+
+	Player getSelectedPlayer() {
+		return selectedPlayer;
 	}
 
 	@Override

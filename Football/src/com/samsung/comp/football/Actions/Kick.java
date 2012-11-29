@@ -11,11 +11,13 @@ public class Kick extends Action {
 
 	private Ball ball;
 	private Vector2 target;
-	private float velocity = 30;
+	private float velocity = 180;
 
-	public Kick(Ball ball, int targetX, int targetY) {
+	public Kick(Ball ball, float targetX, float targetY) {
 		this.ball = ball;
 		this.target = new Vector2(targetX, targetY);
+		//TODO do this better
+		ball.removeOwner();
 	}
 
 	@Override

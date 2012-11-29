@@ -39,5 +39,9 @@ public class Ball extends Rectangle {
 	public boolean hasOwner() {
 		return owner != null;
 	}
+	
+	public void removeOwner(){
+		owner=null;
+	}
 
 }

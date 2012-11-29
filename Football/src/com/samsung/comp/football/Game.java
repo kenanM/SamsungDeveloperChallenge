@@ -154,6 +154,11 @@ public class Game implements ApplicationListener {
 						player.y - 16);
 			}
 		}
+
+		if (inputListener.getSelectedPlayer() != null) {
+			inputListener.getSelectedPlayer().highlight();
+		}
+
 		batch.draw(ball.getTexture(), ball.x, ball.y);
 		batch.end();
 
@@ -192,6 +197,10 @@ public class Game implements ApplicationListener {
 		return gameState;
 	}
 
+	public Ball getBall(){
+		return ball;
+	}
+	
 	public void setInputListener(InputListener inputListener) {
 		this.inputListener = inputListener;
 	}
