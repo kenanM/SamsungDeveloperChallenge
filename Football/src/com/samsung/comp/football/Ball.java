@@ -14,6 +14,7 @@ public class Ball extends Rectangle {
 			Gdx.files.internal("ball.png"));
 	private static final int BALL_SIZE = 8;
 	private Player owner;
+	private Player previousOwner;
 
 	public Ball(int x, int y) {
 		this.x = x;
@@ -32,6 +33,9 @@ public class Ball extends Rectangle {
 	}
 
 	public void setOwner(Player player) {
+		if (hasOwner()) {
+			this.previousOwner = owner;
+		}
 		this.owner = player;
 	}
 
@@ -39,12 +43,21 @@ public class Ball extends Rectangle {
 		return owner;
 	}
 
+	public Player getPreviousOwner() {
+		return previousOwner;
+	}
+
 	public boolean hasOwner() {
 		return owner != null;
 	}
-	
-	public void removeOwner(){
-		owner=null;
+
+	public boolean hasPreviousOwner() {
+		return previousOwner != null;
+	}
+
+	public void removeOwner() {
+		this.previousOwner = owner;
+		owner = null;
 	}
 
 }

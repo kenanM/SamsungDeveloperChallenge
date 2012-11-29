@@ -61,7 +61,7 @@ public class Game implements ApplicationListener {
 		blueHoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		pauseTexture = new Texture(Gdx.files.internal("pauseIcon.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
-		
+
 		// create the camera and the SpriteBatch
 		// TODO ese are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
@@ -119,15 +119,22 @@ public class Game implements ApplicationListener {
 			}
 		}
 
+		// #tackling
 		for (Player player : players) {
-			boolean takePossesion = false;
+			Boolean takePossesion = false;
 			if (ball.hasOwner()) {
-				if (player.contains(ball) && player != ball.getOwner()
-						&& ball.getOwner().getTeam() != player.getTeam()) {
-					takePossesion = true;
-				}
+				break;
 			} else {
-				if (player.contains(ball)) {
+				// NASTY HACK
+				boolean wasPreviousOwner = false;
+				try {
+					if (ball.getPreviousOwner() == player) {
+						wasPreviousOwner = true;
+					}
+				} catch (Exception e) {
+					// Feel bad about yourself gavin
+				}
+				if (player.overlaps(ball) && !wasPreviousOwner) {
 					takePossesion = true;
 				}
 			}
