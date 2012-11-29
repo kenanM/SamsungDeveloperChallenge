@@ -12,7 +12,7 @@ public class Ball extends Rectangle {
 	private static final long serialVersionUID = -3523719737664937244L;
 	private static final Texture TEXTURE = new Texture(
 			Gdx.files.internal("ball.png"));
-	private static final int BALL_SIZE = 4;
+	private static final int BALL_SIZE = 8;
 	private Player owner;
 
 	public Ball(int x, int y) {
