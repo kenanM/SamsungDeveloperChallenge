@@ -154,10 +154,14 @@ public class Game implements ApplicationListener {
 
 		// begin a new batch and draw the players and ball
 		batch.begin();
+		
 		// draw the background pitch
 		batch.draw(pitchTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 700,
 				1024, false, false);
+		batch.end();
+		
 
+		batch.begin();
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
 			if (player.isHighlighted()) {
@@ -165,15 +169,21 @@ public class Game implements ApplicationListener {
 						player.y - 16);
 			}
 		}
+		batch.end();
 
 		if (inputListener.getSelectedPlayer() != null) {
 			inputListener.getSelectedPlayer().highlight();
 		}
 
+		batch.begin();
 		batch.draw(ball.getTexture(), ball.x, ball.y);
+		batch.end();
 
 		if (gameState == GameState.INPUT) {
+			batch.begin();
 			batch.draw(playTexture, 0, 0);
+			batch.end();
+
 			ShapeRenderer shapeRenderer = new ShapeRenderer();
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeType.Line);
@@ -202,7 +212,9 @@ public class Game implements ApplicationListener {
 				if (action instanceof Kick) {
 					Kick kick = (Kick) action;
 					Vector2 target = kick.getTarget();
+					batch.begin();
 					batch.draw(targetTexture, target.x, target.y);
+					batch.end();
 				}
 			}
 			shapeRenderer.end();
@@ -210,7 +222,6 @@ public class Game implements ApplicationListener {
 			// Execution stage
 
 		}
-		batch.end();
 	}
 
 	public GameState getGameState() {
