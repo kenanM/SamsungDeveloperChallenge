@@ -57,18 +57,18 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public void onTouchButtonDown(View arg0, MotionEvent arg1) {
-		//Log.v(TAG, "onTouchButtonDown: " + arg1.getX() + ", " + arg1.getY());
+		// Log.v(TAG, "onTouchButtonDown: " + arg1.getX() + ", " + arg1.getY());
 	}
 
 	@Override
 	public void onTouchButtonUp(View arg0, MotionEvent arg1) {
-		//Log.v(TAG, "onTouchButtonUp: " + arg1.getX() + ", " + arg1.getY());
+		// Log.v(TAG, "onTouchButtonUp: " + arg1.getX() + ", " + arg1.getY());
 	}
 
 	@Override
 	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
-		if (detectPresses) {
-			//Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
+		if (detectPresses && arg1.getX() < 128 && arg1.getY() < 128) {
+			// Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
 			detectPresses = false;
 			game.beginExecution();
 		}
@@ -81,7 +81,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 		if (action == MotionEvent.ACTION_DOWN) {
 			if (selectedPlayer == null) {
-				//Log.v("MOTION", "ACTION_DOWN");
+				// Log.v("MOTION", "ACTION_DOWN");
 				Vector2 vector = new Vector2(motionEvent.getX(),
 						motionEvent.getY());
 				playerBeingDrawnFrom = findPlayer(vector);
@@ -105,7 +105,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (action == MotionEvent.ACTION_MOVE) {
 			if (selectedPlayer != null) {
 			} else {
-				//Log.v("MOTION", "ACTION_MOVE");
+				// Log.v("MOTION", "ACTION_MOVE");
 				playerBeingDrawnFrom.highlight();
 				for (int i = 0; i < motionEvent.getHistorySize(); i++) {
 					lineInProgress.add(new Vector2(motionEvent
@@ -142,7 +142,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchPenEraser(View arg0, MotionEvent arg1) {
-		//Log.v(TAG, "onTouchPenEraser: " + arg1.getX() + ", " + arg1.getY());
+		// Log.v(TAG, "onTouchPenEraser: " + arg1.getX() + ", " + arg1.getY());
 		return false;
 	}
 
@@ -165,12 +165,12 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
-		//Log.v(TAG, "onHoverButtonDown: " + arg1.getX() + ", " + arg1.getY());
+		// Log.v(TAG, "onHoverButtonDown: " + arg1.getX() + ", " + arg1.getY());
 	}
 
 	@Override
 	public void onHoverButtonUp(View arg0, MotionEvent arg1) {
-		//Log.v(TAG, "onHoverButtonUp: " + arg1.getX() + ", " + arg1.getY());
+		// Log.v(TAG, "onHoverButtonUp: " + arg1.getX() + ", " + arg1.getY());
 	}
 
 }

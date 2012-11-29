@@ -29,7 +29,6 @@ public class Game implements ApplicationListener {
 	public static Texture blueHoverTexture;
 	public static Texture redHoverTexture;
 	public static Texture targetTexture;
-	public static Texture pauseTexture;
 	public static Texture playTexture;
 
 	public enum GameState {
@@ -59,7 +58,6 @@ public class Game implements ApplicationListener {
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		redHoverTexture = new Texture(Gdx.files.internal("red hover.png"));
 		blueHoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
-		pauseTexture = new Texture(Gdx.files.internal("pauseIcon.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 
 		// create the camera and the SpriteBatch
@@ -175,7 +173,7 @@ public class Game implements ApplicationListener {
 		batch.draw(ball.getTexture(), ball.x, ball.y);
 
 		if (gameState == GameState.INPUT) {
-			batch.draw(pauseTexture, 0, 0);
+			batch.draw(playTexture, 0, 0);
 			ShapeRenderer shapeRenderer = new ShapeRenderer();
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeType.Line);
@@ -210,7 +208,6 @@ public class Game implements ApplicationListener {
 			shapeRenderer.end();
 		} else {
 			// Execution stage
-			batch.draw(playTexture, 0, 0);
 
 		}
 		batch.end();
