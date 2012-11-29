@@ -161,7 +161,7 @@ public class Game implements ApplicationListener {
 
 		batch.draw(ball.getTexture(), ball.x, ball.y);
 		batch.end();
-
+		
 		if (gameState == GameState.INPUT) {
 			ShapeRenderer shapeRenderer = new ShapeRenderer();
 			shapeRenderer.setProjectionMatrix(camera.combined);

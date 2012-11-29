@@ -52,7 +52,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	public List<Vector2> getLineBeingDrawn() {
-		return lineInProgress;
+		return new ArrayList<Vector2>(lineInProgress);
 	}
 
 	@Override
