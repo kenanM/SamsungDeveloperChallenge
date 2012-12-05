@@ -1,4 +1,4 @@
-.class
-.orig
+*.class
+*.orig
 /Football/gen/
 /Football/bin/
