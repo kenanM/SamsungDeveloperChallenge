@@ -147,6 +147,9 @@ public class Game implements ApplicationListener {
 			}
 		}
 
+		// TODO: This currently draws the ball to the top left of the player.
+		// This will not be centered if the ball texture doesn't match the
+		// player.
 		if (ball.getOwner() != null) {
 			ball.x = ball.getOwner().x;
 			ball.y = ball.getOwner().y;
@@ -154,17 +157,19 @@ public class Game implements ApplicationListener {
 
 		// begin a new batch and draw the players and ball
 		batch.begin();
-		
+
 		// draw the background pitch
 		batch.draw(pitchTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 700,
 				1024, false, false);
 		batch.end();
-		
 
 		batch.begin();
 		for (Player player : players) {
 			batch.draw(player.getTexture(), player.x, player.y);
 			if (player.isHighlighted()) {
+				// TODO: Hard coded value needs removing from rendering the
+				// hover texture. Centre point of hover texture should be centre
+				// of player
 				batch.draw(player.getHighlightTexture(), player.x - 16,
 						player.y - 16);
 			}
