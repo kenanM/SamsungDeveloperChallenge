@@ -37,7 +37,7 @@ public class Player extends Rectangle {
 	}
 	
 	// Takes a player's x or y co-ordinate and translates it to drawable x or y
-	public float translatePlayerCoordinate(float c){
+	public static float translatePlayerCoordinate(float c){
 		return c - (PLAYER_SIZE/2);
 	}
 	

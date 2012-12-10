@@ -54,7 +54,7 @@ public class Move extends Action {
 		// are within range set our players position to be that point keep going
 		// until either we run out of distance or we can't reach the next point
 		// in which case move towards it using a utility method
-		Vector2 position = new Vector2(player.x, player.y);
+		Vector2 position = new Vector2(player.getPlayerX(), player.getPlayerY());
 		float distance = time * velocity;
 
 		while (distance > 0) {
@@ -76,8 +76,8 @@ public class Move extends Action {
 			}
 		}
 
-		player.x = position.x;
-		player.y = position.y;
+		player.x = Player.translatePlayerCoordinate(position.x);
+		player.y = Player.translatePlayerCoordinate(position.y);
 	}
 
 	public Vector2[] getPath(){

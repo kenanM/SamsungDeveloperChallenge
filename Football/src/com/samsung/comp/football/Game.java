@@ -218,7 +218,8 @@ public class Game implements ApplicationListener {
 					Kick kick = (Kick) action;
 					Vector2 target = kick.getTarget();
 					batch.begin();
-					batch.draw(targetTexture, target.x, target.y);
+					//TODO: need a util method to calculate offsets based on texture
+					batch.draw(targetTexture, target.x-(targetTexture.getHeight()/2), target.y-(targetTexture.getWidth()/2));
 					batch.end();
 				}
 			}
