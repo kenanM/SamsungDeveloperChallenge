@@ -46,9 +46,6 @@ public class Game implements ApplicationListener {
 
 	private InputListener inputListener;
 
-	public static final int SCREEN_WIDTH = 800;
-	public static final int SCREEN_HEIGHT = 1200;
-
 	@Override
 	public void create() {
 
@@ -63,7 +60,8 @@ public class Game implements ApplicationListener {
 		// create the camera and the SpriteBatch
 		// TODO ese are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, SCREEN_WIDTH, SCREEN_HEIGHT);
+		camera.setToOrtho(true, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
 		batch = new SpriteBatch();
 
 		// create the players and test actions
@@ -81,7 +79,9 @@ public class Game implements ApplicationListener {
 		players.add(new Player(TeamColour.BLUE, 400, 100));
 
 		// Create a ball
-		ball = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+		ball = new Ball(
+				Ball.translateBallCoordinate(Gdx.graphics.getWidth() / 2),
+				Ball.translateBallCoordinate(Gdx.graphics.getHeight() / 2));
 		// actions.add(new Kick(ball, 250, 720));
 
 		beginInputStage();
@@ -159,8 +159,8 @@ public class Game implements ApplicationListener {
 		batch.begin();
 
 		// draw the background pitch
-		batch.draw(pitchTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 700,
-				1024, false, false);
+		batch.draw(pitchTexture, 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), 0, 0, 700, 1024, false, false);
 		batch.end();
 
 		batch.begin();
@@ -218,8 +218,11 @@ public class Game implements ApplicationListener {
 					Kick kick = (Kick) action;
 					Vector2 target = kick.getTarget();
 					batch.begin();
-					//TODO: need a util method to calculate offsets based on texture
-					batch.draw(targetTexture, target.x-(targetTexture.getHeight()/2), target.y-(targetTexture.getWidth()/2));
+					// TODO: need a util method to calculate offsets based on
+					// texture
+					batch.draw(targetTexture,
+							target.x - (targetTexture.getHeight() / 2),
+							target.y - (targetTexture.getWidth() / 2));
 					batch.end();
 				}
 			}

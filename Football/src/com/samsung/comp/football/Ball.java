@@ -16,7 +16,7 @@ public class Ball extends Rectangle {
 	private Player owner;
 	private Player previousOwner;
 
-	public Ball(int ballX, int ballY) {
+	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
 		this.y = translateBallCoordinate(ballY);
 
@@ -33,7 +33,7 @@ public class Ball extends Rectangle {
 	}
 	
 	// Takes a ball's x or y co-ordinate and translates it to drawable x or y
-	public float translateBallCoordinate(float c){
+	public static float translateBallCoordinate(float c){
 		return c - (BALL_SIZE/2);
 	}
 
