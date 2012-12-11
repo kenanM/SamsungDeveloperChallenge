@@ -115,37 +115,12 @@ public class Game implements ApplicationListener {
 			for (Action action : actions) {
 				action.executeNextStep(time);
 			}
+			
+
+			tackling();
+			
 		}
 
-		// #tackling
-		for (Player player : players) {
-			Boolean takePossesion = false;
-			if (ball.hasOwner()) {
-				break;
-			} else {
-				// NASTY HACK
-				boolean wasPreviousOwner = false;
-				try {
-					if (ball.getPreviousOwner() == player) {
-						wasPreviousOwner = true;
-					}
-				} catch (Exception e) {
-					// Feel bad about yourself gavin
-				}
-				if (player.overlaps(ball) && !wasPreviousOwner) {
-					takePossesion = true;
-				}
-			}
-			if (takePossesion) {
-				for (Action action : actions) {
-					if (action instanceof Kick) {
-						Kick kick = (Kick) action;
-						kick.cancel();
-					}
-				}
-				ball.setOwner(player);
-			}
-		}
 
 		// TODO: This currently draws the ball to the top left of the player.
 		// This will not be centered if the ball texture doesn't match the
@@ -230,6 +205,38 @@ public class Game implements ApplicationListener {
 		} else {
 			// Execution stage
 
+		}
+	}
+
+	private void tackling() {
+		// #tackling
+		for (Player player : players) {
+			Boolean takePossesion = false;
+			if (ball.hasOwner()) {
+				break;
+			} else {
+				// NASTY HACK
+				boolean wasPreviousOwner = false;
+				try {
+					if (ball.getPreviousOwner() == player) {
+						wasPreviousOwner = true;
+					}
+				} catch (Exception e) {
+					// Feel bad about yourself gavin
+				}
+				if (player.overlaps(ball) && !wasPreviousOwner) {
+					takePossesion = true;
+				}
+			}
+			if (takePossesion) {
+				for (Action action : actions) {
+					if (action instanceof Kick) {
+						Kick kick = (Kick) action;
+						kick.cancel();
+					}
+				}
+				ball.setOwner(player);
+			}
 		}
 	}
 
