@@ -21,8 +21,19 @@ import com.samsung.comp.football.Actions.Move;
 
 public class Game implements ApplicationListener {
 
+	//TODO: Remove these and other hard coded values
 	public static final long ROUND_TIME = 5;
-
+	public static final int PITCH_IMAGE_WIDTH = 670;
+	public static final int PITCH_IMAGE_HEIGHT = 1024;
+	//TODO: Restrict input, ball / player movement etc. to these
+	public static final int PLAYING_AREA_WIDTH = 670;
+	public static final int PLAYING_AREA_HEIGHT = 1024;
+	
+	public int xOffset;
+	public int yOffset;
+	public int drawnPitchWidth;
+	public int drawnPitchHeight;
+		
 	public static Texture redPlayerTexture;
 	public static Texture bluePlayerTexture;
 	public static Texture pitchTexture;
@@ -60,10 +71,11 @@ public class Game implements ApplicationListener {
 		// create the camera and the SpriteBatch
 		// TODO ese are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight());
+		camera.setToOrtho(true, PITCH_IMAGE_WIDTH,
+				PITCH_IMAGE_HEIGHT);
 		batch = new SpriteBatch();
-
+		calculateScreen();
+		
 		// create the players and test actions
 		players = new ArrayList<Player>(10);
 		players.add(new Player(TeamColour.RED, 400, 700));
@@ -92,8 +104,10 @@ public class Game implements ApplicationListener {
 	public void render() {
 		// clear the screen with a dark blue color.
 		// TODO we need to set a background image of a football pitch
+		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight);
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -134,8 +148,8 @@ public class Game implements ApplicationListener {
 		batch.begin();
 
 		// draw the background pitch
-		batch.draw(pitchTexture, 0, 0, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight(), 0, 0, 700, 1024, false, false);
+		batch.draw(pitchTexture, 0, 0, PITCH_IMAGE_WIDTH,
+				PITCH_IMAGE_HEIGHT, 0, 0, PITCH_IMAGE_WIDTH, PITCH_IMAGE_HEIGHT, false, false);
 		batch.end();
 
 		batch.begin();
@@ -209,25 +223,13 @@ public class Game implements ApplicationListener {
 	}
 
 	private void tackling() {
-		// #tackling
 		for (Player player : players) {
 			Boolean takePossesion = false;
-			if (ball.hasOwner()) {
-				break;
-			} else {
-				// NASTY HACK
-				boolean wasPreviousOwner = false;
-				try {
-					if (ball.getPreviousOwner() == player) {
-						wasPreviousOwner = true;
-					}
-				} catch (Exception e) {
-					// Feel bad about yourself gavin
-				}
-				if (player.overlaps(ball) && !wasPreviousOwner) {
-					takePossesion = true;
-				}
+
+			if (player.overlaps(ball)) {
+				takePossesion = true;
 			}
+
 			if (takePossesion) {
 				for (Action action : actions) {
 					if (action instanceof Kick) {
@@ -294,6 +296,37 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void resume() {
+	}
+	
+	private void calculateScreen(){
+		int screenWidth = Gdx.graphics.getWidth();
+		int screenHeight = Gdx.graphics.getHeight();
+		
+		float screenRatio = (float)screenWidth / (float)screenHeight;
+		float pitchImageRatio = (float) PITCH_IMAGE_WIDTH / (float)PITCH_IMAGE_HEIGHT;
+		
+		float stretchFactor;
+
+		
+		if (screenWidth > screenHeight) {
+			// Need to draw pitch on it's side
+		}
+
+		if (screenRatio > pitchImageRatio) {
+			// Borders to left and right
+			stretchFactor = (float)Gdx.graphics.getHeight() / (float)PITCH_IMAGE_HEIGHT;
+			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor); 
+			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor);
+			xOffset = (screenWidth - drawnPitchWidth) / 2;
+			yOffset = 0;
+		} else {
+			// Borders top and bottom
+			stretchFactor = (float)Gdx.graphics.getWidth() / (float)PITCH_IMAGE_WIDTH;
+			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor);
+			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor); 
+			xOffset = 0;
+			yOffset = (screenHeight - drawnPitchHeight)/2;
+		}
 	}
 
 }
