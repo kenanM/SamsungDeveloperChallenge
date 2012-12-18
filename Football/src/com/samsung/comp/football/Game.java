@@ -74,7 +74,6 @@ public class Game implements ApplicationListener {
 		camera.setToOrtho(true, PITCH_IMAGE_WIDTH,
 				PITCH_IMAGE_HEIGHT);
 		batch = new SpriteBatch();
-		calculateScreen();
 		
 		// create the players and test actions
 		players = new ArrayList<Player>(10);
@@ -287,7 +286,32 @@ public class Game implements ApplicationListener {
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(int width, int height) {	
+		float screenRatio = (float)width / (float)height;
+		float pitchImageRatio = (float) PITCH_IMAGE_WIDTH / (float)PITCH_IMAGE_HEIGHT;
+		
+		float stretchFactor;
+
+		
+		if (width > height) {
+			// Need to draw pitch on it's side
+		}
+
+		if (screenRatio > pitchImageRatio) {
+			// Borders to left and right
+			stretchFactor = (float)height / (float)PITCH_IMAGE_HEIGHT;
+			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor); 
+			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor);
+			xOffset = (width - drawnPitchWidth) / 2;
+			yOffset = 0;
+		} else {
+			// Borders top and bottom
+			stretchFactor = (float)width / (float)PITCH_IMAGE_WIDTH;
+			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor);
+			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor); 
+			xOffset = 0;
+			yOffset = (height - drawnPitchHeight)/2;
+		}
 	}
 
 	@Override
@@ -298,35 +322,5 @@ public class Game implements ApplicationListener {
 	public void resume() {
 	}
 	
-	private void calculateScreen(){
-		int screenWidth = Gdx.graphics.getWidth();
-		int screenHeight = Gdx.graphics.getHeight();
-		
-		float screenRatio = (float)screenWidth / (float)screenHeight;
-		float pitchImageRatio = (float) PITCH_IMAGE_WIDTH / (float)PITCH_IMAGE_HEIGHT;
-		
-		float stretchFactor;
-
-		
-		if (screenWidth > screenHeight) {
-			// Need to draw pitch on it's side
-		}
-
-		if (screenRatio > pitchImageRatio) {
-			// Borders to left and right
-			stretchFactor = (float)Gdx.graphics.getHeight() / (float)PITCH_IMAGE_HEIGHT;
-			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor); 
-			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor);
-			xOffset = (screenWidth - drawnPitchWidth) / 2;
-			yOffset = 0;
-		} else {
-			// Borders top and bottom
-			stretchFactor = (float)Gdx.graphics.getWidth() / (float)PITCH_IMAGE_WIDTH;
-			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor);
-			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor); 
-			xOffset = 0;
-			yOffset = (screenHeight - drawnPitchHeight)/2;
-		}
-	}
 
 }
