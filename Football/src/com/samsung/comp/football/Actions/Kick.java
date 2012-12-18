@@ -2,12 +2,14 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
+import com.samsung.comp.football.Game;
 
 public class Kick extends Action {
 
 	private Ball ball;
 	private Vector2 target;
-	private float velocity = 180;
+	private float speed = 180;
+	private float deceleration = 10;
 
 	public Kick(Ball ball, float targetX, float targetY) {
 		this.ball = ball;
@@ -24,7 +26,9 @@ public class Kick extends Action {
 		}
 
 		Vector2 position = new Vector2(ball.x, ball.y);
-		float distance = time * velocity;
+		float distance = time * speed;
+		speed = Math.max(0, 
+				speed - (time*deceleration));
 
 		// If the target is within range of our current position just move to
 		// the target.
