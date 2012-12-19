@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Ball extends Rectangle {
@@ -61,6 +62,10 @@ public class Ball extends Rectangle {
 
 	public void removeOwner() {
 		owner = null;
+	}
+	
+	public void render(SpriteBatch batch) {
+		batch.draw(TEXTURE, this.x, this.y);
 	}
 
 }
