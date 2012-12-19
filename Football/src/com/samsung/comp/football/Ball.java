@@ -65,7 +65,9 @@ public class Ball extends Rectangle {
 	}
 	
 	public void render(SpriteBatch batch) {
-		batch.draw(TEXTURE, this.x, this.y);
+		// draw sprite as is or stretch to fill rectangle
+//		batch.draw(TEXTURE, this.x, this.y);
+		batch.draw(TEXTURE, this.x, this.y, BALL_SIZE, BALL_SIZE);
 	}
 
 }
