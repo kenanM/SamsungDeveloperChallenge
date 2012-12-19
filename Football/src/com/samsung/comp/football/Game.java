@@ -156,14 +156,16 @@ public class Game implements ApplicationListener {
 
 		batch.begin();
 		for (Player player : players) {
-			batch.draw(player.getTexture(), player.x, player.y);
-			if (player.isHighlighted()) {
-				// TODO: Hard coded value needs removing from rendering the
-				// hover texture. Centre point of hover texture should be centre
-				// of player
-				batch.draw(player.getHighlightTexture(), player.x - 16,
-						player.y - 16);
-			}
+//			batch.draw(player.getTexture(), player.x, player.y);
+//			if (player.isHighlighted()) {
+//				// TODO: Hard coded value needs removing from rendering the
+//				// hover texture. Centre point of hover texture should be centre
+//				// of player
+//				batch.draw(player.getHighlightTexture(), player.x - 16,
+//						player.y - 16);
+//			}
+			
+			player.render(batch);
 		}
 		batch.end();
 
