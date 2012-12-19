@@ -36,12 +36,8 @@ public class Game implements ApplicationListener {
 	public int yOffset;
 	public int drawnPitchWidth;
 	public int drawnPitchHeight;
-		
-	public static Texture redPlayerTexture;
-	public static Texture bluePlayerTexture;
+
 	public static Texture pitchTexture;
-	public static Texture blueHoverTexture;
-	public static Texture redHoverTexture;
 	public static Texture targetTexture;
 	public static Texture playTexture;
 
@@ -64,12 +60,16 @@ public class Game implements ApplicationListener {
 	public void create() {
 
 		targetTexture = new Texture(Gdx.files.internal("target.png"));
-		redPlayerTexture = new Texture(Gdx.files.internal("redPlayer.png"));
-		bluePlayerTexture = new Texture(Gdx.files.internal("bluePlayer.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
-		redHoverTexture = new Texture(Gdx.files.internal("red hover.png"));
-		blueHoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
+		
+		Ball.setTexture(new Texture(Gdx.files.internal("ball.png")));
+		
+		Player.setTexture(TeamColour.BLUE, new Texture(Gdx.files.internal("bluePlayer.png")));
+		Player.setTexture(TeamColour.RED, new Texture(Gdx.files.internal("redPlayer.png")));
+		
+		Player.setHighlightTexture(TeamColour.RED, new Texture(Gdx.files.internal("red hover.png")));
+		Player.setHighlightTexture(TeamColour.BLUE, new Texture(Gdx.files.internal("blue hover.png")));
 
 		// create the camera and the SpriteBatch
 		// TODO ese are not necessarily the dimensions we want.
@@ -282,9 +282,11 @@ public class Game implements ApplicationListener {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		bluePlayerTexture.dispose();
-		redPlayerTexture.dispose();
+		Player.dispose();
+		Ball.dispose();
 		pitchTexture.dispose();
+		targetTexture.dispose();
+		playTexture.dispose();
 		batch.dispose();
 	}
 

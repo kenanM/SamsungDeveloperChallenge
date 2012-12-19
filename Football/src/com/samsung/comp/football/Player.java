@@ -12,9 +12,14 @@ public class Player extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
 	private static final int PLAYER_SIZE = 25;
+	private static Texture redPlayerTexture;
+	private static Texture bluePlayerTexture;
+	private static Texture blueHoverTexture;
+	private static Texture redHoverTexture;
 
 	private boolean isHighlighted=false;
 	private final TeamColour TEAM;
+	
 
 	public Player(TeamColour colour, float playerX, float playerY) {
 		this.TEAM = colour;
@@ -45,14 +50,6 @@ public class Player extends Rectangle {
 		return new Vector2(getPlayerX(), getPlayerY());
 	}	
 
-	public Texture getTexture() {
-		if (getTeam() == TeamColour.RED) {
-			return Game.redPlayerTexture;
-		} else {
-			return Game.bluePlayerTexture;
-		}
-	}
-
 	public void highlight() {
 		isHighlighted = true;
 	}
@@ -66,12 +63,43 @@ public class Player extends Rectangle {
 		}
 	}
 
+	public static void setTexture(TeamColour team, Texture texture) {
+		if (team==TeamColour.RED) {
+			redPlayerTexture = texture;
+		}
+		else{
+			bluePlayerTexture = texture;
+		}
+	}
+	
+	public Texture getTexture() {
+		if (TEAM == TeamColour.RED) {
+			return redPlayerTexture;
+		} else {
+			return bluePlayerTexture;
+		}
+	}
+
+	public static void setHighlightTexture(TeamColour team, Texture texture) {
+		if (team==TeamColour.RED) {
+			redHoverTexture = texture;
+		}
+		else{
+			blueHoverTexture = texture;
+		}
+	}
+	
 	public Texture getHighlightTexture() {
 		if (getTeam() == TeamColour.RED) {
-			return Game.redHoverTexture;
+			return redHoverTexture;
 		} else {
-			return Game.blueHoverTexture;
+			return blueHoverTexture;
 		}
+	}
+	
+	public static void dispose(){
+		bluePlayerTexture.dispose();
+		redPlayerTexture.dispose();
 	}
 
 }
