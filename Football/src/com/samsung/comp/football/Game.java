@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
@@ -23,11 +24,13 @@ public class Game implements ApplicationListener {
 
 	//TODO: Remove these and other hard coded values
 	public static final long ROUND_TIME = 5;
-	public static final int PITCH_IMAGE_WIDTH = 670;
-	public static final int PITCH_IMAGE_HEIGHT = 1024;
+	public static final int VIRTUAL_SCREEN_WIDTH = 676;
+	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
 	//TODO: Restrict input, ball / player movement etc. to these
 	public static final int PLAYING_AREA_WIDTH = 670;
 	public static final int PLAYING_AREA_HEIGHT = 1024;
+	// Image here isn't vertical symmetrical
+	public static final Rectangle PLAYING_AREA = new Rectangle(23, 41, 676-23-23, 1024-41-45);
 	
 	public int xOffset;
 	public int yOffset;
@@ -71,8 +74,8 @@ public class Game implements ApplicationListener {
 		// create the camera and the SpriteBatch
 		// TODO ese are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, PITCH_IMAGE_WIDTH,
-				PITCH_IMAGE_HEIGHT);
+		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH,
+				VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		
 		// create the players and test actions
@@ -147,8 +150,8 @@ public class Game implements ApplicationListener {
 		batch.begin();
 
 		// draw the background pitch
-		batch.draw(pitchTexture, 0, 0, PITCH_IMAGE_WIDTH,
-				PITCH_IMAGE_HEIGHT, 0, 0, PITCH_IMAGE_WIDTH, PITCH_IMAGE_HEIGHT, false, false);
+		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
+				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT, false, false);
 		batch.end();
 
 		batch.begin();
@@ -288,7 +291,7 @@ public class Game implements ApplicationListener {
 	@Override
 	public void resize(int width, int height) {	
 		float screenRatio = (float)width / (float)height;
-		float pitchImageRatio = (float) PITCH_IMAGE_WIDTH / (float)PITCH_IMAGE_HEIGHT;
+		float pitchImageRatio = (float) VIRTUAL_SCREEN_WIDTH / (float)VIRTUAL_SCREEN_HEIGHT;
 		
 		float stretchFactor;
 
@@ -299,16 +302,16 @@ public class Game implements ApplicationListener {
 
 		if (screenRatio > pitchImageRatio) {
 			// Borders to left and right
-			stretchFactor = (float)height / (float)PITCH_IMAGE_HEIGHT;
-			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor); 
-			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor);
+			stretchFactor = (float)height / (float)VIRTUAL_SCREEN_HEIGHT;
+			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * stretchFactor); 
+			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * stretchFactor);
 			xOffset = (width - drawnPitchWidth) / 2;
 			yOffset = 0;
 		} else {
 			// Borders top and bottom
-			stretchFactor = (float)width / (float)PITCH_IMAGE_WIDTH;
-			drawnPitchWidth = (int) (PITCH_IMAGE_WIDTH * stretchFactor);
-			drawnPitchHeight = (int) (PITCH_IMAGE_HEIGHT * stretchFactor); 
+			stretchFactor = (float)width / (float)VIRTUAL_SCREEN_WIDTH;
+			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * stretchFactor);
+			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * stretchFactor); 
 			xOffset = 0;
 			yOffset = (height - drawnPitchHeight)/2;
 		}
