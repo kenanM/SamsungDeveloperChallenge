@@ -35,7 +35,7 @@ public class Ball extends Rectangle {
 		return c - (BALL_SIZE/2);
 	}
 
-	public static void setTexture(Texture texture){
+	public static void create(Texture texture){
 		TEXTURE = texture;
 	}
 	

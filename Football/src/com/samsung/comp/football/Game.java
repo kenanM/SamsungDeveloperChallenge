@@ -63,13 +63,13 @@ public class Game implements ApplicationListener {
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		
-		Ball.setTexture(new Texture(Gdx.files.internal("ball.png")));
+		Ball.create(new Texture(Gdx.files.internal("ball.png")));
 		
-		Player.setTexture(TeamColour.BLUE, new Texture(Gdx.files.internal("bluePlayer.png")));
-		Player.setTexture(TeamColour.RED, new Texture(Gdx.files.internal("redPlayer.png")));
-		
-		Player.setHighlightTexture(TeamColour.RED, new Texture(Gdx.files.internal("red hover.png")));
-		Player.setHighlightTexture(TeamColour.BLUE, new Texture(Gdx.files.internal("blue hover.png")));
+		Player.create(
+				new Texture(Gdx.files.internal("redPlayer.png")),
+				new Texture(Gdx.files.internal("red hover.png")),
+				new Texture(Gdx.files.internal("bluePlayer.png")),
+				new Texture(Gdx.files.internal("blue hover.png")));
 
 		// create the camera and the SpriteBatch
 		// TODO ese are not necessarily the dimensions we want.

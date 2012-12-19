@@ -17,9 +17,8 @@ public class Player extends Rectangle {
 	private static Texture blueHoverTexture;
 	private static Texture redHoverTexture;
 
-	private boolean isHighlighted=false;
+	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
-	
 
 	public Player(TeamColour colour, float playerX, float playerY) {
 		this.TEAM = colour;
@@ -32,46 +31,37 @@ public class Player extends Rectangle {
 	public TeamColour getTeam() {
 		return TEAM;
 	}
-	
+
 	public float getPlayerX() {
-		return x + (PLAYER_SIZE/2);
+		return x + (PLAYER_SIZE / 2);
 	}
-	
+
 	public float getPlayerY() {
-		return y + (PLAYER_SIZE/2);
+		return y + (PLAYER_SIZE / 2);
 	}
-	
+
 	// Takes a player's x or y co-ordinate and translates it to drawable x or y
-	public static float translatePlayerCoordinate(float c){
-		return c - (PLAYER_SIZE/2);
+	public static float translatePlayerCoordinate(float c) {
+		return c - (PLAYER_SIZE / 2);
 	}
-	
-	public Vector2 getPlayerPosition(){
+
+	public Vector2 getPlayerPosition() {
 		return new Vector2(getPlayerX(), getPlayerY());
-	}	
+	}
 
 	public void highlight() {
 		isHighlighted = true;
 	}
 
 	public boolean isHighlighted() {
-		if(isHighlighted){
-			isHighlighted=false;
+		if (isHighlighted) {
+			isHighlighted = false;
 			return true;
-		} else{
+		} else {
 			return false;
 		}
 	}
 
-	public static void setTexture(TeamColour team, Texture texture) {
-		if (team==TeamColour.RED) {
-			redPlayerTexture = texture;
-		}
-		else{
-			bluePlayerTexture = texture;
-		}
-	}
-	
 	public Texture getTexture() {
 		if (TEAM == TeamColour.RED) {
 			return redPlayerTexture;
@@ -80,15 +70,6 @@ public class Player extends Rectangle {
 		}
 	}
 
-	public static void setHighlightTexture(TeamColour team, Texture texture) {
-		if (team==TeamColour.RED) {
-			redHoverTexture = texture;
-		}
-		else{
-			blueHoverTexture = texture;
-		}
-	}
-	
 	public Texture getHighlightTexture() {
 		if (getTeam() == TeamColour.RED) {
 			return redHoverTexture;
@@ -96,8 +77,16 @@ public class Player extends Rectangle {
 			return blueHoverTexture;
 		}
 	}
-	
-	public static void dispose(){
+
+	public static void create(Texture redPlayer, Texture redHover,
+			Texture bluePlayer, Texture blueHover) {
+		redPlayerTexture = redPlayer;
+		redHoverTexture = redHover;
+		bluePlayerTexture = bluePlayer;
+		blueHoverTexture = blueHover;
+	}
+
+	public static void dispose() {
 		bluePlayerTexture.dispose();
 		redPlayerTexture.dispose();
 	}
