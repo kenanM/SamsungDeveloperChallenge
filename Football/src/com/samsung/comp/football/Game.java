@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import android.util.Log;
 
@@ -32,10 +33,11 @@ public class Game implements ApplicationListener {
 	public static final Rectangle PLAYING_AREA = new Rectangle(23, 41,
 			676 - 23 - 23, 1024 - 41 - 45);
 
-	public int xOffset;
-	public int yOffset;
-	public int drawnPitchWidth;
-	public int drawnPitchHeight;
+	private int xOffset;
+	private int yOffset;
+	private int drawnPitchWidth;
+	private int drawnPitchHeight;
+	private float stretchFactor;
 
 	public static Texture pitchTexture;
 	public static Texture targetTexture;
@@ -248,7 +250,13 @@ public class Game implements ApplicationListener {
 	public List<Player> getPlayers() {
 		return new ArrayList<Player>(players);
 	}
-
+	
+	public Vector2 translateInputToField(Vector2 vector) {
+		float vx = (vector.x / stretchFactor) - xOffset;
+		float vy = (vector.y / stretchFactor) - yOffset;
+		return new Vector2(vx,vy);
+	}
+	
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
@@ -265,8 +273,6 @@ public class Game implements ApplicationListener {
 		float screenRatio = (float) width / (float) height;
 		float pitchImageRatio = (float) VIRTUAL_SCREEN_WIDTH
 				/ (float) VIRTUAL_SCREEN_HEIGHT;
-
-		float stretchFactor;
 
 		if (width > height) {
 			// Need to draw pitch on it's side

@@ -38,10 +38,12 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	 * player found
 	 */
 	private Player findPlayer(Vector2 point) {
+		Vector2 fieldPoint = game.translateInputToField(point);
 		Vector2 playerVector;
 		for (Player player : players) {
-			playerVector = new Vector2(player.x + 16, player.y + 16);
-			if (playerVector.epsilonEquals(point, 32f)) {
+			playerVector = new Vector2(player.getPlayerX(), player.getPlayerY());
+			// TODO: Remove hard coded value
+			if (playerVector.epsilonEquals(fieldPoint, 32f)) {
 				Log.v("Input", "Hover");
 				player.highlight();
 				return player;
@@ -75,6 +77,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
+		// TODO: remove hard coded value
 		if (detectPresses && arg1.getX() < 128 && arg1.getY() < 128) {
 			// Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
 			detectPresses = false;
@@ -86,7 +89,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	@Override
 	public boolean onTouchPen(View arg0, MotionEvent event) {
 		int action = event.getAction();
-		Vector2 eventVector = new Vector2(event.getX(), event.getY());
+		Vector2 eventVector = game.translateInputToField(new Vector2(event
+				.getX(), event.getY()));
 
 		if (action == MotionEvent.ACTION_DOWN) {
 			if (selectedPlayer == null) {
@@ -113,8 +117,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				// Log.v("MOTION", "ACTION_MOVE");
 				playerBeingDrawnFrom.highlight();
 				for (int i = 0; i < event.getHistorySize(); i++) {
-					lineInProgress.add(new Vector2(event.getHistoricalX(i),
-							event.getHistoricalY(i)));
+					lineInProgress.add(game.translateInputToField(new Vector2(event.getHistoricalX(i),
+							event.getHistoricalY(i))));
 				}
 				lineInProgress.add(eventVector);
 			}
