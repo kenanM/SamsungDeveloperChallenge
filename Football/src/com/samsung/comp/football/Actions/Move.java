@@ -21,21 +21,6 @@ public class Move extends Action {
 		this.nextAction = new Stop();
 	}
 
-	/** This constructor should only be used for test purposes */
-	public Move(Player player) {
-		this.player = player;
-		this.nextAction = new Stop();
-		this.path = new Vector2[5];
-		
-		Random random = new Random();
-
-		for (int a = 0; a < 5; a++) {
-			path[a] = new Vector2(random.nextFloat() * 420,
-					random.nextFloat() * 800);
-		}
-		Log.w("Move", "Create a random path:" + path.toString());
-	}
-
 	public Move(Player player, Vector2[] path, Action nextAction) {
 		this.player = player;
 		this.path = path;
