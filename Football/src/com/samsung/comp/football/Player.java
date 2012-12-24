@@ -14,7 +14,7 @@ public class Player extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	private static final int PLAYER_SIZE = 25;
 	private static final int HOVER_SIZE = 64;
-	
+
 	private static Texture redPlayerTexture;
 	private static Texture bluePlayerTexture;
 	private static Texture blueHoverTexture;
@@ -43,12 +43,14 @@ public class Player extends Rectangle {
 		return y + (PLAYER_SIZE / 2);
 	}
 
-	// Takes a player's x or y co-ordinate and translates it to a player's drawable x or y
+	// Takes a player's x or y co-ordinate and translates it to a player's
+	// drawable x or y
 	public static float translatePlayerCoordinate(float c) {
 		return c - (PLAYER_SIZE / 2);
 	}
-	
-	// Takes a player's x or y co-ordinate and translates it to a hover texture's x or y
+
+	// Takes a player's x or y co-ordinate and translates it to a hover
+	// texture's x or y
 	public static float translateHoverCoordinate(float c) {
 		return c - (HOVER_SIZE / 2);
 	}
@@ -93,18 +95,16 @@ public class Player extends Rectangle {
 		bluePlayerTexture = bluePlayer;
 		blueHoverTexture = blueHover;
 	}
-	
+
 	public void render(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
-//		batch.draw(this.getTexture(), this.x, this.y);
+		// batch.draw(this.getTexture(), this.x, this.y);
 		batch.draw(this.getTexture(), this.x, this.y, PLAYER_SIZE, PLAYER_SIZE);
 		if (this.isHighlighted()) {
 			batch.draw(this.getHighlightTexture(),
 					translateHoverCoordinate(getPlayerX()),
 					translateHoverCoordinate(getPlayerY()));
 		}
-		
-		
 	}
 
 	public static void dispose() {

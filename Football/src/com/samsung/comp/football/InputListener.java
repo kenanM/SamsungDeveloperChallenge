@@ -15,7 +15,6 @@ import com.samsung.spensdk.applistener.SPenTouchListener;
 
 public class InputListener implements SPenTouchListener, SPenHoverListener {
 
-	private static final String TAG = "InputListener";
 	private final Game game;
 	private boolean detectPresses = false;
 	private List<Player> players;

@@ -72,7 +72,7 @@ public class Game implements ApplicationListener {
 						Gdx.files.internal("blue hover.png")));
 
 		// create the camera and the SpriteBatch
-		// TODO ese are not necessarily the dimensions we want.
+		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();

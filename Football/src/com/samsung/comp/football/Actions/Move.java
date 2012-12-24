@@ -1,9 +1,5 @@
 package com.samsung.comp.football.Actions;
 
-import java.util.Random;
-
-import android.util.Log;
-
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player;
 
@@ -65,7 +61,7 @@ public class Move extends Action {
 		player.y = Player.translatePlayerCoordinate(position.y);
 	}
 
-	public Vector2[] getPath(){
+	public Vector2[] getPath() {
 		return path;
 	}
 }
