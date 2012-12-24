@@ -2,7 +2,6 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
-import com.samsung.comp.football.Game;
 
 public class Kick extends Action {
 

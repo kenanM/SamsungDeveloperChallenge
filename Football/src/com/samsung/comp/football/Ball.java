@@ -1,6 +1,5 @@
 package com.samsung.comp.football;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,24 +21,24 @@ public class Ball extends Rectangle {
 		width = BALL_SIZE;
 		height = BALL_SIZE;
 	}
-	
+
 	public float getBallX() {
-		return x + (BALL_SIZE/2);
-	}
-	
-	public float getBallY() {
-		return y + (BALL_SIZE/2);
-	}
-	
-	// Takes a ball's x or y co-ordinate and translates it to drawable x or y
-	public static float translateBallCoordinate(float c){
-		return c - (BALL_SIZE/2);
+		return x + (BALL_SIZE / 2);
 	}
 
-	public static void create(Texture texture){
+	public float getBallY() {
+		return y + (BALL_SIZE / 2);
+	}
+
+	// Takes a ball's x or y co-ordinate and translates it to drawable x or y
+	public static float translateBallCoordinate(float c) {
+		return c - (BALL_SIZE / 2);
+	}
+
+	public static void create(Texture texture) {
 		TEXTURE = texture;
 	}
-	
+
 	public Texture getTexture() {
 		return TEXTURE;
 	}
@@ -63,10 +62,10 @@ public class Ball extends Rectangle {
 	public void removeOwner() {
 		owner = null;
 	}
-	
+
 	public void render(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
-//		batch.draw(TEXTURE, this.x, this.y);
+		// batch.draw(TEXTURE, this.x, this.y);
 		batch.draw(TEXTURE, this.x, this.y, BALL_SIZE, BALL_SIZE);
 	}
 
