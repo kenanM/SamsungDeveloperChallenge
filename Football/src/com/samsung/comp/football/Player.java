@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Stop;
 
 public class Player extends Rectangle {
 
@@ -22,6 +24,7 @@ public class Player extends Rectangle {
 
 	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
+	private Action action;
 
 	public Player(TeamColour colour, float playerX, float playerY) {
 		this.TEAM = colour;
@@ -29,6 +32,23 @@ public class Player extends Rectangle {
 		this.y = translatePlayerCoordinate(playerY);
 		width = PLAYER_SIZE;
 		height = PLAYER_SIZE;
+		action = new Stop();
+	}
+
+	public void setAction(Action action) {
+		this.action = action;
+	}
+
+	public Action getAction() {
+		return action;
+	}
+
+	public void clearAction() {
+		this.action = new Stop();
+	}
+
+	public void executeNextStep(float time) {
+		action.executeNextStep(time);
 	}
 
 	public TeamColour getTeam() {

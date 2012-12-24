@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
-import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 
@@ -51,7 +50,6 @@ public class Game implements ApplicationListener {
 	private OrthographicCamera camera;
 
 	private List<Player> players;
-	private List<Action> actions = new ArrayList<Action>();
 	private Ball ball;
 	private float totalTime = 0;
 
@@ -126,8 +124,8 @@ public class Game implements ApplicationListener {
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
-			for (Action action : actions) {
-				action.executeNextStep(time);
+			for (Player player: players) {
+				player.executeNextStep(time);
 			}
 
 			tackling();
@@ -185,9 +183,9 @@ public class Game implements ApplicationListener {
 				shapeRenderer.line(a.x, a.y, b.x, b.y);
 			}
 			shapeRenderer.setColor(0, 0, 0, 0);
-			for (Action action : actions) {
-				if (action instanceof Move) {
-					Move movement = (Move) action;
+			for (Player player: players) {
+				if (player.getAction() instanceof Move) {
+					Move movement = (Move) player.getAction();
 					Vector2[] path = movement.getPath();
 					for (int i = 0; i < path.length - 1; i++) {
 						shapeRenderer.line(path[i].x, path[i].y, path[i + 1].x,
@@ -195,8 +193,8 @@ public class Game implements ApplicationListener {
 					}
 				}
 
-				if (action instanceof Kick) {
-					Kick kick = (Kick) action;
+				if (player.getAction() instanceof Kick) {
+					Kick kick = (Kick) player.getAction();
 					Vector2 target = kick.getTarget();
 					batch.begin();
 					// TODO: need a util method to calculate offsets based on
@@ -223,9 +221,9 @@ public class Game implements ApplicationListener {
 			}
 
 			if (takePossesion) {
-				for (Action action : actions) {
-					if (action instanceof Kick) {
-						Kick kick = (Kick) action;
+				for (Player previousBallOwner: players) {
+					if (previousBallOwner.getAction() instanceof Kick) {
+						Kick kick = (Kick) previousBallOwner.getAction();
 						kick.cancel();
 					}
 				}
@@ -247,11 +245,9 @@ public class Game implements ApplicationListener {
 	}
 
 	public void clearActions() {
-		actions.clear();
-	}
-
-	public void addAction(Action action) {
-		actions.add(action);
+		for(Player player:players){
+			player.clearAction();
+		}
 	}
 
 	public void beginInputStage() {
@@ -260,7 +256,7 @@ public class Game implements ApplicationListener {
 	}
 
 	public void beginExecution() {
-		Log.v("Game", "Beginning execution " + actions.size() + " actions.");
+		Log.v("Game", "Beginning execution");
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
 	}

@@ -96,7 +96,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			} else {
 				Ball ball = game.getBall();
 				if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
-					game.addAction(new Kick(ball, motionEvent.getX(),
+					selectedPlayer.setAction(new Kick(ball, motionEvent.getX(),
 							motionEvent.getY()));
 				}
 			}
@@ -123,7 +123,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					// end of the line
 					lineInProgress.add(new Vector2(motionEvent.getX(),
 							motionEvent.getY()));
-					game.addAction(new Move(playerBeingDrawnFrom,
+					playerBeingDrawnFrom.setAction(new Move(playerBeingDrawnFrom,
 							lineInProgress.toArray(new Vector2[lineInProgress
 									.size()])));
 					lineInProgress.clear();
