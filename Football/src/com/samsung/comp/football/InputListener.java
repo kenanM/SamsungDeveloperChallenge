@@ -34,8 +34,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	/**
-	 * Finds a player that overlaps or nears a point, returns null if no player
-	 * found
+	 * Finds a player that overlaps or is near a point, returns null if no
+	 * player found
 	 */
 	private Player findPlayer(Vector2 point) {
 		Vector2 playerVector;
@@ -48,6 +48,15 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Finds a player that overlaps or is near a point, returns null if no
+	 * player found
+	 */
+	private Player findPlayer(MotionEvent motionEvent) {
+		Vector2 point = new Vector2(motionEvent.getX(), motionEvent.getY());
+		return findPlayer(point);
 	}
 
 	public List<Vector2> getLineBeingDrawn() {
@@ -75,29 +84,26 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	@Override
-	public boolean onTouchPen(View arg0, MotionEvent motionEvent) {
-		int action = motionEvent.getAction();
+	public boolean onTouchPen(View arg0, MotionEvent event) {
+		int action = event.getAction();
+		Vector2 eventVector = new Vector2(event.getX(), event.getY());
 
 		if (action == MotionEvent.ACTION_DOWN) {
 			if (selectedPlayer == null) {
-				// Log.v("MOTION", "ACTION_DOWN");
-				Vector2 vector = new Vector2(motionEvent.getX(),
-						motionEvent.getY());
-				playerBeingDrawnFrom = findPlayer(vector);
+				playerBeingDrawnFrom = findPlayer(event);
 				selectedPlayer = null;
 				if (playerBeingDrawnFrom == null) {
 					return false;
 				} else {
-					// Being drawing a line
+					// Begin drawing a line
 					playerBeingDrawnFrom.highlight();
 					lineInProgress.clear();
-					lineInProgress.add(vector);
+					lineInProgress.add(eventVector);
 				}
 			} else {
 				Ball ball = game.getBall();
 				if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
-					selectedPlayer.setAction(new Kick(ball, motionEvent.getX(),
-							motionEvent.getY()));
+					selectedPlayer.setAction(new Kick(ball, eventVector));
 				}
 			}
 		}
@@ -106,24 +112,21 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			} else {
 				// Log.v("MOTION", "ACTION_MOVE");
 				playerBeingDrawnFrom.highlight();
-				for (int i = 0; i < motionEvent.getHistorySize(); i++) {
-					lineInProgress.add(new Vector2(motionEvent
-							.getHistoricalX(i), motionEvent.getHistoricalY(i)));
+				for (int i = 0; i < event.getHistorySize(); i++) {
+					lineInProgress.add(new Vector2(event.getHistoricalX(i),
+							event.getHistoricalY(i)));
 				}
-				lineInProgress.add(new Vector2(motionEvent.getX(), motionEvent
-						.getY()));
+				lineInProgress.add(eventVector);
 			}
 		}
 		if (action == MotionEvent.ACTION_UP) {
-			Log.v("MOTION", "ACTION_UP");
 			if (selectedPlayer == null) {
-				Player player = findPlayer(new Vector2(motionEvent.getX(),
-						motionEvent.getY()));
+				Player player = findPlayer(event);
 				if (player == null || player != playerBeingDrawnFrom) {
 					// end of the line
-					lineInProgress.add(new Vector2(motionEvent.getX(),
-							motionEvent.getY()));
-					playerBeingDrawnFrom.setAction(new Move(playerBeingDrawnFrom,
+					lineInProgress.add(eventVector);
+					playerBeingDrawnFrom.setAction(new Move(
+							playerBeingDrawnFrom,
 							lineInProgress.toArray(new Vector2[lineInProgress
 									.size()])));
 					lineInProgress.clear();
@@ -149,8 +152,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	public boolean onHover(View arg0, MotionEvent event) {
 		if (detectPresses) {
 			// Log.v(TAG, "onHover: " + event.getX() + ", " + event.getY());
-			Vector2 hoverPoint = new Vector2(event.getX(), event.getY());
-			Player player = findPlayer(hoverPoint);
+			Player player = findPlayer(event);
 			if (player != null) {
 				player.highlight();
 			}

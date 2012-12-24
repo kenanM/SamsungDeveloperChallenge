@@ -10,9 +10,9 @@ public class Kick extends Action {
 	private float speed = 180;
 	private float deceleration = 10;
 
-	public Kick(Ball ball, float targetX, float targetY) {
+	public Kick(Ball ball, Vector2 target) {
 		this.ball = ball;
-		this.target = new Vector2(targetX, targetY);
+		this.target = target;
 		//TODO do this better
 		ball.removeOwner();
 	}
