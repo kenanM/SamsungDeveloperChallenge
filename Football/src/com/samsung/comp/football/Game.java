@@ -93,7 +93,6 @@ public class Game implements ApplicationListener {
 		ball = new Ball(
 				Ball.translateBallCoordinate(Gdx.graphics.getWidth() / 2),
 				Ball.translateBallCoordinate(Gdx.graphics.getHeight() / 2));
-		// actions.add(new Kick(ball, 250, 720));
 
 		beginInputStage();
 
@@ -124,20 +123,11 @@ public class Game implements ApplicationListener {
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
-			for (Player player: players) {
+			for (Player player : players) {
 				player.executeNextStep(time);
 			}
-
+			ball.executeNextStep(time);
 			tackling();
-
-		}
-
-		// TODO: This currently draws the ball to the top left of the player.
-		// This will not be centered if the ball texture doesn't match the
-		// player.
-		if (ball.getOwner() != null) {
-			ball.x = ball.getOwner().x;
-			ball.y = ball.getOwner().y;
 		}
 
 		// begin a new batch and draw the players and ball
@@ -183,7 +173,7 @@ public class Game implements ApplicationListener {
 				shapeRenderer.line(a.x, a.y, b.x, b.y);
 			}
 			shapeRenderer.setColor(0, 0, 0, 0);
-			for (Player player: players) {
+			for (Player player : players) {
 				if (player.getAction() instanceof Move) {
 					Move movement = (Move) player.getAction();
 					Vector2[] path = movement.getPath();
@@ -221,12 +211,6 @@ public class Game implements ApplicationListener {
 			}
 
 			if (takePossesion) {
-				for (Player previousBallOwner: players) {
-					if (previousBallOwner.getAction() instanceof Kick) {
-						Kick kick = (Kick) previousBallOwner.getAction();
-						kick.cancel();
-					}
-				}
 				ball.setOwner(player);
 			}
 		}
@@ -245,7 +229,7 @@ public class Game implements ApplicationListener {
 	}
 
 	public void clearActions() {
-		for(Player player:players){
+		for (Player player : players) {
 			player.clearAction();
 		}
 	}

@@ -3,6 +3,9 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Kick;
+import com.samsung.comp.football.Actions.Stop;
 
 public class Ball extends Rectangle {
 
@@ -13,6 +16,7 @@ public class Ball extends Rectangle {
 	private static Texture TEXTURE;
 	private static final int BALL_SIZE = 8;
 	private Player owner;
+	private Action action;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
@@ -20,6 +24,20 @@ public class Ball extends Rectangle {
 
 		width = BALL_SIZE;
 		height = BALL_SIZE;
+
+		action = new Stop();
+	}
+
+	public void executeNextStep(float time) {
+		if (hasOwner()) {
+			// TODO The player class should have a function called
+			// getBallLocation() so that it can put the ball in front of the
+			// player
+			this.x = owner.getX();
+			this.y = owner.getY();
+		} else {
+			action.executeNextStep(time);
+		}
 	}
 
 	public float getBallX() {
@@ -49,6 +67,9 @@ public class Ball extends Rectangle {
 
 	public void setOwner(Player player) {
 		this.owner = player;
+		if(action instanceof Kick){
+			((Kick) action).cancel();
+		}
 	}
 
 	public Player getOwner() {
