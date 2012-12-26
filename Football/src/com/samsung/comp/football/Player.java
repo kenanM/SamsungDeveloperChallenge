@@ -25,13 +25,15 @@ public class Player extends Rectangle {
 
 	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
-	private float shootSpeed;
-	private float runSpeed;
+	private float shootSpeed = 10;
+	private float runSpeed = 1000;
 	// TODO: Player shot accuracy?
 	// private float accuracy;
 	Vector2[] path;
+	int positionInPath=0;
 	private Action action;
 
+	//TODO: MUST INITIALISE PLAYER STATS
 	public Player(TeamColour colour, float playerX, float playerY) {
 		this.TEAM = colour;
 		this.x = translatePlayerCoordinate(playerX);
@@ -54,7 +56,9 @@ public class Player extends Rectangle {
 	}
 
 	public void executeAction() {
-		action.execute(this);
+		if (action != null) {
+			action.execute(this);
+		}
 	}
 
 	public TeamColour getTeam() {
@@ -171,10 +175,9 @@ public class Player extends Rectangle {
 		// until either we run out of distance or we can't reach the next point
 		// in which case move towards it using a utility method
 		float distance = time * runSpeed;
-		int positionInPath = 0;
 		Vector2 position = getPlayerPosition();
 
-		while (distance > 0) {
+		while (distance > 0 && path!=null && path.length>0) {
 			Vector2 target = path[positionInPath];
 
 			if (position.dst(target) < distance) {
@@ -183,6 +186,7 @@ public class Player extends Rectangle {
 				positionInPath++;
 				if (positionInPath == path.length) {
 					path = new Vector2[] {};
+					positionInPath = 0;
 					action = action.getNextAction();
 					action.execute(this);
 					break;

@@ -15,12 +15,13 @@ public class Ball extends Rectangle {
 	private static Texture TEXTURE;
 	private static final int BALL_SIZE = 8;
 	private Player owner;
-	private Vector2 velocity;
+	private Vector2 velocity = new Vector2(0,0);
 	private float deceleration = 10;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
 		this.y = translateBallCoordinate(ballY);
+		velocity = new Vector2(0,0);
 
 		width = BALL_SIZE;
 		height = BALL_SIZE;

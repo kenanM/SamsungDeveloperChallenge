@@ -116,8 +116,8 @@ public class Game implements ApplicationListener {
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
 
-		drawShapeRenderer();
 		drawSpriteBatch();
+		drawShapeRenderer();
 	}
 
 	private void drawSpriteBatch() {
@@ -139,7 +139,9 @@ public class Game implements ApplicationListener {
 			batch.draw(playTexture, 0, 0);
 
 			for (Player player : players) {
-				player.getAction().draw(batch);
+				if (player.getAction() != null) {
+					player.getAction().draw(batch);
+				}
 			}
 		} else {
 			// Execution stage
@@ -168,7 +170,9 @@ public class Game implements ApplicationListener {
 			shapeRenderer.setColor(0, 0, 0, 0);
 
 			for (Player player : players) {
-				player.getAction().draw(shapeRenderer);
+				if (player.getAction() != null) {
+					player.getAction().draw(shapeRenderer);
+				}
 			}
 		} else {
 			// Execution stage
@@ -181,7 +185,7 @@ public class Game implements ApplicationListener {
 		float time = Gdx.graphics.getDeltaTime();
 		totalTime += time;
 
-		//TODO: Merge this IF statement with the one below.
+		// TODO: Merge this IF statement with the one below.
 		if (totalTime >= ROUND_TIME && gameState == GameState.EXECUTION) {
 			gameState = GameState.INPUT;
 			inputListener.beginInputStage(players);
