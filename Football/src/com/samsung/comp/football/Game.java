@@ -102,8 +102,10 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void render() {
+		
+		update();
+		
 		// clear the screen with a dark blue color.
-		// TODO we need to set a background image of a football pitch
 		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight);
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -114,24 +116,13 @@ public class Game implements ApplicationListener {
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
+		
+		
+		drawShapeRenderer();
+		drawSpriteBatch();
+	}
 
-		float time = Gdx.graphics.getDeltaTime();
-		totalTime += time;
-
-		if (totalTime >= ROUND_TIME && gameState == GameState.EXECUTION) {
-			gameState = GameState.INPUT;
-			inputListener.beginInputStage(players);
-		}
-
-		// Each action should update the player's X,Y coordines
-		if (gameState == GameState.EXECUTION) {
-			for (Player player : players) {
-				player.executeNextStep(time);
-			}
-			ball.executeNextStep(time);
-			tackling();
-		}
-
+	private void drawSpriteBatch() {
 		// begin a new batch and draw the players and ball
 		batch.begin();
 
@@ -147,9 +138,6 @@ public class Game implements ApplicationListener {
 		}
 		batch.end();
 
-		if (inputListener.getSelectedPlayer() != null) {
-			inputListener.getSelectedPlayer().highlight();
-		}
 
 		batch.begin();
 		ball.render(batch);
@@ -159,7 +147,26 @@ public class Game implements ApplicationListener {
 			batch.begin();
 			batch.draw(playTexture, 0, 0);
 			batch.end();
+			
+			for (Player player : players) {				
 
+				if (player.getAction() instanceof Kick) {
+					Kick kick = (Kick) player.getAction();
+					Vector2 target = kick.getTarget();
+					batch.begin();
+					batch.draw(targetTexture,
+							target.x - (targetTexture.getHeight() / 2),
+							target.y - (targetTexture.getWidth() / 2));
+					batch.end();
+				}
+			}
+		} else {
+			// Execution stage
+		}
+	}
+
+	private void drawShapeRenderer() {
+		if (gameState == GameState.INPUT) {
 			ShapeRenderer shapeRenderer = new ShapeRenderer();
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeType.Line);
@@ -174,7 +181,9 @@ public class Game implements ApplicationListener {
 					continue;
 				shapeRenderer.line(a.x, a.y, b.x, b.y);
 			}
+
 			shapeRenderer.setColor(0, 0, 0, 0);
+
 			for (Player player : players) {
 				if (player.getAction() instanceof Move) {
 					Move movement = (Move) player.getAction();
@@ -184,23 +193,34 @@ public class Game implements ApplicationListener {
 								path[i + 1].y);
 					}
 				}
-
-				if (player.getAction() instanceof Kick) {
-					Kick kick = (Kick) player.getAction();
-					Vector2 target = kick.getTarget();
-					batch.begin();
-					// TODO: need a util method to calculate offsets based on
-					// texture
-					batch.draw(targetTexture,
-							target.x - (targetTexture.getHeight() / 2),
-							target.y - (targetTexture.getWidth() / 2));
-					batch.end();
-				}
 			}
 			shapeRenderer.end();
 		} else {
 			// Execution stage
+		}
+	}
 
+	private void update() {
+		float time = Gdx.graphics.getDeltaTime();
+		totalTime += time;
+
+		if (totalTime >= ROUND_TIME && gameState == GameState.EXECUTION) {
+			gameState = GameState.INPUT;
+			inputListener.beginInputStage(players);
+		}
+		
+
+		if (inputListener.getSelectedPlayer() != null) {
+			inputListener.getSelectedPlayer().highlight();
+		}
+
+		// Each action should update the player's X,Y coordines
+		if (gameState == GameState.EXECUTION) {
+			for (Player player : players) {
+				player.executeNextStep(time);
+			}
+			ball.executeNextStep(time);
+			tackling();
 		}
 	}
 
