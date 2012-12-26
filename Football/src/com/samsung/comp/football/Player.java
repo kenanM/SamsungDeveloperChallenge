@@ -29,7 +29,7 @@ public class Player extends Rectangle {
 	private float runSpeed;
 	// TODO: Player shot accuracy?
 	// private float accuracy;
-	private Vector2 velocity;
+	Vector2[] path;
 	private Action action;
 
 	public Player(TeamColour colour, float playerX, float playerY) {
@@ -53,8 +53,8 @@ public class Player extends Rectangle {
 		this.action = new Stop();
 	}
 
-	public void executeNextStep(float time) {
-		action.executeNextStep(time);
+	public void executeNextStep() {
+		action.executeNextStep(0);
 	}
 
 	public TeamColour getTeam() {
@@ -73,14 +73,27 @@ public class Player extends Rectangle {
 		return new Vector2(getPlayerX(), getPlayerY());
 	}
 
-	// Takes a player's x or y co-ordinate and translates it to a player's
-	// drawable x or y
+	/**
+	 * Takes a player position's x or y component and translates it to the
+	 * player's drawable x or y component.
+	 * 
+	 * @param c
+	 *            The player position's x or y component.
+	 * @return The drawable x or y component of the player.
+	 */
+
 	public static float translatePlayerCoordinate(float c) {
 		return c - (PLAYER_SIZE / 2);
 	}
 
-	// Takes a player's x or y co-ordinate and translates it to a hover
-	// texture's x or y
+	/**
+	 * Takes a player position's x or y component and translates it to the hover
+	 * texture's drawable x or y component.
+	 * 
+	 * @param c
+	 *            The player position's x or y componen.
+	 * @return The drawable x or y component of the hover texture.
+	 */
 	public static float translateHoverCoordinate(float c) {
 		return c - (HOVER_SIZE / 2);
 	}
@@ -138,18 +151,52 @@ public class Player extends Rectangle {
 		redPlayerTexture.dispose();
 	}
 
-	public void move(Vector2 target) {
-		velocity = Utils.getMoveVector(getPlayerPosition(), target, runSpeed);
+	public void move(Vector2[] path) {
+		this.path = path;
 	}
 
 	public void kick(Ball ball, Vector2 target) {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				shootSpeed);
 		ball.move(ballVelocity);
+		action = action.getNextAction();
+		action.executeNextStep(0);
 	}
 
 	public void update(float time) {
-		this.x = this.x + (this.velocity.x * time);
-		this.y = this.y + (this.velocity.y * time);
+
+		// Overview: We loop through each of the points in the list, if they are
+		// are within range set our players position to be that point keep going
+		// until either we run out of distance or we can't reach the next point
+		// in which case move towards it using a utility method
+		float distance = time * runSpeed;
+		int positionInPath = 0;
+		Vector2 position = getPlayerPosition();
+
+		while (distance > 0) {
+			Vector2 target = path[positionInPath];
+
+			if (position.dst(target) < distance) {
+				distance -= position.dst(target);
+				position.set(target);
+				positionInPath++;
+				if (positionInPath == path.length) {
+					path = new Vector2[] {};
+					action = action.getNextAction();
+					action.executeNextStep(time);
+					break;
+				}
+			} else {
+				// Move towards the next position (which is out of reach).
+				Vector2 movement = Utils.getMoveVector(position, target,
+						distance);
+				position.add(movement);
+				break;
+			}
+		}
+
+		this.x = Player.translatePlayerCoordinate(position.x);
+		this.y = Player.translatePlayerCoordinate(position.y);
+
 	}
 }

@@ -194,10 +194,12 @@ public class Game implements ApplicationListener {
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
 			for (Player player : players) {
-				player.executeNextStep(time);
+				player.executeNextStep();
 			}
 			ball.executeNextStep(time);
 			tackling();
+
+			// TODO: Ball & Player.update(time)
 		}
 	}
 

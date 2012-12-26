@@ -5,10 +5,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class Action {
 
+	protected Action nextAction;
 	protected boolean complete = false;
 
 	public boolean isComplete() {
 		return complete;
+	}
+
+	public Action getNextAction() {
+		return nextAction;
 	}
 
 	public abstract void executeNextStep(float time);

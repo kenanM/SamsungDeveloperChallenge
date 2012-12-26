@@ -51,12 +51,19 @@ public class Ball extends Rectangle {
 	public float getBallY() {
 		return y + (BALL_SIZE / 2);
 	}
-	
+
 	public Vector2 getBallPosition() {
 		return new Vector2(getBallX(), getBallY());
 	}
 
-	// Takes a ball's x or y co-ordinate and translates it to drawable x or y
+	/**
+	 * Takes a balls position's x or y component and translates it to a drawable
+	 * x or y component.
+	 * 
+	 * @param c
+	 *            The ball position's x or y component.
+	 * @return The drawable x or y component of the ball.
+	 */
 	public static float translateBallCoordinate(float c) {
 		return c - (BALL_SIZE / 2);
 	}
@@ -92,7 +99,7 @@ public class Ball extends Rectangle {
 		owner = null;
 	}
 
-	//TODO: Rename as draw
+	// TODO: Rename as draw
 	public void render(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);
@@ -107,10 +114,16 @@ public class Ball extends Rectangle {
 		this.x = (this.x + (velocity.x) * time);
 		this.y = (this.x + (velocity.y) * time);
 		decelerate();
+
+		Vector2 position = getBallPosition();
+		position.add(velocity);
+
+		this.x = translateBallCoordinate(position.x);
+		this.y = translateBallCoordinate(position.y);
 	}
-	
+
 	private void decelerate() {
-		float newSpeed = velocity.dst(Vector2.Zero) - deceleration;
+		float newSpeed = Math.max(0, velocity.dst(Vector2.Zero) - deceleration);
 		velocity = Utils.getMoveVector(Vector2.Zero, velocity, newSpeed);
 	}
 
