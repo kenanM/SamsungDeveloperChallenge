@@ -8,24 +8,20 @@ import com.samsung.comp.football.Player;
 public class Move extends Action {
 
 	Vector2[] path;
-	int positionInPath;
-	Player player;
 	float velocity = 200;
 
-	public Move(Player player, Vector2[] path) {
-		this.player = player;
+	public Move(Vector2[] path) {
 		this.path = path;
 		this.nextAction = new Stop();
 	}
 
-	public Move(Player player, Vector2[] path, Action nextAction) {
-		this.player = player;
+	public Move(Vector2[] path, Action nextAction) {
 		this.path = path;
 		this.nextAction = nextAction;
 	}
 
 	@Override
-	public void executeNextStep(float time) {
+	public void execute(Player player) {
 		player.move(path);
 	}
 
@@ -40,8 +36,7 @@ public class Move extends Action {
 	@Override
 	public void draw(ShapeRenderer renderer) {
 		for (int i = 0; i < path.length - 1; i++) {
-			renderer.line(path[i].x, path[i].y, path[i + 1].x,
-					path[i + 1].y);
+			renderer.line(path[i].x, path[i].y, path[i + 1].x, path[i + 1].y);
 		}
 	}
 }

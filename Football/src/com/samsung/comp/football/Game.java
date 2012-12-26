@@ -2,7 +2,6 @@ package com.samsung.comp.football;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import android.util.Log;
 
@@ -182,6 +181,7 @@ public class Game implements ApplicationListener {
 		float time = Gdx.graphics.getDeltaTime();
 		totalTime += time;
 
+		//TODO: Merge this IF statement with the one below.
 		if (totalTime >= ROUND_TIME && gameState == GameState.EXECUTION) {
 			gameState = GameState.INPUT;
 			inputListener.beginInputStage(players);
@@ -194,12 +194,11 @@ public class Game implements ApplicationListener {
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
 			for (Player player : players) {
-				player.executeNextStep();
+				player.executeAction();
+				player.update(time);
+				ball.update(time);
 			}
-			ball.executeNextStep(time);
 			tackling();
-
-			// TODO: Ball & Player.update(time)
 		}
 	}
 

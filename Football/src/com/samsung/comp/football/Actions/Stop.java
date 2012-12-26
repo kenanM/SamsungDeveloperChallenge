@@ -2,12 +2,13 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.samsung.comp.football.Player;
 
 
 public class Stop extends Action {
 
 	@Override
-	public void executeNextStep(float time) {
+	public void execute(Player player) {
 		// Do nothing.
 	}
 

@@ -4,9 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.Kick;
-import com.samsung.comp.football.Actions.Stop;
 import com.samsung.comp.football.Actions.Utils;
 
 public class Ball extends Rectangle {
@@ -20,7 +17,6 @@ public class Ball extends Rectangle {
 	private Player owner;
 	private Vector2 velocity;
 	private float deceleration = 10;
-	private Action action;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
@@ -28,20 +24,6 @@ public class Ball extends Rectangle {
 
 		width = BALL_SIZE;
 		height = BALL_SIZE;
-
-		action = new Stop();
-	}
-
-	public void executeNextStep(float time) {
-		if (hasOwner()) {
-			// TODO The player class should have a function called
-			// getBallLocation() so that it can put the ball in front of the
-			// player
-			this.x = owner.getX();
-			this.y = owner.getY();
-		} else {
-			action.executeNextStep(time);
-		}
 	}
 
 	public float getBallX() {
@@ -82,9 +64,6 @@ public class Ball extends Rectangle {
 
 	public void setOwner(Player player) {
 		this.owner = player;
-		if (action instanceof Kick) {
-			((Kick) action).cancel();
-		}
 	}
 
 	public Player getOwner() {
@@ -111,15 +90,25 @@ public class Ball extends Rectangle {
 	}
 
 	public void update(float time) {
-		this.x = (this.x + (velocity.x) * time);
-		this.y = (this.x + (velocity.y) * time);
-		decelerate();
 
-		Vector2 position = getBallPosition();
-		position.add(velocity);
+		if (hasOwner()) {
+			// TODO The player class should have a function called
+			// getBallLocation() so that it can put the ball in front of the
+			// player
+			this.x = owner.getX();
+			this.y = owner.getY();
+		} else {
 
-		this.x = translateBallCoordinate(position.x);
-		this.y = translateBallCoordinate(position.y);
+			this.x = (this.x + (velocity.x) * time);
+			this.y = (this.x + (velocity.y) * time);
+			decelerate();
+
+			Vector2 position = getBallPosition();
+			position.add(velocity);
+
+			this.x = translateBallCoordinate(position.x);
+			this.y = translateBallCoordinate(position.y);
+		}
 	}
 
 	private void decelerate() {

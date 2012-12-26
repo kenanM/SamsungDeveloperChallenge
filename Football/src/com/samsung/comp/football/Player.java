@@ -53,8 +53,8 @@ public class Player extends Rectangle {
 		this.action = new Stop();
 	}
 
-	public void executeNextStep() {
-		action.executeNextStep(0);
+	public void executeAction() {
+		action.execute(this);
 	}
 
 	public TeamColour getTeam() {
@@ -160,7 +160,8 @@ public class Player extends Rectangle {
 				shootSpeed);
 		ball.move(ballVelocity);
 		action = action.getNextAction();
-		action.executeNextStep(0);
+		action.execute(this);
+		ball.removeOwner();
 	}
 
 	public void update(float time) {
@@ -183,7 +184,7 @@ public class Player extends Rectangle {
 				if (positionInPath == path.length) {
 					path = new Vector2[] {};
 					action = action.getNextAction();
-					action.executeNextStep(time);
+					action.execute(this);
 					break;
 				}
 			} else {

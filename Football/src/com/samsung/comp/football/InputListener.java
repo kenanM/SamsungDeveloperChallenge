@@ -117,8 +117,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				// Log.v("MOTION", "ACTION_MOVE");
 				playerBeingDrawnFrom.highlight();
 				for (int i = 0; i < event.getHistorySize(); i++) {
-					lineInProgress.add(game.translateInputToField(new Vector2(event.getHistoricalX(i),
-							event.getHistoricalY(i))));
+					lineInProgress.add(game.translateInputToField(new Vector2(
+							event.getHistoricalX(i), event.getHistoricalY(i))));
 				}
 				lineInProgress.add(eventVector);
 			}
@@ -129,10 +129,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				if (player == null || player != playerBeingDrawnFrom) {
 					// end of the line
 					lineInProgress.add(eventVector);
-					playerBeingDrawnFrom.setAction(new Move(
-							playerBeingDrawnFrom,
-							lineInProgress.toArray(new Vector2[lineInProgress
-									.size()])));
+					playerBeingDrawnFrom.setAction(new Move(lineInProgress
+							.toArray(new Vector2[lineInProgress.size()])));
 					lineInProgress.clear();
 				} else {
 					lineInProgress.clear();

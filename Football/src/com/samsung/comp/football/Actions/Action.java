@@ -2,21 +2,17 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.samsung.comp.football.Player;
 
 public abstract class Action {
 
 	protected Action nextAction;
-	protected boolean complete = false;
-
-	public boolean isComplete() {
-		return complete;
-	}
 
 	public Action getNextAction() {
 		return nextAction;
 	}
 
-	public abstract void executeNextStep(float time);
+	public abstract void execute(Player player);
 
 	public abstract void draw(SpriteBatch batch);
 
