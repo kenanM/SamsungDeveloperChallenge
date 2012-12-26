@@ -129,22 +129,15 @@ public class Game implements ApplicationListener {
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
-		batch.end();
 
-		batch.begin();
 		for (Player player : players) {
 			player.render(batch);
 		}
-		batch.end();
 
-		batch.begin();
 		ball.render(batch);
-		batch.end();
 
 		if (gameState == GameState.INPUT) {
-			batch.begin();
 			batch.draw(playTexture, 0, 0);
-			batch.end();
 
 			for (Player player : players) {
 				player.getAction().draw(batch);
@@ -152,13 +145,15 @@ public class Game implements ApplicationListener {
 		} else {
 			// Execution stage
 		}
+		batch.end();
 	}
 
 	private void drawShapeRenderer() {
+		ShapeRenderer shapeRenderer = new ShapeRenderer();
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.begin(ShapeType.Line);
+
 		if (gameState == GameState.INPUT) {
-			ShapeRenderer shapeRenderer = new ShapeRenderer();
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(255, 255, 255, 255);
 			List<Vector2> lineInProgress = inputListener.getLineBeingDrawn();
 
@@ -176,10 +171,11 @@ public class Game implements ApplicationListener {
 			for (Player player : players) {
 				player.getAction().draw(shapeRenderer);
 			}
-			shapeRenderer.end();
 		} else {
 			// Execution stage
 		}
+
+		shapeRenderer.end();
 	}
 
 	private void update() {
