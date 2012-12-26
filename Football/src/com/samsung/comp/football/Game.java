@@ -40,7 +40,6 @@ public class Game implements ApplicationListener {
 	private float stretchFactor;
 
 	public static Texture pitchTexture;
-	public static Texture targetTexture;
 	public static Texture playTexture;
 
 	public enum GameState {
@@ -60,9 +59,10 @@ public class Game implements ApplicationListener {
 	@Override
 	public void create() {
 
-		targetTexture = new Texture(Gdx.files.internal("target.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
+
+		Kick.create(new Texture(Gdx.files.internal("target.png")));
 
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
 
@@ -102,9 +102,9 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void render() {
-		
+
 		update();
-		
+
 		// clear the screen with a dark blue color.
 		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight);
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
@@ -116,8 +116,7 @@ public class Game implements ApplicationListener {
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
-		
-		
+
 		drawShapeRenderer();
 		drawSpriteBatch();
 	}
@@ -138,7 +137,6 @@ public class Game implements ApplicationListener {
 		}
 		batch.end();
 
-
 		batch.begin();
 		ball.render(batch);
 		batch.end();
@@ -147,18 +145,9 @@ public class Game implements ApplicationListener {
 			batch.begin();
 			batch.draw(playTexture, 0, 0);
 			batch.end();
-			
-			for (Player player : players) {				
 
-				if (player.getAction() instanceof Kick) {
-					Kick kick = (Kick) player.getAction();
-					Vector2 target = kick.getTarget();
-					batch.begin();
-					batch.draw(targetTexture,
-							target.x - (targetTexture.getHeight() / 2),
-							target.y - (targetTexture.getWidth() / 2));
-					batch.end();
-				}
+			for (Player player : players) {
+				player.getAction().draw(batch);
 			}
 		} else {
 			// Execution stage
@@ -185,14 +174,7 @@ public class Game implements ApplicationListener {
 			shapeRenderer.setColor(0, 0, 0, 0);
 
 			for (Player player : players) {
-				if (player.getAction() instanceof Move) {
-					Move movement = (Move) player.getAction();
-					Vector2[] path = movement.getPath();
-					for (int i = 0; i < path.length - 1; i++) {
-						shapeRenderer.line(path[i].x, path[i].y, path[i + 1].x,
-								path[i + 1].y);
-					}
-				}
+				player.getAction().draw(shapeRenderer);
 			}
 			shapeRenderer.end();
 		} else {
@@ -208,7 +190,6 @@ public class Game implements ApplicationListener {
 			gameState = GameState.INPUT;
 			inputListener.beginInputStage(players);
 		}
-		
 
 		if (inputListener.getSelectedPlayer() != null) {
 			inputListener.getSelectedPlayer().highlight();
@@ -270,20 +251,20 @@ public class Game implements ApplicationListener {
 	public List<Player> getPlayers() {
 		return new ArrayList<Player>(players);
 	}
-	
+
 	public Vector2 translateInputToField(Vector2 vector) {
 		float vx = (vector.x / stretchFactor) - xOffset;
 		float vy = (vector.y / stretchFactor) - yOffset;
-		return new Vector2(vx,vy);
+		return new Vector2(vx, vy);
 	}
-	
+
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
 		Player.dispose();
 		Ball.dispose();
+		Kick.dispose();
 		pitchTexture.dispose();
-		targetTexture.dispose();
 		playTexture.dispose();
 		batch.dispose();
 	}
