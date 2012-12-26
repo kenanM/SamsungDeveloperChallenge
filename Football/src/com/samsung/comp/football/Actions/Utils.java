@@ -9,7 +9,7 @@ public class Utils {
 	 * certain distance towards a target.
 	 */
 	public static Vector2 getMoveVector(Vector2 currentPosition,
-			Vector2 target, float distance) {
+			Vector2 target, float hypotenuse) {
 
 		float yDistance = target.y - currentPosition.y;
 		float xDistance = target.x - currentPosition.x;
@@ -20,8 +20,8 @@ public class Utils {
 		}
 
 		double dir = Math.atan2(yDistance, xDistance) * 180 / Math.PI;
-		double x = Math.cos(dir * Math.PI / 180) * distance;
-		double y = Math.sin(dir * Math.PI / 180) * distance;
+		double x = Math.cos(dir * Math.PI / 180) * hypotenuse;
+		double y = Math.sin(dir * Math.PI / 180) * hypotenuse;
 		return new Vector2((float) x, (float) y);
 	}
 

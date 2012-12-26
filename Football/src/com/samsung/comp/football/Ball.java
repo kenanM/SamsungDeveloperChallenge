@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Stop;
@@ -16,6 +17,7 @@ public class Ball extends Rectangle {
 	private static Texture TEXTURE;
 	private static final int BALL_SIZE = 8;
 	private Player owner;
+	private Vector2 velocity;
 	private Action action;
 
 	public Ball(float ballX, float ballY) {
@@ -67,7 +69,7 @@ public class Ball extends Rectangle {
 
 	public void setOwner(Player player) {
 		this.owner = player;
-		if(action instanceof Kick){
+		if (action instanceof Kick) {
 			((Kick) action).cancel();
 		}
 	}
@@ -84,10 +86,20 @@ public class Ball extends Rectangle {
 		owner = null;
 	}
 
+	//TODO: Rename as draw
 	public void render(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);
 		batch.draw(TEXTURE, this.x, this.y, BALL_SIZE, BALL_SIZE);
+	}
+
+	public void move(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+	public void update(float time) {
+		this.x = (this.x + (velocity.x) * time);
+		this.y = (this.x + (velocity.y) * time);
 	}
 
 }

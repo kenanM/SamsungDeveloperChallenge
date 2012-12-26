@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Stop;
+import com.samsung.comp.football.Actions.Utils;
 
 public class Player extends Rectangle {
 
@@ -24,6 +25,11 @@ public class Player extends Rectangle {
 
 	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
+	private float shootSpeed;
+	private float runSpeed;
+	// TODO: Player shot accuracy?
+	// private float accuracy;
+	private Vector2 velocity;
 	private Action action;
 
 	public Player(TeamColour colour, float playerX, float playerY) {
@@ -63,6 +69,10 @@ public class Player extends Rectangle {
 		return y + (PLAYER_SIZE / 2);
 	}
 
+	public Vector2 getPlayerPosition() {
+		return new Vector2(getPlayerX(), getPlayerY());
+	}
+
 	// Takes a player's x or y co-ordinate and translates it to a player's
 	// drawable x or y
 	public static float translatePlayerCoordinate(float c) {
@@ -73,10 +83,6 @@ public class Player extends Rectangle {
 	// texture's x or y
 	public static float translateHoverCoordinate(float c) {
 		return c - (HOVER_SIZE / 2);
-	}
-
-	public Vector2 getPlayerPosition() {
-		return new Vector2(getPlayerX(), getPlayerY());
 	}
 
 	public void highlight() {
@@ -132,4 +138,18 @@ public class Player extends Rectangle {
 		redPlayerTexture.dispose();
 	}
 
+	public void move(Vector2 target) {
+		velocity = Utils.getMoveVector(getPlayerPosition(), target, runSpeed);
+	}
+
+	public void kick(Ball ball, Vector2 target) {
+		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
+				shootSpeed);
+		ball.move(ballVelocity);
+	}
+
+	public void update(float time) {
+		this.x = this.x + (this.velocity.x * time);
+		this.y = this.y + (this.velocity.y * time);
+	}
 }
