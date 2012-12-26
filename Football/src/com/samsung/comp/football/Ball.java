@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Stop;
+import com.samsung.comp.football.Actions.Utils;
 
 public class Ball extends Rectangle {
 
@@ -18,6 +19,7 @@ public class Ball extends Rectangle {
 	private static final int BALL_SIZE = 8;
 	private Player owner;
 	private Vector2 velocity;
+	private float deceleration = 10;
 	private Action action;
 
 	public Ball(float ballX, float ballY) {
@@ -48,6 +50,10 @@ public class Ball extends Rectangle {
 
 	public float getBallY() {
 		return y + (BALL_SIZE / 2);
+	}
+	
+	public Vector2 getBallPosition() {
+		return new Vector2(getBallX(), getBallY());
 	}
 
 	// Takes a ball's x or y co-ordinate and translates it to drawable x or y
@@ -100,6 +106,12 @@ public class Ball extends Rectangle {
 	public void update(float time) {
 		this.x = (this.x + (velocity.x) * time);
 		this.y = (this.x + (velocity.y) * time);
+		decelerate();
+	}
+	
+	private void decelerate() {
+		float newSpeed = velocity.dst(Vector2.Zero) - deceleration;
+		velocity = Utils.getMoveVector(Vector2.Zero, velocity, newSpeed);
 	}
 
 }
