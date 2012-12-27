@@ -100,15 +100,9 @@ public class Ball extends Rectangle {
 			this.y = owner.getY();
 		} else {
 
-			this.x = (this.x + (velocity.x) * time);
-			this.y = (this.x + (velocity.y) * time);
+			this.x = (this.x + ((velocity.x) * time));
+			this.y = (this.y + ((velocity.y) * time));
 			decelerate();
-
-			Vector2 position = getBallPosition();
-			position.add(velocity);
-
-			this.x = translateBallCoordinate(position.x);
-			this.y = translateBallCoordinate(position.y);
 		}
 	}
 

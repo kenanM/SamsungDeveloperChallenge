@@ -30,10 +30,10 @@ public class Player extends Rectangle {
 	// TODO: Player shot accuracy?
 	// private float accuracy;
 	Vector2[] path;
-	int positionInPath=0;
+	int positionInPath = 0;
 	private Action action;
 
-	//TODO: MUST INITIALISE PLAYER STATS
+	// TODO: MUST INITIALISE PLAYER STATS
 	public Player(TeamColour colour, float playerX, float playerY) {
 		this.TEAM = colour;
 		this.x = translatePlayerCoordinate(playerX);
@@ -163,8 +163,12 @@ public class Player extends Rectangle {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				shootSpeed);
 		ball.move(ballVelocity);
-		action = action.getNextAction();
-		action.execute(this);
+		if (action.getNextAction() == null) {
+			action = null;
+		} else {
+			action = action.getNextAction();
+			action.execute(this);
+		}
 		ball.removeOwner();
 	}
 
@@ -177,17 +181,21 @@ public class Player extends Rectangle {
 		float distance = time * runSpeed;
 		Vector2 position = getPlayerPosition();
 
-		while (distance > 0 && path!=null && path.length>0) {
+		while (distance > 0 && path != null && path.length > 0) {
 			Vector2 target = path[positionInPath];
 
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
 				position.set(target);
 				positionInPath++;
-				if (positionInPath == path.length) {
+				if (positionInPath != 0 && positionInPath == path.length) {
 					path = new Vector2[] {};
 					positionInPath = 0;
-					action = action.getNextAction();
+					if (action.getNextAction() == null) {
+						action = null;
+					} else {
+						action = action.getNextAction();
+					}
 					action.execute(this);
 					break;
 				}
