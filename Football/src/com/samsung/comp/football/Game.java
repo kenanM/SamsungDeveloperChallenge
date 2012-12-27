@@ -130,10 +130,10 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
 		for (Player player : players) {
-			player.render(batch);
+			player.draw(batch);
 		}
 
-		ball.render(batch);
+		ball.draw(batch);
 
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);

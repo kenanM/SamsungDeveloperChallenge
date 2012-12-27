@@ -15,13 +15,13 @@ public class Ball extends Rectangle {
 	private static Texture TEXTURE;
 	private static final int BALL_SIZE = 8;
 	private Player owner;
-	private Vector2 velocity = new Vector2(0,0);
+	private Vector2 velocity = new Vector2(0, 0);
 	private float deceleration = 5;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
 		this.y = translateBallCoordinate(ballY);
-		velocity = new Vector2(0,0);
+		velocity = new Vector2(0, 0);
 
 		width = BALL_SIZE;
 		height = BALL_SIZE;
@@ -79,8 +79,7 @@ public class Ball extends Rectangle {
 		owner = null;
 	}
 
-	// TODO: Rename as draw
-	public void render(SpriteBatch batch) {
+	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);
 		batch.draw(TEXTURE, this.x, this.y, BALL_SIZE, BALL_SIZE);
@@ -107,7 +106,8 @@ public class Ball extends Rectangle {
 	}
 
 	private void decelerate(float time) {
-		float newSpeed = Math.max(0, velocity.dst(Vector2.Zero) - (deceleration*time));
+		float newSpeed = Math.max(0, velocity.dst(Vector2.Zero)
+				- (deceleration * time));
 		velocity = Utils.getMoveVector(Vector2.Zero, velocity, newSpeed);
 	}
 

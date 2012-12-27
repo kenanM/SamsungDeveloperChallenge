@@ -139,7 +139,7 @@ public class Player extends Rectangle {
 		blueHoverTexture = blueHover;
 	}
 
-	public void render(SpriteBatch batch) {
+	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(this.getTexture(), this.x, this.y);
 		batch.draw(this.getTexture(), this.x, this.y, PLAYER_SIZE, PLAYER_SIZE);
