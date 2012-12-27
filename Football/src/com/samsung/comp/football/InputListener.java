@@ -88,60 +88,67 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchPen(View arg0, MotionEvent event) {
-		int action = event.getAction();
-		Vector2 eventVector = game.translateInputToField(new Vector2(event
-				.getX(), event.getY()));
+		if (detectPresses) {
+			int action = event.getAction();
+			Vector2 eventVector = game.translateInputToField(new Vector2(event
+					.getX(), event.getY()));
 
-		if (action == MotionEvent.ACTION_DOWN) {
-			if (selectedPlayer == null) {
-				playerBeingDrawnFrom = findPlayer(event);
-				selectedPlayer = null;
-				if (playerBeingDrawnFrom == null) {
-					return false;
+			if (action == MotionEvent.ACTION_DOWN) {
+				if (selectedPlayer == null) {
+					playerBeingDrawnFrom = findPlayer(event);
+					selectedPlayer = null;
+					if (playerBeingDrawnFrom == null) {
+						return false;
+					} else {
+						// Begin drawing a line
+						playerBeingDrawnFrom.highlight();
+						lineInProgress.clear();
+						lineInProgress.add(eventVector);
+					}
 				} else {
-					// Begin drawing a line
+					Ball ball = game.getBall();
+					if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
+						selectedPlayer.setAction(new Kick(ball, eventVector));
+					}
+				}
+			}
+			
+			if (action == MotionEvent.ACTION_MOVE) {
+				if (selectedPlayer != null) {
+				} else {
+					// Log.v("MOTION", "ACTION_MOVE");
 					playerBeingDrawnFrom.highlight();
-					lineInProgress.clear();
+					for (int i = 0; i < event.getHistorySize(); i++) {
+						lineInProgress.add(game
+								.translateInputToField(new Vector2(event
+										.getHistoricalX(i), event
+										.getHistoricalY(i))));
+					}
 					lineInProgress.add(eventVector);
 				}
-			} else {
-				Ball ball = game.getBall();
-				if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
-					selectedPlayer.setAction(new Kick(ball, eventVector));
-				}
 			}
-		}
-		if (action == MotionEvent.ACTION_MOVE) {
-			if (selectedPlayer != null) {
-			} else {
-				// Log.v("MOTION", "ACTION_MOVE");
-				playerBeingDrawnFrom.highlight();
-				for (int i = 0; i < event.getHistorySize(); i++) {
-					lineInProgress.add(game.translateInputToField(new Vector2(
-							event.getHistoricalX(i), event.getHistoricalY(i))));
-				}
-				lineInProgress.add(eventVector);
-			}
-		}
-		if (action == MotionEvent.ACTION_UP) {
-			if (selectedPlayer == null) {
-				Player player = findPlayer(event);
-				if (player == null || player != playerBeingDrawnFrom) {
-					// end of the line
-					lineInProgress.add(eventVector);
-					playerBeingDrawnFrom.setAction(new Move(lineInProgress
-							.toArray(new Vector2[lineInProgress.size()])));
-					lineInProgress.clear();
-				} else {
-					lineInProgress.clear();
-					selectedPlayer = player;
-				}
+			
+			if (action == MotionEvent.ACTION_UP) {
+				if (selectedPlayer == null) {
+					Player player = findPlayer(event);
+					if (player == null || player != playerBeingDrawnFrom) {
+						// end of the line
+						lineInProgress.add(eventVector);
+						playerBeingDrawnFrom.setAction(new Move(lineInProgress
+								.toArray(new Vector2[lineInProgress.size()])));
+						lineInProgress.clear();
+					} else {
+						lineInProgress.clear();
+						selectedPlayer = player;
+					}
 
-			} else {
-				selectedPlayer = null;
+				} else {
+					selectedPlayer = null;
+				}
 			}
 		}
 		return true;
+
 	}
 
 	@Override

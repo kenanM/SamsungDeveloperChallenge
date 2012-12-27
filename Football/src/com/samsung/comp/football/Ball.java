@@ -16,7 +16,7 @@ public class Ball extends Rectangle {
 	private static final int BALL_SIZE = 8;
 	private Player owner;
 	private Vector2 velocity = new Vector2(0,0);
-	private float deceleration = 10;
+	private float deceleration = 5;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
@@ -97,17 +97,17 @@ public class Ball extends Rectangle {
 			// getBallLocation() so that it can put the ball in front of the
 			// player
 			this.x = owner.getX();
-			this.y = owner.getY();
+			this.y = owner.getY() - 15;
 		} else {
 
 			this.x = (this.x + ((velocity.x) * time));
 			this.y = (this.y + ((velocity.y) * time));
-			decelerate();
+			decelerate(time);
 		}
 	}
 
-	private void decelerate() {
-		float newSpeed = Math.max(0, velocity.dst(Vector2.Zero) - deceleration);
+	private void decelerate(float time) {
+		float newSpeed = Math.max(0, velocity.dst(Vector2.Zero) - (deceleration*time));
 		velocity = Utils.getMoveVector(Vector2.Zero, velocity, newSpeed);
 	}
 

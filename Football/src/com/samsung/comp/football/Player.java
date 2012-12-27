@@ -25,8 +25,8 @@ public class Player extends Rectangle {
 
 	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
-	private float shootSpeed = 10;
-	private float runSpeed = 1000;
+	private float shootSpeed = 50;
+	private float runSpeed = 300;
 	// TODO: Player shot accuracy?
 	// private float accuracy;
 	Vector2[] path;
