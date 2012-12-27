@@ -163,13 +163,17 @@ public class Player extends Rectangle {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				shootSpeed);
 		ball.move(ballVelocity);
+		executeNextAction();
+		ball.removeOwner();
+	}
+
+	private void executeNextAction() {
 		if (action.getNextAction() == null) {
 			action = null;
 		} else {
 			action = action.getNextAction();
 			action.execute(this);
 		}
-		ball.removeOwner();
 	}
 
 	public void update(float time) {
@@ -191,12 +195,7 @@ public class Player extends Rectangle {
 				if (positionInPath != 0 && positionInPath == path.length) {
 					path = new Vector2[] {};
 					positionInPath = 0;
-					if (action.getNextAction() == null) {
-						action = null;
-					} else {
-						action = action.getNextAction();
-					}
-					action.execute(this);
+					executeNextAction();
 					break;
 				}
 			} else {
