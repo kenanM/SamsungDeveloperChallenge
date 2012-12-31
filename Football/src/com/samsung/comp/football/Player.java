@@ -1,13 +1,15 @@
 package com.samsung.comp.football;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.*;
 import com.samsung.comp.football.Actions.Utils;
 
-public class Player extends Rectangle {
+public abstract class Player extends Rectangle {
 
 	public enum TeamColour {
 		RED, BLUE
@@ -17,13 +19,17 @@ public class Player extends Rectangle {
 	private static final int PLAYER_SIZE = 25;
 	private static final int HOVER_SIZE = 64;
 
-	private static Texture redPlayerTexture;
-	private static Texture bluePlayerTexture;
-	private static Texture blueHoverTexture;
-	private static Texture redHoverTexture;
+	protected Texture walkSheet;
+	protected Animation walkAnimation;
+	protected TextureRegion currentFrame;
+	private float stateTime = 0l;
+	/** The dimensions of the run animation */
+	private static final int NUMBER_OF_FRAMES = 8;
 
+	protected Texture hoverTexture;
 	private boolean isHighlighted = false;
-	private final TeamColour TEAM;
+
+	protected TeamColour TEAM;
 
 	private float shootSpeed = 400;
 	private float runSpeed = 300;
@@ -37,12 +43,11 @@ public class Player extends Rectangle {
 	private Action action;
 
 	// TODO: MUST INITIALISE PLAYER STATS
-	public Player(TeamColour colour, float playerX, float playerY) {
-		this.TEAM = colour;
+	public Player(float playerX, float playerY) {
 		this.x = translatePlayerCoordinate(playerX);
 		this.y = translatePlayerCoordinate(playerY);
-		width = PLAYER_SIZE;
-		height = PLAYER_SIZE;
+		this.width = PLAYER_SIZE;
+		this.height = PLAYER_SIZE;
 	}
 
 	public void setAction(Action action) {
@@ -126,20 +131,12 @@ public class Player extends Rectangle {
 		}
 	}
 
-	public Texture getTexture() {
-		if (TEAM == TeamColour.RED) {
-			return redPlayerTexture;
-		} else {
-			return bluePlayerTexture;
-		}
+	public TextureRegion getTexture() {
+		return currentFrame;
 	}
 
 	public Texture getHighlightTexture() {
-		if (getTeam() == TeamColour.RED) {
-			return redHoverTexture;
-		} else {
-			return blueHoverTexture;
-		}
+		return hoverTexture;
 	}
 
 	public float getTackleSkill() {
@@ -150,13 +147,19 @@ public class Player extends Rectangle {
 		return tacklePreventionSkill;
 	}
 
-	public static void create(Texture redPlayer, Texture redHover,
-			Texture bluePlayer, Texture blueHover) {
-		redPlayerTexture = redPlayer;
-		redHoverTexture = redHover;
-		bluePlayerTexture = bluePlayer;
-		blueHoverTexture = blueHover;
+	/** Create a one dimensional TextureRegion array */
+	protected static TextureRegion[] createTextureRegion(Texture animation) {
+		TextureRegion[][] temp = TextureRegion.split(animation,
+				animation.getWidth() / NUMBER_OF_FRAMES, animation.getHeight());
+		// The split function gives us a two dimensional array so turn it into a
+		// one dimensional one
+		TextureRegion[] result = new TextureRegion[NUMBER_OF_FRAMES];
+		for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
+			result[i] = temp[0][i];
+		}
+		return result;
 	}
+
 
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
@@ -169,9 +172,9 @@ public class Player extends Rectangle {
 		}
 	}
 
-	public static void dispose() {
-		bluePlayerTexture.dispose();
-		redPlayerTexture.dispose();
+	public void dispose() {
+		hoverTexture.dispose();
+		walkSheet.dispose();
 	}
 
 	public void move(Vector2[] path) {
@@ -246,6 +249,8 @@ public class Player extends Rectangle {
 				position.add(movement);
 				break;
 			}
+			this.stateTime += time;
+			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		}
 		return position;
 	}

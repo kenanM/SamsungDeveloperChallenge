@@ -16,8 +16,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Player.TeamColour;
-import com.samsung.comp.football.Actions.*;
+import com.samsung.comp.football.Actions.Kick;
+import com.samsung.comp.football.Actions.Utils;
 
 public class Game implements ApplicationListener {
 
@@ -69,11 +69,6 @@ public class Game implements ApplicationListener {
 
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
 
-		Player.create(new Texture(Gdx.files.internal("redPlayer.png")),
-				new Texture(Gdx.files.internal("red hover.png")), new Texture(
-						Gdx.files.internal("bluePlayer.png")), new Texture(
-						Gdx.files.internal("blue hover.png")));
-
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
@@ -82,17 +77,17 @@ public class Game implements ApplicationListener {
 
 		// create the players and test actions
 		players = new ArrayList<Player>(10);
-		players.add(new Player(TeamColour.RED, 400, 700));
-		players.add(new Player(TeamColour.RED, 200, 800));
-		players.add(new Player(TeamColour.RED, 600, 800));
-		players.add(new Player(TeamColour.RED, 400, 850));
-		players.add(new Player(TeamColour.RED, 400, 1100));
+		players.add(new RedPlayer(400, 700));
+		players.add(new RedPlayer(200, 800));
+		players.add(new RedPlayer(600, 800));
+		players.add(new RedPlayer(400, 850));
+		players.add(new RedPlayer(400, 1100));
 
-		players.add(new Player(TeamColour.BLUE, 400, 500));
-		players.add(new Player(TeamColour.BLUE, 200, 400));
-		players.add(new Player(TeamColour.BLUE, 600, 400));
-		players.add(new Player(TeamColour.BLUE, 400, 350));
-		players.add(new Player(TeamColour.BLUE, 400, 100));
+		players.add(new BluePlayer(400, 500));
+		players.add(new BluePlayer(200, 400));
+		players.add(new BluePlayer(600, 400));
+		players.add(new BluePlayer(400, 350));
+		players.add(new BluePlayer(400, 100));
 
 		// Create a ball
 		ball = new Ball(
@@ -276,7 +271,9 @@ public class Game implements ApplicationListener {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		Player.dispose();
+		for (Player player : players) {
+			player.dispose();
+		}
 		Ball.dispose();
 		Kick.dispose();
 		pitchTexture.dispose();
