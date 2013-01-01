@@ -181,9 +181,9 @@ public class Player extends Rectangle {
 	public void pass(Player target) {
 
 	}
-	
+
 	public void mark(Player target) {
-		
+		move(new Vector2[] { target.getPlayerPosition() });
 	}
 
 	private void executeNextAction() {
