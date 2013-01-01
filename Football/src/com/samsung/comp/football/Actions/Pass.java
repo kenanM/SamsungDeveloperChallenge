@@ -2,15 +2,17 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Player;
 
 public class Pass extends Action {
 	
+	private Ball ball;
 	Player target;
 
 	@Override
 	public void execute(Player player) {
-		player.pass(target);
+		player.pass(ball, target);
 
 	}
 

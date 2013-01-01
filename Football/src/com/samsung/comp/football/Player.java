@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.*;
 import com.samsung.comp.football.Actions.Utils;
 
 public class Player extends Rectangle {
@@ -53,8 +53,17 @@ public class Player extends Rectangle {
 		return action;
 	}
 
-	public void clearAction() {
+	private void clearAction() {
 		this.action = null;
+	}
+	
+	private void resetPathIndex() {
+		positionInPath = 0;
+	}
+	
+	public void reset() {
+		clearAction();
+		resetPathIndex();
 	}
 
 	public void executeAction() {
@@ -178,12 +187,13 @@ public class Player extends Rectangle {
 		ball.removeOwner();
 	}
 
-	public void pass(Player target) {
-
-	}
-
 	public void mark(Player target) {
 		move(new Vector2[] { target.getPlayerPosition() });
+	}
+
+	// TODO: Account for a moving player.
+	public void pass(Ball ball, Player target) {
+		kick(ball, target.getPlayerPosition());
 	}
 
 	private void executeNextAction() {
@@ -223,8 +233,10 @@ public class Player extends Rectangle {
 				positionInPath++;
 				if (positionInPath != 0 && positionInPath == path.length) {
 					path = new Vector2[] {};
-					positionInPath = 0;
-					executeNextAction();
+					if (action instanceof Move) {
+						executeNextAction();
+						resetPathIndex();
+					}
 					break;
 				}
 			} else {

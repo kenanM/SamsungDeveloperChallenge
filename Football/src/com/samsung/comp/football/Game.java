@@ -226,8 +226,9 @@ public class Game implements ApplicationListener {
 						ball.setOwner(player);
 					}
 				}
-
-				ball.setOwner(player);
+				else {
+					ball.setOwner(player);
+				}
 			}
 		}
 	}
@@ -246,7 +247,7 @@ public class Game implements ApplicationListener {
 
 	public void clearActions() {
 		for (Player player : players) {
-			player.clearAction();
+			player.reset();
 		}
 	}
 
