@@ -8,11 +8,9 @@ import com.samsung.comp.football.Player;
 public class Move extends Action {
 
 	Vector2[] path;
-	float velocity = 200;
 
 	public Move(Vector2[] path) {
 		this.path = path;
-		this.nextAction = new Stop();
 	}
 
 	public Move(Vector2[] path, Action nextAction) {

@@ -17,9 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
-import com.samsung.comp.football.Actions.Kick;
-import com.samsung.comp.football.Actions.Move;
-import com.samsung.comp.football.Actions.Utils;
+import com.samsung.comp.football.Actions.*;
 
 public class Game implements ApplicationListener {
 

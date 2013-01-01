@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.Stop;
 import com.samsung.comp.football.Actions.Utils;
 
 public class Player extends Rectangle {
@@ -44,7 +43,6 @@ public class Player extends Rectangle {
 		this.y = translatePlayerCoordinate(playerY);
 		width = PLAYER_SIZE;
 		height = PLAYER_SIZE;
-		action = new Stop();
 	}
 
 	public void setAction(Action action) {
@@ -56,7 +54,7 @@ public class Player extends Rectangle {
 	}
 
 	public void clearAction() {
-		this.action = new Stop();
+		this.action = null;
 	}
 
 	public void executeAction() {
@@ -169,6 +167,7 @@ public class Player extends Rectangle {
 
 	public void move(Vector2[] path) {
 		this.path = path;
+		executeNextAction();
 	}
 
 	public void kick(Ball ball, Vector2 target) {
@@ -177,6 +176,14 @@ public class Player extends Rectangle {
 		ball.move(ballVelocity);
 		executeNextAction();
 		ball.removeOwner();
+	}
+
+	public void pass(Player target) {
+
+	}
+	
+	public void mark(Player target) {
+		
 	}
 
 	private void executeNextAction() {
