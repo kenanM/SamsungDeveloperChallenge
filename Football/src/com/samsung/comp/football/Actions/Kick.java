@@ -16,8 +16,6 @@ public class Kick extends Action {
 	public Kick(Ball ball, Vector2 target) {
 		this.ball = ball;
 		this.target = target;
-		// TODO do this better
-		ball.removeOwner();
 	}
 
 	@Override
