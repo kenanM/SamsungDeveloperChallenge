@@ -178,10 +178,19 @@ public class Player extends Rectangle {
 
 	public void update(float time) {
 
-		// Overview: We loop through each of the points in the list, if they are
-		// are within range set our players position to be that point keep going
-		// until either we run out of distance or we can't reach the next point
-		// in which case move towards it using a utility method
+		Vector2 position = moveAlongPath(time);
+
+		this.x = Player.translatePlayerCoordinate(position.x);
+		this.y = Player.translatePlayerCoordinate(position.y);
+
+	}
+	
+	/** Overview: We loop through each of the points in the list, if they are
+	* are within range set our players position to be that point keep going
+	* until either we run out of distance or we can't reach the next point
+	* in which case move towards it using a utility method
+	*/
+	private Vector2 moveAlongPath(float time) {
 		float distance = time * runSpeed;
 		Vector2 position = getPlayerPosition();
 
@@ -206,9 +215,6 @@ public class Player extends Rectangle {
 				break;
 			}
 		}
-
-		this.x = Player.translatePlayerCoordinate(position.x);
-		this.y = Player.translatePlayerCoordinate(position.y);
-
+		return position;
 	}
 }
