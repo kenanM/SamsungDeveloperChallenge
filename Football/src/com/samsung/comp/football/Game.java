@@ -53,6 +53,7 @@ public class Game implements ApplicationListener {
 
 	private List<Player> players;
 	private Ball ball;
+	// TODO: Rename to elapsedRoundTime?
 	private float totalTime = 0;
 	private float timeSinceTackle = 0;
 
@@ -198,14 +199,18 @@ public class Game implements ApplicationListener {
 			inputListener.getSelectedPlayer().highlight();
 		}
 
+
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
 			for (Player player : players) {
 				player.executeAction();
 				player.update(time);
 				ball.update(time);
+				
+				tackling(time);
+				
+				
 			}
-			tackling(time);
 		}
 	}
 
