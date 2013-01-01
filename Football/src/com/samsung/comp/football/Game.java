@@ -189,16 +189,9 @@ public class Game implements ApplicationListener {
 		float time = Gdx.graphics.getDeltaTime();
 		totalTime += time;
 
-		// TODO: Merge this IF statement with the one below.
-		if (totalTime >= ROUND_TIME && gameState == GameState.EXECUTION) {
-			gameState = GameState.INPUT;
-			inputListener.beginInputStage(players);
-		}
-
 		if (inputListener.getSelectedPlayer() != null) {
 			inputListener.getSelectedPlayer().highlight();
 		}
-
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
@@ -206,10 +199,13 @@ public class Game implements ApplicationListener {
 				player.executeAction();
 				player.update(time);
 				ball.update(time);
-				
+
 				tackling(time);
-				
-				
+
+				if (totalTime >= ROUND_TIME) {
+					gameState = GameState.INPUT;
+					inputListener.beginInputStage(players);
+				}
 			}
 		}
 	}
