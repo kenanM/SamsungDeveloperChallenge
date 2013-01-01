@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.util.Log;
 
@@ -18,11 +19,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.Utils;
 
 public class Game implements ApplicationListener {
 
 	// TODO: Remove these and other hard coded values
-	public static final long ROUND_TIME = 5;
+	public static final float ROUND_TIME = 5;
+	public static final float RETACKLE_TIME = 1.5f;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
 	// TODO: Restrict input, ball / player movement etc. to these
@@ -45,6 +48,7 @@ public class Game implements ApplicationListener {
 		INPUT, EXECUTION
 	}
 
+	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -52,6 +56,7 @@ public class Game implements ApplicationListener {
 	private List<Player> players;
 	private Ball ball;
 	private float totalTime = 0;
+	private float timeSinceTackle = 0;
 
 	private InputListener inputListener;
 
@@ -202,19 +207,27 @@ public class Game implements ApplicationListener {
 				player.update(time);
 				ball.update(time);
 			}
-			tackling();
+			tackling(time);
 		}
 	}
 
-	private void tackling() {
+	private void tackling(float time) {
+		timeSinceTackle = +time;
 		for (Player player : players) {
-			Boolean takePossesion = false;
 
-			if (player.overlaps(ball)) {
-				takePossesion = true;
-			}
+			if (player.overlaps(ball) && timeSinceTackle > RETACKLE_TIME) {
 
-			if (takePossesion) {
+				if (ball.hasOwner()) {
+
+					float tackleChance = player.getTackleSkill()
+							- ball.getOwner().getTacklePreventionSkill();
+					float rn = Utils.randomFloat(rng, 0, 100);
+					if (rn > tackleChance) {
+						timeSinceTackle = 0;
+						ball.setOwner(player);
+					}
+				}
+
 				ball.setOwner(player);
 			}
 		}

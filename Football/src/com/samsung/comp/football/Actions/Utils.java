@@ -1,5 +1,7 @@
 package com.samsung.comp.football.Actions;
 
+import java.util.Random;
+
 import com.badlogic.gdx.math.Vector2;
 
 public class Utils {
@@ -23,6 +25,14 @@ public class Utils {
 		double x = Math.cos(dir * Math.PI / 180) * hypotenuse;
 		double y = Math.sin(dir * Math.PI / 180) * hypotenuse;
 		return new Vector2((float) x, (float) y);
+	}
+
+	static public float randomFloat(Random rng, float a, float b) {
+		if (rng == null) {
+			rng = new Random();
+			rng.setSeed(System.nanoTime());
+		}
+		return ((b - a) * rng.nextFloat() + a);
 	}
 
 }

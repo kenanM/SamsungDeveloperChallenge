@@ -25,8 +25,12 @@ public class Player extends Rectangle {
 
 	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
+
 	private float shootSpeed = 50;
 	private float runSpeed = 300;
+	private float tackleSkill = 100;
+	private float tacklePreventionSkill = 0;
+
 	// TODO: Player shot accuracy?
 	// private float accuracy;
 	Vector2[] path;
@@ -131,6 +135,14 @@ public class Player extends Rectangle {
 		}
 	}
 
+	public float getTackleSkill() {
+		return tackleSkill;
+	}
+
+	public float getTacklePreventionSkill() {
+		return tacklePreventionSkill;
+	}
+
 	public static void create(Texture redPlayer, Texture redHover,
 			Texture bluePlayer, Texture blueHover) {
 		redPlayerTexture = redPlayer;
@@ -184,12 +196,13 @@ public class Player extends Rectangle {
 		this.y = Player.translatePlayerCoordinate(position.y);
 
 	}
-	
-	/** Overview: We loop through each of the points in the list, if they are
-	* are within range set our players position to be that point keep going
-	* until either we run out of distance or we can't reach the next point
-	* in which case move towards it using a utility method
-	*/
+
+	/**
+	 * Overview: We loop through each of the points in the list, if they are are
+	 * within range set our players position to be that point keep going until
+	 * either we run out of distance or we can't reach the next point in which
+	 * case move towards it using a utility method
+	 */
 	private Vector2 moveAlongPath(float time) {
 		float distance = time * runSpeed;
 		Vector2 position = getPlayerPosition();
