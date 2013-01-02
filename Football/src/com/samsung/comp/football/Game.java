@@ -23,7 +23,7 @@ public class Game implements ApplicationListener {
 
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
-	public static final float RETACKLE_TIME = 1.5f;
+	public static final float RETACKLE_TIME = 5f;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
 	// TODO: Restrict input, ball / player movement etc. to these
@@ -55,7 +55,7 @@ public class Game implements ApplicationListener {
 	private Ball ball;
 	// TODO: Rename to elapsedRoundTime?
 	private float totalTime = 0;
-	private float timeSinceTackle = 0;
+	private float timeSinceTackle = RETACKLE_TIME;
 
 	private InputListener inputListener;
 
@@ -195,23 +195,19 @@ public class Game implements ApplicationListener {
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
+			
 			for (Player player : players) {
 				player.executeAction();
 				player.update(time);
-				ball.update(time);
-
-				tackling(time);
-
-				if (totalTime >= ROUND_TIME) {
-					gameState = GameState.INPUT;
-					inputListener.beginInputStage(players);
-				}
 			}
+			
+			ball.update(time);
+			tackling(time);
 		}
 	}
 
 	private void tackling(float time) {
-		timeSinceTackle = +time;
+		timeSinceTackle = timeSinceTackle + time;
 		for (Player player : players) {
 
 			if (player.overlaps(ball) && timeSinceTackle > RETACKLE_TIME) {
@@ -221,8 +217,8 @@ public class Game implements ApplicationListener {
 					float tackleChance = player.getTackleSkill()
 							- ball.getOwner().getTacklePreventionSkill();
 					float rn = Utils.randomFloat(rng, 0, 100);
-					if (rn > tackleChance) {
-						timeSinceTackle = 0;
+					if (rn < tackleChance) {
+						timeSinceTackle = 0f;
 						ball.setOwner(player);
 					}
 				}
