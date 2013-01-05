@@ -195,14 +195,20 @@ public class Game implements ApplicationListener {
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
-			
+
 			for (Player player : players) {
 				player.executeAction();
 				player.update(time);
 			}
-			
+
 			ball.update(time);
 			tackling(time);
+
+			if (totalTime >= ROUND_TIME) {
+				gameState = GameState.INPUT;
+				beginInputStage();
+			}
+
 		}
 	}
 
@@ -221,8 +227,7 @@ public class Game implements ApplicationListener {
 						timeSinceTackle = 0f;
 						ball.setOwner(player);
 					}
-				}
-				else {
+				} else {
 					ball.setOwner(player);
 				}
 			}
