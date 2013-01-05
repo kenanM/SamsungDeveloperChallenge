@@ -13,7 +13,7 @@ public class Ball extends Rectangle {
 	 */
 	private static final long serialVersionUID = -3523719737664937244L;
 	private static Texture TEXTURE;
-	private static final int BALL_SIZE = 8;
+	private static final int BALL_SIZE = 12;
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
 	private float deceleration = 50;
