@@ -96,11 +96,9 @@ public class Ball extends Rectangle {
 	public void update(float time) {
 
 		if (hasOwner()) {
-			// TODO The player class should have a function called
-			// getBallLocation() so that it can put the ball in front of the
-			// player
-			this.x = owner.getX();
-			this.y = owner.getY() - 15;
+			Vector2 ballVector = owner.getBallPosition();
+			this.x = ballVector.x;
+			this.y = ballVector.y;
 		} else {
 
 			this.x = (this.x + ((velocity.x) * time));

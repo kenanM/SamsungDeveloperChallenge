@@ -39,6 +39,7 @@ public abstract class Player extends Rectangle {
 	// private float accuracy;
 	Vector2[] path;
 	int positionInPath = 0;
+	float rotation;
 	private float timeSinceKick = 1.5f;
 	private Action action;
 
@@ -121,6 +122,12 @@ public abstract class Player extends Rectangle {
 	 */
 	public static float translateHoverCoordinate(float c) {
 		return c - (HOVER_SIZE / 2);
+	}
+
+	public Vector2 getBallPosition() {
+		// TODO: hard coded value
+		return getPlayerPosition().add(
+				Utils.getMoveVector(getPlayerPosition(), rotation, 25));
 	}
 
 	public void highlight() {
@@ -273,6 +280,7 @@ public abstract class Player extends Rectangle {
 				Vector2 movement = Utils.getMoveVector(position, target,
 						distance);
 				position.add(movement);
+				rotation = movement.angle();
 				break;
 			}
 			this.stateTime += time;

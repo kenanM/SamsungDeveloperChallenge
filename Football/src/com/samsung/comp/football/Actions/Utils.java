@@ -27,6 +27,21 @@ public class Utils {
 		return new Vector2((float) x, (float) y);
 	}
 
+	/**
+	 * Returns a vector using a position, distance & angle which can be added to
+	 * the current position to move a certain distance towards a target.
+	 */
+	public static Vector2 getMoveVector(Vector2 currentPosition, float angle,
+			float hypotenuse) {
+
+		double angleRadians = Math.toRadians(angle);
+
+		double y = Math.sin(angleRadians) * hypotenuse;
+		double x = Math.cos(angleRadians) * hypotenuse;
+
+		return new Vector2((float) x, (float) y);
+	}
+
 	static public float randomFloat(Random rng, float a, float b) {
 		if (rng == null) {
 			rng = new Random();
