@@ -26,6 +26,10 @@ public class Ball extends Rectangle {
 		width = BALL_SIZE;
 		height = BALL_SIZE;
 	}
+	
+	public float getDeceleration() {
+		return deceleration;
+	}
 
 	public float getBallX() {
 		return x + (BALL_SIZE / 2);

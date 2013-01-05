@@ -165,7 +165,6 @@ public abstract class Player extends Rectangle {
 		return result;
 	}
 
-
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(this.getTexture(), this.x, this.y);
@@ -190,6 +189,25 @@ public abstract class Player extends Rectangle {
 	public void kick(Ball ball, Vector2 target) {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				shootSpeed);
+		ball.move(ballVelocity);
+		timeSinceKick = 0;
+		executeNextAction();
+		ball.removeOwner();
+	}
+
+	public void shortKick(Ball ball, Vector2 target) {
+
+		Vector2 movementVector = new Vector2(target.x - getPlayerX(), target.y
+				- getPlayerY());
+
+		// equations of motion -> v^2 = 2ax
+		double targetSpeed = Math.sqrt(2 * ball.getDeceleration()
+				* movementVector.dst(Vector2.Zero));
+
+		double lowestSpeed = Math.min(targetSpeed, shootSpeed);
+
+		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
+				(float) lowestSpeed);
 		ball.move(ballVelocity);
 		timeSinceKick = 0;
 		executeNextAction();
