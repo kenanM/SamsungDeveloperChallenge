@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.*;
-import com.samsung.comp.football.Actions.Utils;
 
 public abstract class Player extends Rectangle {
 
@@ -40,6 +39,7 @@ public abstract class Player extends Rectangle {
 	// private float accuracy;
 	Vector2[] path;
 	int positionInPath = 0;
+	private float timeSinceKick = 1.5f;
 	private Action action;
 
 	// TODO: MUST INITIALISE PLAYER STATS
@@ -61,14 +61,19 @@ public abstract class Player extends Rectangle {
 	private void clearAction() {
 		this.action = null;
 	}
-	
+
 	private void resetPathIndex() {
 		positionInPath = 0;
 	}
-	
+
 	public void reset() {
 		clearAction();
 		resetPathIndex();
+		path = null;
+	}
+
+	public float getTimeSinceKick() {
+		return timeSinceKick;
 	}
 
 	public void executeAction() {
@@ -186,6 +191,7 @@ public abstract class Player extends Rectangle {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				shootSpeed);
 		ball.move(ballVelocity);
+		timeSinceKick = 0;
 		executeNextAction();
 		ball.removeOwner();
 	}
@@ -211,6 +217,8 @@ public abstract class Player extends Rectangle {
 	public void update(float time) {
 
 		Vector2 position = moveAlongPath(time);
+		// TODO: Potential buffer overflow
+		timeSinceKick = Math.max(0, timeSinceKick + time);
 
 		this.x = Player.translatePlayerCoordinate(position.x);
 		this.y = Player.translatePlayerCoordinate(position.y);

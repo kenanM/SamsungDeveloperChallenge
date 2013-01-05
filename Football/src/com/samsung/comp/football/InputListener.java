@@ -30,7 +30,6 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	public void beginInputStage(List<Player> players) {
 		detectPresses = true;
 		this.players = players;
-		game.clearActions();
 	}
 
 	/**

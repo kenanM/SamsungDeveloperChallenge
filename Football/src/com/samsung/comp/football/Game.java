@@ -24,6 +24,7 @@ public class Game implements ApplicationListener {
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
 	public static final float RETACKLE_TIME = 5f;
+	public static final float RECOLLECT_TIME = 1f;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
 	// TODO: Restrict input, ball / player movement etc. to these
@@ -208,10 +209,13 @@ public class Game implements ApplicationListener {
 	}
 
 	private void tackling(float time) {
+		// TODO: Potential buffer overflow
 		timeSinceTackle = timeSinceTackle + time;
 		for (Player player : players) {
 
-			if (player.overlaps(ball) && timeSinceTackle > RETACKLE_TIME) {
+			if (player.overlaps(ball)
+					&& player.getTimeSinceKick() > RECOLLECT_TIME
+					&& timeSinceTackle > RETACKLE_TIME) {
 
 				if (ball.hasOwner()) {
 
@@ -250,6 +254,7 @@ public class Game implements ApplicationListener {
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
 		inputListener.beginInputStage(players);
+		clearActions();
 	}
 
 	public void beginExecution() {
