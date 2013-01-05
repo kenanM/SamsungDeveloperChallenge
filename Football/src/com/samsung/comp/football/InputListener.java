@@ -1,6 +1,7 @@
 package com.samsung.comp.football;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.spensdk.applistener.SPenHoverListener;
@@ -22,14 +24,31 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private Player playerBeingDrawnFrom;
 	private Player selectedPlayer;
 
+	private final TeamColour teamColour;
+	private List<Player> selectablePlayers = new ArrayList<Player>();
+
 	public InputListener(Game game) {
 		players = new ArrayList<Player>();
 		this.game = game;
+		teamColour = game.getHumanColour();
+	}
+
+	public void fetchSelectablePlayers() {
+		if (teamColour == TeamColour.RED) {
+			selectablePlayers = new LinkedList<Player>(game.getRedPlayers());
+		} else {
+			selectablePlayers = new LinkedList<Player>(game.getBluePlayers());
+		}
+
+		if (game.humanGoalieIsHoldingTheBall()) {
+			selectablePlayers.add(game.getHumanGoalie());
+		}
 	}
 
 	public void beginInputStage(List<Player> players) {
 		detectPresses = true;
 		this.players = players;
+		fetchSelectablePlayers();
 	}
 
 	/**
@@ -95,8 +114,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			if (action == MotionEvent.ACTION_DOWN) {
 				if (selectedPlayer == null) {
 					playerBeingDrawnFrom = findPlayer(event);
-					selectedPlayer = null;
-					if (playerBeingDrawnFrom == null) {
+					if (playerBeingDrawnFrom == null
+							|| !isSelectable(playerBeingDrawnFrom)) {
 						return false;
 					} else {
 						// Begin drawing a line
@@ -111,7 +130,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					}
 				}
 			}
-			
+
 			if (action == MotionEvent.ACTION_MOVE) {
 				if (selectedPlayer != null) {
 				} else {
@@ -126,7 +145,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					lineInProgress.add(eventVector);
 				}
 			}
-			
+
 			if (action == MotionEvent.ACTION_UP) {
 				if (selectedPlayer == null) {
 					Player player = findPlayer(event);
@@ -170,6 +189,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	Player getSelectedPlayer() {
 		return selectedPlayer;
+	}
+
+	public boolean isSelectable(Player player) {
+		return selectablePlayers.contains(player);
 	}
 
 	@Override

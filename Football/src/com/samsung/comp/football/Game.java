@@ -1,6 +1,6 @@
 package com.samsung.comp.football;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Utils;
 
@@ -52,13 +53,20 @@ public class Game implements ApplicationListener {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 
-	private List<Player> players;
+	private List<Player> redPlayers = new LinkedList<Player>();
+	private List<Player> bluePlayers = new LinkedList<Player>();
+	private Player redGoalie;
+	private Player blueGoalie;
+
 	private Ball ball;
 	// TODO: Rename to elapsedRoundTime?
 	private float totalTime = 0;
 	private float timeSinceTackle = RETACKLE_TIME;
 
 	private InputListener inputListener;
+
+	private TeamColour humanColour;
+	private TeamColour computerColour;
 
 	@Override
 	public void create() {
@@ -76,24 +84,26 @@ public class Game implements ApplicationListener {
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 
-		// create the players and test actions
-		players = new ArrayList<Player>(10);
-		players.add(new RedPlayer(400, 700));
-		players.add(new RedPlayer(200, 800));
-		players.add(new RedPlayer(600, 800));
-		players.add(new RedPlayer(400, 850));
-		players.add(new RedPlayer(400, 1100));
+		// create the players
+		redPlayers.add(new RedPlayer(400, 700));
+		redPlayers.add(new RedPlayer(200, 800));
+		redPlayers.add(new RedPlayer(600, 800));
+		redPlayers.add(new RedPlayer(400, 850));
+		redGoalie = new RedPlayer(400, 900);
 
-		players.add(new BluePlayer(400, 500));
-		players.add(new BluePlayer(200, 400));
-		players.add(new BluePlayer(600, 400));
-		players.add(new BluePlayer(400, 350));
-		players.add(new BluePlayer(400, 100));
+		bluePlayers.add(new BluePlayer(400, 500));
+		bluePlayers.add(new BluePlayer(200, 400));
+		bluePlayers.add(new BluePlayer(600, 400));
+		bluePlayers.add(new BluePlayer(400, 350));
+		blueGoalie = new BluePlayer(400, 100);
 
 		// Create a ball
 		ball = new Ball(
 				Ball.translateBallCoordinate(Gdx.graphics.getWidth() / 2),
 				Ball.translateBallCoordinate(Gdx.graphics.getHeight() / 2));
+
+		humanColour = TeamColour.BLUE;
+		computerColour = TeamColour.RED;
 
 		beginInputStage();
 
@@ -129,7 +139,7 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
-		for (Player player : players) {
+		for (Player player : allPlayers()) {
 			player.draw(batch);
 		}
 
@@ -138,7 +148,7 @@ public class Game implements ApplicationListener {
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
 
-			for (Player player : players) {
+			for (Player player : allPlayers()) {
 				if (player.getAction() != null) {
 					player.getAction().draw(batch);
 				}
@@ -169,7 +179,7 @@ public class Game implements ApplicationListener {
 
 			shapeRenderer.setColor(0, 0, 0, 0);
 
-			for (Player player : players) {
+			for (Player player : allPlayers()) {
 				if (player.getAction() != null) {
 					player.getAction().draw(shapeRenderer);
 				}
@@ -192,7 +202,7 @@ public class Game implements ApplicationListener {
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
 
-			for (Player player : players) {
+			for (Player player : allPlayers()) {
 				player.executeAction();
 				player.update(time);
 			}
@@ -211,7 +221,7 @@ public class Game implements ApplicationListener {
 	private void tackling(float time) {
 		// TODO: Potential buffer overflow
 		timeSinceTackle = timeSinceTackle + time;
-		for (Player player : players) {
+		for (Player player : allPlayers()) {
 
 			if (player.overlaps(ball)
 					&& player.getTimeSinceKick() > RECOLLECT_TIME
@@ -246,14 +256,14 @@ public class Game implements ApplicationListener {
 	}
 
 	public void clearActions() {
-		for (Player player : players) {
+		for (Player player : allPlayers()) {
 			player.reset();
 		}
 	}
 
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
-		inputListener.beginInputStage(players);
+		inputListener.beginInputStage(allPlayers());
 		clearActions();
 	}
 
@@ -263,8 +273,45 @@ public class Game implements ApplicationListener {
 		this.gameState = GameState.EXECUTION;
 	}
 
-	public List<Player> getPlayers() {
-		return new ArrayList<Player>(players);
+	private List<Player> allPlayers() {
+		List<Player> result = new LinkedList<Player>();
+		result.addAll(redPlayers);
+		result.add(redGoalie);
+		result.addAll(bluePlayers);
+		result.add(blueGoalie);
+		return result;
+	}
+
+	public TeamColour getHumanColour() {
+		return humanColour;
+	}
+
+	public TeamColour getComputerColour() {
+		return computerColour;
+	}
+
+	public List<Player> getRedPlayers() {
+		return redPlayers;
+	}
+
+	public List<Player> getBluePlayers() {
+		return bluePlayers;
+	}
+
+	public boolean humanGoalieIsHoldingTheBall() {
+		if (humanColour == TeamColour.RED) {
+			return ball.hasOwner() && ball.getOwner() == redGoalie;
+		} else {
+			return ball.hasOwner() && ball.getOwner() == blueGoalie;
+		}
+	}
+
+	public Player getHumanGoalie() {
+		if (humanColour == TeamColour.RED) {
+			return redGoalie;
+		} else {
+			return blueGoalie;
+		}
 	}
 
 	public Vector2 translateInputToField(Vector2 vector) {
@@ -276,7 +323,7 @@ public class Game implements ApplicationListener {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		for (Player player : players) {
+		for (Player player : allPlayers()) {
 			player.dispose();
 		}
 		Ball.dispose();
