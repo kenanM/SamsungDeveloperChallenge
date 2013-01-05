@@ -25,6 +25,7 @@ public class Game implements ApplicationListener {
 	public static final float ROUND_TIME = 5;
 	public static final float RETACKLE_TIME = 5f;
 	public static final float RECOLLECT_TIME = 1f;
+	public static final float BOUNCE_ELASTICITY = 0.5f;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
 	// TODO: Restrict input, ball / player movement etc. to these
@@ -198,6 +199,7 @@ public class Game implements ApplicationListener {
 			}
 
 			ball.update(time);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
 			tackling(time);
 
 			if (totalTime >= ROUND_TIME) {

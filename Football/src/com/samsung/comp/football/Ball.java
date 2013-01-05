@@ -26,7 +26,7 @@ public class Ball extends Rectangle {
 		width = BALL_SIZE;
 		height = BALL_SIZE;
 	}
-	
+
 	public float getDeceleration() {
 		return deceleration;
 	}
@@ -91,6 +91,37 @@ public class Ball extends Rectangle {
 
 	public void move(Vector2 velocity) {
 		this.velocity = velocity;
+	}
+
+	/**
+	 * Bounce the ball off the wall when it exceeds the rectangle formed by 0,0
+	 * and maxWidth,MaxHeight. Inverts the velocity according to the wall it
+	 * collides with then adjusts the speed by the elasticity.
+	 * 
+	 * @param maxWidth
+	 *            The right edge of the field.
+	 * @param maxHeight
+	 *            The bottom edge of the field.
+	 * @param bounceElasticty
+	 *            The factor to multiply the ball velocity by.
+	 */
+	public void ballBounceDetection(int maxWidth, int maxHeight,
+			float bounceElasticty) {
+		if (getBallPosition().x < 0) {
+			x = translateBallCoordinate(0);
+			velocity.x = velocity.x * (-1) * bounceElasticty;
+		} else if (getBallPosition().x > maxWidth) {
+			x = translateBallCoordinate(maxWidth);
+			velocity.x = velocity.x * (-1) * bounceElasticty;
+		}
+		if (getBallPosition().y < 0) {
+			y = translateBallCoordinate(0);
+			velocity.y = velocity.y * (-1) * bounceElasticty;
+
+		} else if (getBallPosition().y > maxHeight) {
+			y = translateBallCoordinate(maxHeight);
+			velocity.y = velocity.y * (-1) * bounceElasticty;
+		}
 	}
 
 	public void update(float time) {
