@@ -16,7 +16,7 @@ public class Ball extends Rectangle {
 	private static final int BALL_SIZE = 8;
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
-	private float deceleration = 5;
+	private float deceleration = 50;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);

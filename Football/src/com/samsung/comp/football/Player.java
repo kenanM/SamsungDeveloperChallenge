@@ -25,7 +25,7 @@ public class Player extends Rectangle {
 	private boolean isHighlighted = false;
 	private final TeamColour TEAM;
 
-	private float shootSpeed = 50;
+	private float shootSpeed = 400;
 	private float runSpeed = 300;
 	private float tackleSkill = 100;
 	private float tacklePreventionSkill = 0;
