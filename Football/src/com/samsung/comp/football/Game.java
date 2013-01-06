@@ -24,8 +24,8 @@ public class Game implements ApplicationListener {
 
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
-	public static final float RETACKLE_TIME = 5f;
-	public static final float RECOLLECT_TIME = 1f;
+	public static final float BALL_CHANGE_TIME = 1f;
+	public static final float BALL_PASS_TIME = 1f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
@@ -62,7 +62,6 @@ public class Game implements ApplicationListener {
 	private Ball ball;
 	// TODO: Rename to elapsedRoundTime?
 	private float totalTime = 0;
-	private float timeSinceTackle = RETACKLE_TIME;
 
 	private InputListener inputListener;
 
@@ -209,8 +208,9 @@ public class Game implements ApplicationListener {
 			}
 
 			ball.update(time);
-			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-			tackling(time);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+			tackleDetection(time);
 
 			if (totalTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
@@ -220,28 +220,29 @@ public class Game implements ApplicationListener {
 		}
 	}
 
-	private void tackling(float time) {
-		// TODO: Potential buffer overflow
-		timeSinceTackle = timeSinceTackle + time;
+	private void tackleDetection(float time) {
 		for (Player player : allPlayers()) {
 
-			if (player.overlaps(ball)
-					&& player.getTimeSinceKick() > RECOLLECT_TIME
-					&& timeSinceTackle > RETACKLE_TIME) {
+			if (player.overlaps(ball) && ball.getOwner() != player
+					&& ball.getTimeSinceTackle() > BALL_CHANGE_TIME
+					&& player.getTimeSinceKick() > BALL_PASS_TIME) {
 
 				if (ball.hasOwner()) {
-
-					float tackleChance = player.getTackleSkill()
-							- ball.getOwner().getTacklePreventionSkill();
-					float rn = Utils.randomFloat(rng, 0, 100);
-					if (rn < tackleChance) {
-						timeSinceTackle = 0f;
-						ball.setOwner(player);
-					}
+					performTackle(player);
 				} else {
 					ball.setOwner(player);
 				}
 			}
+		}
+	}
+
+	private void performTackle(Player player) {
+		float tackleChance = player.getTackleSkill()
+				- ball.getOwner().getTacklePreventionSkill();
+		float rn = Utils.randomFloat(rng, 0, 100);
+		if (rn < tackleChance) {
+			ball.setOwner(player);
+			ball.clearTimeSinceTackle();
 		}
 	}
 

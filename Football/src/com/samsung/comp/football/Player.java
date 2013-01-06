@@ -40,8 +40,8 @@ public abstract class Player extends Rectangle {
 	Vector2[] path;
 	int positionInPath = 0;
 	float rotation;
-	private float timeSinceKick = 1.5f;
 	private Action action;
+	private float timeSinceKick = 0;
 
 	// TODO: MUST INITIALISE PLAYER STATS
 	public Player(float playerX, float playerY) {
@@ -49,6 +49,10 @@ public abstract class Player extends Rectangle {
 		this.y = translatePlayerCoordinate(playerY);
 		this.width = PLAYER_SIZE;
 		this.height = PLAYER_SIZE;
+	}
+
+	public float getTimeSinceKick() {
+		return timeSinceKick;
 	}
 
 	public void setAction(Action action) {
@@ -71,10 +75,6 @@ public abstract class Player extends Rectangle {
 		clearAction();
 		resetPathIndex();
 		path = null;
-	}
-
-	public float getTimeSinceKick() {
-		return timeSinceKick;
 	}
 
 	public void executeAction() {
@@ -197,6 +197,7 @@ public abstract class Player extends Rectangle {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				shootSpeed);
 		ball.move(ballVelocity);
+		ball.resetTimeSinceTackle();
 		timeSinceKick = 0;
 		executeNextAction();
 		ball.removeOwner();
@@ -216,6 +217,7 @@ public abstract class Player extends Rectangle {
 		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
 				(float) lowestSpeed);
 		ball.move(ballVelocity);
+		ball.resetTimeSinceTackle();
 		timeSinceKick = 0;
 		executeNextAction();
 		ball.removeOwner();
@@ -242,8 +244,7 @@ public abstract class Player extends Rectangle {
 	public void update(float time) {
 
 		Vector2 position = moveAlongPath(time);
-		// TODO: Potential buffer overflow
-		timeSinceKick = Math.max(0, timeSinceKick + time);
+		timeSinceKick = timeSinceKick + time;
 
 		this.x = Player.translatePlayerCoordinate(position.x);
 		this.y = Player.translatePlayerCoordinate(position.y);
