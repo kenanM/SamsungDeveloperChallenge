@@ -30,7 +30,6 @@ public class AI {
 	private Game game;
 	private TeamColour teamColour;
 	private Player goalie;
-	private List<Player> players;
 	private Ball ball;
 
 	private Vector2 targetGoal;
@@ -62,7 +61,7 @@ public class AI {
 		boolean goalieHasBall = game.computerGoalieIsHoldingTheBall();
 
 		if (goalieHasBall) {
-			Player nearestToTheGoalie = playerNearestTheGoalie();
+			Player nearestToTheGoalie = playerNearestTheGoalie(players);
 			goalie.setAction(new Pass(ball, nearestToTheGoalie));
 			players.remove(nearestToTheGoalie);
 
@@ -130,12 +129,12 @@ public class AI {
 		}
 	}
 
-	private Player playerNearestTheGoalie() {
+	private Player playerNearestTheGoalie(List<Player> players) {
 		return playerNearestVector(players, goalie.getPlayerPosition());
 	}
 
 	/** Finds the player in the list nearest a given Vector */
-	public static Player playerNearestVector(List<Player> listOfPlayers,
+	public Player playerNearestVector(List<Player> listOfPlayers,
 			Vector2 vector) {
 		float minValue = Float.MAX_VALUE;
 		Player minPlayer = null;
