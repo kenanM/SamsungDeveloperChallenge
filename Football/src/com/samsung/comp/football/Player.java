@@ -194,8 +194,8 @@ public abstract class Player extends Rectangle {
 	}
 
 	public void kick(Ball ball, Vector2 target) {
-		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
-				shootSpeed);
+		Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
+				target, shootSpeed);
 		ball.move(ballVelocity);
 		ball.resetTimeSinceTackle();
 		timeSinceKick = 0;
@@ -205,8 +205,8 @@ public abstract class Player extends Rectangle {
 
 	public void shortKick(Ball ball, Vector2 target) {
 
-		Vector2 movementVector = new Vector2(target.x - getPlayerX(), target.y
-				- getPlayerY());
+		Vector2 movementVector = new Vector2(target.x
+				- ball.getBallPosition().x, target.y - ball.getBallPosition().y);
 
 		// equations of motion -> v^2 = 2ax
 		double targetSpeed = Math.sqrt(2 * ball.getDeceleration()
