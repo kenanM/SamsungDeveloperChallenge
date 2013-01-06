@@ -176,6 +176,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (detectPresses) {
 			// Log.v(TAG, "onHover: " + event.getX() + ", " + event.getY());
 			Player player = findPlayer(event);
+			game.setHoveringPlayer(player);
 			if (player != null) {
 				player.highlight();
 			}
