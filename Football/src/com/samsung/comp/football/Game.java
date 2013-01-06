@@ -138,13 +138,7 @@ public class Game implements ApplicationListener {
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
-
-		for (Player player : allPlayers()) {
-			player.draw(batch);
-		}
-
-		ball.draw(batch);
-
+		
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
 
@@ -153,9 +147,14 @@ public class Game implements ApplicationListener {
 					player.getAction().draw(batch);
 				}
 			}
-		} else {
-			// Execution stage
 		}
+
+		for (Player player : allPlayers()) {
+			player.draw(batch);
+		}
+
+		ball.draw(batch);
+		
 		batch.end();
 	}
 
