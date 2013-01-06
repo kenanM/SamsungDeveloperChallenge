@@ -40,9 +40,11 @@ public class Game implements ApplicationListener {
 	public static final Rectangle PLAYING_AREA = new Rectangle(23, 41,
 			676 - 23 - 23, 1024 - 41 - 45);
 	// TODO: HACK: rough area for goal here
-	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 0, 110, 44);
-	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 980, 110, 44);
-	
+	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 0, 110,
+			44);
+	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 980, 110,
+			44);
+
 	private int xOffset;
 	private int yOffset;
 	private int drawnPitchWidth;
@@ -53,6 +55,7 @@ public class Game implements ApplicationListener {
 	public static Texture playTexture;
 	public static Texture starFull;
 	public static Texture stats;
+	public static Texture goalMessage;
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -71,6 +74,7 @@ public class Game implements ApplicationListener {
 	private Ball ball;
 	// TODO: Rename to elapsedRoundTime?
 	private float totalTime = 0;
+	private float goalScoredDrawTime = 0f;
 
 	private InputListener inputListener;
 	private Player hoveringPlayer;
@@ -85,6 +89,7 @@ public class Game implements ApplicationListener {
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
+		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 
@@ -168,6 +173,13 @@ public class Game implements ApplicationListener {
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
+		
+		if(goalScoredDrawTime > 0) {
+			batch.draw(goalMessage,
+					VIRTUAL_SCREEN_WIDTH/2 - goalMessage.getWidth()/2, VIRTUAL_SCREEN_HEIGHT/2 - goalMessage.getHeight()/2, 0, 0,
+					goalMessage.getWidth(), goalMessage.getHeight(), 1, 1, 0, 0, 0,
+					goalMessage.getWidth(), goalMessage.getHeight(), false, true);
+		}
 
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
@@ -273,6 +285,7 @@ public class Game implements ApplicationListener {
 	private void update() {
 		float time = Gdx.graphics.getDeltaTime();
 		totalTime += time;
+		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
 		if (inputListener.getSelectedPlayer() != null) {
 			inputListener.getSelectedPlayer().highlight();
@@ -327,19 +340,20 @@ public class Game implements ApplicationListener {
 			ball.clearTimeSinceTackle();
 		}
 	}
-	
-	private void goalScoredDetection() { 
+
+	private void goalScoredDetection() {
 		if (RED_GOAL_AREA.contains(ball)) {
 			setStartingPositions();
 			gameState = GameState.INPUT;
 			beginInputStage();
+			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
 			// TODO: Sound: crowd cheer
-		}
-		else if( BLUE_GOAL_AREA.contains(ball)) {
+		} else if (BLUE_GOAL_AREA.contains(ball)) {
 			setStartingPositions();
 			gameState = GameState.INPUT;
 			beginInputStage();
+			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
 			// TODO: Sound: crowd cheer
 		}
@@ -456,6 +470,10 @@ public class Game implements ApplicationListener {
 		Kick.dispose();
 		pitchTexture.dispose();
 		playTexture.dispose();
+		starFull.dispose();
+		stats.dispose();
+		goalMessage.dispose();
+
 		batch.dispose();
 	}
 
