@@ -39,7 +39,10 @@ public class Game implements ApplicationListener {
 	// Image here isn't vertical symmetrical
 	public static final Rectangle PLAYING_AREA = new Rectangle(23, 41,
 			676 - 23 - 23, 1024 - 41 - 45);
-
+	// TODO: HACK: rough area for goal here
+	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 0, 110, 44);
+	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 980, 110, 44);
+	
 	private int xOffset;
 	private int yOffset;
 	private int drawnPitchWidth;
@@ -93,6 +96,16 @@ public class Game implements ApplicationListener {
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 
+		setStartingPositions();
+
+		humanColour = TeamColour.BLUE;
+		computerColour = TeamColour.RED;
+
+		beginInputStage();
+
+	}
+
+	private void setStartingPositions() {
 		// create the players
 		redPlayers.add(new RedPlayer(400, 700));
 		redPlayers.add(new RedPlayer(200, 800));
@@ -110,11 +123,6 @@ public class Game implements ApplicationListener {
 		ball = new Ball(
 				Ball.translateBallCoordinate(Gdx.graphics.getWidth() / 2),
 				Ball.translateBallCoordinate(Gdx.graphics.getHeight() / 2));
-
-		humanColour = TeamColour.BLUE;
-		computerColour = TeamColour.RED;
-
-		beginInputStage();
 
 	}
 
@@ -225,7 +233,7 @@ public class Game implements ApplicationListener {
 		// bmf.draw(batch, "str", (float)VIRTUAL_SCREEN_WIDTH-128, 10);
 
 		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
-				- stats.getWidth()/2, 0, 0, 0, stats.getWidth(),
+				- stats.getWidth() / 2, 0, 0, 0, stats.getWidth(),
 				stats.getHeight(), 1, 1, 0, 0, 0, stats.getWidth(),
 				stats.getHeight(), false, true);
 
@@ -282,6 +290,7 @@ public class Game implements ApplicationListener {
 			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
 					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
 			tackleDetection(time);
+			goalScoredDetection();
 
 			if (totalTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
@@ -316,6 +325,23 @@ public class Game implements ApplicationListener {
 		if (rn < tackleChance) {
 			ball.setOwner(player);
 			ball.clearTimeSinceTackle();
+		}
+	}
+	
+	private void goalScoredDetection() { 
+		if (RED_GOAL_AREA.contains(ball)) {
+			setStartingPositions();
+			gameState = GameState.INPUT;
+			beginInputStage();
+			// TODO: Sound: blow whistle
+			// TODO: Sound: crowd cheer
+		}
+		else if( BLUE_GOAL_AREA.contains(ball)) {
+			setStartingPositions();
+			gameState = GameState.INPUT;
+			beginInputStage();
+			// TODO: Sound: blow whistle
+			// TODO: Sound: crowd cheer
 		}
 	}
 
