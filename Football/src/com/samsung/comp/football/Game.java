@@ -228,7 +228,9 @@ public class Game implements ApplicationListener {
 					&& player.getTimeSinceKick() > BALL_PASS_TIME) {
 
 				if (ball.hasOwner()) {
-					performTackle(player);
+					if (ball.getOwner().getTeam() != player.getTeam()) {
+						performTackle(player);
+					}
 				} else {
 					ball.setOwner(player);
 				}
