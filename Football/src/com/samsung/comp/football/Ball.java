@@ -17,6 +17,7 @@ public class Ball extends Rectangle {
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
 	private float deceleration = 50;
+	private float timeSinceTackle = Game.BALL_CHANGE_TIME;
 
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
@@ -83,6 +84,18 @@ public class Ball extends Rectangle {
 		owner = null;
 	}
 
+	public float getTimeSinceTackle() {
+		return timeSinceTackle;
+	}
+
+	public void clearTimeSinceTackle() {
+		this.timeSinceTackle = 0;
+	}
+	
+	public void resetTimeSinceTackle() {
+		this.timeSinceTackle = Game.BALL_CHANGE_TIME;
+	}
+
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);
@@ -125,6 +138,8 @@ public class Ball extends Rectangle {
 	}
 
 	public void update(float time) {
+
+		timeSinceTackle = timeSinceTackle + time;
 
 		if (hasOwner()) {
 			Vector2 ballVector = owner.getBallPosition();
