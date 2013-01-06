@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -47,6 +48,8 @@ public class Game implements ApplicationListener {
 
 	public static Texture pitchTexture;
 	public static Texture playTexture;
+	public static Texture starFull;
+	public static Texture stats;
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -67,6 +70,7 @@ public class Game implements ApplicationListener {
 	private float totalTime = 0;
 
 	private InputListener inputListener;
+	private Player hoveringPlayer;
 
 	private TeamColour humanColour;
 	private TeamColour computerColour;
@@ -76,6 +80,8 @@ public class Game implements ApplicationListener {
 
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
+		starFull = new Texture(Gdx.files.internal("star.png"));
+		stats = new Texture(Gdx.files.internal("stats.png"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 
@@ -112,6 +118,13 @@ public class Game implements ApplicationListener {
 
 	}
 
+	public void setHoveringPlayer(Player hoveringPlayer) {
+		this.hoveringPlayer = hoveringPlayer;
+	}
+
+	// TODO: HACK FOR DRAWING STATS (HOVERINGPLAYER)
+	int a = 0;
+
 	@Override
 	public void render() {
 
@@ -131,6 +144,12 @@ public class Game implements ApplicationListener {
 
 		drawSpriteBatch();
 		drawShapeRenderer();
+
+		a++;
+		if (a == 100) {
+			hoveringPlayer = null;
+			a = 0;
+		}
 	}
 
 	private void drawSpriteBatch() {
@@ -141,9 +160,11 @@ public class Game implements ApplicationListener {
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
-		
+
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
+
+			drawPlayerStats(batch, hoveringPlayer);
 
 			for (Player player : allPlayers()) {
 				if (player.getAction() != null) {
@@ -159,7 +180,7 @@ public class Game implements ApplicationListener {
 		}
 
 		ball.draw(batch);
-		
+
 		batch.end();
 	}
 
@@ -193,6 +214,52 @@ public class Game implements ApplicationListener {
 		}
 
 		shapeRenderer.end();
+	}
+
+	private void drawPlayerStats(SpriteBatch batch, Player player) {
+		if (player == null) {
+			return;
+		}
+		// BitmapFont bmf = new BitmapFont();
+		// bmf.draw
+		// bmf.draw(batch, "str", (float)VIRTUAL_SCREEN_WIDTH-128, 10);
+
+		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
+				- stats.getWidth()/2, 0, 0, 0, stats.getWidth(),
+				stats.getHeight(), 1, 1, 0, 0, 0, stats.getWidth(),
+				stats.getHeight(), false, true);
+
+		for (int i = 1; i <= player.getStarsRunSpeed(); i++) {
+			batch.draw(starFull,
+					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()), 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), 1, 1, 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), false, true);
+		}
+
+		for (int i = 1; i <= player.getStarsShootSpeed(); i++) {
+			batch.draw(starFull,
+					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+					1 * starFull.getWidth(), 0, 0, starFull.getWidth(),
+					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
+					starFull.getHeight(), false, true);
+		}
+
+		for (int i = 1; i <= player.getStarsTackleSkill(); i++) {
+			batch.draw(starFull,
+					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+					2 * starFull.getWidth(), 0, 0, starFull.getWidth(),
+					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
+					starFull.getHeight(), false, true);
+		}
+
+		for (int i = 1; i <= player.getStarsTacklePreventionSkill(); i++) {
+			batch.draw(starFull,
+					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+					3 * starFull.getWidth(), 0, 0, starFull.getWidth(),
+					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
+					starFull.getHeight(), false, true);
+		}
+
 	}
 
 	private void update() {

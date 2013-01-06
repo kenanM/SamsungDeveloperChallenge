@@ -153,6 +153,30 @@ public abstract class Player extends Rectangle {
 		return hoverTexture;
 	}
 
+	public int getStarsShootSpeed() {
+		return (int)shootSpeed/100;
+	}
+	
+	public int getStarsRunSpeed() {
+		return (int)runSpeed/100;
+	}
+	
+	public int getStarsTackleSkill() {
+		return (int)tackleSkill/20;
+	}
+	
+	public int getStarsTacklePreventionSkill() {
+		return (int)tacklePreventionSkill/20;
+	}
+	
+	public float getShootSpeed() {
+		return shootSpeed;
+	}
+
+	public float getRunSpeed() {
+		return runSpeed;
+	}
+
 	public float getTackleSkill() {
 		return tackleSkill;
 	}
