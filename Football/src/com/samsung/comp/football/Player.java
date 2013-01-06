@@ -17,7 +17,7 @@ public abstract class Player extends Rectangle {
 	}
 
 	private static final long serialVersionUID = 1L;
-	private static final int PLAYER_SIZE = 25;
+	private static final int PLAYER_SIZE = 50;
 	private static final int HOVER_SIZE = 64;
 
 	protected Texture walkSheet;
@@ -288,6 +288,10 @@ public abstract class Player extends Rectangle {
 		Vector2 position = getPlayerPosition();
 
 		while (distance > 0 && path != null && path.length > 0) {
+
+			this.stateTime += time;
+			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+
 			Vector2 target = path[positionInPath];
 
 			if (position.dst(target) < distance) {
@@ -310,8 +314,6 @@ public abstract class Player extends Rectangle {
 				rotation = movement.angle();
 				break;
 			}
-			this.stateTime += time;
-			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		}
 		return position;
 	}
