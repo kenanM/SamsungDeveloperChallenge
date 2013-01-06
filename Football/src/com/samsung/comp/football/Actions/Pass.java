@@ -6,9 +6,14 @@ import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Player;
 
 public class Pass extends Action {
-	
+
 	private Ball ball;
 	Player target;
+
+	public Pass(Ball ball, Player target) {
+		this.ball = ball;
+		this.target = target;
+	}
 
 	@Override
 	public void execute(Player player) {
@@ -19,13 +24,11 @@ public class Pass extends Action {
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		// TODO Auto-generated method stub
-
+		renderer.line(ball.x, ball.y, target.x, target.y);
 	}
 
 }

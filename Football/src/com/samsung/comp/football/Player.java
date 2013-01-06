@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Actions.*;
+import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.Utils;
 
 public abstract class Player extends Rectangle {
 
@@ -227,7 +229,7 @@ public abstract class Player extends Rectangle {
 
 	// TODO: Account for a moving player.
 	public void pass(Ball ball, Player target) {
-		kick(ball, target.getPlayerPosition());
+		shortKick(ball, target.getPlayerPosition());
 	}
 
 	private void executeNextAction() {

@@ -1,7 +1,6 @@
 package com.samsung.comp.football;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.spensdk.applistener.SPenHoverListener;
@@ -24,31 +22,29 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private Player playerBeingDrawnFrom;
 	private Player selectedPlayer;
 
-	private final TeamColour teamColour;
 	private List<Player> selectablePlayers = new ArrayList<Player>();
+
+	private AI ai;
 
 	public InputListener(Game game) {
 		players = new ArrayList<Player>();
 		this.game = game;
-		teamColour = game.getHumanColour();
 	}
 
 	public void fetchSelectablePlayers() {
-		if (teamColour == TeamColour.RED) {
-			selectablePlayers = new LinkedList<Player>(game.getRedPlayers());
-		} else {
-			selectablePlayers = new LinkedList<Player>(game.getBluePlayers());
-		}
-
+		selectablePlayers = game.getHumanPlayers();
 		if (game.humanGoalieIsHoldingTheBall()) {
 			selectablePlayers.add(game.getHumanGoalie());
 		}
 	}
 
 	public void beginInputStage(List<Player> players) {
+		// LOL try understanding this.
+		ai = (ai == null) ? new AI(game) : ai;
 		detectPresses = true;
 		this.players = players;
 		fetchSelectablePlayers();
+		ai.getComputerActions();
 	}
 
 	/**

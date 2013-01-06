@@ -22,6 +22,9 @@ import com.samsung.comp.football.Actions.Utils;
 
 public class Game implements ApplicationListener {
 
+	public static final Vector2 RED_GOAL = new Vector2(337, 1000);
+	public static final Vector2 BLUE_GOAL = new Vector2(337, 24);
+
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
 	public static final float RETACKLE_TIME = 5f;
@@ -209,7 +212,8 @@ public class Game implements ApplicationListener {
 			}
 
 			ball.update(time);
-			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
 			tackling(time);
 
 			if (totalTime >= ROUND_TIME) {
@@ -265,8 +269,8 @@ public class Game implements ApplicationListener {
 
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
-		inputListener.beginInputStage(allPlayers());
 		clearActions();
+		inputListener.beginInputStage(allPlayers());
 	}
 
 	public void beginExecution() {
@@ -292,12 +296,20 @@ public class Game implements ApplicationListener {
 		return computerColour;
 	}
 
-	public List<Player> getRedPlayers() {
-		return redPlayers;
+	public List<Player> getHumanPlayers() {
+		if (humanColour == TeamColour.RED) {
+			return redPlayers;
+		} else {
+			return bluePlayers;
+		}
 	}
 
-	public List<Player> getBluePlayers() {
-		return bluePlayers;
+	public List<Player> getComputerPlayers() {
+		if (computerColour == TeamColour.RED) {
+			return redPlayers;
+		} else {
+			return bluePlayers;
+		}
 	}
 
 	public boolean humanGoalieIsHoldingTheBall() {
@@ -308,8 +320,24 @@ public class Game implements ApplicationListener {
 		}
 	}
 
+	public boolean computerGoalieIsHoldingTheBall() {
+		if (computerColour == TeamColour.RED) {
+			return ball.hasOwner() && ball.getOwner() == redGoalie;
+		} else {
+			return ball.hasOwner() && ball.getOwner() == blueGoalie;
+		}
+	}
+
 	public Player getHumanGoalie() {
 		if (humanColour == TeamColour.RED) {
+			return redGoalie;
+		} else {
+			return blueGoalie;
+		}
+	}
+
+	public Player getComputerGoalie() {
+		if (computerColour == TeamColour.RED) {
 			return redGoalie;
 		} else {
 			return blueGoalie;
@@ -369,5 +397,4 @@ public class Game implements ApplicationListener {
 	@Override
 	public void resume() {
 	}
-
 }
