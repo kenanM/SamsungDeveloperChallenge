@@ -56,6 +56,16 @@ public class Game implements ApplicationListener {
 	public static Texture starFull;
 	public static Texture stats;
 	public static Texture goalMessage;
+	public static Texture d0;
+	public static Texture d1;
+	public static Texture d2;
+	public static Texture d3;
+	public static Texture d4;
+	public static Texture d5;
+	public static Texture d6;
+	public static Texture d7;
+	public static Texture d8;
+	public static Texture d9;
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -64,6 +74,7 @@ public class Game implements ApplicationListener {
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
 	private SpriteBatch batch;
+	private BitmapFont bmf;
 	private OrthographicCamera camera;
 
 	private List<Player> redPlayers = new LinkedList<Player>();
@@ -75,6 +86,8 @@ public class Game implements ApplicationListener {
 	// TODO: Rename to elapsedRoundTime?
 	private float totalTime = 0;
 	private float goalScoredDrawTime = 0f;
+	private int redScore = 0;
+	private int blueScore = 0;
 
 	private InputListener inputListener;
 	private Player hoveringPlayer;
@@ -90,6 +103,15 @@ public class Game implements ApplicationListener {
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
+		d1 = new Texture(Gdx.files.internal("digit1.png"));
+		d2 = new Texture(Gdx.files.internal("digit2.png"));
+		d3 = new Texture(Gdx.files.internal("digit3.png"));
+		d4 = new Texture(Gdx.files.internal("digit4.png"));
+		d5 = new Texture(Gdx.files.internal("digit5.png"));
+		d6 = new Texture(Gdx.files.internal("digit6.png"));
+		d7 = new Texture(Gdx.files.internal("digit7.png"));
+		d8 = new Texture(Gdx.files.internal("digit8.png"));
+		d9 = new Texture(Gdx.files.internal("digit9.png"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 
@@ -100,6 +122,7 @@ public class Game implements ApplicationListener {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
+		bmf = new BitmapFont();
 
 		setStartingPositions();
 
@@ -112,11 +135,15 @@ public class Game implements ApplicationListener {
 
 	private void setStartingPositions() {
 		// create the players
+		redPlayers = new LinkedList<Player>();
+
 		redPlayers.add(new RedPlayer(400, 700));
 		redPlayers.add(new RedPlayer(200, 800));
 		redPlayers.add(new RedPlayer(600, 800));
 		redPlayers.add(new RedPlayer(400, 850));
 		redGoalie = new RedPlayer(400, 900);
+
+		bluePlayers = new LinkedList<Player>();
 
 		bluePlayers.add(new BluePlayer(400, 500));
 		bluePlayers.add(new BluePlayer(200, 400));
@@ -173,12 +200,16 @@ public class Game implements ApplicationListener {
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
+
+		drawPlayerScore(batch, bmf);
 		
-		if(goalScoredDrawTime > 0) {
+		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
-					VIRTUAL_SCREEN_WIDTH/2 - goalMessage.getWidth()/2, VIRTUAL_SCREEN_HEIGHT/2 - goalMessage.getHeight()/2, 0, 0,
-					goalMessage.getWidth(), goalMessage.getHeight(), 1, 1, 0, 0, 0,
-					goalMessage.getWidth(), goalMessage.getHeight(), false, true);
+					VIRTUAL_SCREEN_WIDTH / 2 - goalMessage.getWidth() / 2,
+					VIRTUAL_SCREEN_HEIGHT / 2 - goalMessage.getHeight() / 2, 0,
+					0, goalMessage.getWidth(), goalMessage.getHeight(), 1, 1,
+					0, 0, 0, goalMessage.getWidth(), goalMessage.getHeight(),
+					false, true);
 		}
 
 		if (gameState == GameState.INPUT) {
@@ -234,6 +265,16 @@ public class Game implements ApplicationListener {
 		}
 
 		shapeRenderer.end();
+	}
+	private void drawPlayerScore(SpriteBatch batch, BitmapFont bmf) {
+//		 bmf.scale(4);
+//		 bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore, (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
+		
+		String fileName;
+		fileName = "digit" + redScore;
+		
+//		batch.draw()
+		
 	}
 
 	private void drawPlayerStats(SpriteBatch batch, Player player) {
@@ -343,15 +384,15 @@ public class Game implements ApplicationListener {
 
 	private void goalScoredDetection() {
 		if (RED_GOAL_AREA.contains(ball)) {
+			blueScore++;
 			setStartingPositions();
-			gameState = GameState.INPUT;
 			beginInputStage();
 			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
 			// TODO: Sound: crowd cheer
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
+			redScore++;
 			setStartingPositions();
-			gameState = GameState.INPUT;
 			beginInputStage();
 			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
