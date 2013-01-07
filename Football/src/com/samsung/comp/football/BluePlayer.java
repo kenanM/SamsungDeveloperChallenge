@@ -12,7 +12,7 @@ public class BluePlayer extends Player {
 		super(x, y);
 		this.TEAM = TeamColour.BLUE;
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
-		this.walkSheet = new Texture(Gdx.files.internal("overhead spritesheet 256 x 256.png"));
+		this.walkSheet = new Texture(Gdx.files.internal("overhead spritesheet strip 256 x 256.png"));
 		this.walkAnimation = new Animation(0.025f,
 				createTextureRegion(walkSheet));
 		this.currentFrame = walkAnimation.getKeyFrame(0);

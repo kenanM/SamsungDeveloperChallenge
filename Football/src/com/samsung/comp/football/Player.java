@@ -25,7 +25,7 @@ public abstract class Player extends Rectangle {
 	protected TextureRegion currentFrame;
 	private float stateTime = 0l;
 	/** The dimensions of the run animation */
-	private static final int NUMBER_OF_FRAMES = 8;
+	private static final int NUMBER_OF_FRAMES = 10;
 
 	protected Texture hoverTexture;
 	private boolean isHighlighted = false;
@@ -200,7 +200,7 @@ public abstract class Player extends Rectangle {
 
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
-		// batch.draw(this.getTexture(), this.x, this.y);
+//		 batch.draw(this.getTexture(), this.x, this.y);
 		batch.draw(this.getTexture(), this.x, this.y, PLAYER_SIZE, PLAYER_SIZE);
 		if (this.isHighlighted()) {
 			batch.draw(this.getHighlightTexture(),
