@@ -103,15 +103,15 @@ public class Game implements ApplicationListener {
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
-		d1 = new Texture(Gdx.files.internal("digit1.png"));
-		d2 = new Texture(Gdx.files.internal("digit2.png"));
-		d3 = new Texture(Gdx.files.internal("digit3.png"));
-		d4 = new Texture(Gdx.files.internal("digit4.png"));
-		d5 = new Texture(Gdx.files.internal("digit5.png"));
-		d6 = new Texture(Gdx.files.internal("digit6.png"));
-		d7 = new Texture(Gdx.files.internal("digit7.png"));
-		d8 = new Texture(Gdx.files.internal("digit8.png"));
-		d9 = new Texture(Gdx.files.internal("digit9.png"));
+		d1 = new Texture(Gdx.files.internal("digits/digit1.png"));
+		d2 = new Texture(Gdx.files.internal("digits/digit2.png"));
+		d3 = new Texture(Gdx.files.internal("digits/digit3.png"));
+		d4 = new Texture(Gdx.files.internal("digits/digit4.png"));
+		d5 = new Texture(Gdx.files.internal("digits/digit5.png"));
+		d6 = new Texture(Gdx.files.internal("digits/digit6.png"));
+		d7 = new Texture(Gdx.files.internal("digits/digit7.png"));
+		d8 = new Texture(Gdx.files.internal("digits/digit8.png"));
+		d9 = new Texture(Gdx.files.internal("digits/digit9.png"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 
