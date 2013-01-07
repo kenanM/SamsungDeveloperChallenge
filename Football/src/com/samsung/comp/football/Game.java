@@ -67,6 +67,7 @@ public class Game implements ApplicationListener {
 	public static Texture d7;
 	public static Texture d8;
 	public static Texture d9;
+	public static Texture[] digits = new Texture[10];
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -104,6 +105,7 @@ public class Game implements ApplicationListener {
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
+		d0 = new Texture(Gdx.files.internal("digits/digit0.png"));
 		d1 = new Texture(Gdx.files.internal("digits/digit1.png"));
 		d2 = new Texture(Gdx.files.internal("digits/digit2.png"));
 		d3 = new Texture(Gdx.files.internal("digits/digit3.png"));
@@ -113,6 +115,17 @@ public class Game implements ApplicationListener {
 		d7 = new Texture(Gdx.files.internal("digits/digit7.png"));
 		d8 = new Texture(Gdx.files.internal("digits/digit8.png"));
 		d9 = new Texture(Gdx.files.internal("digits/digit9.png"));
+
+		digits[0] = d0;
+		digits[1] = d1;
+		digits[2] = d2;
+		digits[3] = d3;
+		digits[4] = d4;
+		digits[5] = d5;
+		digits[6] = d6;
+		digits[7] = d7;
+		digits[8] = d8;
+		digits[9] = d9;
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("target.png")));
@@ -204,7 +217,7 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
 		drawPlayerScore(batch, bmf);
-		
+
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
 					VIRTUAL_SCREEN_WIDTH / 2 - goalMessage.getWidth() / 2,
@@ -268,15 +281,38 @@ public class Game implements ApplicationListener {
 
 		shapeRenderer.end();
 	}
+
 	private void drawPlayerScore(SpriteBatch batch, BitmapFont bmf) {
-//		 bmf.scale(4);
-//		 bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore, (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
+		// bmf.scale(4);
+		// bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore,
+		// (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
+
+		Texture tRed = digits[redScore];
+		Texture tBlue = digits[blueScore];
 		
-		String fileName;
-		fileName = "digit" + redScore;
+		// beautiful hack to disgust kenan
+		try {
+			batch.draw(tRed, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), false, true);
+		} catch (Exception e) {
+			batch.draw(d0, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), false, true);
+		}
+
+		try {
+			batch.draw(tBlue, VIRTUAL_SCREEN_WIDTH / 2 + 32, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), false, true);
+		} catch (Exception e) {
+			batch.draw(d0, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
+					tRed.getWidth(), tRed.getHeight(), false, true);
+		}
+
 		
-//		batch.draw()
-		
+
 	}
 
 	private void drawPlayerStats(SpriteBatch batch, Player player) {
