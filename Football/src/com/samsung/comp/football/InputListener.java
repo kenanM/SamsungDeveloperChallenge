@@ -10,6 +10,7 @@ import android.view.View;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.Pass;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 
@@ -122,7 +123,16 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				} else {
 					Ball ball = game.getBall();
 					if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
-						selectedPlayer.setAction(new Kick(ball, eventVector));
+						// See if the pen is pointing at a team mate
+						Player receiver = findPlayer(event);
+						if (receiver != null
+								&& receiver.getTeam() == game.getHumanColour()) {
+							Log.v("InputListener", "passing to teamate");
+							selectedPlayer.setAction(new Pass(ball, receiver));
+						} else {
+							selectedPlayer
+									.setAction(new Kick(ball, eventVector));
+						}
 					}
 				}
 			}
