@@ -11,7 +11,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -19,6 +18,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
+import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Utils;
 
 public class Game implements ApplicationListener {
@@ -84,6 +84,7 @@ public class Game implements ApplicationListener {
 		stats = new Texture(Gdx.files.internal("stats.png"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
+		Mark.create(new Texture(Gdx.files.internal("target.png")));
 
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
 
@@ -225,7 +226,7 @@ public class Game implements ApplicationListener {
 		// bmf.draw(batch, "str", (float)VIRTUAL_SCREEN_WIDTH-128, 10);
 
 		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
-				- stats.getWidth()/2, 0, 0, 0, stats.getWidth(),
+				- stats.getWidth() / 2, 0, 0, 0, stats.getWidth(),
 				stats.getHeight(), 1, 1, 0, 0, 0, stats.getWidth(),
 				stats.getHeight(), false, true);
 

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Kick;
+import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.spensdk.applistener.SPenHoverListener;
@@ -133,7 +134,16 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 							selectedPlayer
 									.setAction(new Kick(ball, eventVector));
 						}
+					} else {
+						Player target = findPlayer(event);
+						if (target != null
+								&& target.getTeam() != game.getHumanColour()) {
+							Log.v("InputListener", "marking");
+							selectedPlayer.setAction(new Mark(selectedPlayer, target));
+						}
+
 					}
+
 				}
 			}
 

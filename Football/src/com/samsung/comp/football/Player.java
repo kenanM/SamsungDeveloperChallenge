@@ -154,21 +154,21 @@ public abstract class Player extends Rectangle {
 	}
 
 	public int getStarsShootSpeed() {
-		return (int)shootSpeed/100;
+		return (int) shootSpeed / 100;
 	}
-	
+
 	public int getStarsRunSpeed() {
-		return (int)runSpeed/100;
+		return (int) runSpeed / 100;
 	}
-	
+
 	public int getStarsTackleSkill() {
-		return (int)tackleSkill/20;
+		return (int) tackleSkill / 20;
 	}
-	
+
 	public int getStarsTacklePreventionSkill() {
-		return (int)tacklePreventionSkill/20;
+		return (int) tacklePreventionSkill / 20;
 	}
-	
+
 	public float getShootSpeed() {
 		return shootSpeed;
 	}
@@ -250,7 +250,7 @@ public abstract class Player extends Rectangle {
 	}
 
 	public void mark(Player target) {
-		move(new Vector2[] { target.getPlayerPosition() });
+		this.path = new Vector2[] { target.getBallPosition() };
 	}
 
 	// TODO: Account for a moving player.
@@ -287,7 +287,8 @@ public abstract class Player extends Rectangle {
 		float distance = time * runSpeed;
 		Vector2 position = getPlayerPosition();
 
-		while (distance > 0 && path != null && path.length > 0) {
+		while (distance > 0 && path != null && path.length > 0
+				&& positionInPath < path.length) {
 
 			this.stateTime += time;
 			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
