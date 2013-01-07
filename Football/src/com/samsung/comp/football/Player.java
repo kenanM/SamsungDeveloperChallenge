@@ -43,7 +43,7 @@ public abstract class Player extends Rectangle {
 	int positionInPath = 0;
 	float rotation;
 	private Action action;
-	private float timeSinceKick = 0;
+	private float timeSinceKick = Game.BALL_PASS_TIME;
 
 	// TODO: MUST INITIALISE PLAYER STATS
 	public Player(float playerX, float playerY) {
