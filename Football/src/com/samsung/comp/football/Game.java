@@ -153,10 +153,11 @@ public class Game implements ApplicationListener {
 		redPlayers = new LinkedList<Player>();
 
 		redPlayers.add(new RedPlayer(169, 704));
-		redPlayers.add(new RedPlayer(338, 640));
-		redPlayers.add(new RedPlayer(507, 704));
-		redPlayers.add(new RedPlayer(338, 768));
-		redGoalie = new RedPlayer(338, 950);
+		redPlayers.add(new RedPlayer(169, 704, 400, 100, 100, 20));
+		redPlayers.add(new RedPlayer(338, 640, 300, 300, 80, 0));
+		redPlayers.add(new RedPlayer(507, 704, 200, 300, 100, 0));
+		redPlayers.add(new RedPlayer(338, 768, 200, 300, 100, 0));
+		redGoalie = new RedPlayer(338, 900);
 
 		bluePlayers = new LinkedList<Player>();
 
@@ -164,7 +165,7 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(169, 320));
 		bluePlayers.add(new BluePlayer(338, 256));
 		bluePlayers.add(new BluePlayer(507, 320));
-		blueGoalie = new BluePlayer(338, 74);
+		blueGoalie = new BluePlayer(338, 124);
 
 		// Create a ball
 		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
