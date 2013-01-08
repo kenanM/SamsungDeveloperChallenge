@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -68,6 +69,8 @@ public class Game implements ApplicationListener {
 	public static Texture d8;
 	public static Texture d9;
 	public static Texture[] digits = new Texture[10];
+	
+	Sound whistleBlow;
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -126,6 +129,8 @@ public class Game implements ApplicationListener {
 		digits[7] = d7;
 		digits[8] = d8;
 		digits[9] = d9;
+		
+		whistleBlow = Gdx.audio.newSound(Gdx.files.internal("sound/Whistle short 2.wav"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("target.png")));
@@ -170,7 +175,8 @@ public class Game implements ApplicationListener {
 		// Create a ball
 		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
 				Ball.translateBallCoordinate(VIRTUAL_SCREEN_HEIGHT / 2));
-
+		
+		whistleBlow.play();
 	}
 
 	public void setHoveringPlayer(Player hoveringPlayer) {
@@ -554,7 +560,19 @@ public class Game implements ApplicationListener {
 		starFull.dispose();
 		stats.dispose();
 		goalMessage.dispose();
-
+		d0.dispose();
+		d1.dispose();
+		d2.dispose();
+		d3.dispose();
+		d4.dispose();
+		d5.dispose();
+		d6.dispose();
+		d7.dispose();
+		d8.dispose();
+		d9.dispose();
+		
+		whistleBlow.dispose();
+		
 		batch.dispose();
 	}
 
