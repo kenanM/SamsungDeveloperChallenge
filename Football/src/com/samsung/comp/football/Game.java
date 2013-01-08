@@ -152,24 +152,23 @@ public class Game implements ApplicationListener {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new RedPlayer(400, 700));
-		redPlayers.add(new RedPlayer(200, 800));
-		redPlayers.add(new RedPlayer(600, 800));
-		redPlayers.add(new RedPlayer(400, 850));
-		redGoalie = new RedPlayer(400, 900);
+		redPlayers.add(new RedPlayer(169, 704));
+		redPlayers.add(new RedPlayer(338, 640));
+		redPlayers.add(new RedPlayer(507, 704));
+		redPlayers.add(new RedPlayer(338, 768));
+		redGoalie = new RedPlayer(338, 950);
 
 		bluePlayers = new LinkedList<Player>();
 
-		bluePlayers.add(new BluePlayer(400, 500));
-		bluePlayers.add(new BluePlayer(200, 400));
-		bluePlayers.add(new BluePlayer(600, 400));
-		bluePlayers.add(new BluePlayer(400, 350));
-		blueGoalie = new BluePlayer(400, 100);
+		bluePlayers.add(new BluePlayer(338, 384));
+		bluePlayers.add(new BluePlayer(169, 320));
+		bluePlayers.add(new BluePlayer(338, 256));
+		bluePlayers.add(new BluePlayer(507, 320));
+		blueGoalie = new BluePlayer(338, 74);
 
 		// Create a ball
-		ball = new Ball(
-				Ball.translateBallCoordinate(Gdx.graphics.getWidth() / 2),
-				Ball.translateBallCoordinate(Gdx.graphics.getHeight() / 2));
+		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
+				Ball.translateBallCoordinate(VIRTUAL_SCREEN_HEIGHT / 2));
 
 	}
 
