@@ -48,6 +48,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		fetchSelectablePlayers();
 		ai.getComputerActions();
 	}
+	
+	public void resetAI() {
+		ai = new AI(game);
+	}
 
 	/**
 	 * Finds a player that overlaps or is near a point, returns null if no

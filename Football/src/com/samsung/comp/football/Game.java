@@ -424,6 +424,7 @@ public class Game implements ApplicationListener {
 		if (RED_GOAL_AREA.contains(ball)) {
 			blueScore++;
 			setStartingPositions();
+			inputListener.resetAI();
 			beginInputStage();
 			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
@@ -431,6 +432,7 @@ public class Game implements ApplicationListener {
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
 			redScore++;
 			setStartingPositions();
+			inputListener.resetAI();
 			beginInputStage();
 			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
