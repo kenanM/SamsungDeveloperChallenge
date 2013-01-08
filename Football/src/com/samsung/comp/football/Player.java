@@ -32,10 +32,10 @@ public abstract class Player extends Rectangle {
 
 	protected TeamColour TEAM;
 
-	private float shootSpeed = 400;
-	private float runSpeed = 300;
-	private float tackleSkill = 100;
-	private float tacklePreventionSkill = 0;
+	protected float shootSpeed = 400;
+	protected float runSpeed = 300;
+	protected float tackleSkill = 100;
+	protected float tacklePreventionSkill = 0;
 
 	// TODO: Player shot accuracy?
 	// private float accuracy;
