@@ -157,9 +157,8 @@ public class Game implements ApplicationListener {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new RedPlayer(169, 704));
 		redPlayers.add(new RedPlayer(169, 704, 400, 100, 100, 20));
-		redPlayers.add(new RedPlayer(338, 640, 300, 300, 80, 0));
+		redPlayers.add(new RedPlayer(338, 640, 300, 400, 80, 0));
 		redPlayers.add(new RedPlayer(507, 704, 200, 300, 100, 0));
 		redPlayers.add(new RedPlayer(338, 768, 200, 300, 100, 0));
 		redGoalie = new RedPlayer(338, 900);
