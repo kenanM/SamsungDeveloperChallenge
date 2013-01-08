@@ -287,31 +287,31 @@ public class Game implements ApplicationListener {
 		// bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore,
 		// (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
 
-		Texture tRed = digits[redScore];
-		Texture tBlue = digits[blueScore];
-		
-		// beautiful hack to disgust kenan
-		try {
-			batch.draw(tRed, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), false, true);
-		} catch (Exception e) {
-			batch.draw(d0, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), false, true);
+		Texture redCurrentScoreTexture;
+		Texture blueCurrentScoreTexture;
+		if (redScore > 9) {
+			redCurrentScoreTexture = digits[9];
+		} else {
+			redCurrentScoreTexture = digits[redScore];
 		}
 
-		try {
-			batch.draw(tBlue, VIRTUAL_SCREEN_WIDTH / 2 + 32, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), false, true);
-		} catch (Exception e) {
-			batch.draw(d0, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), 1, 1, 0, 0, 0,
-					tRed.getWidth(), tRed.getHeight(), false, true);
+		if (blueScore > 9) {
+			blueCurrentScoreTexture = digits[9];
+		} else {
+			blueCurrentScoreTexture = digits[blueScore];
 		}
 
-		
+		batch.draw(redCurrentScoreTexture, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0,
+				0, redCurrentScoreTexture.getWidth(),
+				redCurrentScoreTexture.getHeight(), 1, 1, 0, 0, 0,
+				redCurrentScoreTexture.getWidth(),
+				redCurrentScoreTexture.getHeight(), false, true);
+
+		batch.draw(blueCurrentScoreTexture, VIRTUAL_SCREEN_WIDTH / 2 + 32, 0,
+				0, 0, redCurrentScoreTexture.getWidth(),
+				redCurrentScoreTexture.getHeight(), 1, 1, 0, 0, 0,
+				redCurrentScoreTexture.getWidth(),
+				redCurrentScoreTexture.getHeight(), false, true);
 
 	}
 
