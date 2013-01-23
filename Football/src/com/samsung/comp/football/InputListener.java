@@ -34,7 +34,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	public void fetchSelectablePlayers() {
-		selectablePlayers = game.getHumanPlayers();
+		selectablePlayers = new ArrayList<Player>(game.getHumanPlayers());
 		if (game.humanGoalieIsHoldingTheBall()) {
 			selectablePlayers.add(game.getHumanGoalie());
 		}
