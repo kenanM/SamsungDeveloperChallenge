@@ -46,7 +46,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		detectPresses = true;
 		this.players = players;
 		fetchSelectablePlayers();
-		ai.getComputerActions();
+		//ai.getComputerActions();
 	}
 
 	public void resetAI() {

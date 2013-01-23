@@ -25,7 +25,7 @@ import com.samsung.comp.football.Actions.Utils;
 
 public class Game implements ApplicationListener {
 
-	public static final Vector2 RED_GOAL = new Vector2(337, 1000);
+	public static final Vector2 RED_GOAL = new Vector2(337, 1400);
 	public static final Vector2 BLUE_GOAL = new Vector2(337, 24);
 
 	// TODO: Remove these and other hard coded values
@@ -69,8 +69,11 @@ public class Game implements ApplicationListener {
 	public static Texture d8;
 	public static Texture d9;
 	public static Texture[] digits = new Texture[10];
-	
+
 	Sound whistleBlow;
+
+	// TODO do not commit
+	private Texture goalTexture;
 
 	public enum GameState {
 		INPUT, EXECUTION
@@ -84,8 +87,8 @@ public class Game implements ApplicationListener {
 
 	private List<Player> redPlayers = new LinkedList<Player>();
 	private List<Player> bluePlayers = new LinkedList<Player>();
-	private Player redGoalie;
-	private Player blueGoalie;
+	private Goalie redGoalie;
+	private Goalie blueGoalie;
 
 	private Ball ball;
 	// TODO: Rename to elapsedRoundTime?
@@ -129,8 +132,12 @@ public class Game implements ApplicationListener {
 		digits[7] = d7;
 		digits[8] = d8;
 		digits[9] = d9;
-		
-		whistleBlow = Gdx.audio.newSound(Gdx.files.internal("sound/Whistle short 2.wav"));
+
+		whistleBlow = Gdx.audio.newSound(Gdx.files
+				.internal("sound/Whistle short 2.wav"));
+
+		// TODO delete this do not commit
+		goalTexture = new Texture(Gdx.files.internal("target.png"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("target.png")));
@@ -154,6 +161,11 @@ public class Game implements ApplicationListener {
 	}
 
 	private void setStartingPositions() {
+
+		// Create a ball
+		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
+				Ball.translateBallCoordinate(VIRTUAL_SCREEN_HEIGHT / 2));
+
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
@@ -161,7 +173,7 @@ public class Game implements ApplicationListener {
 		redPlayers.add(new RedPlayer(338, 640, 300, 400, 80, 0));
 		redPlayers.add(new RedPlayer(507, 704, 200, 300, 100, 0));
 		redPlayers.add(new RedPlayer(338, 768, 200, 300, 100, 0));
-		redGoalie = new RedPlayer(338, 900);
+		redGoalie = new RedGoalie(338, 900, ball);
 
 		bluePlayers = new LinkedList<Player>();
 
@@ -169,12 +181,8 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(169, 320));
 		bluePlayers.add(new BluePlayer(338, 256));
 		bluePlayers.add(new BluePlayer(507, 320));
-		blueGoalie = new BluePlayer(338, 124);
+		blueGoalie = new BlueGoalie(338, 124, ball);
 
-		// Create a ball
-		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
-				Ball.translateBallCoordinate(VIRTUAL_SCREEN_HEIGHT / 2));
-		
 		whistleBlow.play();
 	}
 
@@ -250,6 +258,9 @@ public class Game implements ApplicationListener {
 			player.draw(batch);
 		}
 
+		batch.draw(goalTexture, RED_GOAL.x, RED_GOAL.y);
+		batch.draw(goalTexture, BLUE_GOAL.x, BLUE_GOAL.y);
+
 		ball.draw(batch);
 
 		batch.end();
@@ -280,6 +291,7 @@ public class Game implements ApplicationListener {
 					player.getAction().draw(shapeRenderer);
 				}
 			}
+
 		} else {
 			// Execution stage
 		}
@@ -569,9 +581,9 @@ public class Game implements ApplicationListener {
 		d7.dispose();
 		d8.dispose();
 		d9.dispose();
-		
+
 		whistleBlow.dispose();
-		
+
 		batch.dispose();
 	}
 

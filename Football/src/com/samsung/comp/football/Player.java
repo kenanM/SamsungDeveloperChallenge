@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import android.util.Log;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,7 +45,7 @@ public abstract class Player extends Rectangle {
 	int positionInPath = 0;
 	float rotation;
 	private Action action;
-	private float timeSinceKick = Game.BALL_PASS_TIME;
+	protected float timeSinceKick = Game.BALL_PASS_TIME;
 	private Ball ball;
 
 	// TODO: MUST INITIALISE PLAYER STATS
@@ -287,7 +289,7 @@ public abstract class Player extends Rectangle {
 	 * either we run out of distance or we can't reach the next point in which
 	 * case move towards it using a utility method
 	 */
-	private Vector2 moveAlongPath(float time) {
+	protected Vector2 moveAlongPath(float time) {
 		float distance = time * runSpeed;
 		Vector2 position = getPlayerPosition();
 
@@ -298,7 +300,7 @@ public abstract class Player extends Rectangle {
 			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 
 			Vector2 target = path[positionInPath];
-
+			Log.v("Goalie", positionInPath+"");
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
 				position.set(target);
