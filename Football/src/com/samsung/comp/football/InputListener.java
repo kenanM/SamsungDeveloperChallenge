@@ -48,7 +48,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		fetchSelectablePlayers();
 		ai.getComputerActions();
 	}
-	
+
 	public void resetAI() {
 		ai = new AI(game);
 	}
@@ -127,7 +127,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					}
 				} else {
 					Ball ball = game.getBall();
-					if (ball.hasOwner() && ball.getOwner() == selectedPlayer) {
+					if (selectedPlayer.hasBall()) {
 						// See if the pen is pointing at a team mate
 						Player receiver = findPlayer(event);
 						if (receiver != null
@@ -143,7 +143,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 						if (target != null
 								&& target.getTeam() != game.getHumanColour()) {
 							Log.v("InputListener", "marking");
-							selectedPlayer.setAction(new Mark(selectedPlayer, target));
+							selectedPlayer.setAction(new Mark(selectedPlayer,
+									target));
 						}
 
 					}

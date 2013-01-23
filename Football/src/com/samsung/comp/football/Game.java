@@ -510,17 +510,17 @@ public class Game implements ApplicationListener {
 
 	public boolean humanGoalieIsHoldingTheBall() {
 		if (humanColour == TeamColour.RED) {
-			return ball.hasOwner() && ball.getOwner() == redGoalie;
+			return redGoalie.hasBall();
 		} else {
-			return ball.hasOwner() && ball.getOwner() == blueGoalie;
+			return blueGoalie.hasBall();
 		}
 	}
 
 	public boolean computerGoalieIsHoldingTheBall() {
 		if (computerColour == TeamColour.RED) {
-			return ball.hasOwner() && ball.getOwner() == redGoalie;
+			return redGoalie.hasBall();
 		} else {
-			return ball.hasOwner() && ball.getOwner() == blueGoalie;
+			return blueGoalie.hasBall();
 		}
 	}
 

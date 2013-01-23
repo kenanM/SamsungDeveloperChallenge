@@ -44,6 +44,7 @@ public abstract class Player extends Rectangle {
 	float rotation;
 	private Action action;
 	private float timeSinceKick = Game.BALL_PASS_TIME;
+	private Ball ball;
 
 	// TODO: MUST INITIALISE PLAYER STATS
 	public Player(float playerX, float playerY) {
@@ -200,9 +201,11 @@ public abstract class Player extends Rectangle {
 
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
-//		 batch.draw(this.getTexture(), this.x, this.y);
-//		batch.draw(this.getTexture(), this.x, this.y, PLAYER_SIZE, PLAYER_SIZE);
-		batch.draw(getTexture(), x, y, PLAYER_SIZE/2 ,PLAYER_SIZE/2, PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
+		// batch.draw(this.getTexture(), this.x, this.y);
+		// batch.draw(this.getTexture(), this.x, this.y, PLAYER_SIZE,
+		// PLAYER_SIZE);
+		batch.draw(getTexture(), x, y, PLAYER_SIZE / 2, PLAYER_SIZE / 2,
+				PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
 		if (this.isHighlighted()) {
 			batch.draw(this.getHighlightTexture(),
 					translateHoverCoordinate(getPlayerX()),
@@ -318,5 +321,17 @@ public abstract class Player extends Rectangle {
 			}
 		}
 		return position;
+	}
+
+	public boolean hasBall() {
+		return ball != null;
+	}
+
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
+
+	public void removeBall() {
+		this.ball = null;
 	}
 }

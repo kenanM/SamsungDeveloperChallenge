@@ -69,7 +69,16 @@ public class Ball extends Rectangle {
 	}
 
 	public void setOwner(Player player) {
+		if (hasOwner()) {
+			removeOwner();
+		}
 		this.owner = player;
+		player.setBall(this);
+	}
+
+	public void removeOwner() {
+		owner.removeBall();
+		owner = null;
 	}
 
 	public Player getOwner() {
@@ -80,10 +89,6 @@ public class Ball extends Rectangle {
 		return owner != null;
 	}
 
-	public void removeOwner() {
-		owner = null;
-	}
-
 	public float getTimeSinceTackle() {
 		return timeSinceTackle;
 	}
@@ -91,7 +96,7 @@ public class Ball extends Rectangle {
 	public void clearTimeSinceTackle() {
 		this.timeSinceTackle = 0;
 	}
-	
+
 	public void resetTimeSinceTackle() {
 		this.timeSinceTackle = Game.BALL_CHANGE_TIME;
 	}
