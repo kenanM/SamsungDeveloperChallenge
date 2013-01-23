@@ -48,7 +48,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		fetchSelectablePlayers();
 		ai.getComputerActions();
 	}
-	
+
 	public void resetAI() {
 		ai = new AI(game);
 	}
@@ -96,18 +96,20 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	@Override
-	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
-		// TODO: remove hard coded value
-		if (detectPresses && arg1.getX() < 128 && arg1.getY() < 128) {
-			// Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
-			detectPresses = false;
-			game.beginExecution();
-		}
+	public boolean onTouchPen(View arg0, MotionEvent arg1) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean onTouchPen(View arg0, MotionEvent event) {
+	public boolean onTouchFinger(View arg0, MotionEvent event) {
+		// TODO: remove hard coded value
+		if (detectPresses && event.getX() < 128 && event.getY() < 128) {
+			// Log.v(TAG, "onTouchFinger: " + arg1.getX() + ", " + arg1.getY());
+			detectPresses = false;
+			game.beginExecution();
+		}
+
 		if (detectPresses) {
 			int action = event.getAction();
 			Vector2 eventVector = game.translateInputToField(new Vector2(event
@@ -143,7 +145,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 						if (target != null
 								&& target.getTeam() != game.getHumanColour()) {
 							Log.v("InputListener", "marking");
-							selectedPlayer.setAction(new Mark(selectedPlayer, target));
+							selectedPlayer.setAction(new Mark(selectedPlayer,
+									target));
 						}
 
 					}
@@ -225,5 +228,4 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	public void onHoverButtonUp(View arg0, MotionEvent arg1) {
 		// Log.v(TAG, "onHoverButtonUp: " + arg1.getX() + ", " + arg1.getY());
 	}
-
 }
