@@ -1,6 +1,6 @@
 package com.samsung.comp.football;
 
-import android.util.Log;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -21,8 +21,6 @@ public abstract class Player extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	private static final int PLAYER_SIZE = 50;
 	private static final int HOVER_SIZE = 64;
-
-	private Vector2 playerFuturePosition = getPlayerPosition();
 
 	protected Texture walkSheet;
 	protected Animation walkAnimation;
@@ -62,16 +60,27 @@ public abstract class Player extends Rectangle {
 		return timeSinceKick;
 	}
 
-	public void setAction(Action action) {
+	public void addAction(Action newAction) {
 		if (this.action == null) {
-			this.action = action;
+			this.action = newAction;
 		} else {
-			this.action.queueAction(action);
+			this.action.setNextAction(newAction);
 		}
+
 	}
 
 	public Action getAction() {
 		return action;
+	}
+
+	public Vector2 getFuturePosition() {
+		if (action != null) {
+			Vector2 futurePosition = action.getFuturePosition();
+			if (futurePosition != null) {
+				return futurePosition;
+			}
+		}
+		return getPlayerPosition();
 	}
 
 	public void clearAction() {
@@ -79,7 +88,6 @@ public abstract class Player extends Rectangle {
 			this.action.clearSubsequentActions();
 		}
 		this.action = null;
-		resetPlayerLatestPosition();
 	}
 
 	protected void resetPathIndex() {
@@ -100,18 +108,6 @@ public abstract class Player extends Rectangle {
 
 	public TeamColour getTeam() {
 		return TEAM;
-	}
-
-	public void setPlayerLatestPosition(Vector2 value) {
-		playerFuturePosition = value;
-	}
-
-	public void resetPlayerLatestPosition() {
-		playerFuturePosition = getPlayerPosition();
-	}
-
-	public Vector2 getPlayerLatestPosition() {
-		return playerFuturePosition;
 	}
 
 	public float getPlayerX() {
@@ -360,5 +356,13 @@ public abstract class Player extends Rectangle {
 
 	public void removeBall() {
 		this.ball = null;
+	}
+
+	public LinkedList<Action> getActions() {
+		LinkedList<Action> temp = new LinkedList<Action>();
+		if (action != null) {
+			temp.addAll(action.getActions());
+		}
+		return temp;
 	}
 }

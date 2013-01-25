@@ -45,34 +45,6 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	/**
-	 * Finds a player that will overlap or be near a point, returns null if no
-	 * player found
-	 */
-	private Player findPlayerPlan(Vector2 point) {
-		Vector2 fieldPoint = game.translateInputToField(point);
-		Vector2 playerVector;
-		for (Player player : players) {
-			playerVector = new Vector2(player.getPlayerLatestPosition().x, player.getPlayerLatestPosition().y);
-			// TODO: Remove hard coded value
-			if (playerVector.epsilonEquals(fieldPoint, 32f)) {
-				Log.v("Input", "Hover");
-				player.highlight();
-				return player;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Finds a player that will overlap or be near a point, returns null if no
-	 * player found
-	 */
-	private Player findPlayerPlan(MotionEvent motionEvent) {
-		Vector2 point = new Vector2(motionEvent.getX(), motionEvent.getY());
-		return findPlayerPlan(point);
-	}
-
-	/**
 	 * Finds a player that overlaps or is near a point, returns null if no
 	 * player found
 	 */
@@ -80,10 +52,9 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		Vector2 fieldPoint = game.translateInputToField(point);
 		Vector2 playerVector;
 		for (Player player : players) {
-			playerVector = new Vector2(player.getPlayerX(), player.getPlayerY());
+			playerVector = player.getFuturePosition();
 			// TODO: Remove hard coded value
 			if (playerVector.epsilonEquals(fieldPoint, 32f)) {
-				Log.v("Input", "Hover");
 				player.highlight();
 				return player;
 			}
@@ -152,17 +123,17 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 						if (receiver != null
 								&& receiver.getTeam() == game.getHumanColour()) {
 							Log.v("InputListener", "passing to teamate");
-							selectedPlayer.setAction(new Pass(ball, receiver));
+							selectedPlayer.addAction(new Pass(ball, receiver));
 						} else {
 							selectedPlayer
-									.setAction(new Kick(ball, eventVector));
+									.addAction(new Kick(ball, eventVector));
 						}
 					} else {
 						Player target = findPlayer(event);
 						if (target != null
 								&& target.getTeam() != game.getHumanColour()) {
 							Log.v("InputListener", "marking");
-							selectedPlayer.setAction(new Mark(selectedPlayer,
+							selectedPlayer.addAction(new Mark(selectedPlayer,
 									target));
 						}
 
@@ -192,9 +163,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					if (player == null || player != playerBeingDrawnFrom) {
 						// end of the line
 						lineInProgress.add(eventVector);
-						playerBeingDrawnFrom.setAction(new Move(lineInProgress
+						playerBeingDrawnFrom.addAction(new Move(lineInProgress
 								.toArray(new Vector2[lineInProgress.size()])));
-						playerBeingDrawnFrom.setPlayerLatestPosition(lineInProgress.get(lineInProgress.size()-1));
 						lineInProgress.clear();
 					} else {
 						lineInProgress.clear();
@@ -221,6 +191,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (detectPresses) {
 			// Log.v(TAG, "onHover: " + event.getX() + ", " + event.getY());
 			Player player = findPlayer(event);
+
 			game.setHoveringPlayer(player);
 			if (player != null) {
 				player.highlight();

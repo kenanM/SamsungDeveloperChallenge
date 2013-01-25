@@ -33,11 +33,13 @@ public class Mark extends Action {
 	public void draw(SpriteBatch batch) {
 		batch.draw(targetTexture, target.x - (targetTexture.getHeight() / 2),
 				target.y - (targetTexture.getWidth() / 2));
+		super.draw(batch);
 	}
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
 		renderer.line(player.x, player.y, target.x, target.y);
+		super.draw(renderer);
 	}
 
 }

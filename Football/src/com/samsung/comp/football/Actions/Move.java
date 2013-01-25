@@ -1,5 +1,7 @@
 package com.samsung.comp.football.Actions;
 
+import android.util.Log;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -60,6 +62,7 @@ public class Move extends Action {
 				- TEXTURE.getWidth() / 2, lastPoint.x, lastPoint.y,
 				TEXTURE.getWidth(), TEXTURE.getHeight(), 1, 1, rotation, 0, 0,
 				TEXTURE.getWidth(), TEXTURE.getHeight(), false, true);
+		super.draw(batch);
 	}
 
 	@Override
@@ -67,5 +70,23 @@ public class Move extends Action {
 		for (int i = 0; i < path.length - 1; i++) {
 			renderer.line(path[i].x, path[i].y, path[i + 1].x, path[i + 1].y);
 		}
+		super.draw(renderer);
+	}
+
+	@Override
+	public Vector2 getFuturePosition() {
+		if (nextAction != null) {
+			Vector2 nextPosition = nextAction.getFuturePosition();
+			if (nextPosition != null) {
+				return nextPosition;
+			}
+		}
+		return path[path.length - 1];
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		Log.v("Move", "getPosition called");
+		return path[path.length - 1];
 	}
 }

@@ -300,14 +300,15 @@ public class Game implements ApplicationListener {
 	private void drawActions(Action action, SpriteBatch batch) {
 		if (action != null) {
 			action.draw(batch);
-			drawActions(action.getNextAction(), batch);
 		}
 	}
 
 	private void drawActions(Action action, ShapeRenderer shapeRenderer) {
 		if (action != null) {
 			action.draw(shapeRenderer);
-			drawActions(action.getNextAction(), shapeRenderer);
+			if (action.getNextAction() != null) {
+				drawActions(action.getNextAction(), shapeRenderer);
+			}
 		}
 	}
 

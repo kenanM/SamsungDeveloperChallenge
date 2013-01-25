@@ -2,7 +2,6 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Player;
@@ -39,10 +38,6 @@ public class Kick extends Action {
 	public void draw(SpriteBatch batch) {
 		batch.draw(targetTexture, target.x - (targetTexture.getHeight() / 2),
 				target.y - (targetTexture.getWidth() / 2));
+		super.draw(batch);
 	}
-
-	@Override
-	public void draw(ShapeRenderer renderer) {
-	}
-
 }

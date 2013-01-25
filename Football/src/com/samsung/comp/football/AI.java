@@ -62,7 +62,7 @@ public class AI {
 
 		if (goalieHasBall) {
 			Player nearestToTheGoalie = playerNearestTheGoalie(players);
-			goalie.setAction(new Pass(ball, nearestToTheGoalie));
+			goalie.addAction(new Pass(ball, nearestToTheGoalie));
 			players.remove(nearestToTheGoalie);
 
 			for (Player player : players) {
@@ -81,7 +81,7 @@ public class AI {
 				Player receiver = players.get(3);
 				if (receiver != ballOwner) {
 					players.remove(receiver);
-					ballOwner.setAction(new Pass(ball, receiver));
+					ballOwner.addAction(new Pass(ball, receiver));
 				} else {
 					moveToOffensivePosition(ballOwner);
 				}
@@ -196,7 +196,7 @@ public class AI {
 	}
 
 	private void moveToPosition(Player player, Vector2 vector) {
-		player.setAction(new Move(new Vector2[] { player.getPlayerPosition(),
+		player.addAction(new Move(new Vector2[] { player.getPlayerPosition(),
 				vector }));
 	}
 
@@ -205,6 +205,6 @@ public class AI {
 	}
 
 	private void shoot(Player player) {
-		player.setAction(new Kick(ball, targetGoal));
+		player.addAction(new Kick(ball, targetGoal));
 	}
 }
