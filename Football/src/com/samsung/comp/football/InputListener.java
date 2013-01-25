@@ -17,6 +17,8 @@ import com.samsung.spensdk.applistener.SPenTouchListener;
 
 public class InputListener implements SPenTouchListener, SPenHoverListener {
 
+	private static final float INPUT_EPSILON_VALUE = 32;
+
 	private final Game game;
 	private boolean detectPresses = false;
 	private List<Player> players;
@@ -53,8 +55,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		Vector2 playerVector;
 		for (Player player : players) {
 			playerVector = player.getFuturePosition();
-			// TODO: Remove hard coded value
-			if (playerVector.epsilonEquals(fieldPoint, 32f)) {
+			if (playerVector.epsilonEquals(fieldPoint, INPUT_EPSILON_VALUE)) {
 				player.highlight();
 				return player;
 			}
