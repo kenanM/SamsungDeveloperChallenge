@@ -219,6 +219,9 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	@Override
 	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
 		// Log.v(TAG, "onHoverButtonDown: " + arg1.getX() + ", " + arg1.getY());
+		if (selectedPlayer != null) {
+			selectedPlayer.clearAction();
+		}
 	}
 
 	@Override

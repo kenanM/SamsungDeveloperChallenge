@@ -69,7 +69,10 @@ public abstract class Player extends Rectangle {
 		return action;
 	}
 
-	private void clearAction() {
+	public void clearAction() {
+		if (this.action != null) {
+			this.action.clearSubsequentActions();
+		}
 		this.action = null;
 	}
 

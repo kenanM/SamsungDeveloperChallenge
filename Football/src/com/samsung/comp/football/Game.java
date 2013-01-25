@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
+import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Utils;
@@ -69,7 +70,7 @@ public class Game implements ApplicationListener {
 	public static Texture d8;
 	public static Texture d9;
 	public static Texture[] digits = new Texture[10];
-	
+
 	Sound whistleBlow;
 
 	public enum GameState {
@@ -129,8 +130,9 @@ public class Game implements ApplicationListener {
 		digits[7] = d7;
 		digits[8] = d8;
 		digits[9] = d9;
-		
-		whistleBlow = Gdx.audio.newSound(Gdx.files.internal("sound/Whistle short 2.wav"));
+
+		whistleBlow = Gdx.audio.newSound(Gdx.files
+				.internal("sound/Whistle short 2.wav"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("target.png")));
@@ -174,7 +176,7 @@ public class Game implements ApplicationListener {
 		// Create a ball
 		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
 				Ball.translateBallCoordinate(VIRTUAL_SCREEN_HEIGHT / 2));
-		
+
 		whistleBlow.play();
 	}
 
@@ -238,9 +240,7 @@ public class Game implements ApplicationListener {
 			drawPlayerStats(batch, hoveringPlayer);
 
 			for (Player player : allPlayers()) {
-				if (player.getAction() != null) {
-					player.getAction().draw(batch);
-				}
+				drawActions(player.getAction(), batch);
 			}
 		} else {
 			// Execution stage
@@ -276,15 +276,27 @@ public class Game implements ApplicationListener {
 			shapeRenderer.setColor(0, 0, 0, 0);
 
 			for (Player player : allPlayers()) {
-				if (player.getAction() != null) {
-					player.getAction().draw(shapeRenderer);
-				}
+				drawActions(player.getAction(), shapeRenderer);
 			}
 		} else {
 			// Execution stage
 		}
 
 		shapeRenderer.end();
+	}
+
+	private void drawActions(Action action, SpriteBatch batch) {
+		if (action != null) {
+			action.draw(batch);
+			drawActions(action.getNextAction(), batch);
+		}
+	}
+
+	private void drawActions(Action action, ShapeRenderer shapeRenderer) {
+		if (action != null) {
+			action.draw(shapeRenderer);
+			drawActions(action.getNextAction(), shapeRenderer);
+		}
 	}
 
 	private void drawPlayerScore(SpriteBatch batch, BitmapFont bmf) {
@@ -569,9 +581,9 @@ public class Game implements ApplicationListener {
 		d7.dispose();
 		d8.dispose();
 		d9.dispose();
-		
+
 		whistleBlow.dispose();
-		
+
 		batch.dispose();
 	}
 
