@@ -26,8 +26,6 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private List<Player> selectablePlayers = new ArrayList<Player>();
 
-	private AI ai;
-
 	public InputListener(Game game) {
 		players = new ArrayList<Player>();
 		this.game = game;
@@ -41,18 +39,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	public void beginInputStage(List<Player> players) {
-		// LOL try understanding this.
-		ai = (ai == null) ? new AI(game) : ai;
 		detectPresses = true;
 		this.players = players;
 		fetchSelectablePlayers();
-		ai.getComputerActions();
 	}
 
-	public void resetAI() {
-		ai = new AI(game);
-	}
-	
 	/**
 	 * Finds a player that will overlap or be near a point, returns null if no
 	 * player found

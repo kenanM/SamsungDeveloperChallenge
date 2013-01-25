@@ -104,6 +104,8 @@ public class Game implements ApplicationListener {
 	private TeamColour humanColour;
 	private TeamColour computerColour;
 
+	private AI ai;
+
 	@Override
 	public void create() {
 
@@ -154,6 +156,8 @@ public class Game implements ApplicationListener {
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
 
+		ai = new AI(this);
+
 		beginInputStage();
 
 	}
@@ -180,6 +184,8 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(338, 256));
 		bluePlayers.add(new BluePlayer(507, 320));
 		blueGoalie = new BlueGoalie(338, 124, ball);
+
+		ai = new AI(this);
 
 		whistleBlow.play();
 	}
@@ -443,18 +449,17 @@ public class Game implements ApplicationListener {
 	}
 
 	private void goalScoredDetection() {
+		boolean goalScored = false;
 		if (RED_GOAL_AREA.contains(ball)) {
 			blueScore++;
-			setStartingPositions();
-			inputListener.resetAI();
-			beginInputStage();
-			goalScoredDrawTime = 3f;
-			// TODO: Sound: blow whistle
-			// TODO: Sound: crowd cheer
+			goalScored = true;
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
 			redScore++;
+			goalScored = true;
+		}
+
+		if (goalScored) {
 			setStartingPositions();
-			inputListener.resetAI();
 			beginInputStage();
 			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
@@ -484,6 +489,7 @@ public class Game implements ApplicationListener {
 		gameState = GameState.INPUT;
 		clearActions();
 		inputListener.beginInputStage(allPlayers());
+		ai.getComputerActions();
 	}
 
 	public void beginExecution() {
