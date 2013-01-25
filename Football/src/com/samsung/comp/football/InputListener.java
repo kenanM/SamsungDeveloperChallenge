@@ -52,6 +52,34 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	public void resetAI() {
 		ai = new AI(game);
 	}
+	
+	/**
+	 * Finds a player that will overlap or be near a point, returns null if no
+	 * player found
+	 */
+	private Player findPlayerPlan(Vector2 point) {
+		Vector2 fieldPoint = game.translateInputToField(point);
+		Vector2 playerVector;
+		for (Player player : players) {
+			playerVector = new Vector2(player.getPlayerLatestPosition().x, player.getPlayerLatestPosition().y);
+			// TODO: Remove hard coded value
+			if (playerVector.epsilonEquals(fieldPoint, 32f)) {
+				Log.v("Input", "Hover");
+				player.highlight();
+				return player;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Finds a player that will overlap or be near a point, returns null if no
+	 * player found
+	 */
+	private Player findPlayerPlan(MotionEvent motionEvent) {
+		Vector2 point = new Vector2(motionEvent.getX(), motionEvent.getY());
+		return findPlayerPlan(point);
+	}
 
 	/**
 	 * Finds a player that overlaps or is near a point, returns null if no
@@ -174,6 +202,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 						lineInProgress.add(eventVector);
 						playerBeingDrawnFrom.setAction(new Move(lineInProgress
 								.toArray(new Vector2[lineInProgress.size()])));
+						playerBeingDrawnFrom.setPlayerLatestPosition(lineInProgress.get(lineInProgress.size()-1));
 						lineInProgress.clear();
 					} else {
 						lineInProgress.clear();

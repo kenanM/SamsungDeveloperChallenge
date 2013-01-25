@@ -19,6 +19,8 @@ public abstract class Player extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	private static final int PLAYER_SIZE = 50;
 	private static final int HOVER_SIZE = 64;
+	
+	private Vector2 playerFuturePosition = getPlayerPosition();
 
 	protected Texture walkSheet;
 	protected Animation walkAnimation;
@@ -74,6 +76,7 @@ public abstract class Player extends Rectangle {
 			this.action.clearSubsequentActions();
 		}
 		this.action = null;
+		resetPlayerLatestPosition();
 	}
 
 	private void resetPathIndex() {
@@ -94,6 +97,19 @@ public abstract class Player extends Rectangle {
 
 	public TeamColour getTeam() {
 		return TEAM;
+	}
+	
+	public void setPlayerLatestPosition(Vector2 value) {
+		playerFuturePosition = value;
+	}
+	
+	public void resetPlayerLatestPosition() {
+		playerFuturePosition = getPlayerPosition();
+	}
+	
+	
+	public Vector2 getPlayerLatestPosition() {
+		return playerFuturePosition;
 	}
 
 	public float getPlayerX() {
