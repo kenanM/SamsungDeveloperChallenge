@@ -4,8 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import android.app.AlertDialog;
+import android.os.Message;
 import android.util.Log;
 
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -23,7 +28,7 @@ import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Utils;
 
-public class Game implements ApplicationListener {
+public class Game implements ApplicationListener, InputProcessor {
 
 	public static final Vector2 RED_GOAL = new Vector2(337, 1000);
 	public static final Vector2 BLUE_GOAL = new Vector2(337, 24);
@@ -53,6 +58,7 @@ public class Game implements ApplicationListener {
 	private int drawnPitchHeight;
 	private float stretchFactor;
 
+	public static Texture Menu;
 	public static Texture pitchTexture;
 	public static Texture playTexture;
 	public static Texture starFull;
@@ -69,15 +75,16 @@ public class Game implements ApplicationListener {
 	public static Texture d8;
 	public static Texture d9;
 	public static Texture[] digits = new Texture[10];
-	
+
 	Sound whistleBlow;
 
 	public enum GameState {
-		INPUT, EXECUTION
+		INPUT, EXECUTION, MENU
 	}
 
 	private static Random rng;
-	private GameState gameState = GameState.EXECUTION;
+	private GameState gameState = GameState.INPUT;
+	private GameState LastGameState;
 	private SpriteBatch batch;
 	private BitmapFont bmf;
 	private OrthographicCamera camera;
@@ -102,8 +109,12 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void create() {
-
-		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
+		// allows us to use an image that’s width and height aren’t powers of 2.
+		Texture.setEnforcePotImages(false);
+		Gdx.input.setInputProcessor(this);
+		Gdx.input.setCatchBackKey(true);
+		Menu = new Texture(Gdx.files.internal("TitleScreen.png"));
+		pitchTexture = new Texture(Gdx.files.internal("leftpitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
@@ -129,8 +140,9 @@ public class Game implements ApplicationListener {
 		digits[7] = d7;
 		digits[8] = d8;
 		digits[9] = d9;
-		
-		whistleBlow = Gdx.audio.newSound(Gdx.files.internal("sound/Whistle short 2.wav"));
+
+		whistleBlow = Gdx.audio.newSound(Gdx.files
+				.internal("sound/Whistle short 2.wav"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("target.png")));
@@ -148,7 +160,8 @@ public class Game implements ApplicationListener {
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
-
+		gameState = gameState.MENU;
+		// once menu can return to previous state remove the bellow code to start the game in menu mode
 		beginInputStage();
 
 	}
@@ -174,8 +187,7 @@ public class Game implements ApplicationListener {
 		// Create a ball
 		ball = new Ball(Ball.translateBallCoordinate(VIRTUAL_SCREEN_WIDTH / 2),
 				Ball.translateBallCoordinate(VIRTUAL_SCREEN_HEIGHT / 2));
-		
-		whistleBlow.play();
+
 	}
 
 	public void setHoveringPlayer(Player hoveringPlayer) {
@@ -189,26 +201,34 @@ public class Game implements ApplicationListener {
 	public void render() {
 
 		update();
+		if (gameState == gameState.MENU) {
+			batch.begin();
+			batch.draw(Menu, 0, 0, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT,
+					0, 0, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT, false,
+					true);
+			batch.end();
+		} else {
+			// clear the screen with a dark blue color.
+			Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth,
+					drawnPitchHeight);
+			Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		// clear the screen with a dark blue color.
-		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight);
-		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			// tell the camera to update its matrices.
+			camera.update();
 
-		// tell the camera to update its matrices.
-		camera.update();
+			// tell the SpriteBatch to render in the
+			// coordinate system specified by the camera.
+			batch.setProjectionMatrix(camera.combined);
 
-		// tell the SpriteBatch to render in the
-		// coordinate system specified by the camera.
-		batch.setProjectionMatrix(camera.combined);
+			drawSpriteBatch();
+			drawShapeRenderer();
 
-		drawSpriteBatch();
-		drawShapeRenderer();
-
-		a++;
-		if (a == 100) {
-			hoveringPlayer = null;
-			a = 0;
+			a++;
+			if (a == 100) {
+				hoveringPlayer = null;
+				a = 0;
+			}
 		}
 	}
 
@@ -569,9 +589,9 @@ public class Game implements ApplicationListener {
 		d7.dispose();
 		d8.dispose();
 		d9.dispose();
-		
+
 		whistleBlow.dispose();
-		
+
 		batch.dispose();
 	}
 
@@ -604,10 +624,75 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void pause() {
+
 	}
 
 	@Override
 	public void resume() {
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		// TODO Auto-generated method stub
+		if (keycode == Keys.BACK) {
+			LastGameState = getGameState();
+			if(gameState == gameState.MENU){System.exit(0);}
+			else{
+			gameState= gameState.MENU;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(gameState == gameState.MENU){
+			gameState = gameState.INPUT;
+			return true;
+			//if(screenX > 80 && screenX < 600){}
+		}else{
+		return false;}
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public GameState lastState(){
+		
+		return gameState;
+		
 	}
 
 }
