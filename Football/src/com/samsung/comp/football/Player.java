@@ -21,7 +21,7 @@ public abstract class Player extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	private static final int PLAYER_SIZE = 50;
 	private static final int HOVER_SIZE = 64;
-	
+
 	private Vector2 playerFuturePosition = getPlayerPosition();
 
 	protected Texture walkSheet;
@@ -101,16 +101,15 @@ public abstract class Player extends Rectangle {
 	public TeamColour getTeam() {
 		return TEAM;
 	}
-	
+
 	public void setPlayerLatestPosition(Vector2 value) {
 		playerFuturePosition = value;
 	}
-	
+
 	public void resetPlayerLatestPosition() {
 		playerFuturePosition = getPlayerPosition();
 	}
-	
-	
+
 	public Vector2 getPlayerLatestPosition() {
 		return playerFuturePosition;
 	}
@@ -248,33 +247,38 @@ public abstract class Player extends Rectangle {
 	}
 
 	public void kick(Ball ball, Vector2 target) {
-		Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
-				target, shootSpeed);
-		ball.move(ballVelocity);
-		ball.resetTimeSinceTackle();
-		timeSinceKick = 0;
+		if (hasBall()) {
+
+			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
+					target, shootSpeed);
+			ball.move(ballVelocity);
+			ball.resetTimeSinceTackle();
+			timeSinceKick = 0;
+			ball.removeOwner();
+		}
 		executeNextAction();
-		ball.removeOwner();
 	}
 
 	public void shortKick(Ball ball, Vector2 target) {
+		if (hasBall()) {
+			Vector2 movementVector = new Vector2(target.x
+					- ball.getBallPosition().x, target.y
+					- ball.getBallPosition().y);
 
-		Vector2 movementVector = new Vector2(target.x
-				- ball.getBallPosition().x, target.y - ball.getBallPosition().y);
+			// equations of motion -> v^2 = 2ax
+			double targetSpeed = Math.sqrt(2 * ball.getDeceleration()
+					* movementVector.dst(Vector2.Zero));
 
-		// equations of motion -> v^2 = 2ax
-		double targetSpeed = Math.sqrt(2 * ball.getDeceleration()
-				* movementVector.dst(Vector2.Zero));
+			double lowestSpeed = Math.min(targetSpeed, shootSpeed);
 
-		double lowestSpeed = Math.min(targetSpeed, shootSpeed);
-
-		Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(), target,
-				(float) lowestSpeed);
-		ball.move(ballVelocity);
-		ball.resetTimeSinceTackle();
-		timeSinceKick = 0;
+			Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(),
+					target, (float) lowestSpeed);
+			ball.move(ballVelocity);
+			ball.resetTimeSinceTackle();
+			timeSinceKick = 0;
+			ball.removeOwner();
+		}
 		executeNextAction();
-		ball.removeOwner();
 	}
 
 	public void mark(Player target) {
