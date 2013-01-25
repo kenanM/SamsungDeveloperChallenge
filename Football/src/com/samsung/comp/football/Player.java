@@ -58,7 +58,11 @@ public abstract class Player extends Rectangle {
 	}
 
 	public void setAction(Action action) {
-		this.action = action;
+		if (this.action == null) {
+			this.action = action;
+		} else {
+			this.action.queueAction(action);
+		}
 	}
 
 	public Action getAction() {
