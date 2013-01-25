@@ -20,7 +20,7 @@ public class BlueGoalie extends Goalie {
 		
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		this.walkSheet = new Texture(
-				Gdx.files.internal("overhead spritesheet strip(green).png"));
+				Gdx.files.internal("greenPlayer.png"));
 		this.walkAnimation = new Animation(0.10f,
 				createTextureRegion(walkSheet));
 		this.currentFrame = walkAnimation.getKeyFrame(0);
