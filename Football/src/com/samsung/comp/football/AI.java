@@ -134,8 +134,7 @@ public class AI {
 	}
 
 	/** Finds the player in the list nearest a given Vector */
-	public Player playerNearestVector(List<Player> listOfPlayers,
-			Vector2 vector) {
+	public Player playerNearestVector(List<Player> listOfPlayers, Vector2 vector) {
 		float minValue = Float.MAX_VALUE;
 		Player minPlayer = null;
 
@@ -192,7 +191,7 @@ public class AI {
 		// TODO test this, I'm pretty sure it doesn't work
 		float distance = a.dst(b) / 2;
 		Vector2 distanceVector = Utils.getMoveVector(a, b, distance);
-		Vector2 target = a.add(distanceVector);
+		Vector2 target = a.cpy().add(distanceVector);
 		moveToPosition(player, target);
 	}
 
