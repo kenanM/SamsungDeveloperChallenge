@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Player.TeamColour;
+import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Utils;
@@ -243,9 +244,7 @@ public class Game implements ApplicationListener {
 			drawPlayerStats(batch, hoveringPlayer);
 
 			for (Player player : allPlayers()) {
-				if (player.getAction() != null) {
-					player.getAction().draw(batch);
-				}
+				drawActions(player.getAction(), batch);
 			}
 		} else {
 			// Execution stage
@@ -281,9 +280,7 @@ public class Game implements ApplicationListener {
 			shapeRenderer.setColor(0, 0, 0, 0);
 
 			for (Player player : allPlayers()) {
-				if (player.getAction() != null) {
-					player.getAction().draw(shapeRenderer);
-				}
+				drawActions(player.getAction(), shapeRenderer);
 			}
 
 		} else {
@@ -291,6 +288,20 @@ public class Game implements ApplicationListener {
 		}
 
 		shapeRenderer.end();
+	}
+
+	private void drawActions(Action action, SpriteBatch batch) {
+		if (action != null) {
+			action.draw(batch);
+			drawActions(action.getNextAction(), batch);
+		}
+	}
+
+	private void drawActions(Action action, ShapeRenderer shapeRenderer) {
+		if (action != null) {
+			action.draw(shapeRenderer);
+			drawActions(action.getNextAction(), shapeRenderer);
+		}
 	}
 
 	private void drawPlayerScore(SpriteBatch batch, BitmapFont bmf) {

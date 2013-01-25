@@ -11,6 +11,22 @@ public abstract class Action {
 	public Action getNextAction() {
 		return nextAction;
 	}
+	
+	public void clearSubsequentActions() {
+		if (nextAction != null) {
+			nextAction.clearSubsequentActions();
+			nextAction = null;
+		}
+	}
+	
+	public void queueAction(Action newAction) {
+		if (nextAction == null) {
+			nextAction = newAction;
+		}
+		else {
+			nextAction.queueAction(newAction);
+		}
+	}
 
 	public abstract void execute(Player player);
 
