@@ -22,6 +22,7 @@ import com.samsung.comp.football.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
+import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Utils;
 
 public class Game implements ApplicationListener {
@@ -141,7 +142,7 @@ public class Game implements ApplicationListener {
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("target.png")));
-
+		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
 
 		// create the camera and the SpriteBatch
