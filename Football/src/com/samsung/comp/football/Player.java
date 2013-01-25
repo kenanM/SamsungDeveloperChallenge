@@ -221,7 +221,6 @@ public abstract class Player extends Rectangle {
 
 	public void move(Vector2[] path) {
 		this.path = path;
-		executeNextAction();
 	}
 
 	public void kick(Ball ball, Vector2 target) {
