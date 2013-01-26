@@ -1,4 +1,4 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

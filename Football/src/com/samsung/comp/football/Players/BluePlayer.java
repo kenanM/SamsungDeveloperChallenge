@@ -1,9 +1,8 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.samsung.comp.football.Player.TeamColour;
 
 public class BluePlayer extends Player {
 

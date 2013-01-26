@@ -2,7 +2,7 @@ package com.samsung.comp.football.Actions;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.samsung.comp.football.Ball;
-import com.samsung.comp.football.Player;
+import com.samsung.comp.football.Players.Player;
 
 public class Pass extends Action {
 

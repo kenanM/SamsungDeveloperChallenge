@@ -1,8 +1,10 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Players;
 
 import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Ball;
+import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Utils;
 
 public abstract class Goalie extends Player {

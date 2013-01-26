@@ -1,4 +1,4 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.Players;
 
 import java.util.LinkedList;
 
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Ball;
+import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Utils;

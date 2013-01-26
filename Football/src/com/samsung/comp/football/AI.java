@@ -8,7 +8,10 @@ import java.util.List;
 import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Player.TeamColour;
+import com.samsung.comp.football.Players.BluePlayer;
+import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.football.Players.RedPlayer;
+import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;

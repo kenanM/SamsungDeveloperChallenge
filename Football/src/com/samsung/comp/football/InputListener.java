@@ -12,6 +12,7 @@ import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;
+import com.samsung.comp.football.Players.Player;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 
