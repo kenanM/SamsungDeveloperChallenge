@@ -76,14 +76,12 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return new ArrayList<Vector2>(lineInProgress);
 	}
 
-	@Override
-	public void onTouchButtonDown(View arg0, MotionEvent arg1) {
-		// Log.v(TAG, "onTouchButtonDown: " + arg1.getX() + ", " + arg1.getY());
+	Player getSelectedPlayer() {
+		return selectedPlayer;
 	}
 
-	@Override
-	public void onTouchButtonUp(View arg0, MotionEvent arg1) {
-		// Log.v(TAG, "onTouchButtonUp: " + arg1.getX() + ", " + arg1.getY());
+	public boolean isSelectable(Player player) {
+		return selectablePlayers.contains(player);
 	}
 
 	@Override
@@ -182,12 +180,6 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	@Override
-	public boolean onTouchPenEraser(View arg0, MotionEvent arg1) {
-		// Log.v(TAG, "onTouchPenEraser: " + arg1.getX() + ", " + arg1.getY());
-		return false;
-	}
-
-	@Override
 	public boolean onHover(View arg0, MotionEvent event) {
 		if (detectPresses) {
 			// Log.v(TAG, "onHover: " + event.getX() + ", " + event.getY());
@@ -201,20 +193,17 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return false;
 	}
 
-	Player getSelectedPlayer() {
-		return selectedPlayer;
-	}
-
-	public boolean isSelectable(Player player) {
-		return selectablePlayers.contains(player);
-	}
-
 	@Override
 	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
-		// Log.v(TAG, "onHoverButtonDown: " + arg1.getX() + ", " + arg1.getY());
 		if (selectedPlayer != null) {
 			selectedPlayer.clearAction();
 		}
+	}
+
+	@Override
+	public boolean onTouchPenEraser(View arg0, MotionEvent arg1) {
+		// Log.v(TAG, "onTouchPenEraser: " + arg1.getX() + ", " + arg1.getY());
+		return false;
 	}
 
 	@Override
@@ -222,4 +211,13 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		// Log.v(TAG, "onHoverButtonUp: " + arg1.getX() + ", " + arg1.getY());
 	}
 
+	@Override
+	public void onTouchButtonDown(View arg0, MotionEvent arg1) {
+		// Log.v(TAG, "onTouchButtonDown: " + arg1.getX() + ", " + arg1.getY());
+	}
+
+	@Override
+	public void onTouchButtonUp(View arg0, MotionEvent arg1) {
+		// Log.v(TAG, "onTouchButtonUp: " + arg1.getX() + ", " + arg1.getY());
+	}
 }
