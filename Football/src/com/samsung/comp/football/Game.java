@@ -22,6 +22,7 @@ import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.BlueGoalie;
 import com.samsung.comp.football.Players.BluePlayer;
@@ -147,8 +148,9 @@ public class Game implements ApplicationListener {
 				.internal("sound/Whistle short 2.wav"));
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
-		Mark.create(new Texture(Gdx.files.internal("target.png")));
+		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
+		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
 
 		// create the camera and the SpriteBatch

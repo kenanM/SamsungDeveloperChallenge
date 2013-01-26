@@ -9,7 +9,7 @@ public class Mark extends Action {
 
 	private Player target;
 	private Player player;
-	private static Texture targetTexture;
+	private static Texture markTexture;
 
 	public Mark(Player player, Player target) {
 		this.player = player;
@@ -17,7 +17,7 @@ public class Mark extends Action {
 	}
 
 	public static void create(Texture texture) {
-		targetTexture = texture;
+		markTexture = texture;
 	}
 
 	@Override
@@ -26,13 +26,13 @@ public class Mark extends Action {
 	}
 
 	public static void dispose() {
-		targetTexture.dispose();
+		markTexture.dispose();
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		batch.draw(targetTexture, target.x - (targetTexture.getHeight() / 2),
-				target.y - (targetTexture.getWidth() / 2));
+		batch.draw(markTexture, target.x - (markTexture.getHeight() / 2),
+				target.y - (markTexture.getWidth() / 2));
 		super.draw(batch);
 	}
 
