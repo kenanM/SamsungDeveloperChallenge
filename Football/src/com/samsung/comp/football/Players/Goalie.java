@@ -2,6 +2,8 @@ package com.samsung.comp.football.Players;
 
 import android.util.Log;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
@@ -14,13 +16,15 @@ public abstract class Goalie extends Player {
 	protected Vector2 goal;
 	protected Vector2 vector;
 	protected static final float DEFENSIVE_DISTANCE_FROM_GOAL = 150;
+	private final Texture unselectableHoverTexture;
 
-	private Ball ball;
+	private Game game;
 
-	// TODO: Introduce coloured goalie's
-	public Goalie(float playerX, float playerY, Ball ball) {
+	public Goalie(float playerX, float playerY, Game game) {
 		super(playerX, playerY);
-		this.ball = ball;
+		this.game = game;
+		unselectableHoverTexture = new Texture(
+				Gdx.files.internal("unselectableHover.png"));
 	}
 
 	@Override
@@ -29,7 +33,7 @@ public abstract class Goalie extends Player {
 			Log.v("Goalie", "I have the ball gavin!");
 			super.update(time);
 		} else {
-
+			Ball ball = game.getBall();
 			float ballDistanceFromGoal = ball.getBallPosition().dst(goal);
 
 			if (ballDistanceFromGoal <= DEFENSIVE_DISTANCE_FROM_GOAL) {
@@ -57,6 +61,15 @@ public abstract class Goalie extends Player {
 
 			resetPathIndex();
 			super.update(time);
+		}
+	}
+
+	@Override
+	public Texture getHighlightTexture() {
+		if (!hasBall() && game.getHumanColour() == getTeam()) {
+			return unselectableHoverTexture;
+		} else {
+			return super.getHighlightTexture();
 		}
 	}
 }

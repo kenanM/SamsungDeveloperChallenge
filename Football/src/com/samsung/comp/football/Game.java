@@ -18,18 +18,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Players.BlueGoalie;
-import com.samsung.comp.football.Players.BluePlayer;
-import com.samsung.comp.football.Players.Goalie;
-import com.samsung.comp.football.Players.Player;
-import com.samsung.comp.football.Players.RedGoalie;
-import com.samsung.comp.football.Players.RedPlayer;
-import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Utils;
+import com.samsung.comp.football.Players.BlueGoalie;
+import com.samsung.comp.football.Players.BluePlayer;
+import com.samsung.comp.football.Players.Goalie;
+import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.football.Players.RedGoalie;
+import com.samsung.comp.football.Players.RedPlayer;
 
 public class Game implements ApplicationListener {
 
@@ -182,7 +182,7 @@ public class Game implements ApplicationListener {
 		redPlayers.add(new RedPlayer(338, 640, 300, 400, 80, 0));
 		redPlayers.add(new RedPlayer(507, 704, 200, 300, 100, 0));
 		redPlayers.add(new RedPlayer(338, 768, 200, 300, 100, 0));
-		redGoalie = new RedGoalie(338, 900, ball);
+		redGoalie = new RedGoalie(338, 900, this);
 
 		bluePlayers = new LinkedList<Player>();
 
@@ -190,7 +190,7 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(169, 320));
 		bluePlayers.add(new BluePlayer(338, 256));
 		bluePlayers.add(new BluePlayer(507, 320));
-		blueGoalie = new BlueGoalie(338, 124, ball);
+		blueGoalie = new BlueGoalie(338, 124, this);
 
 		ai = new AI(this);
 
