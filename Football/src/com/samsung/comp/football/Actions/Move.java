@@ -12,6 +12,7 @@ public class Move extends Action {
 
 	private final Vector2[] path;
 	private static Texture TEXTURE;
+	// TODO: remove this & references from attributes list
 	private float rotation = 0;
 
 	public Move(Vector2[] path) {
@@ -56,12 +57,23 @@ public class Move extends Action {
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		Vector2 lastPoint = path[path.length - 1];
 
-		batch.draw(TEXTURE, lastPoint.x - TEXTURE.getWidth(), lastPoint.y
-				- TEXTURE.getWidth() / 2, lastPoint.x, lastPoint.y,
-				TEXTURE.getWidth(), TEXTURE.getHeight(), 1, 1, rotation, 0, 0,
-				TEXTURE.getWidth(), TEXTURE.getHeight(), false, true);
+		// Arbitrary number to ensure points aren't the same
+		if (path != null && path.length > 5) {
+
+			Vector2 firstPoint = path[path.length - 5];
+			Vector2 secondPoint = path[path.length - 1];
+
+			float rotation = Utils.getMoveVector(firstPoint, secondPoint, 10)
+					.angle();
+
+			batch.draw(TEXTURE, secondPoint.x - (TEXTURE.getWidth() / 2),
+					secondPoint.y - (TEXTURE.getWidth() / 2),
+					TEXTURE.getWidth() / 2, TEXTURE.getHeight() / 2,
+					TEXTURE.getWidth(), TEXTURE.getHeight(), 1, 1,
+					rotation + 45 + 90, 0, 0, TEXTURE.getWidth(),
+					TEXTURE.getHeight(), false, true);
+		}
 		super.draw(batch);
 	}
 
