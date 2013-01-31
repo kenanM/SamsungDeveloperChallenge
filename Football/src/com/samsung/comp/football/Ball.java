@@ -102,6 +102,11 @@ public class Ball extends Rectangle {
 		this.timeSinceTackle = Game.BALL_CHANGE_TIME;
 	}
 
+	public void resetBall() {
+		removeOwner();
+		velocity = new Vector2(0, 0);
+	}
+
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);

@@ -160,7 +160,7 @@ public class Game implements ApplicationListener {
 		batch = new SpriteBatch();
 		bmf = new BitmapFont();
 
-		setStartingPositions();
+		createNewPlayersAndBall();
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
@@ -172,6 +172,45 @@ public class Game implements ApplicationListener {
 	}
 
 	private void setStartingPositions() {
+		redPlayers.get(0).x = Player.translatePlayerCoordinate(169);
+		redPlayers.get(0).y = Player.translatePlayerCoordinate(704);
+
+		redPlayers.get(1).x = Player.translatePlayerCoordinate(338);
+		redPlayers.get(1).y = Player.translatePlayerCoordinate(640);
+
+		redPlayers.get(2).x = Player.translatePlayerCoordinate(507);
+		redPlayers.get(2).y = Player.translatePlayerCoordinate(704);
+
+		redPlayers.get(3).x = Player.translatePlayerCoordinate(338);
+		redPlayers.get(3).y = Player.translatePlayerCoordinate(768);
+
+		redGoalie.x = Player.translatePlayerCoordinate(338);
+		redGoalie.y = Player.translatePlayerCoordinate(900);
+
+		bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
+		bluePlayers.get(0).y = Player.translatePlayerCoordinate(334);
+
+		bluePlayers.get(1).x = Player.translatePlayerCoordinate(169);
+		bluePlayers.get(1).y = Player.translatePlayerCoordinate(320);
+
+		bluePlayers.get(2).x = Player.translatePlayerCoordinate(338);
+		bluePlayers.get(2).y = Player.translatePlayerCoordinate(256);
+
+		bluePlayers.get(3).x = Player.translatePlayerCoordinate(507);
+		bluePlayers.get(3).y = Player.translatePlayerCoordinate(320);
+
+		blueGoalie.x = Player.translatePlayerCoordinate(338);
+		blueGoalie.y = Player.translatePlayerCoordinate(124);
+
+		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
+		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
+
+		ball.resetBall();
+
+		whistleBlow.play();
+	}
+
+	private void createNewPlayersAndBall() {
 
 		// Create a ball
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
