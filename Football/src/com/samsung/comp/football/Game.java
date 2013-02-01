@@ -90,6 +90,7 @@ public class Game implements ApplicationListener {
 
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
+	private float remainingMatchTime;
 	private SpriteBatch batch;
 	private BitmapFont bmf;
 	private OrthographicCamera camera;
@@ -158,12 +159,13 @@ public class Game implements ApplicationListener {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
-		bmf = new BitmapFont();
+		bmf = new BitmapFont(true);
 
 		createNewPlayersAndBall();
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
+		remainingMatchTime = 5 * 60;
 
 		ai = new AI(this);
 
@@ -283,6 +285,8 @@ public class Game implements ApplicationListener {
 
 		drawPlayerScore(batch, bmf);
 
+		drawRemainingTime();
+
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
 					VIRTUAL_SCREEN_WIDTH / 2 - goalMessage.getWidth() / 2,
@@ -311,6 +315,19 @@ public class Game implements ApplicationListener {
 		ball.draw(batch);
 
 		batch.end();
+	}
+
+	private void drawRemainingTime() {
+		// bmf.scale(30);
+
+		int minutes = (int) remainingMatchTime / 60;
+		int seconds = (int) remainingMatchTime % 60;
+
+		String remainingTimeString = (seconds > 9) ? minutes + ":" + seconds
+				: minutes + ":0" + seconds;
+
+		bmf.draw(batch, remainingTimeString, (float) VIRTUAL_SCREEN_WIDTH / 2,
+				20);
 	}
 
 	private void drawShapeRenderer() {
@@ -396,9 +413,6 @@ public class Game implements ApplicationListener {
 		if (player == null) {
 			return;
 		}
-		// BitmapFont bmf = new BitmapFont();
-		// bmf.draw
-		// bmf.draw(batch, "str", (float)VIRTUAL_SCREEN_WIDTH-128, 10);
 
 		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
 				- stats.getWidth() / 2, 0, 0, 0, stats.getWidth(),
@@ -449,6 +463,8 @@ public class Game implements ApplicationListener {
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
+
+			remainingMatchTime -= time;
 
 			for (Player player : allPlayers()) {
 				player.executeAction();
