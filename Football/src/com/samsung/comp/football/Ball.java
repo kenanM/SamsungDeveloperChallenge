@@ -107,7 +107,9 @@ public class Ball extends Rectangle {
 	}
 
 	public void resetBall() {
-		removeOwner();
+		if (hasOwner()) {
+			removeOwner();
+		}
 		velocity = new Vector2(0, 0);
 	}
 
