@@ -502,7 +502,13 @@ public class Game implements ApplicationListener {
 						performTackle(player);
 					}
 				} else {
-					ball.setOwner(player);
+					if (ball.getSpeed() > 450) {
+						// TODO: update to have a reduced change of collecting
+						// the ball over a certain speed.
+						ball.setOwner(player);
+					} else {
+						ball.setOwner(player);
+					}
 				}
 			}
 		}

@@ -94,6 +94,10 @@ public class Ball extends Rectangle {
 		return timeSinceTackle;
 	}
 
+	public float getSpeed() {
+		return Vector2.Zero.dst(velocity);
+	}
+
 	public void clearTimeSinceTackle() {
 		this.timeSinceTackle = 0;
 	}
