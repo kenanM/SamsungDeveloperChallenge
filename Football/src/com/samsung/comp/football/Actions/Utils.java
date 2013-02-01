@@ -2,6 +2,8 @@ package com.samsung.comp.football.Actions;
 
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Utils {
@@ -48,6 +50,20 @@ public class Utils {
 			rng.setSeed(System.nanoTime());
 		}
 		return ((b - a) * rng.nextFloat() + a);
+	}
+
+	/** Create a one dimensional TextureRegion array */
+	public static TextureRegion[] createTextureRegion(Texture animation,
+			int numberOfFrames) {
+		TextureRegion[][] temp = TextureRegion.split(animation,
+				animation.getWidth() / numberOfFrames, animation.getHeight());
+		// The split function gives us a two dimensional array so turn it into a
+		// one dimensional one
+		TextureRegion[] result = new TextureRegion[numberOfFrames];
+		for (int i = 0; i < numberOfFrames; i++) {
+			result[i] = temp[0][i];
+		}
+		return result;
 	}
 
 }

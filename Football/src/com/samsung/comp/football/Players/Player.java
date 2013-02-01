@@ -29,7 +29,7 @@ public abstract class Player extends Rectangle {
 	protected TextureRegion currentFrame;
 	private float stateTime = 0l;
 	/** The dimensions of the run animation */
-	private static final int NUMBER_OF_FRAMES = 10;
+	protected static final int NUMBER_OF_FRAMES = 10;
 
 	protected Texture hoverTexture;
 	private boolean isHighlighted = false;
@@ -206,19 +206,6 @@ public abstract class Player extends Rectangle {
 
 	public float getTacklePreventionSkill() {
 		return tacklePreventionSkill;
-	}
-
-	/** Create a one dimensional TextureRegion array */
-	protected static TextureRegion[] createTextureRegion(Texture animation) {
-		TextureRegion[][] temp = TextureRegion.split(animation,
-				animation.getWidth() / NUMBER_OF_FRAMES, animation.getHeight());
-		// The split function gives us a two dimensional array so turn it into a
-		// one dimensional one
-		TextureRegion[] result = new TextureRegion[NUMBER_OF_FRAMES];
-		for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
-			result[i] = temp[0][i];
-		}
-		return result;
 	}
 
 	public void draw(SpriteBatch batch) {
