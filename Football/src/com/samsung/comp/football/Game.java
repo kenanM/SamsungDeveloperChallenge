@@ -482,6 +482,9 @@ public class Game implements ApplicationListener {
 				beginInputStage();
 			}
 
+			if (remainingMatchTime < 0) {
+				matchFinish();
+			}
 		}
 	}
 
@@ -531,6 +534,10 @@ public class Game implements ApplicationListener {
 			// TODO: Sound: blow whistle
 			// TODO: Sound: crowd cheer
 		}
+	}
+
+	private void matchFinish() {
+
 	}
 
 	public GameState getGameState() {
