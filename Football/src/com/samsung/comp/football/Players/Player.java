@@ -36,8 +36,8 @@ public abstract class Player extends Rectangle {
 
 	protected TeamColour TEAM;
 
-	protected float shootSpeed = 400;
-	protected float runSpeed = 300;
+	protected float shootSpeed = 550;
+	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
 	protected float tacklePreventionSkill = 0;
 
@@ -177,11 +177,11 @@ public abstract class Player extends Rectangle {
 	}
 
 	public int getStarsShootSpeed() {
-		return (int) shootSpeed / 100;
+		return (int) shootSpeed / 200;
 	}
 
 	public int getStarsRunSpeed() {
-		return (int) runSpeed / 100;
+		return (int) runSpeed / 50;
 	}
 
 	public int getStarsTackleSkill() {
