@@ -160,6 +160,7 @@ public class Game implements ApplicationListener {
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		bmf = new BitmapFont(true);
+		bmf.scale(.35f);
 
 		createNewPlayersAndBall();
 
@@ -318,7 +319,6 @@ public class Game implements ApplicationListener {
 	}
 
 	private void drawRemainingTime() {
-		// bmf.scale(30);
 
 		int minutes = (int) remainingMatchTime / 60;
 		int seconds = (int) remainingMatchTime % 60;
@@ -326,8 +326,8 @@ public class Game implements ApplicationListener {
 		String remainingTimeString = (seconds > 9) ? minutes + ":" + seconds
 				: minutes + ":0" + seconds;
 
-		bmf.draw(batch, remainingTimeString, (float) VIRTUAL_SCREEN_WIDTH / 2,
-				20);
+		bmf.draw(batch, remainingTimeString,
+				(float) VIRTUAL_SCREEN_WIDTH / 2 - 5, 15);
 	}
 
 	private void drawShapeRenderer() {
