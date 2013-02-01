@@ -31,14 +31,17 @@ public class Mark extends Action {
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		batch.draw(markTexture, target.x - (markTexture.getHeight() / 2),
-				target.y - (markTexture.getWidth() / 2));
+		batch.draw(markTexture,
+				target.getPlayerPosition().x - markTexture.getWidth() / 2,
+				target.getPlayerPosition().y - markTexture.getHeight() / 2);
 		super.draw(batch);
 	}
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(player.x, player.y, target.x, target.y);
+		renderer.line(player.getPlayerPosition().x,
+				player.getPlayerPosition().y, target.getPlayerPosition().x,
+				target.getPlayerPosition().y);
 		super.draw(renderer);
 	}
 
