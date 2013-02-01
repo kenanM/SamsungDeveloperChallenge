@@ -491,7 +491,8 @@ public class Game implements ApplicationListener {
 	private void tackleDetection(float time) {
 		for (Player player : allPlayers()) {
 
-			if (player.overlaps(ball) && ball.getOwner() != player
+			if (player.getTackleHitbox().overlaps(ball)
+					&& ball.getOwner() != player
 					&& !(ball.getOwner() instanceof Goalie)
 					&& ball.getTimeSinceTackle() > BALL_CHANGE_TIME
 					&& player.getTimeSinceKick() > BALL_PASS_TIME) {

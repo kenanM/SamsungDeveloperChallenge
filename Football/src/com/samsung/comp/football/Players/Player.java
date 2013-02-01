@@ -367,4 +367,9 @@ public abstract class Player extends Rectangle {
 		}
 		return temp;
 	}
+	
+	public Rectangle getTackleHitbox() {
+		return new Rectangle(getPlayerPosition().x - 12,
+				getPlayerPosition().y - 12, 24, 24);
+	}
 }
