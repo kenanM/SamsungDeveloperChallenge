@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Utils;
 
@@ -99,6 +100,45 @@ public abstract class Player extends Rectangle {
 			}
 		}
 		return getPlayerPosition();
+	}
+
+	public Vector2 getFuturePosition(float time) {
+
+		Vector2 position = getPlayerPosition();
+		if (action != null
+				&& (action instanceof Move || action instanceof Mark)) {
+
+			Vector2[] path;
+			if (action instanceof Move) {
+				Move act = (Move) action;
+				path = act.getPath().clone();
+			} else {
+				Mark act = (Mark) action;
+				path = new Vector2[] { act.getTarget().getPlayerPosition() };
+			}
+
+			float remainingDistance = time * runSpeed;
+			int positionIndex = positionInPath;
+
+			while (remainingDistance > 0 && path != null && path.length > 0
+					&& positionIndex < path.length) {
+
+				Vector2 target = path[positionIndex];
+				if (position.dst(target) < remainingDistance) {
+					remainingDistance -= position.dst(target);
+					position.set(target);
+					positionIndex++;
+				} else {
+					// Move towards the next position (which is out of reach).
+					Vector2 movement = Utils.getMoveVector(position, target,
+							remainingDistance);
+					position.add(movement);
+					break;
+				}
+			}
+
+		}
+		return position;
 	}
 
 	public void clearAction() {
@@ -308,9 +348,9 @@ public abstract class Player extends Rectangle {
 	// TODO: Account for a moving player.
 	public void pass(Ball ball, Player target) {
 		if (hasBall()) {
-			Vector2 movementVector = new Vector2(target.getPlayerX()
-					- ball.getBallPosition().x, target.getPlayerY()
-					- ball.getBallPosition().y);
+
+			float initialDistance = ball.getBallPosition().dst(
+					target.getPlayerPosition());
 
 			// equations of motion -> v^2 - u^2 = 2ax
 			// u^2 = v^2 - 2ax
@@ -318,18 +358,24 @@ public abstract class Player extends Rectangle {
 			// The ideal initial speed is where the ball reaches the target and
 			// meets (ball speed - target's savingSkill <= 100).
 			// Don't pass with an initial speed faster than this.
+			// Note: a target moving towards the ball may have a negligible
+			// failure rate
 
-			float idealFinalSpeed = target.getSavingSkill() - 1;
+			float idealFinalSpeed = target.getSavingSkill() - 20;
 
 			float idealInitialSpeed = (float) Math.sqrt(idealFinalSpeed
 					* idealFinalSpeed
-					- (2 * (-ball.getDeceleration() * Vector2.Zero
-							.dst(movementVector))));
+					- (2 * (-ball.getDeceleration() * initialDistance)));
 
 			float lowestSpeed = Math.min(idealInitialSpeed, shootSpeed);
 
+			float time = initialDistance / lowestSpeed;
+
+			Vector2 targetFuturePosition = target.getFuturePosition(time);
+
 			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
-					target.getPlayerPosition(), lowestSpeed);
+					targetFuturePosition, lowestSpeed);
+
 			ball.move(ballVelocity);
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
