@@ -153,6 +153,7 @@ public class Game implements ApplicationListener {
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
+		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
@@ -226,7 +227,7 @@ public class Game implements ApplicationListener {
 		redPlayers.add(new RedPlayer(338, 640, 300, 200, 80, 0));
 		redPlayers.add(new RedPlayer(507, 704, 200, 150, 100, 0));
 		redPlayers.add(new RedPlayer(338, 768, 200, 150, 100, 0));
-		redGoalie = new RedGoalie(338, 900, this);
+		redGoalie = new RedGoalie(338, 900, this, 500);
 
 		bluePlayers = new LinkedList<Player>();
 
@@ -234,7 +235,7 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(169, 320));
 		bluePlayers.add(new BluePlayer(338, 256));
 		bluePlayers.add(new BluePlayer(507, 320));
-		blueGoalie = new BlueGoalie(338, 124, this);
+		blueGoalie = new BlueGoalie(338, 124, this, 500);
 
 		ai = new AI(this);
 
@@ -502,12 +503,15 @@ public class Game implements ApplicationListener {
 						performTackle(player);
 					}
 				} else {
-					if (ball.getSpeed() > 450) {
-						// TODO: update to have a reduced change of collecting
-						// the ball over a certain speed.
+					float delta = ball.getSpeed() - player.getSavingSkill();
+					float rn = Utils.randomFloat(rng, 0, 100);
+
+					if (rn > delta) {
 						ball.setOwner(player);
 					} else {
-						ball.setOwner(player);
+						// failed to collect ball
+						player.setNoticationTime(.75f);
+						player.setTimeSinceKick(.5f);
 					}
 				}
 			}
@@ -521,6 +525,10 @@ public class Game implements ApplicationListener {
 		if (rn < tackleChance) {
 			ball.setOwner(player);
 			ball.clearTimeSinceTackle();
+		} else {
+			// failed the tackle
+			player.setNoticationTime(.75f);
+			player.setTimeSinceKick(.5f);
 		}
 	}
 

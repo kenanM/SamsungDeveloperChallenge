@@ -34,12 +34,16 @@ public abstract class Player extends Rectangle {
 	protected Texture hoverTexture;
 	private boolean isHighlighted = false;
 
+	protected static Texture notificationTexture;
+	private float notificationTime = 0f;
+
 	protected TeamColour TEAM;
 
 	protected float shootSpeed = 550;
 	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
-	protected float tacklePreventionSkill = 0;
+	protected float tacklePreventionSkill = 100;
+	protected float savingSkill = 450;
 
 	// TODO: Player shot accuracy?
 	// private float accuracy;
@@ -58,8 +62,20 @@ public abstract class Player extends Rectangle {
 		this.height = PLAYER_SIZE;
 	}
 
+	public static void create(Texture texture) {
+		notificationTexture = texture;
+	}
+
+	public void setTimeSinceKick(float time) {
+		timeSinceKick = time;
+	}
+
 	public float getTimeSinceKick() {
 		return timeSinceKick;
+	}
+
+	public void setNoticationTime(float time) {
+		this.notificationTime = time;
 	}
 
 	public void addAction(Action newAction) {
@@ -188,6 +204,10 @@ public abstract class Player extends Rectangle {
 		return (int) tackleSkill / 20;
 	}
 
+	public float getStarsSavingSkill() {
+		return savingSkill / 200;
+	}
+
 	public int getStarsTacklePreventionSkill() {
 		return (int) tacklePreventionSkill / 20;
 	}
@@ -208,6 +228,10 @@ public abstract class Player extends Rectangle {
 		return tacklePreventionSkill;
 	}
 
+	public float getSavingSkill() {
+		return savingSkill;
+	}
+
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(this.getTexture(), this.x, this.y);
@@ -220,9 +244,19 @@ public abstract class Player extends Rectangle {
 					translateHoverCoordinate(getPlayerX()),
 					translateHoverCoordinate(getPlayerY()));
 		}
+		if (this.notificationTime > 0) {
+			batch.draw(notificationTexture,
+					getPlayerX() - notificationTexture.getWidth() / 2, this.y
+							- notificationTexture.getHeight(),
+					notificationTexture.getWidth(),
+					notificationTexture.getHeight(), 0, 0,
+					notificationTexture.getWidth(),
+					notificationTexture.getHeight(), false, true);
+		}
 	}
 
 	public void dispose() {
+		notificationTexture.dispose();
 		hoverTexture.dispose();
 		walkSheet.dispose();
 	}
@@ -288,6 +322,7 @@ public abstract class Player extends Rectangle {
 
 		Vector2 position = moveAlongPath(time);
 		timeSinceKick = timeSinceKick + time;
+		notificationTime -= (notificationTime > 0) ? time : 0;
 
 		this.x = Player.translatePlayerCoordinate(position.x);
 		this.y = Player.translatePlayerCoordinate(position.y);
@@ -354,7 +389,7 @@ public abstract class Player extends Rectangle {
 		}
 		return temp;
 	}
-	
+
 	public Rectangle getTackleHitbox() {
 		return new Rectangle(getPlayerPosition().x - 12,
 				getPlayerPosition().y - 12, 24, 24);

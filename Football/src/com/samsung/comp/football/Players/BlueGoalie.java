@@ -10,7 +10,7 @@ public class BlueGoalie extends Goalie {
 
 	private static final long serialVersionUID = 7960723633348803798L;
 
-	public BlueGoalie(float playerX, float playerY, Game game) {
+	public BlueGoalie(float playerX, float playerY, Game game, float saving) {
 		super(playerX, playerY, game);
 
 		this.goal = Game.BLUE_GOAL;
@@ -25,6 +25,8 @@ public class BlueGoalie extends Goalie {
 		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
 				walkSheet, NUMBER_OF_FRAMES));
 		this.currentFrame = walkAnimation.getKeyFrame(0);
+
+		savingSkill = saving;
 	}
 
 }
