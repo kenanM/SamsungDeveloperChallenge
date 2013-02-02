@@ -535,11 +535,15 @@ public class Game implements ApplicationListener {
 	private void goalScoredDetection() {
 		boolean goalScored = false;
 		if (RED_GOAL_AREA.contains(ball)) {
-			blueScore++;
-			goalScored = true;
+			if (ball.hasOwner() && ball.getOwner() != redGoalie) {
+				blueScore++;
+				goalScored = true;
+			}
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
-			redScore++;
-			goalScored = true;
+			if (ball.hasOwner() && ball.getOwner() != blueGoalie) {
+				redScore++;
+				goalScored = true;
+			}
 		}
 
 		if (goalScored) {
