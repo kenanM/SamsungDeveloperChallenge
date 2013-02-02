@@ -280,6 +280,7 @@ public abstract class Player extends Rectangle {
 
 	public void shortKick(Ball ball, Vector2 target) {
 		if (hasBall()) {
+
 			Vector2 movementVector = new Vector2(target.x
 					- ball.getBallPosition().x, target.y
 					- ball.getBallPosition().y);
@@ -306,7 +307,35 @@ public abstract class Player extends Rectangle {
 
 	// TODO: Account for a moving player.
 	public void pass(Ball ball, Player target) {
-		shortKick(ball, target.getPlayerPosition());
+		if (hasBall()) {
+			Vector2 movementVector = new Vector2(target.getPlayerX()
+					- ball.getBallPosition().x, target.getPlayerY()
+					- ball.getBallPosition().y);
+
+			// equations of motion -> v^2 - u^2 = 2ax
+			// u^2 = v^2 - 2ax
+
+			// The ideal initial speed is where the ball reaches the target and
+			// meets (ball speed - target's savingSkill <= 100).
+			// Don't pass with an initial speed faster than this.
+
+			float idealFinalSpeed = target.getSavingSkill() - 1;
+
+			float idealInitialSpeed = (float) Math.sqrt(idealFinalSpeed
+					* idealFinalSpeed
+					- (2 * (-ball.getDeceleration() * Vector2.Zero
+							.dst(movementVector))));
+
+			float lowestSpeed = Math.min(idealInitialSpeed, shootSpeed);
+
+			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
+					target.getPlayerPosition(), lowestSpeed);
+			ball.move(ballVelocity);
+			ball.resetTimeSinceTackle();
+			timeSinceKick = 0;
+			ball.removeOwner();
+		}
+		executeNextAction();
 	}
 
 	private void executeNextAction() {
