@@ -3,6 +3,7 @@ package com.samsung.comp.football.Players;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.samsung.comp.football.Actions.Utils;
 
 public class BluePlayer extends Player {
 
@@ -13,20 +14,21 @@ public class BluePlayer extends Player {
 		this.TEAM = TeamColour.BLUE;
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("bluePlayer.png"));
-		this.walkAnimation = new Animation(0.10f,
-				createTextureRegion(walkSheet));
+		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
+				walkSheet, NUMBER_OF_FRAMES));
 		this.currentFrame = walkAnimation.getKeyFrame(0);
 	}
-	
-	public BluePlayer(float x, float y, float shoot, float run, float tackle, float tackleStop) {
+
+	public BluePlayer(float x, float y, float shoot, float run, float tackle,
+			float tackleStop) {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("bluePlayer.png"));
-		this.walkAnimation = new Animation(0.10f,
-				createTextureRegion(walkSheet));
+		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
+				walkSheet, NUMBER_OF_FRAMES));
 		this.currentFrame = walkAnimation.getKeyFrame(0);
-		
+
 		shootSpeed = shoot;
 		runSpeed = run;
 		tackleSkill = tackle;

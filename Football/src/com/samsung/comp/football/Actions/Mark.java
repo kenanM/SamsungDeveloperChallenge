@@ -16,6 +16,10 @@ public class Mark extends Action {
 		this.target = target;
 	}
 
+	public Player getTarget() {
+		return target;
+	}
+
 	public static void create(Texture texture) {
 		markTexture = texture;
 	}

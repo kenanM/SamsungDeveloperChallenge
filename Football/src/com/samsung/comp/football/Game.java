@@ -90,6 +90,7 @@ public class Game implements ApplicationListener {
 
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
+	private float remainingMatchTime;
 	private SpriteBatch batch;
 	private BitmapFont bmf;
 	private OrthographicCamera camera;
@@ -152,18 +153,21 @@ public class Game implements ApplicationListener {
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 		Ball.create(new Texture(Gdx.files.internal("ball.png")));
+		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
-		bmf = new BitmapFont();
+		bmf = new BitmapFont(true);
+		bmf.scale(.35f);
 
 		createNewPlayersAndBall();
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
+		remainingMatchTime = 5 * 60;
 
 		ai = new AI(this);
 
@@ -219,11 +223,11 @@ public class Game implements ApplicationListener {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new RedPlayer(169, 704, 400, 100, 100, 20));
-		redPlayers.add(new RedPlayer(338, 640, 300, 400, 80, 0));
-		redPlayers.add(new RedPlayer(507, 704, 200, 300, 100, 0));
-		redPlayers.add(new RedPlayer(338, 768, 200, 300, 100, 0));
-		redGoalie = new RedGoalie(338, 900, this);
+		redPlayers.add(new RedPlayer(169, 704, 400, 50, 100, 20));
+		redPlayers.add(new RedPlayer(338, 640, 300, 200, 80, 0));
+		redPlayers.add(new RedPlayer(507, 704, 200, 150, 100, 0));
+		redPlayers.add(new RedPlayer(338, 768, 200, 150, 100, 0));
+		redGoalie = new RedGoalie(338, 900, this, 500);
 
 		bluePlayers = new LinkedList<Player>();
 
@@ -231,7 +235,7 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(169, 320));
 		bluePlayers.add(new BluePlayer(338, 256));
 		bluePlayers.add(new BluePlayer(507, 320));
-		blueGoalie = new BlueGoalie(338, 124, this);
+		blueGoalie = new BlueGoalie(338, 124, this, 500);
 
 		ai = new AI(this);
 
@@ -282,6 +286,8 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
 		drawPlayerScore(batch, bmf);
+		drawRemainingTime();
+		drawCurrentLinePoints(batch);
 
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
@@ -311,6 +317,29 @@ public class Game implements ApplicationListener {
 		ball.draw(batch);
 
 		batch.end();
+	}
+
+	private void drawCurrentLinePoints(SpriteBatch batch) {
+		Vector2[] points = inputListener.getTimeLinePoints();
+		if (points == null) {
+			return;
+		} else {
+			for (int i = 0; i < points.length; i++) {
+				bmf.draw(batch, String.valueOf(i), points[i].x, points[i].y);
+			}
+		}
+	}
+
+	private void drawRemainingTime() {
+
+		int minutes = (int) remainingMatchTime / 60;
+		int seconds = (int) remainingMatchTime % 60;
+
+		String remainingTimeString = (seconds > 9) ? minutes + ":" + seconds
+				: minutes + ":0" + seconds;
+
+		bmf.draw(batch, remainingTimeString,
+				(float) VIRTUAL_SCREEN_WIDTH / 2 - 5, 15);
 	}
 
 	private void drawShapeRenderer() {
@@ -396,9 +425,6 @@ public class Game implements ApplicationListener {
 		if (player == null) {
 			return;
 		}
-		// BitmapFont bmf = new BitmapFont();
-		// bmf.draw
-		// bmf.draw(batch, "str", (float)VIRTUAL_SCREEN_WIDTH-128, 10);
 
 		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
 				- stats.getWidth() / 2, 0, 0, 0, stats.getWidth(),
@@ -450,6 +476,8 @@ public class Game implements ApplicationListener {
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
 
+			remainingMatchTime -= time;
+
 			for (Player player : allPlayers()) {
 				player.executeAction();
 				player.update(time);
@@ -466,13 +494,17 @@ public class Game implements ApplicationListener {
 				beginInputStage();
 			}
 
+			if (remainingMatchTime < 0) {
+				matchFinish();
+			}
 		}
 	}
 
 	private void tackleDetection(float time) {
 		for (Player player : allPlayers()) {
 
-			if (player.overlaps(ball) && ball.getOwner() != player
+			if (player.getTackleHitbox().overlaps(ball)
+					&& ball.getOwner() != player
 					&& !(ball.getOwner() instanceof Goalie)
 					&& ball.getTimeSinceTackle() > BALL_CHANGE_TIME
 					&& player.getTimeSinceKick() > BALL_PASS_TIME) {
@@ -482,7 +514,16 @@ public class Game implements ApplicationListener {
 						performTackle(player);
 					}
 				} else {
-					ball.setOwner(player);
+					float delta = ball.getSpeed() - player.getSavingSkill();
+					float rn = Utils.randomFloat(rng, 0, 100);
+
+					if (rn > delta) {
+						ball.setOwner(player);
+					} else {
+						// failed to collect ball
+						player.setNoticationTime(.75f);
+						player.setTimeSinceKick(.75f);
+					}
 				}
 			}
 		}
@@ -495,17 +536,29 @@ public class Game implements ApplicationListener {
 		if (rn < tackleChance) {
 			ball.setOwner(player);
 			ball.clearTimeSinceTackle();
+		} else {
+			// failed the tackle
+			player.setNoticationTime(.75f);
+			player.setTimeSinceKick(.75f);
 		}
 	}
 
 	private void goalScoredDetection() {
 		boolean goalScored = false;
 		if (RED_GOAL_AREA.contains(ball)) {
-			blueScore++;
-			goalScored = true;
+			if (ball.hasOwner() && ball.getOwner() == redGoalie) {
+				// do nothing
+			} else {
+				blueScore++;
+				goalScored = true;
+			}
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
-			redScore++;
-			goalScored = true;
+			if (ball.hasOwner() && ball.getOwner() == blueGoalie) {
+				// do nothing
+			} else {
+				redScore++;
+				goalScored = true;
+			}
 		}
 
 		if (goalScored) {
@@ -515,6 +568,10 @@ public class Game implements ApplicationListener {
 			// TODO: Sound: blow whistle
 			// TODO: Sound: crowd cheer
 		}
+	}
+
+	private void matchFinish() {
+
 	}
 
 	public GameState getGameState() {

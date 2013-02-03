@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Utils;
 
@@ -29,17 +30,21 @@ public abstract class Player extends Rectangle {
 	protected TextureRegion currentFrame;
 	private float stateTime = 0l;
 	/** The dimensions of the run animation */
-	private static final int NUMBER_OF_FRAMES = 10;
+	protected static final int NUMBER_OF_FRAMES = 10;
 
 	protected Texture hoverTexture;
 	private boolean isHighlighted = false;
 
+	protected static Texture notificationTexture;
+	private float notificationTime = 0f;
+
 	protected TeamColour TEAM;
 
-	protected float shootSpeed = 400;
-	protected float runSpeed = 300;
+	protected float shootSpeed = 550;
+	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
-	protected float tacklePreventionSkill = 0;
+	protected float tacklePreventionSkill = 100;
+	protected float savingSkill = 450;
 
 	// TODO: Player shot accuracy?
 	// private float accuracy;
@@ -58,8 +63,20 @@ public abstract class Player extends Rectangle {
 		this.height = PLAYER_SIZE;
 	}
 
+	public static void create(Texture texture) {
+		notificationTexture = texture;
+	}
+
+	public void setTimeSinceKick(float time) {
+		timeSinceKick = time;
+	}
+
 	public float getTimeSinceKick() {
 		return timeSinceKick;
+	}
+
+	public void setNoticationTime(float time) {
+		this.notificationTime = time;
 	}
 
 	public void addAction(Action newAction) {
@@ -83,6 +100,45 @@ public abstract class Player extends Rectangle {
 			}
 		}
 		return getPlayerPosition();
+	}
+
+	public Vector2 getFuturePosition(float time) {
+
+		Vector2 position = getPlayerPosition();
+		if (action != null
+				&& (action instanceof Move || action instanceof Mark)) {
+
+			Vector2[] path;
+			if (action instanceof Move) {
+				Move act = (Move) action;
+				path = act.getPath().clone();
+			} else {
+				Mark act = (Mark) action;
+				path = new Vector2[] { act.getTarget().getPlayerPosition() };
+			}
+
+			float remainingDistance = time * runSpeed;
+			int positionIndex = positionInPath;
+
+			while (remainingDistance > 0 && path != null && path.length > 0
+					&& positionIndex < path.length) {
+
+				Vector2 target = path[positionIndex];
+				if (position.dst(target) < remainingDistance) {
+					remainingDistance -= position.dst(target);
+					position.set(target);
+					positionIndex++;
+				} else {
+					// Move towards the next position (which is out of reach).
+					Vector2 movement = Utils.getMoveVector(position, target,
+							remainingDistance);
+					position.add(movement);
+					break;
+				}
+			}
+
+		}
+		return position;
 	}
 
 	public void clearAction() {
@@ -177,15 +233,19 @@ public abstract class Player extends Rectangle {
 	}
 
 	public int getStarsShootSpeed() {
-		return (int) shootSpeed / 100;
+		return (int) shootSpeed / 200;
 	}
 
 	public int getStarsRunSpeed() {
-		return (int) runSpeed / 100;
+		return (int) runSpeed / 50;
 	}
 
 	public int getStarsTackleSkill() {
 		return (int) tackleSkill / 20;
+	}
+
+	public float getStarsSavingSkill() {
+		return savingSkill / 200;
 	}
 
 	public int getStarsTacklePreventionSkill() {
@@ -208,17 +268,8 @@ public abstract class Player extends Rectangle {
 		return tacklePreventionSkill;
 	}
 
-	/** Create a one dimensional TextureRegion array */
-	protected static TextureRegion[] createTextureRegion(Texture animation) {
-		TextureRegion[][] temp = TextureRegion.split(animation,
-				animation.getWidth() / NUMBER_OF_FRAMES, animation.getHeight());
-		// The split function gives us a two dimensional array so turn it into a
-		// one dimensional one
-		TextureRegion[] result = new TextureRegion[NUMBER_OF_FRAMES];
-		for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
-			result[i] = temp[0][i];
-		}
-		return result;
+	public float getSavingSkill() {
+		return savingSkill;
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -233,9 +284,20 @@ public abstract class Player extends Rectangle {
 					translateHoverCoordinate(getPlayerX()),
 					translateHoverCoordinate(getPlayerY()));
 		}
+		if (this.notificationTime > 0) {
+			batch.draw(notificationTexture,
+					getPlayerX() - notificationTexture.getWidth() / 2, this.y
+							- notificationTexture.getHeight()
+							+ (notificationTime * 25),
+					notificationTexture.getWidth(),
+					notificationTexture.getHeight(), 0, 0,
+					notificationTexture.getWidth(),
+					notificationTexture.getHeight(), false, true);
+		}
 	}
 
 	public void dispose() {
+		notificationTexture.dispose();
 		hoverTexture.dispose();
 		walkSheet.dispose();
 	}
@@ -259,6 +321,7 @@ public abstract class Player extends Rectangle {
 
 	public void shortKick(Ball ball, Vector2 target) {
 		if (hasBall()) {
+
 			Vector2 movementVector = new Vector2(target.x
 					- ball.getBallPosition().x, target.y
 					- ball.getBallPosition().y);
@@ -281,11 +344,53 @@ public abstract class Player extends Rectangle {
 
 	public void mark(Player target) {
 		this.path = new Vector2[] { target.getBallPosition() };
+
+		if (hasBall()) {
+			executeNextAction();
+		}
 	}
 
 	// TODO: Account for a moving player.
 	public void pass(Ball ball, Player target) {
-		shortKick(ball, target.getPlayerPosition());
+		if (hasBall()) {
+
+			float initialDistance = ball.getBallPosition().dst(
+					target.getPlayerPosition());
+
+			// equations of motion -> v^2 - u^2 = 2ax
+			// u^2 = v^2 - 2ax
+
+			// The ideal initial speed is where the ball reaches the target and
+			// meets (ball speed - target's savingSkill <= 100).
+			// Don't pass with an initial speed faster than this.
+			// Note: a target moving towards the ball may have a negligible
+			// failure rate
+
+			float idealFinalSpeed = target.getSavingSkill() - 20;
+
+			float idealInitialSpeed = (float) Math.sqrt(idealFinalSpeed
+					* idealFinalSpeed
+					- (2 * (-ball.getDeceleration() * initialDistance)));
+
+			float lowestSpeed = Math.min(idealInitialSpeed, shootSpeed);
+
+			float time = initialDistance / lowestSpeed;
+			Vector2 targetFuturePosition = target.getFuturePosition(time);
+
+			// repeat once with new time for more accuracy
+			time = targetFuturePosition.dst(ball.getBallPosition())
+					/ lowestSpeed;
+			targetFuturePosition = target.getFuturePosition(time);
+
+			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
+					targetFuturePosition, lowestSpeed);
+
+			ball.move(ballVelocity);
+			ball.resetTimeSinceTackle();
+			timeSinceKick = 0;
+			ball.removeOwner();
+		}
+		executeNextAction();
 	}
 
 	private void executeNextAction() {
@@ -301,6 +406,7 @@ public abstract class Player extends Rectangle {
 
 		Vector2 position = moveAlongPath(time);
 		timeSinceKick = timeSinceKick + time;
+		notificationTime -= (notificationTime > 0) ? time : 0;
 
 		this.x = Player.translatePlayerCoordinate(position.x);
 		this.y = Player.translatePlayerCoordinate(position.y);
@@ -366,5 +472,10 @@ public abstract class Player extends Rectangle {
 			temp.addAll(action.getActions());
 		}
 		return temp;
+	}
+
+	public Rectangle getTackleHitbox() {
+		return new Rectangle(getPlayerPosition().x - 12,
+				getPlayerPosition().y - 12, 24, 24);
 	}
 }
