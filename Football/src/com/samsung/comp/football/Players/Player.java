@@ -374,8 +374,12 @@ public abstract class Player extends Rectangle {
 			float lowestSpeed = Math.min(idealInitialSpeed, shootSpeed);
 
 			float time = initialDistance / lowestSpeed;
-
 			Vector2 targetFuturePosition = target.getFuturePosition(time);
+
+			// repeat once with new time for more accuracy
+			time = targetFuturePosition.dst(ball.getBallPosition())
+					/ lowestSpeed;
+			targetFuturePosition = target.getFuturePosition(time);
 
 			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
 					targetFuturePosition, lowestSpeed);
