@@ -343,6 +343,10 @@ public abstract class Player extends Rectangle {
 
 	public void mark(Player target) {
 		this.path = new Vector2[] { target.getBallPosition() };
+
+		if (hasBall()) {
+			executeNextAction();
+		}
 	}
 
 	// TODO: Account for a moving player.
