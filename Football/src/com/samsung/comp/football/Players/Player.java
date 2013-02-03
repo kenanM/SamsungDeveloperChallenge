@@ -287,7 +287,8 @@ public abstract class Player extends Rectangle {
 		if (this.notificationTime > 0) {
 			batch.draw(notificationTexture,
 					getPlayerX() - notificationTexture.getWidth() / 2, this.y
-							- notificationTexture.getHeight(),
+							- notificationTexture.getHeight()
+							+ (notificationTime * 25),
 					notificationTexture.getWidth(),
 					notificationTexture.getHeight(), 0, 0,
 					notificationTexture.getWidth(),
