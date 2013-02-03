@@ -286,8 +286,8 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
 		drawPlayerScore(batch, bmf);
-
 		drawRemainingTime();
+		drawCurrentLinePoints(batch);
 
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
@@ -317,6 +317,17 @@ public class Game implements ApplicationListener {
 		ball.draw(batch);
 
 		batch.end();
+	}
+
+	private void drawCurrentLinePoints(SpriteBatch batch) {
+		Vector2[] points = inputListener.getTimeLinePoints();
+		if (points == null) {
+			return;
+		} else {
+			for (int i = 0; i < points.length; i++) {
+				bmf.draw(batch, String.valueOf(i), points[i].x, points[i].y);
+			}
+		}
 	}
 
 	private void drawRemainingTime() {
@@ -511,7 +522,7 @@ public class Game implements ApplicationListener {
 					} else {
 						// failed to collect ball
 						player.setNoticationTime(.75f);
-						player.setTimeSinceKick(.5f);
+						player.setTimeSinceKick(.75f);
 					}
 				}
 			}
@@ -528,7 +539,7 @@ public class Game implements ApplicationListener {
 		} else {
 			// failed the tackle
 			player.setNoticationTime(.75f);
-			player.setTimeSinceKick(.5f);
+			player.setTimeSinceKick(.75f);
 		}
 	}
 
