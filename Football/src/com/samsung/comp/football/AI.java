@@ -8,14 +8,14 @@ import java.util.List;
 import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.football.Players.BluePlayer;
-import com.samsung.comp.football.Players.Player;
-import com.samsung.comp.football.Players.RedPlayer;
-import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
+import com.samsung.comp.football.Players.BluePlayer;
+import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.football.Players.RedPlayer;
 
 public class AI {
 
@@ -65,7 +65,7 @@ public class AI {
 
 		if (goalieHasBall) {
 			Player nearestToTheGoalie = playerNearestTheGoalie(players);
-			goalie.addAction(new Pass(ball, nearestToTheGoalie));
+			goalie.addAction(new Pass(ball, goalie, nearestToTheGoalie));
 			players.remove(nearestToTheGoalie);
 
 			for (Player player : players) {
@@ -84,7 +84,7 @@ public class AI {
 				Player receiver = players.get(3);
 				if (receiver != ballOwner) {
 					players.remove(receiver);
-					ballOwner.addAction(new Pass(ball, receiver));
+					ballOwner.addAction(new Pass(ball, ballOwner, receiver));
 				} else {
 					moveToOffensivePosition(ballOwner);
 				}

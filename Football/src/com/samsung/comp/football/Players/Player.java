@@ -32,7 +32,6 @@ public abstract class Player extends Rectangle {
 	private static final int NUMBER_OF_FRAMES = 10;
 
 	protected Texture hoverTexture;
-	private boolean isHighlighted = false;
 
 	protected TeamColour TEAM;
 
@@ -155,19 +154,6 @@ public abstract class Player extends Rectangle {
 				Utils.getMoveVector(getPlayerPosition(), rotation, 25));
 	}
 
-	public void highlight() {
-		isHighlighted = true;
-	}
-
-	public boolean isHighlighted() {
-		if (isHighlighted) {
-			isHighlighted = false;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public TextureRegion getTexture() {
 		return currentFrame;
 	}
@@ -228,11 +214,12 @@ public abstract class Player extends Rectangle {
 		// PLAYER_SIZE);
 		batch.draw(getTexture(), x, y, PLAYER_SIZE / 2, PLAYER_SIZE / 2,
 				PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
-		if (this.isHighlighted()) {
-			batch.draw(this.getHighlightTexture(),
-					translateHoverCoordinate(getPlayerX()),
-					translateHoverCoordinate(getPlayerY()));
-		}
+	}
+
+	public void drawHighlight(SpriteBatch batch) {
+		batch.draw(this.getHighlightTexture(),
+				translateHoverCoordinate(getPlayerX()),
+				translateHoverCoordinate(getPlayerY()));
 	}
 
 	public void dispose() {
