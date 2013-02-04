@@ -13,6 +13,7 @@ public class RedPlayer extends Player {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
 		this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
+		this.selectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("redPlayer.png"));
 		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
 				walkSheet, NUMBER_OF_FRAMES));
@@ -25,6 +26,7 @@ public class RedPlayer extends Player {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
 		this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
+		this.selectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("redPlayer.png"));
 		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
 				walkSheet, NUMBER_OF_FRAMES));

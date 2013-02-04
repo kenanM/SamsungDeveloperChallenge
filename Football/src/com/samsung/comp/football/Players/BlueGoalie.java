@@ -21,6 +21,8 @@ public class BlueGoalie extends Goalie {
 		this.y = vector.y;
 
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
+		this.selectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
+
 		this.walkSheet = new Texture(Gdx.files.internal("greenPlayer.png"));
 		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
 				walkSheet, NUMBER_OF_FRAMES));

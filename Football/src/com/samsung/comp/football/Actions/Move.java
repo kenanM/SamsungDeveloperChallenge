@@ -17,6 +17,9 @@ public class Move extends Action {
 
 	public Move(Vector2[] path) {
 		this.path = path;
+		if (path.length == 0) {
+			throw new UnsupportedOperationException();
+		}
 
 		if (path.length > 1) {
 			rotation = getRotation();

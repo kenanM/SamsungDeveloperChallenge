@@ -10,10 +10,12 @@ public class Pass extends Action {
 
 	private Ball ball;
 	private Player target;
+	private Player kicker;
 	private static Texture passIcon;
 
-	public Pass(Ball ball, Player target) {
+	public Pass(Ball ball, Player kicker, Player target) {
 		this.ball = ball;
+		this.kicker = kicker;
 		this.target = target;
 	}
 
@@ -28,8 +30,8 @@ public class Pass extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(ball.x, ball.y, target.getPlayerPosition().x,
-				target.getPlayerPosition().y);
+		renderer.line(kicker.getBallPosition().x, kicker.getBallPosition().y,
+				target.getPlayerPosition().x, target.getPlayerPosition().y);
 		super.draw(renderer);
 	}
 

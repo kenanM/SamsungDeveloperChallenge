@@ -33,7 +33,7 @@ public abstract class Player extends Rectangle {
 	protected static final int NUMBER_OF_FRAMES = 10;
 
 	protected Texture hoverTexture;
-	private boolean isHighlighted = false;
+	protected Texture selectTexture;
 
 	protected static Texture notificationTexture;
 	private float notificationTime = 0f;
@@ -211,19 +211,6 @@ public abstract class Player extends Rectangle {
 				Utils.getMoveVector(getPlayerPosition(), rotation, 25));
 	}
 
-	public void highlight() {
-		isHighlighted = true;
-	}
-
-	public boolean isHighlighted() {
-		if (isHighlighted) {
-			isHighlighted = false;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public TextureRegion getTexture() {
 		return currentFrame;
 	}
@@ -279,11 +266,7 @@ public abstract class Player extends Rectangle {
 		// PLAYER_SIZE);
 		batch.draw(getTexture(), x, y, PLAYER_SIZE / 2, PLAYER_SIZE / 2,
 				PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
-		if (this.isHighlighted()) {
-			batch.draw(this.getHighlightTexture(),
-					translateHoverCoordinate(getPlayerX()),
-					translateHoverCoordinate(getPlayerY()));
-		}
+
 		if (this.notificationTime > 0) {
 			batch.draw(notificationTexture,
 					getPlayerX() - notificationTexture.getWidth() / 2, this.y
@@ -294,6 +277,17 @@ public abstract class Player extends Rectangle {
 					notificationTexture.getWidth(),
 					notificationTexture.getHeight(), false, true);
 		}
+	}
+
+	public void drawHighlight(SpriteBatch batch) {
+		batch.draw(this.getHighlightTexture(),
+				translateHoverCoordinate(getPlayerX()),
+				translateHoverCoordinate(getPlayerY()));
+	}
+
+	public void drawSelect(SpriteBatch batch) {
+		batch.draw(new TextureRegion(selectTexture), x, y, PLAYER_SIZE / 2,
+				PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
 	}
 
 	public void dispose() {

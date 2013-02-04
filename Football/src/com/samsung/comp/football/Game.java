@@ -243,13 +243,6 @@ public class Game implements ApplicationListener {
 		soundManager.play(whistleBlow);
 	}
 
-	public void setHoveringPlayer(Player hoveringPlayer) {
-		this.hoveringPlayer = hoveringPlayer;
-	}
-
-	// TODO: HACK FOR DRAWING STATS (HOVERINGPLAYER)
-	int a = 0;
-
 	@Override
 	public void render() {
 
@@ -269,12 +262,6 @@ public class Game implements ApplicationListener {
 
 		drawSpriteBatch();
 		drawShapeRenderer();
-
-		a++;
-		if (a == 100) {
-			hoveringPlayer = null;
-			a = 0;
-		}
 	}
 
 	private void drawSpriteBatch() {
@@ -302,6 +289,7 @@ public class Game implements ApplicationListener {
 			batch.draw(playTexture, 0, 0);
 
 			drawCurrentLinePoints(batch);
+			inputListener.draw(batch);
 			drawPlayerStats(batch, hoveringPlayer);
 
 			for (Player player : allPlayers()) {
@@ -469,10 +457,6 @@ public class Game implements ApplicationListener {
 		float time = Gdx.graphics.getDeltaTime();
 		totalTime += time;
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
-
-		if (inputListener.getSelectedPlayer() != null) {
-			inputListener.getSelectedPlayer().highlight();
-		}
 
 		// Each action should update the player's X,Y coordines
 		if (gameState == GameState.EXECUTION) {
