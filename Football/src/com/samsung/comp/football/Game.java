@@ -325,7 +325,7 @@ public class Game implements ApplicationListener {
 			return;
 		} else {
 			for (int i = 0; i < points.length; i++) {
-				bmf.draw(batch, String.valueOf(i), points[i].x, points[i].y);
+				bmf.draw(batch, String.valueOf(i + 1), points[i].x, points[i].y);
 			}
 		}
 	}
