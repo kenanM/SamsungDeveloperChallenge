@@ -287,7 +287,6 @@ public class Game implements ApplicationListener {
 
 		drawPlayerScore(batch, bmf);
 		drawRemainingTime();
-		drawCurrentLinePoints(batch);
 
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
@@ -301,6 +300,7 @@ public class Game implements ApplicationListener {
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
 
+			drawCurrentLinePoints(batch);
 			drawPlayerStats(batch, hoveringPlayer);
 
 			for (Player player : allPlayers()) {
