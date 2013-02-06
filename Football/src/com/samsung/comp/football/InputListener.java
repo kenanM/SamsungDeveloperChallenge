@@ -68,6 +68,32 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	 * Finds a player that overlaps or is near a point, returns null if no
 	 * player found
 	 */
+	private Player findSelectablePlayer(MotionEvent motionEvent) {
+		Vector2 point = new Vector2(motionEvent.getX(), motionEvent.getY());
+		return findSelectablePlayer(point);
+	}
+
+	/**
+	 * Finds a player that overlaps or is near a point, returns null if no
+	 * player found
+	 */
+	private Player findSelectablePlayer(Vector2 point) {
+		Vector2 fieldPoint = game.translateInputToField(point);
+		Vector2 playerVector;
+		for (Player player : selectablePlayers) {
+			playerVector = player.getFuturePosition();
+			if (playerVector.epsilonEquals(fieldPoint, INPUT_EPSILON_VALUE)) {
+				player.highlight();
+				return player;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds a player that overlaps or is near a point, returns null if no
+	 * player found
+	 */
 	private Player findPlayer(MotionEvent motionEvent) {
 		Vector2 point = new Vector2(motionEvent.getX(), motionEvent.getY());
 		return findPlayer(point);
@@ -117,7 +143,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 			if (action == MotionEvent.ACTION_DOWN) {
 				if (selectedPlayer == null) {
-					playerBeingDrawnFrom = findPlayer(event);
+					playerBeingDrawnFrom = findSelectablePlayer(event);
 					if (playerBeingDrawnFrom == null
 							|| !isSelectable(playerBeingDrawnFrom)) {
 						return false;
