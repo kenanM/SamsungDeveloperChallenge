@@ -108,6 +108,7 @@ public class Game implements ApplicationListener {
 	private int blueScore = 0;
 
 	private InputListener inputListener;
+	private SoundManager soundManager;
 	private Player hoveringPlayer;
 
 	private TeamColour humanColour;
@@ -239,7 +240,7 @@ public class Game implements ApplicationListener {
 
 		ai = new AI(this);
 
-		whistleBlow.play();
+		soundManager.play(whistleBlow);
 	}
 
 	public void setHoveringPlayer(Player hoveringPlayer) {
@@ -584,6 +585,10 @@ public class Game implements ApplicationListener {
 
 	public void setInputListener(InputListener inputListener) {
 		this.inputListener = inputListener;
+	}
+
+	public void setSoundManager(SoundManager soundManager) {
+		this.soundManager = soundManager;
 	}
 
 	public void clearActions() {

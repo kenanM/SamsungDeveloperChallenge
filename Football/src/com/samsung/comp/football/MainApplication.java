@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -21,7 +23,20 @@ public class MainApplication extends AndroidApplication {
 		boolean useGL2 = false;
 		Game game = new Game();
 		InputListener inputListener = new InputListener(game);
+
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+		// set the music stream to be the same as the system stream
+		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+				audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM),
+				AudioManager.FLAG_SHOW_UI);
+
+		SoundManager soundManager = new SoundManager(audioManager);
+
 		game.setInputListener(inputListener);
+		game.setSoundManager(soundManager);
 		View gameView = initializeForView(game, useGL2);
 		SPenEventLibrary spen = new SPenEventLibrary();
 		spen.setSPenTouchListener(gameView, inputListener);
