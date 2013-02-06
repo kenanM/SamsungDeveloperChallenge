@@ -63,7 +63,7 @@ public class Game implements ApplicationListener {
 	private int yOffset;
 	private int drawnPitchWidth;
 	private int drawnPitchHeight;
-	private float stretchFactor;
+	private double scaleFactor;
 
 	public static Texture pitchTexture;
 	public static Texture playTexture;
@@ -671,9 +671,9 @@ public class Game implements ApplicationListener {
 	}
 
 	public Vector2 translateInputToField(Vector2 vector) {
-		float vx = (vector.x / stretchFactor) - xOffset;
-		float vy = (vector.y / stretchFactor) - yOffset;
-		return new Vector2(vx, vy);
+		double vx = (vector.x / scaleFactor) - xOffset;
+		double vy = (vector.y / scaleFactor) - yOffset;
+		return new Vector2((float) vx, (float) vy);
 	}
 
 	@Override
@@ -707,9 +707,9 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
-		float screenRatio = (float) width / (float) height;
-		float pitchImageRatio = (float) VIRTUAL_SCREEN_WIDTH
-				/ (float) VIRTUAL_SCREEN_HEIGHT;
+		double screenRatio = (double) width / (double) height;
+		double pitchImageRatio = (double) VIRTUAL_SCREEN_WIDTH
+				/ (double) VIRTUAL_SCREEN_HEIGHT;
 
 		if (width > height) {
 			// Need to draw pitch on it's side
@@ -717,16 +717,16 @@ public class Game implements ApplicationListener {
 
 		if (screenRatio > pitchImageRatio) {
 			// Borders to left and right
-			stretchFactor = (float) height / (float) VIRTUAL_SCREEN_HEIGHT;
-			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * stretchFactor);
-			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * stretchFactor);
+			scaleFactor = (double) height / (double) VIRTUAL_SCREEN_HEIGHT;
+			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
+			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * scaleFactor);
 			xOffset = (width - drawnPitchWidth) / 2;
 			yOffset = 0;
 		} else {
 			// Borders top and bottom
-			stretchFactor = (float) width / (float) VIRTUAL_SCREEN_WIDTH;
-			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * stretchFactor);
-			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * stretchFactor);
+			scaleFactor = (double) width / (double) VIRTUAL_SCREEN_WIDTH;
+			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
+			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * scaleFactor);
 			xOffset = 0;
 			yOffset = (height - drawnPitchHeight) / 2;
 		}
