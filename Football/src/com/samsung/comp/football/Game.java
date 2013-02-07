@@ -119,6 +119,8 @@ public class Game implements ApplicationListener {
 	@Override
 	public void create() {
 
+		Texture.setEnforcePotImages(false);
+
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		starFull = new Texture(Gdx.files.internal("star.png"));
