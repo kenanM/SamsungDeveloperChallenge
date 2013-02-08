@@ -49,15 +49,15 @@ public class Mark extends Action {
 				target.getPlayerPosition().y);
 		super.draw(renderer);
 	}
-	
+
 	@Override
 	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
 			float speed, int positionInPath, boolean returnNulls) {
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 		Vector2 position = initialPosition;
-		
-		Vector2[] path = new Vector2[]{target.getPlayerPosition()};
+
+		Vector2[] path = new Vector2[] { target.getPlayerPosition() };
 
 		while (distance > 0 && path != null && path.length > 0
 				&& positionInPath < path.length) {

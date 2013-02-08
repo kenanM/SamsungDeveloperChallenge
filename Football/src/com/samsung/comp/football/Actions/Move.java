@@ -104,8 +104,7 @@ public class Move extends Action {
 		Log.v("Move", "getPosition called");
 		return path[path.length - 1];
 	}
-	
-	
+
 	@Override
 	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
 			float speed, int positionInPath, boolean returnNulls) {
