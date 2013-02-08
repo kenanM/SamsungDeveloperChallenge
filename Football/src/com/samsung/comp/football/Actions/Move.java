@@ -108,9 +108,9 @@ public class Move extends Action {
 	
 	@Override
 	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
-			float speed) {
+			float speed, int positionInPath, boolean returnNulls) {
 		float distance = speed * time;
-		int positionInPath = 0;
+		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 		Vector2 position = initialPosition;
 
 		while (distance > 0 && path != null && path.length > 0
@@ -127,9 +127,9 @@ public class Move extends Action {
 					if (nextAction != null) {
 						float remainingTime = distance / speed;
 						return nextAction.getFuturePosition(remainingTime,
-								position, speed);
+								position, speed, 0, returnNulls);
 					} else {
-						return null;
+						return returnNulls ? null : position;
 					}
 				}
 			} else {

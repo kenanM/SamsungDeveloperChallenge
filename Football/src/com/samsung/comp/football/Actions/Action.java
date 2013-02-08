@@ -36,7 +36,27 @@ public abstract class Action {
 		}
 	}
 
-	public abstract Vector2 getFuturePosition(float time, Vector2 initialPosition, float speed);
+	/**
+	 * Abstract method, recursively goes through the chain of actions and
+	 * calculates the future point of a player
+	 * 
+	 * @param time
+	 *            amount of time in seconds the player travels before returning
+	 *            its position
+	 * @param initialPosition
+	 *            the player's position
+	 * @param speed
+	 *            the player's speed
+	 * @param positionInPath
+	 *            the index of the player's currently executing path
+	 * @param returnNulls
+	 *            whether reaching the end of the chain of paths returns a null
+	 *            or the last point
+	 * @return
+	 */
+	public abstract Vector2 getFuturePosition(float time,
+			Vector2 initialPosition, float speed, int positionInPath,
+			boolean returnNulls);
 
 	public Vector2 getPosition() {
 		return null;

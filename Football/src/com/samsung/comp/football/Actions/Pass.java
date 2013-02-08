@@ -42,12 +42,13 @@ public class Pass extends Action {
 				/ 2, target.getPlayerPosition().y - passIcon.getHeight() / 2);
 		super.draw(batch);
 	}
-	
+
 	@Override
 	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
-			float speed) {
+			float speed, int positionInPath, boolean returnNulls) {
 		if (nextAction != null) {
-			return nextAction.getFuturePosition(time, initialPosition, speed);
+			return nextAction.getFuturePosition(time, initialPosition, speed,
+					0, returnNulls);
 		} else {
 			return initialPosition;
 		}

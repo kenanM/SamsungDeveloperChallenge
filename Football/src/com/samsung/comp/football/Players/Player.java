@@ -91,6 +91,11 @@ public abstract class Player extends Rectangle {
 		return action;
 	}
 
+	/**
+	 * Used for player selection
+	 * 
+	 * @return the final point in the chain of actions
+	 */
 	public Vector2 getFuturePosition() {
 		if (action != null) {
 			Vector2 futurePosition = action.getFuturePosition();
@@ -101,14 +106,46 @@ public abstract class Player extends Rectangle {
 		return getPlayerPosition();
 	}
 
+	/**
+	 * Used for line time indicators
+	 * 
+	 * @param time
+	 *            time in seconds
+	 * @return the position the player will be at after time seconds
+	 */
 	public Vector2 getFuturePosition(float time) {
 		if (action != null) {
 			Vector2 futurePosition = action.getFuturePosition(time,
-					getPlayerPosition(), runSpeed);
+					getPlayerPosition(), runSpeed, positionInPath, true);
 			return futurePosition;
 		} else {
 			return getPlayerPosition();
 		}
+	}
+
+	/**
+	 * Used for passing the ball between players
+	 * 
+	 * @param time
+	 *            time in seconds
+	 * @param initialPosition
+	 *            position of this player to start calculating from
+	 * @return gets the position this player will be at after the input amount
+	 *         of time, starting from initialPosition. Used for passing to a
+	 *         moving player
+	 */
+	public Vector2 getFuturePosition(float time, int pointInCurrentPath) {
+		if (action != null) {
+			Vector2 futurePosition = action.getFuturePosition(time,
+					getPlayerPosition(), runSpeed, pointInCurrentPath, false);
+			return futurePosition;
+		} else {
+			return getPlayerPosition();
+		}
+	}
+
+	public int getPositionInPath() {
+		return positionInPath;
 	}
 
 	public void clearAction() {
@@ -339,12 +376,14 @@ public abstract class Player extends Rectangle {
 			float lowestSpeed = Math.min(idealInitialSpeed, shootSpeed);
 
 			float time = initialDistance / lowestSpeed;
-			Vector2 targetFuturePosition = target.getFuturePosition(time);
+			Vector2 targetFuturePosition = target.getFuturePosition(time,
+					target.getPositionInPath());
 
 			// repeat once with new time for more accuracy
 			time = targetFuturePosition.dst(ball.getBallPosition())
 					/ lowestSpeed;
-			targetFuturePosition = target.getFuturePosition(time);
+			targetFuturePosition = target.getFuturePosition(time,
+					target.getPositionInPath());
 
 			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
 					targetFuturePosition, lowestSpeed);
