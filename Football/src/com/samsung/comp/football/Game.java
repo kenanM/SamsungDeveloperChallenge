@@ -225,10 +225,10 @@ public class Game implements ApplicationListener {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new RedPlayer(169, 704, 400, 50, 100, 20));
-		redPlayers.add(new RedPlayer(338, 640, 300, 200, 80, 0));
-		redPlayers.add(new RedPlayer(507, 704, 200, 150, 100, 0));
-		redPlayers.add(new RedPlayer(338, 768, 200, 150, 100, 0));
+		redPlayers.add(new RedPlayer(169, 704, 550, 50, 100, 40));
+		redPlayers.add(new RedPlayer(338, 640, 540, 200, 80, 20));
+		redPlayers.add(new RedPlayer(507, 704, 530, 150, 80, 40));
+		redPlayers.add(new RedPlayer(338, 768, 520, 150, 100, 20));
 		redGoalie = new RedGoalie(338, 900, this, 500);
 
 		bluePlayers = new LinkedList<Player>();
@@ -290,7 +290,7 @@ public class Game implements ApplicationListener {
 			batch.draw(playTexture, 0, 0);
 
 			inputListener.draw(batch);
-			drawPlayerStats(batch, inputListener.getSelectedPlayer());
+			drawPlayerStats(batch, inputListener.getHighlightedPlayer());
 
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);

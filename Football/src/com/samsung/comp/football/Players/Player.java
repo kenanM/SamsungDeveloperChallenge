@@ -42,7 +42,7 @@ public abstract class Player extends Rectangle {
 	protected float shootSpeed = 550;
 	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
-	protected float tacklePreventionSkill = 100;
+	protected float tacklePreventionSkill = 40;
 	protected float savingSkill = 450;
 
 	// TODO: Player shot accuracy?
