@@ -129,7 +129,7 @@ public class Move extends Action {
 						return nextAction.getFuturePosition(remainingTime,
 								position, speed);
 					} else {
-						return position;
+						return null;
 					}
 				}
 			} else {

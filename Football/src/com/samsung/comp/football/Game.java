@@ -290,13 +290,13 @@ public class Game implements ApplicationListener {
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
 
-			drawCurrentLinePoints(batch);
 			inputListener.draw(batch);
-			drawPlayerStats(batch, hoveringPlayer);
 
+			drawPlayerStats(batch, hoveringPlayer);
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);
 			}
+			drawTimeLinePoints(batch);
 		} else {
 			// Execution stage
 		}
@@ -310,13 +310,16 @@ public class Game implements ApplicationListener {
 		batch.end();
 	}
 
-	private void drawCurrentLinePoints(SpriteBatch batch) {
+	private void drawTimeLinePoints(SpriteBatch batch) {
 		Vector2[] points = inputListener.getTimeLinePoints();
 		if (points == null) {
 			return;
 		} else {
 			for (int i = 0; i < points.length; i++) {
-				bmf.draw(batch, String.valueOf(i + 1), points[i].x, points[i].y);
+				if (points[i] != null) {
+					bmf.draw(batch, String.valueOf(i + 1), points[i].x,
+							points[i].y);
+				}
 			}
 		}
 	}
