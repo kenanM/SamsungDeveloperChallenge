@@ -109,7 +109,6 @@ public class Game implements ApplicationListener {
 
 	private InputListener inputListener;
 	private SoundManager soundManager;
-	private Player hoveringPlayer;
 
 	private TeamColour humanColour;
 	private TeamColour computerColour;
@@ -291,8 +290,8 @@ public class Game implements ApplicationListener {
 			batch.draw(playTexture, 0, 0);
 
 			inputListener.draw(batch);
+			drawPlayerStats(batch, inputListener.getSelectedPlayer());
 
-			drawPlayerStats(batch, hoveringPlayer);
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);
 			}
