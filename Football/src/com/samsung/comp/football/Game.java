@@ -274,7 +274,7 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
-		drawPlayerScore(batch, bmf);
+		drawPlayerScore(batch);
 		drawRemainingTime();
 
 		if (goalScoredDrawTime > 0) {
@@ -381,7 +381,7 @@ public class Game implements ApplicationListener {
 		}
 	}
 
-	private void drawPlayerScore(SpriteBatch batch, BitmapFont bmf) {
+	private void drawPlayerScore(SpriteBatch batch) {
 		// bmf.scale(4);
 		// bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore,
 		// (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
