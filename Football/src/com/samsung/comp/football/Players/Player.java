@@ -119,7 +119,7 @@ public abstract class Player extends Rectangle {
 					getPlayerPosition(), runSpeed, positionInPath, true);
 			return futurePosition;
 		} else {
-			return getPlayerPosition();
+			return null;
 		}
 	}
 
