@@ -104,4 +104,43 @@ public class Move extends Action {
 		Log.v("Move", "getPosition called");
 		return path[path.length - 1];
 	}
+	
+	
+	@Override
+	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
+			float speed) {
+		float distance = speed * time;
+		int positionInPath = 0;
+		Vector2 position = initialPosition;
+
+		while (distance > 0 && path != null && path.length > 0
+				&& positionInPath < path.length) {
+
+			Vector2 target = path[positionInPath];
+			if (position.dst(target) < distance) {
+				distance -= position.dst(target);
+				position.set(target);
+				positionInPath++;
+
+				// if reached end of path
+				if (positionInPath != 0 && positionInPath == path.length) {
+					if (nextAction != null) {
+						float remainingTime = distance / speed;
+						return nextAction.getFuturePosition(remainingTime,
+								position, speed);
+					} else {
+						return position;
+					}
+				}
+			} else {
+				// Move towards the next position (which is out of reach).
+				Vector2 movement = Utils.getMoveVector(position, target,
+						distance);
+				position.add(movement);
+				break;
+			}
+		}
+		return position;
+	}
+
 }

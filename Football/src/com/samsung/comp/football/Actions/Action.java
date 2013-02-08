@@ -36,6 +36,8 @@ public abstract class Action {
 		}
 	}
 
+	public abstract Vector2 getFuturePosition(float time, Vector2 initialPosition, float speed);
+
 	public Vector2 getPosition() {
 		return null;
 	}

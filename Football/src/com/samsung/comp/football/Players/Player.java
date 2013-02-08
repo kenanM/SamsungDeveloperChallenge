@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Utils;
 
@@ -103,42 +102,13 @@ public abstract class Player extends Rectangle {
 	}
 
 	public Vector2 getFuturePosition(float time) {
-
-		Vector2 position = getPlayerPosition();
-		if (action != null
-				&& (action instanceof Move || action instanceof Mark)) {
-
-			Vector2[] path;
-			if (action instanceof Move) {
-				Move act = (Move) action;
-				path = act.getPath().clone();
-			} else {
-				Mark act = (Mark) action;
-				path = new Vector2[] { act.getTarget().getPlayerPosition() };
-			}
-
-			float remainingDistance = time * runSpeed;
-			int positionIndex = positionInPath;
-
-			while (remainingDistance > 0 && path != null && path.length > 0
-					&& positionIndex < path.length) {
-
-				Vector2 target = path[positionIndex];
-				if (position.dst(target) < remainingDistance) {
-					remainingDistance -= position.dst(target);
-					position.set(target);
-					positionIndex++;
-				} else {
-					// Move towards the next position (which is out of reach).
-					Vector2 movement = Utils.getMoveVector(position, target,
-							remainingDistance);
-					position.add(movement);
-					break;
-				}
-			}
-
+		if (action != null) {
+			Vector2 futurePosition = action.getFuturePosition(time,
+					getPlayerPosition(), runSpeed);
+			return futurePosition;
+		} else {
+			return getPlayerPosition();
 		}
-		return position;
 	}
 
 	public void clearAction() {

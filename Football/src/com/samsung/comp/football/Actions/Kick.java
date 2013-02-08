@@ -40,4 +40,14 @@ public class Kick extends Action {
 				target.y - (targetTexture.getWidth() / 2));
 		super.draw(batch);
 	}
+
+	@Override
+	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
+			float speed) {
+		if (nextAction != null) {
+			return nextAction.getFuturePosition(time, initialPosition, speed);
+		} else {
+			return initialPosition;
+		}
+	}
 }

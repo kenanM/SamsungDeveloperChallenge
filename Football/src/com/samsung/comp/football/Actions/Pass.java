@@ -3,6 +3,7 @@ package com.samsung.comp.football.Actions;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Players.Player;
 
@@ -40,5 +41,15 @@ public class Pass extends Action {
 		batch.draw(passIcon, target.getPlayerPosition().x - passIcon.getWidth()
 				/ 2, target.getPlayerPosition().y - passIcon.getHeight() / 2);
 		super.draw(batch);
+	}
+	
+	@Override
+	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
+			float speed) {
+		if (nextAction != null) {
+			return nextAction.getFuturePosition(time, initialPosition, speed);
+		} else {
+			return initialPosition;
+		}
 	}
 }
