@@ -93,6 +93,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return selectedPlayer;
 	}
 
+	Player getHighlightedPlayer() {
+		return highlightedPlayer;
+	}
+
 	public boolean isSelectable(Player player) {
 		return selectablePlayers.contains(player);
 	}
