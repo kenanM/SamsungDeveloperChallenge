@@ -101,21 +101,6 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return selectablePlayers.contains(player);
 	}
 
-	public Vector2[] getTimeLinePoints() {
-		List<Vector2> line = lineInProgress;
-		if (line == null || lineInProgress.size() == 0) {
-			return null;
-		}
-		Player player = findPlayer(lineInProgress.get(0));
-
-		if (player == null) {
-			return null;
-		}
-		return new Vector2[] { player.getFuturePosition(1),
-				player.getFuturePosition(2), player.getFuturePosition(3),
-				player.getFuturePosition(4), player.getFuturePosition(5) };
-	}
-
 	@Override
 	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
 		// TODO: remove hard coded value

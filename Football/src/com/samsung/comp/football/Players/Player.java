@@ -454,4 +454,11 @@ public abstract class Player extends Rectangle {
 		this.x = this.x < (0 + PLAYER_SIZE) ? 0 + PLAYER_SIZE : this.x;
 		this.y = this.y < (0 + PLAYER_SIZE) ? 0 + PLAYER_SIZE : this.y;
 	}
+
+	public Vector2[] getTimeLinePoints() {
+		return new Vector2[] { getFuturePosition(1), getFuturePosition(2),
+				getFuturePosition(3), getFuturePosition(4),
+				getFuturePosition(5) };
+	}
+
 }

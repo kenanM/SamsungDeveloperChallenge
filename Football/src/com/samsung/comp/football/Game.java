@@ -295,7 +295,13 @@ public class Game implements ApplicationListener {
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);
 			}
-			drawTimeLinePoints(batch);
+
+			if (inputListener.getHighlightedPlayer() != null) {
+				drawTimeLinePoints(inputListener.getHighlightedPlayer());
+			}
+			if (inputListener.getSelectedPlayer() != null) {
+				drawTimeLinePoints(inputListener.getSelectedPlayer());
+			}
 		} else {
 			// Execution stage
 		}
@@ -309,8 +315,8 @@ public class Game implements ApplicationListener {
 		batch.end();
 	}
 
-	private void drawTimeLinePoints(SpriteBatch batch) {
-		Vector2[] points = inputListener.getTimeLinePoints();
+	private void drawTimeLinePoints(Player player) {
+		Vector2[] points = player.getTimeLinePoints();
 		if (points == null) {
 			return;
 		} else {
