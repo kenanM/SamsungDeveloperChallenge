@@ -374,7 +374,7 @@ public abstract class Player extends Rectangle {
 
 		this.x = Player.translatePlayerCoordinate(position.x);
 		this.y = Player.translatePlayerCoordinate(position.y);
-
+		// restrictToField();
 	}
 
 	/**
@@ -441,5 +441,17 @@ public abstract class Player extends Rectangle {
 	public Rectangle getTackleHitbox() {
 		return new Rectangle(getPlayerPosition().x - 12,
 				getPlayerPosition().y - 12, 24, 24);
+	}
+
+	private void restrictToField() {
+		this.x = this.x > (Game.VIRTUAL_SCREEN_WIDTH - PLAYER_SIZE) ? Game.VIRTUAL_SCREEN_WIDTH
+				- PLAYER_SIZE
+				: this.x;
+		this.y = this.y > (Game.VIRTUAL_SCREEN_HEIGHT - PLAYER_SIZE) ? Game.VIRTUAL_SCREEN_HEIGHT
+				- PLAYER_SIZE
+				: this.y;
+
+		this.x = this.x < (0 + PLAYER_SIZE) ? 0 + PLAYER_SIZE : this.x;
+		this.y = this.y < (0 + PLAYER_SIZE) ? 0 + PLAYER_SIZE : this.y;
 	}
 }

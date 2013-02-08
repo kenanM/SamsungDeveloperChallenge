@@ -168,12 +168,25 @@ public class Ball extends Rectangle {
 			this.y = (this.y + ((velocity.y) * time));
 			decelerate(time);
 		}
+		// restrictToField();
 	}
 
 	private void decelerate(float time) {
 		float newSpeed = Math.max(0, velocity.dst(Vector2.Zero)
 				- (deceleration * time));
 		velocity = Utils.getMoveVector(Vector2.Zero, velocity, newSpeed);
+	}
+
+	private void restrictToField() {
+		this.x = this.x > (Game.VIRTUAL_SCREEN_WIDTH - BALL_SIZE) ? Game.VIRTUAL_SCREEN_WIDTH
+				- BALL_SIZE
+				: this.x;
+		this.y = this.y > (Game.VIRTUAL_SCREEN_HEIGHT - BALL_SIZE) ? Game.VIRTUAL_SCREEN_HEIGHT
+				- BALL_SIZE
+				: this.y;
+
+		this.x = this.x < (0 + BALL_SIZE) ? 0 + BALL_SIZE : this.x;
+		this.y = this.y < (0 + BALL_SIZE) ? 0 + BALL_SIZE : this.y;
 	}
 
 }
