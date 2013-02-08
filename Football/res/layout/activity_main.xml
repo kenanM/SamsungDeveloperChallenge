@@ -1,14 +1,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="@drawable/title_screen"
+    android:orientation="vertical" >
 
-    <TextView
+    <Button
+        android:id="@+id/startGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".MainActivity" />
+        android:text="@string/start_game"
+        android:textSize="35dp" />
+
+    <Button
+        android:id="@+id/howToPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startGame"
+        android:layout_alignRight="@+id/startGame"
+        android:layout_below="@+id/startGame"
+        android:layout_marginTop="30dp"
+        android:text="@string/how_to_play"
+        android:textSize="35dp" />
+
+    <Button
+        android:id="@+id/aboutUs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/howToPlay"
+        android:layout_alignRight="@+id/howToPlay"
+        android:layout_below="@+id/howToPlay"
+        android:layout_marginTop="30dp"
+        android:text="@string/about_us"
+        android:textSize="35dp" />
 
 </RelativeLayout>

@@ -595,13 +595,13 @@ public class Game implements ApplicationListener {
 		gameState = GameState.INPUT;
 		clearActions();
 		inputListener.beginInputStage(allPlayers());
-		ai.getComputerActions();
 	}
 
 	public void beginExecution() {
 		Log.v("Game", "Beginning execution");
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
+		// ai.getComputerActions();
 	}
 
 	private List<Player> allPlayers() {
