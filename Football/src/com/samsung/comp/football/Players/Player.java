@@ -1,6 +1,8 @@
 package com.samsung.comp.football.Players;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -104,6 +106,30 @@ public abstract class Player extends Rectangle {
 			}
 		}
 		return getPlayerPosition();
+	}
+
+	/**
+	 * Used for player selection
+	 * 
+	 * @return The player's current position and all of the locations that each
+	 *         action returns
+	 */
+	public List<Vector2> getPositionList() {
+		ArrayList<Vector2> points = new ArrayList<Vector2>();
+
+		points.add(getPlayerPosition());
+
+		if (action != null) {
+			ArrayList<Action> actions = new ArrayList<Action>();
+			actions.add(action);
+
+			while (actions.get(actions.size() - 1) != null) {
+				Action currentAction = actions.get(actions.size() - 1);
+				points.add(currentAction.getPosition());
+				actions.add(currentAction.getNextAction());
+			}
+		}
+		return points;
 	}
 
 	/**
