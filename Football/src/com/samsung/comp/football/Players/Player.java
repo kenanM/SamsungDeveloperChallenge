@@ -45,6 +45,7 @@ public abstract class Player extends Rectangle {
 	protected float tackleSkill = 100;
 	protected float tacklePreventionSkill = 100;
 	protected float savingSkill = 450;
+	private float rotationSpeed = 0.25f;
 
 	// TODO: Player shot accuracy?
 	// private float accuracy;
@@ -416,6 +417,7 @@ public abstract class Player extends Rectangle {
 	protected Vector2 moveAlongPath(float time) {
 		float distance = time * runSpeed;
 		Vector2 position = getPlayerPosition();
+		Vector2 oldPosition = position.cpy();
 
 		while (distance > 0 && path != null && path.length > 0
 				&& positionInPath < path.length) {
@@ -441,10 +443,21 @@ public abstract class Player extends Rectangle {
 				Vector2 movement = Utils.getMoveVector(position, target,
 						distance);
 				position.add(movement);
-				rotation = movement.angle();
 				break;
 			}
 		}
+		
+		Vector2 movement = position.cpy().sub(oldPosition);
+		float targetRotation = movement.angle();
+		float distanceToRotate = rotationSpeed/time;
+		if(distanceToRotate >= Math.abs(rotation-targetRotation)){
+			rotation=targetRotation;
+		} else if(targetRotation>rotation){
+			rotation+=distanceToRotate;
+		} else if(targetRotation<rotation){
+			rotation-=distanceToRotate;
+		}
+
 		return position;
 	}
 
