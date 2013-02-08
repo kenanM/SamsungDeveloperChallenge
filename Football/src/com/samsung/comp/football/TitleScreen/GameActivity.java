@@ -1,18 +1,19 @@
-package com.samsung.comp.football;
+package com.samsung.comp.football.TitleScreen;
 
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.samsung.comp.football.Game;
+import com.samsung.comp.football.InputListener;
+import com.samsung.comp.football.SoundManager;
 import com.samsung.spen.lib.input.SPenEventLibrary;
 
-public class MainApplication extends AndroidApplication {
+public class GameActivity extends AndroidApplication {
 
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -25,9 +26,7 @@ public class MainApplication extends AndroidApplication {
 		InputListener inputListener = new InputListener(game);
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
 		// set the music stream to be the same as the system stream
 		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
 				audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM),
@@ -42,11 +41,5 @@ public class MainApplication extends AndroidApplication {
 		spen.setSPenTouchListener(gameView, inputListener);
 		spen.setSPenHoverListener(gameView, inputListener);
 		setContentView(gameView);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
 	}
 }
