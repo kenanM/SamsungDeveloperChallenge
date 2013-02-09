@@ -23,7 +23,6 @@ public class GameActivity extends AndroidApplication {
 		cfg.useCompass = false;
 		boolean useGL2 = false;
 		Game game = new Game();
-		InputListener inputListener = new InputListener(game);
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -34,6 +33,7 @@ public class GameActivity extends AndroidApplication {
 
 		SoundManager soundManager = new SoundManager(audioManager);
 
+		InputListener inputListener = new InputListener(game);
 		game.setInputListener(inputListener);
 		game.setSoundManager(soundManager);
 		View gameView = initializeForView(game, useGL2);

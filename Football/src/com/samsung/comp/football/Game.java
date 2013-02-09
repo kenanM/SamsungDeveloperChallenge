@@ -81,15 +81,17 @@ public class Game implements ApplicationListener {
 	public static Texture d8;
 	public static Texture d9;
 	public static Texture[] digits = new Texture[10];
+	private static Texture pauseTexture;
 
 	Sound whistleBlow;
 
 	public enum GameState {
-		INPUT, EXECUTION
+		INPUT, EXECUTION, PAUSED
 	}
 
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
+	private GameState gameStateToGoIntoWhenBackButtonPressed = GameState.PAUSED;
 	private float remainingMatchTime;
 	private SpriteBatch batch;
 	private BitmapFont bmf;
@@ -108,6 +110,7 @@ public class Game implements ApplicationListener {
 	private int blueScore = 0;
 
 	private InputListener inputListener;
+	private LibGDXInput input;
 	private SoundManager soundManager;
 
 	private TeamColour humanColour;
@@ -120,6 +123,11 @@ public class Game implements ApplicationListener {
 
 		Texture.setEnforcePotImages(false);
 
+		input = new LibGDXInput(this);
+		Gdx.input.setInputProcessor(input);
+		Gdx.input.setCatchBackKey(true);
+
+		pauseTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		starFull = new Texture(Gdx.files.internal("star.png"));
@@ -312,6 +320,13 @@ public class Game implements ApplicationListener {
 
 		ball.draw(batch);
 
+		if (gameState == GameState.PAUSED) {
+			batch.draw(pauseTexture,
+					VIRTUAL_SCREEN_WIDTH / 2 - pauseTexture.getWidth() / 2,
+					VIRTUAL_SCREEN_HEIGHT / 2 - pauseTexture.getHeight() / 2,
+					pauseTexture.getWidth(), pauseTexture.getHeight());
+		}
+
 		batch.end();
 	}
 
@@ -464,12 +479,13 @@ public class Game implements ApplicationListener {
 	}
 
 	private void update() {
-		float time = Gdx.graphics.getDeltaTime();
-		totalTime += time;
-		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
-		// Each action should update the player's X,Y coordines
+		float time = Gdx.graphics.getDeltaTime();
+
 		if (gameState == GameState.EXECUTION) {
+
+			totalTime += time;
+			goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
 			remainingMatchTime -= time;
 
@@ -597,11 +613,16 @@ public class Game implements ApplicationListener {
 		inputListener.beginInputStage(allPlayers());
 	}
 
-	public void beginExecution() {
-		Log.v("Game", "Beginning execution");
-		totalTime = 0;
-		this.gameState = GameState.EXECUTION;
-		// ai.getComputerActions();
+	public boolean beginExecution() {
+		if (gameState == GameState.PAUSED) {
+			return false;
+		} else {
+			Log.v("Game", "Beginning execution");
+			totalTime = 0;
+			this.gameState = GameState.EXECUTION;
+			// ai.getComputerActions();
+			return true;
+		}
 	}
 
 	private List<Player> allPlayers() {
@@ -729,6 +750,17 @@ public class Game implements ApplicationListener {
 			xOffset = 0;
 			yOffset = (height - drawnPitchHeight) / 2;
 		}
+	}
+
+	public void backButtonPressed() {
+		Log.i("GameState", "Back button pressed");
+		if (gameState == GameState.PAUSED) {
+			gameState = gameStateToGoIntoWhenBackButtonPressed;
+		} else {
+			gameStateToGoIntoWhenBackButtonPressed = gameState;
+			gameState = GameState.PAUSED;
+		}
+		Log.i("GameState", gameState.toString());
 	}
 
 	@Override

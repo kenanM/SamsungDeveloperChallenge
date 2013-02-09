@@ -103,10 +103,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
-		// TODO: remove hard coded value
 		if (detectPresses && arg1.getX() < 128 && arg1.getY() < 128) {
-			detectPresses = false;
-			game.beginExecution();
+			if (game.beginExecution()) {
+				detectPresses = false;
+			}
 		}
 		return false;
 	}
