@@ -182,7 +182,7 @@ public class Game implements ApplicationListener {
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
-		remainingMatchTime = 1 * 4;
+		remainingMatchTime = 3 * 60;
 
 		ai = new AI(this);
 
@@ -653,7 +653,7 @@ public class Game implements ApplicationListener {
 			Log.v("Game", "Beginning execution");
 			totalTime = 0;
 			this.gameState = GameState.EXECUTION;
-			// ai.getComputerActions();
+			ai.getComputerActions();
 			return true;
 		}
 	}
