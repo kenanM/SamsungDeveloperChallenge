@@ -9,6 +9,7 @@ import android.util.Log;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -65,6 +66,7 @@ public class Game implements ApplicationListener {
 	private int drawnPitchHeight;
 	private double scaleFactor;
 
+	public static Texture endTexture;
 	public static Texture pitchTexture;
 	public static Texture playTexture;
 	public static Texture starFull;
@@ -86,8 +88,10 @@ public class Game implements ApplicationListener {
 	Sound whistleBlow;
 
 	public enum GameState {
-		INPUT, EXECUTION, PAUSED
+		INPUT, EXECUTION, PAUSED, FINISHED
 	}
+
+	private int result;
 
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
@@ -127,6 +131,7 @@ public class Game implements ApplicationListener {
 		Gdx.input.setInputProcessor(input);
 		Gdx.input.setCatchBackKey(true);
 
+		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
 		pauseTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
@@ -177,7 +182,7 @@ public class Game implements ApplicationListener {
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
-		remainingMatchTime = 5 * 60;
+		remainingMatchTime = 1 * 4;
 
 		ai = new AI(this);
 
@@ -276,6 +281,20 @@ public class Game implements ApplicationListener {
 	private void drawSpriteBatch() {
 		// begin a new batch and draw the players and ball
 		batch.begin();
+
+		if (gameState == GameState.FINISHED) {
+			batch.draw(endTexture,
+					VIRTUAL_SCREEN_WIDTH / 2 - endTexture.getWidth() / 2,
+					VIRTUAL_SCREEN_HEIGHT / 2 - endTexture.getHeight() / 2,
+					endTexture.getWidth(), endTexture.getHeight());
+
+			String score = "Red: " + redScore + "   Blue: " + blueScore;
+			// TODO: These screen positions are a little off, Fix them.
+			bmf.draw(batch, score, (float) VIRTUAL_SCREEN_WIDTH / 3,
+					VIRTUAL_SCREEN_HEIGHT / 3);
+			batch.end();
+			return;
+		}
 
 		// draw the background pitch
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
@@ -583,6 +602,20 @@ public class Game implements ApplicationListener {
 
 	private void matchFinish() {
 
+		gameState = GameState.FINISHED;
+
+		bmf.setColor(Color.BLACK);
+		bmf.setScale(3);
+
+		if (blueScore > redScore && getHumanColour() == TeamColour.BLUE) {
+			result = 1;
+		} else if (blueScore > redScore && getHumanColour() == TeamColour.RED) {
+			result = 1;
+		} else if (blueScore == redScore) {
+			result = 0;
+		} else {
+			result = -1;
+		}
 	}
 
 	public GameState getGameState() {
@@ -754,7 +787,9 @@ public class Game implements ApplicationListener {
 
 	public void backButtonPressed() {
 		Log.i("GameState", "Back button pressed");
-		if (gameState == GameState.PAUSED) {
+		if (gameState == GameState.FINISHED) {
+			Gdx.app.exit();
+		} else if (gameState == GameState.PAUSED) {
 			gameState = gameStateToGoIntoWhenBackButtonPressed;
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
