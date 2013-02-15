@@ -489,11 +489,13 @@ public abstract class Player extends Rectangle {
 		Vector2 position = getPlayerPosition();
 		Vector2 oldPosition = position.cpy();
 
-		while (distance > 0 && path != null && path.length > 0
-				&& positionInPath < path.length) {
-
+		if (path != null && path.length > 0 && positionInPath < path.length) {
 			this.stateTime += time;
 			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+		}
+
+		while (distance > 0 && path != null && path.length > 0
+				&& positionInPath < path.length) {
 
 			Vector2 target = path[positionInPath];
 			if (position.dst(target) < distance) {
