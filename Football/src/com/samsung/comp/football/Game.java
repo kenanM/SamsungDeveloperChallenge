@@ -74,17 +74,6 @@ public class Game implements ApplicationListener {
 	public static Texture starFull;
 	public static Texture stats;
 	public static Texture goalMessage;
-	public static Texture d0;
-	public static Texture d1;
-	public static Texture d2;
-	public static Texture d3;
-	public static Texture d4;
-	public static Texture d5;
-	public static Texture d6;
-	public static Texture d7;
-	public static Texture d8;
-	public static Texture d9;
-	public static Texture[] digits = new Texture[10];
 
 	Sound whistleBlow;
 
@@ -138,27 +127,6 @@ public class Game implements ApplicationListener {
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
-		d0 = new Texture(Gdx.files.internal("digits/digit0.png"));
-		d1 = new Texture(Gdx.files.internal("digits/digit1.png"));
-		d2 = new Texture(Gdx.files.internal("digits/digit2.png"));
-		d3 = new Texture(Gdx.files.internal("digits/digit3.png"));
-		d4 = new Texture(Gdx.files.internal("digits/digit4.png"));
-		d5 = new Texture(Gdx.files.internal("digits/digit5.png"));
-		d6 = new Texture(Gdx.files.internal("digits/digit6.png"));
-		d7 = new Texture(Gdx.files.internal("digits/digit7.png"));
-		d8 = new Texture(Gdx.files.internal("digits/digit8.png"));
-		d9 = new Texture(Gdx.files.internal("digits/digit9.png"));
-
-		digits[0] = d0;
-		digits[1] = d1;
-		digits[2] = d2;
-		digits[3] = d3;
-		digits[4] = d4;
-		digits[5] = d5;
-		digits[6] = d6;
-		digits[7] = d7;
-		digits[8] = d8;
-		digits[9] = d9;
 
 		whistleBlow = Gdx.audio.newSound(Gdx.files
 				.internal("sound/Whistle short 2.wav"));
@@ -307,8 +275,6 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
 		bar.draw(batch);
-		drawPlayerScore(batch);
-		drawRemainingTime();
 
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
@@ -366,7 +332,7 @@ public class Game implements ApplicationListener {
 		}
 	}
 
-	private void drawRemainingTime() {
+	public String getRemainingTime() {
 
 		int minutes = (int) remainingMatchTime / 60;
 		int seconds = (int) remainingMatchTime % 60;
@@ -374,8 +340,7 @@ public class Game implements ApplicationListener {
 		String remainingTimeString = (seconds > 9) ? minutes + ":" + seconds
 				: minutes + ":0" + seconds;
 
-		bmf.draw(batch, remainingTimeString,
-				(float) VIRTUAL_SCREEN_WIDTH / 2 - 5, 15);
+		return remainingTimeString;
 	}
 
 	private void drawShapeRenderer() {
@@ -424,37 +389,12 @@ public class Game implements ApplicationListener {
 		}
 	}
 
-	private void drawPlayerScore(SpriteBatch batch) {
-		// bmf.scale(4);
-		// bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore,
-		// (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
+	public int getRedScore() {
+		return redScore;
+	}
 
-		Texture redCurrentScoreTexture;
-		Texture blueCurrentScoreTexture;
-		if (redScore > 9) {
-			redCurrentScoreTexture = digits[9];
-		} else {
-			redCurrentScoreTexture = digits[redScore];
-		}
-
-		if (blueScore > 9) {
-			blueCurrentScoreTexture = digits[9];
-		} else {
-			blueCurrentScoreTexture = digits[blueScore];
-		}
-
-		batch.draw(redCurrentScoreTexture, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0,
-				0, redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), 1, 1, 0, 0, 0,
-				redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), false, true);
-
-		batch.draw(blueCurrentScoreTexture, VIRTUAL_SCREEN_WIDTH / 2 + 32, 0,
-				0, 0, redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), 1, 1, 0, 0, 0,
-				redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), false, true);
-
+	public int getBlueScore() {
+		return blueScore;
 	}
 
 	private void drawPlayerStats(SpriteBatch batch, Player player) {
@@ -733,19 +673,7 @@ public class Game implements ApplicationListener {
 		starFull.dispose();
 		stats.dispose();
 		goalMessage.dispose();
-		d0.dispose();
-		d1.dispose();
-		d2.dispose();
-		d3.dispose();
-		d4.dispose();
-		d5.dispose();
-		d6.dispose();
-		d7.dispose();
-		d8.dispose();
-		d9.dispose();
-
 		whistleBlow.dispose();
-
 		batch.dispose();
 	}
 
