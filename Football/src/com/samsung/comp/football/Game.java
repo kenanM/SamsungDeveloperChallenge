@@ -309,7 +309,8 @@ public class Game implements ApplicationListener {
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
 					VIRTUAL_SCREEN_WIDTH / 2 - goalMessage.getWidth() / 2,
-					VIRTUAL_SCREEN_HEIGHT / 2 - goalMessage.getHeight() / 2, 0,
+					(VIRTUAL_SCREEN_HEIGHT / 2 - goalMessage.getHeight() / 2)
+							+ (goalScoredDrawTime * 20) - (3f * 20), 0,
 					0, goalMessage.getWidth(), goalMessage.getHeight(), 1, 1,
 					0, 0, 0, goalMessage.getWidth(), goalMessage.getHeight(),
 					false, true);
