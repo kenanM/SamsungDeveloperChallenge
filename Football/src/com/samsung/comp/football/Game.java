@@ -182,6 +182,8 @@ public class Game implements ApplicationListener {
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
+		inputListener.initialise();
+
 		remainingMatchTime = 3 * 60;
 
 		ai = new AI(this);
@@ -316,12 +318,12 @@ public class Game implements ApplicationListener {
 		if (gameState == GameState.INPUT) {
 			batch.draw(playTexture, 0, 0);
 
-			inputListener.draw(batch);
-			drawPlayerStats(batch, inputListener.getHighlightedPlayer());
-
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);
 			}
+
+			inputListener.draw(batch);
+			drawPlayerStats(batch, inputListener.getHighlightedPlayer());
 
 			if (inputListener.getHighlightedPlayer() != null) {
 				drawTimeLinePoints(inputListener.getHighlightedPlayer());
@@ -688,22 +690,6 @@ public class Game implements ApplicationListener {
 			return redPlayers;
 		} else {
 			return bluePlayers;
-		}
-	}
-
-	public boolean humanGoalieIsHoldingTheBall() {
-		if (humanColour == TeamColour.RED) {
-			return redGoalie.hasBall();
-		} else {
-			return blueGoalie.hasBall();
-		}
-	}
-
-	public boolean computerGoalieIsHoldingTheBall() {
-		if (computerColour == TeamColour.RED) {
-			return redGoalie.hasBall();
-		} else {
-			return blueGoalie.hasBall();
 		}
 	}
 

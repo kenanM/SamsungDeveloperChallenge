@@ -14,6 +14,7 @@ import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 
@@ -25,23 +26,35 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private final Game game;
 	private boolean detectPresses = false;
-	private List<Player> players;
+	private List<Player> players = new ArrayList<Player>();;
 	private List<Vector2> lineInProgress = new ArrayList<Vector2>();
 
 	private Player selectedPlayer;
 	private Player highlightedPlayer;
 
+	private TeamColour playerColour;
 	private List<Player> selectablePlayers = new ArrayList<Player>();
+	private Player humanGoalie;
+	private Player computerGoalie;
 
 	public InputListener(Game game) {
-		players = new ArrayList<Player>();
 		this.game = game;
 	}
 
-	public void fetchSelectablePlayers() {
+	/**
+	 * Set the goalies players. Only call this method once the game has set team
+	 * colours
+	 */
+	public void initialise() {
+		playerColour = game.getHumanColour();
+		humanGoalie = game.getHumanGoalie();
+		computerGoalie = game.getComputerGoalie();
+	}
+
+	private void fetchSelectablePlayers() {
 		selectablePlayers = new ArrayList<Player>(game.getHumanPlayers());
-		if (game.humanGoalieIsHoldingTheBall()) {
-			selectablePlayers.add(game.getHumanGoalie());
+		if (humanGoalie.hasBall()) {
+			selectablePlayers.add(humanGoalie);
 		}
 	}
 
@@ -183,18 +196,19 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			return;
 		}
 
-		if (isSelectable(pressedPlayer)) {
+		if (selectedPlayer != null && pressedPlayer.getTeam() == playerColour) {
 			// If both players are selectable pass between them
 			selectedPlayer.addAction(new Pass(game.getBall(), selectedPlayer,
 					pressedPlayer));
 
-		} else if (selectedPlayer != null && !isSelectable(pressedPlayer)) {
-			// If the first player is selectable but the second player isn't
-			// then mark the second player
+		} else if (selectedPlayer != null
+				&& pressedPlayer.getTeam() != playerColour
+				&& pressedPlayer != computerGoalie) {
+			// If the first player is selectable, the second player is on the
+			// opposingTeam but is not a goalie then mark the second player
 			selectedPlayer.addAction(new Mark(selectedPlayer, pressedPlayer));
 		}
 		selectedPlayer = null;
-
 	}
 
 	private void pressPoint(Vector2 point) {

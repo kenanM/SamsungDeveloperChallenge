@@ -61,7 +61,7 @@ public class AI {
 		sortPlayersByDistanceFromHomeGoal(players);
 
 		boolean controlBall = computerControlsBall();
-		boolean goalieHasBall = game.computerGoalieIsHoldingTheBall();
+		boolean goalieHasBall = goalie.hasBall();
 
 		if (goalieHasBall) {
 			Player nearestToTheGoalie = playerNearestTheGoalie(players);
