@@ -105,6 +105,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
 		if (detectPresses && arg1.getX() < 128 && arg1.getY() < 128) {
 			if (game.beginExecution()) {
+				selectedPlayer = null;
+				highlightedPlayer = null;
 				detectPresses = false;
 			}
 		}
