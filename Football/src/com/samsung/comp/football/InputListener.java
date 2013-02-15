@@ -94,6 +94,27 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	/**
+	 * hack lol stfu. Gets index of the position
+	 */
+	private int findPlayerIndex(Vector2 point) {
+		Vector2 playerVector;
+		for (Player player : players) {
+
+			for (int i = 0; i < player.getPositionList().size(); i++) {
+				playerVector = player.getPositionList().get(i);
+				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
+					// We are biased to selectable players, return them before
+					// an unselectable one.
+					if (isSelectable(player)) {
+						return i;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	/**
 	 * Finds a player that overlaps or is near a point, returns null if no
 	 * player found
 	 */
@@ -178,7 +199,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 					lineInProgress.clear();
 				} else if (isSelectable(start)) {
 					Log.i(TAG, "You drew a line from a player");
-					assignMoveTo(start);
+					int index = findPlayerIndex(lineInProgress.get(0));
+					Log.i(TAG,
+							"You drew a line from a player "
+									+ String.valueOf(index));
+					assignMoveTo(start, index);
 					lineInProgress.clear();
 				}
 			}
@@ -221,10 +246,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		}
 	}
 
-	private void assignMoveTo(Player player) {
+	private void assignMoveTo(Player player, int index) {
 		Log.i(TAG, "assigning Move command to " + player.toString());
-		player.addAction(new Move(lineInProgress
-				.toArray(new Vector2[lineInProgress.size()])));
+		player.setAction(
+				new Move(lineInProgress.toArray(new Vector2[lineInProgress
+						.size()])), index);
 		selectedPlayer = null;
 	}
 

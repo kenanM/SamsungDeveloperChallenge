@@ -19,13 +19,16 @@ public abstract class Action {
 		nextAction = null;
 	}
 
-	public void setNextAction(Action newAction) {
+	public void addNextAction(Action newAction) {
 		if (nextAction == null) {
 			nextAction = newAction;
 		} else {
-			nextAction.setNextAction(newAction);
+			nextAction.addNextAction(newAction);
 		}
+	}
 
+	public void setNextAction(Action newAction) {
+		nextAction = newAction;
 	}
 
 	public Vector2 getFuturePosition() {

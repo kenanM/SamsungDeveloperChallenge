@@ -85,9 +85,36 @@ public abstract class Player extends Rectangle {
 		if (this.action == null) {
 			this.action = newAction;
 		} else {
-			this.action.setNextAction(newAction);
+			this.action.addNextAction(newAction);
 		}
 
+	}
+
+	public Action getAction(int index) throws IndexOutOfBoundsException {
+		if (index == 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		int i = 1;
+		Action act = action;
+		while (i != index && act != null && act.getNextAction() != null) {
+			act = act.getNextAction();
+			i++;
+		}
+		return act;
+	}
+
+	public void setAction(Action newAction, int index) {
+		if (index == 0) {
+			action = newAction;
+			return;
+		} else {
+			Action act = getAction(index);
+			if (act == null) {
+				return;
+			} else {
+				act.setNextAction(newAction);
+			}
+		}
 	}
 
 	public Action getAction() {
@@ -126,7 +153,9 @@ public abstract class Player extends Rectangle {
 
 			while (actions.get(actions.size() - 1) != null) {
 				Action currentAction = actions.get(actions.size() - 1);
-				points.add(currentAction.getPosition());
+				if (currentAction.getPosition() != null) {
+					points.add(currentAction.getPosition());
+				}
 				actions.add(currentAction.getNextAction());
 			}
 		}
