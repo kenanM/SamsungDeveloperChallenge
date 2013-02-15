@@ -72,19 +72,23 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	 *          FIELD COORDINATES
 	 */
 	private Player findPlayer(Vector2 point) {
-		Vector2 playerVector;
 		Player temp = null;
+		Vector2 playerVector;
 		for (Player player : players) {
-			playerVector = player.getFuturePosition();
-			if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
-				// We are biased to selectable players, return them before an
-				// unselectable one.
-				if (isSelectable(player)) {
-					return player;
-				} else {
-					temp = player;
+
+			for (int i = 0; i < player.getPositionList().size(); i++) {
+				playerVector = player.getPositionList().get(i);
+				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
+					// We are biased to selectable players, return them before
+					// an unselectable one.
+					if (isSelectable(player)) {
+						return player;
+					} else {
+						temp = player;
+					}
 				}
 			}
+
 		}
 		return temp;
 	}
