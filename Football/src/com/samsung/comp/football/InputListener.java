@@ -40,6 +40,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private Player humanGoalie;
 	private Player computerGoalie;
 
+	private Bar bar;
+
 	public InputListener(Game game) {
 		this.game = game;
 	}
@@ -52,6 +54,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		playerColour = game.getHumanColour();
 		humanGoalie = game.getHumanGoalie();
 		computerGoalie = game.getComputerGoalie();
+		bar = game.getBar();
 	}
 
 	private void fetchSelectablePlayers() {
@@ -144,12 +147,14 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchFinger(View arg0, MotionEvent event) {
+
 		if (paused) {
 			Log.i(TAG, "Paused ... Finger pressed");
 			game.pauseMenu.onPress(event);
 		}
 
-		if (detectPresses && event.getX() < 128 && event.getY() < 128) {
+		if (detectPresses
+				&& bar.getPlayIcon().contains(event.getX(), event.getY())) {
 			if (game.beginExecution()) {
 				selectedPlayer = null;
 				highlightedPlayer = null;
@@ -165,11 +170,15 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			game.pauseMenu.onPress(event);
 		}
 
+		Vector2 eventVector = game.translateInputToField(new Vector2(event
+				.getX(), event.getY()));
+
+		if (bar != null && bar.contains(eventVector.x, eventVector.y)) {
+			bar.fade();
+		}
+
 		if (detectPresses) {
 			int action = event.getAction();
-			Vector2 eventVector = game.translateInputToField(new Vector2(event
-					.getX(), event.getY()));
-
 			if (action == MotionEvent.ACTION_DOWN) {
 				lineInProgress.clear();
 				lineInProgress.add(eventVector);
@@ -272,6 +281,16 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onHover(View arg0, MotionEvent event) {
+
+		Vector2 eventVector = game.translateInputToField(new Vector2(event
+				.getX(), event.getY()));
+
+		if (bar != null && bar.contains(eventVector.x, eventVector.y)) {
+			Log.i("BAR", "hover eventVector: " + eventVector.toString() + " "
+					+ bar.toString());
+			bar.fade();
+		}
+
 		if (detectPresses) {
 			Player player = findPlayer(event);
 			setHighlightedPlayer(player);
