@@ -167,7 +167,7 @@ public class Game implements ApplicationListener {
 		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
-		Ball.create(new Texture(Gdx.files.internal("ball.png")));
+		Ball.create();
 		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
 
 		// create the camera and the SpriteBatch

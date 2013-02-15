@@ -1,7 +1,10 @@
 package com.samsung.comp.football;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Utils;
@@ -9,12 +12,16 @@ import com.samsung.comp.football.Players.Player;
 
 public class Ball extends Rectangle {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3523719737664937244L;
-	private static Texture TEXTURE;
+
+	private static Animation animation;
+	private static TextureRegion texture;
+	private static Texture animationSheet;
+	private float stateTime = 0;
+	private static final int FRAMES = 4;
+
 	private static final int BALL_SIZE = 12;
+
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
 	private float deceleration = 50;
@@ -57,16 +64,15 @@ public class Ball extends Rectangle {
 		return c - (BALL_SIZE / 2);
 	}
 
-	public static void create(Texture texture) {
-		TEXTURE = texture;
-	}
-
-	public Texture getTexture() {
-		return TEXTURE;
+	public static void create() {
+		animationSheet = new Texture(Gdx.files.internal("ballAnimation.png"));
+		animation = new Animation(0.10f, Utils.createTextureRegion(
+				animationSheet, FRAMES));
+		texture = animation.getKeyFrame(0);
 	}
 
 	public static void dispose() {
-		TEXTURE.dispose();
+		animationSheet.dispose();
 	}
 
 	public void setOwner(Player player) {
@@ -116,7 +122,7 @@ public class Ball extends Rectangle {
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);
-		batch.draw(TEXTURE, this.x, this.y, BALL_SIZE, BALL_SIZE);
+		batch.draw(texture, this.x, this.y, BALL_SIZE, BALL_SIZE);
 	}
 
 	public void move(Vector2 velocity) {
@@ -157,17 +163,23 @@ public class Ball extends Rectangle {
 	public void update(float time) {
 
 		timeSinceTackle = timeSinceTackle + time;
-
+		Vector2 start = new Vector2(x, y);
 		if (hasOwner()) {
 			Vector2 ballVector = owner.getBallPosition();
 			this.x = ballVector.x;
 			this.y = ballVector.y;
 		} else {
-
 			this.x = (this.x + ((velocity.x) * time));
 			this.y = (this.y + ((velocity.y) * time));
 			decelerate(time);
 		}
+
+		// If the ball has moved update the texture
+		if (this.x != start.x || this.y != start.y) {
+			stateTime += time;
+			texture = animation.getKeyFrame(stateTime, true);
+		}
+
 		// restrictToField();
 	}
 
