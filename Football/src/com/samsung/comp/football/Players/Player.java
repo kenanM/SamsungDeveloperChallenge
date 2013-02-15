@@ -373,7 +373,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	public void shortKick(Ball ball, Vector2 target) {
@@ -396,7 +398,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	public void mark(Player target) {
@@ -449,7 +453,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	private void executeNextAction() {
