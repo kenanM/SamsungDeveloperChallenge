@@ -46,6 +46,7 @@ public abstract class Player extends Rectangle {
 	protected float tackleSkill = 100;
 	protected float tacklePreventionSkill = 40;
 	protected float savingSkill = 420;
+	private float rotationSpeed = 0.25f;
 
 	// TODO: Player shot accuracy?
 	// private float accuracy;
@@ -84,9 +85,36 @@ public abstract class Player extends Rectangle {
 		if (this.action == null) {
 			this.action = newAction;
 		} else {
-			this.action.setNextAction(newAction);
+			this.action.addNextAction(newAction);
 		}
 
+	}
+
+	public Action getAction(int index) throws IndexOutOfBoundsException {
+		if (index == 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		int i = 1;
+		Action act = action;
+		while (i != index && act != null && act.getNextAction() != null) {
+			act = act.getNextAction();
+			i++;
+		}
+		return act;
+	}
+
+	public void setAction(Action newAction, int index) {
+		if (index == 0) {
+			action = newAction;
+			return;
+		} else {
+			Action act = getAction(index);
+			if (act == null) {
+				return;
+			} else {
+				act.setNextAction(newAction);
+			}
+		}
 	}
 
 	public Action getAction() {
@@ -125,7 +153,9 @@ public abstract class Player extends Rectangle {
 
 			while (actions.get(actions.size() - 1) != null) {
 				Action currentAction = actions.get(actions.size() - 1);
-				points.add(currentAction.getPosition());
+				if (currentAction.getPosition() != null) {
+					points.add(currentAction.getPosition());
+				}
 				actions.add(currentAction.getNextAction());
 			}
 		}
@@ -343,7 +373,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	public void shortKick(Ball ball, Vector2 target) {
@@ -366,7 +398,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	public void mark(Player target) {
@@ -419,7 +453,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	private void executeNextAction() {
@@ -453,11 +489,13 @@ public abstract class Player extends Rectangle {
 		Vector2 position = getPlayerPosition();
 		Vector2 oldPosition = position.cpy();
 
-		while (distance > 0 && path != null && path.length > 0
-				&& positionInPath < path.length) {
-
+		if (path != null && path.length > 0 && positionInPath < path.length) {
 			this.stateTime += time;
 			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+		}
+
+		while (distance > 0 && path != null && path.length > 0
+				&& positionInPath < path.length) {
 
 			Vector2 target = path[positionInPath];
 			if (position.dst(target) < distance) {
