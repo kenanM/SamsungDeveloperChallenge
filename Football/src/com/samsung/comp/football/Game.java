@@ -502,11 +502,11 @@ public class Game implements ApplicationListener {
 	private void update() {
 
 		float time = Gdx.graphics.getDeltaTime();
+		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
 		if (gameState == GameState.EXECUTION) {
 
 			totalTime += time;
-			goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
 			remainingMatchTime -= time;
 
