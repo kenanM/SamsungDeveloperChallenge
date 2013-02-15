@@ -121,6 +121,7 @@ public class Game implements ApplicationListener {
 
 	private AI ai;
 	public PauseMenu pauseMenu;
+	public Bar bar;
 
 	@Override
 	public void create() {
@@ -170,6 +171,7 @@ public class Game implements ApplicationListener {
 		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
 
 		pauseMenu = new PauseMenu(this);
+		bar = new Bar(this);
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
@@ -304,6 +306,7 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
+		bar.draw(batch);
 		drawPlayerScore(batch);
 		drawRemainingTime();
 
@@ -317,7 +320,6 @@ public class Game implements ApplicationListener {
 		}
 
 		if (gameState == GameState.INPUT) {
-			batch.draw(playTexture, 0, 0);
 
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);
@@ -332,6 +334,7 @@ public class Game implements ApplicationListener {
 			if (inputListener.getSelectedPlayer() != null) {
 				drawTimeLinePoints(inputListener.getSelectedPlayer());
 			}
+
 		} else {
 			// Execution stage
 		}
@@ -501,6 +504,8 @@ public class Game implements ApplicationListener {
 
 		float time = Gdx.graphics.getDeltaTime();
 
+		bar.update(time);
+
 		if (gameState == GameState.EXECUTION) {
 
 			totalTime += time;
@@ -644,6 +649,7 @@ public class Game implements ApplicationListener {
 		gameState = GameState.INPUT;
 		clearActions();
 		inputListener.beginInputStage(allPlayers());
+		bar.setPositionToDown();
 	}
 
 	public boolean beginExecution() {
@@ -654,6 +660,7 @@ public class Game implements ApplicationListener {
 			totalTime = 0;
 			this.gameState = GameState.EXECUTION;
 			ai.getComputerActions();
+			bar.setPositionToUp();
 			return true;
 		}
 	}
