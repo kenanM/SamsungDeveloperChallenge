@@ -35,6 +35,8 @@ import com.samsung.comp.football.Players.RedPlayer;
 
 public class Game implements ApplicationListener {
 
+	private int result;
+
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
 	public static final float BALL_CHANGE_TIME = 1f;
@@ -83,15 +85,12 @@ public class Game implements ApplicationListener {
 	public static Texture d8;
 	public static Texture d9;
 	public static Texture[] digits = new Texture[10];
-	private static Texture pauseTexture;
 
 	Sound whistleBlow;
 
 	public enum GameState {
 		INPUT, EXECUTION, PAUSED, FINISHED
 	}
-
-	private int result;
 
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
@@ -121,6 +120,7 @@ public class Game implements ApplicationListener {
 	private TeamColour computerColour;
 
 	private AI ai;
+	public PauseMenu pauseMenu;
 
 	@Override
 	public void create() {
@@ -132,7 +132,6 @@ public class Game implements ApplicationListener {
 		Gdx.input.setCatchBackKey(true);
 
 		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
-		pauseTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		starFull = new Texture(Gdx.files.internal("star.png"));
@@ -169,6 +168,8 @@ public class Game implements ApplicationListener {
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 		Ball.create();
 		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
+
+		pauseMenu = new PauseMenu(this);
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
@@ -342,10 +343,7 @@ public class Game implements ApplicationListener {
 		ball.draw(batch);
 
 		if (gameState == GameState.PAUSED) {
-			batch.draw(pauseTexture,
-					VIRTUAL_SCREEN_WIDTH / 2 - pauseTexture.getWidth() / 2,
-					VIRTUAL_SCREEN_HEIGHT / 2 - pauseTexture.getHeight() / 2,
-					pauseTexture.getWidth(), pauseTexture.getHeight());
+			pauseMenu.draw(batch);
 		}
 
 		batch.end();
@@ -777,9 +775,11 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 		} else if (gameState == GameState.PAUSED) {
 			gameState = gameStateToGoIntoWhenBackButtonPressed;
+			inputListener.exitPauseState();
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
+			inputListener.enterPauseState();
 		}
 		Log.i("GameState", gameState.toString());
 	}

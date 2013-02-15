@@ -25,7 +25,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private static final String TAG = "InputListener";
 
 	private final Game game;
+
 	private boolean detectPresses = false;
+	private boolean paused = false;
+
 	private List<Player> players = new ArrayList<Player>();;
 	private List<Vector2> lineInProgress = new ArrayList<Vector2>();
 
@@ -115,8 +118,13 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	@Override
-	public boolean onTouchFinger(View arg0, MotionEvent arg1) {
-		if (detectPresses && arg1.getX() < 128 && arg1.getY() < 128) {
+	public boolean onTouchFinger(View arg0, MotionEvent event) {
+		if (paused) {
+			Log.i(TAG, "Paused ... Finger pressed");
+			game.pauseMenu.onPress(event);
+		}
+
+		if (detectPresses && event.getX() < 128 && event.getY() < 128) {
 			if (game.beginExecution()) {
 				selectedPlayer = null;
 				highlightedPlayer = null;
@@ -128,6 +136,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	@Override
 	public boolean onTouchPen(View arg0, MotionEvent event) {
+		if (paused) {
+			game.pauseMenu.onPress(event);
+		}
+
 		if (detectPresses) {
 			int action = event.getAction();
 			Vector2 eventVector = game.translateInputToField(new Vector2(event
@@ -251,6 +263,14 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (selectedPlayer != null) {
 			selectedPlayer.drawSelect(batch);
 		}
+	}
+
+	public void enterPauseState() {
+		paused = true;
+	}
+
+	public void exitPauseState() {
+		paused = false;
 	}
 
 	@Override
