@@ -45,7 +45,7 @@ public abstract class Player extends Rectangle {
 	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
 	protected float tacklePreventionSkill = 40;
-	protected float savingSkill = 450;
+	protected float savingSkill = 420;
 	private float rotationSpeed = 0.25f;
 
 	// TODO: Player shot accuracy?

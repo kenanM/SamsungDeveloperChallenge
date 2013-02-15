@@ -38,7 +38,7 @@ public class Game implements ApplicationListener {
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
 	public static final float BALL_CHANGE_TIME = 1f;
-	public static final float BALL_PASS_TIME = 1f;
+	public static final float BALL_PASS_TIME = 0.5f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
