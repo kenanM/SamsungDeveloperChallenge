@@ -31,6 +31,11 @@ public abstract class Action {
 		nextAction = newAction;
 	}
 
+	/**
+	 * Used for player selection
+	 * 
+	 * @return the final point in the chain of actions
+	 */
 	public Vector2 getFuturePosition() {
 		if (nextAction == null) {
 			return getPosition();
