@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.samsung.comp.football.Game.GameState;
 
 public class LibGDXInput implements InputProcessor{
 
@@ -31,7 +32,10 @@ public class LibGDXInput implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
+		if (game.getGameState() == GameState.PAUSED) {
+
+		}
+		return true;
 	}
 
 	@Override

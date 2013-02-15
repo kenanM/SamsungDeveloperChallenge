@@ -35,6 +35,8 @@ import com.samsung.comp.football.Players.RedPlayer;
 
 public class Game implements ApplicationListener {
 
+	private int result;
+
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
 	public static final float BALL_CHANGE_TIME = 1f;
@@ -72,26 +74,12 @@ public class Game implements ApplicationListener {
 	public static Texture starFull;
 	public static Texture stats;
 	public static Texture goalMessage;
-	public static Texture d0;
-	public static Texture d1;
-	public static Texture d2;
-	public static Texture d3;
-	public static Texture d4;
-	public static Texture d5;
-	public static Texture d6;
-	public static Texture d7;
-	public static Texture d8;
-	public static Texture d9;
-	public static Texture[] digits = new Texture[10];
-	private static Texture pauseTexture;
 
 	Sound whistleBlow;
 
 	public enum GameState {
 		INPUT, EXECUTION, PAUSED, FINISHED
 	}
-
-	private int result;
 
 	private static Random rng;
 	private GameState gameState = GameState.EXECUTION;
@@ -121,6 +109,8 @@ public class Game implements ApplicationListener {
 	private TeamColour computerColour;
 
 	private AI ai;
+	public PauseMenu pauseMenu;
+	public Bar bar;
 
 	@Override
 	public void create() {
@@ -132,33 +122,11 @@ public class Game implements ApplicationListener {
 		Gdx.input.setCatchBackKey(true);
 
 		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
-		pauseTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
-		d0 = new Texture(Gdx.files.internal("digits/digit0.png"));
-		d1 = new Texture(Gdx.files.internal("digits/digit1.png"));
-		d2 = new Texture(Gdx.files.internal("digits/digit2.png"));
-		d3 = new Texture(Gdx.files.internal("digits/digit3.png"));
-		d4 = new Texture(Gdx.files.internal("digits/digit4.png"));
-		d5 = new Texture(Gdx.files.internal("digits/digit5.png"));
-		d6 = new Texture(Gdx.files.internal("digits/digit6.png"));
-		d7 = new Texture(Gdx.files.internal("digits/digit7.png"));
-		d8 = new Texture(Gdx.files.internal("digits/digit8.png"));
-		d9 = new Texture(Gdx.files.internal("digits/digit9.png"));
-
-		digits[0] = d0;
-		digits[1] = d1;
-		digits[2] = d2;
-		digits[3] = d3;
-		digits[4] = d4;
-		digits[5] = d5;
-		digits[6] = d6;
-		digits[7] = d7;
-		digits[8] = d8;
-		digits[9] = d9;
 
 		whistleBlow = Gdx.audio.newSound(Gdx.files
 				.internal("sound/Whistle short 2.wav"));
@@ -169,6 +137,9 @@ public class Game implements ApplicationListener {
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 		Ball.create();
 		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
+
+		pauseMenu = new PauseMenu(this);
+		bar = new Bar(this);
 
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
@@ -303,8 +274,7 @@ public class Game implements ApplicationListener {
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, false);
 
-		drawPlayerScore(batch);
-		drawRemainingTime();
+		bar.draw(batch);
 
 		if (goalScoredDrawTime > 0) {
 			batch.draw(goalMessage,
@@ -317,7 +287,6 @@ public class Game implements ApplicationListener {
 		}
 
 		if (gameState == GameState.INPUT) {
-			batch.draw(playTexture, 0, 0);
 
 			for (Player player : allPlayers()) {
 				drawActions(player.getAction(), batch);
@@ -332,6 +301,7 @@ public class Game implements ApplicationListener {
 			if (inputListener.getSelectedPlayer() != null) {
 				drawTimeLinePoints(inputListener.getSelectedPlayer());
 			}
+
 		} else {
 			// Execution stage
 		}
@@ -343,10 +313,7 @@ public class Game implements ApplicationListener {
 		ball.draw(batch);
 
 		if (gameState == GameState.PAUSED) {
-			batch.draw(pauseTexture,
-					VIRTUAL_SCREEN_WIDTH / 2 - pauseTexture.getWidth() / 2,
-					VIRTUAL_SCREEN_HEIGHT / 2 - pauseTexture.getHeight() / 2,
-					pauseTexture.getWidth(), pauseTexture.getHeight());
+			pauseMenu.draw(batch);
 		}
 
 		batch.end();
@@ -366,7 +333,7 @@ public class Game implements ApplicationListener {
 		}
 	}
 
-	private void drawRemainingTime() {
+	public String getRemainingTime() {
 
 		int minutes = (int) remainingMatchTime / 60;
 		int seconds = (int) remainingMatchTime % 60;
@@ -374,8 +341,7 @@ public class Game implements ApplicationListener {
 		String remainingTimeString = (seconds > 9) ? minutes + ":" + seconds
 				: minutes + ":0" + seconds;
 
-		bmf.draw(batch, remainingTimeString,
-				(float) VIRTUAL_SCREEN_WIDTH / 2 - 5, 15);
+		return remainingTimeString;
 	}
 
 	private void drawShapeRenderer() {
@@ -424,37 +390,12 @@ public class Game implements ApplicationListener {
 		}
 	}
 
-	private void drawPlayerScore(SpriteBatch batch) {
-		// bmf.scale(4);
-		// bmf.draw(batch, "Blue: " + blueScore +" | Red: " + redScore,
-		// (float)VIRTUAL_SCREEN_WIDTH/2 - 64, 20);
+	public int getRedScore() {
+		return redScore;
+	}
 
-		Texture redCurrentScoreTexture;
-		Texture blueCurrentScoreTexture;
-		if (redScore > 9) {
-			redCurrentScoreTexture = digits[9];
-		} else {
-			redCurrentScoreTexture = digits[redScore];
-		}
-
-		if (blueScore > 9) {
-			blueCurrentScoreTexture = digits[9];
-		} else {
-			blueCurrentScoreTexture = digits[blueScore];
-		}
-
-		batch.draw(redCurrentScoreTexture, VIRTUAL_SCREEN_WIDTH / 2 - 32, 0, 0,
-				0, redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), 1, 1, 0, 0, 0,
-				redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), false, true);
-
-		batch.draw(blueCurrentScoreTexture, VIRTUAL_SCREEN_WIDTH / 2 + 32, 0,
-				0, 0, redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), 1, 1, 0, 0, 0,
-				redCurrentScoreTexture.getWidth(),
-				redCurrentScoreTexture.getHeight(), false, true);
-
+	public int getBlueScore() {
+		return blueScore;
 	}
 
 	private void drawPlayerStats(SpriteBatch batch, Player player) {
@@ -504,6 +445,8 @@ public class Game implements ApplicationListener {
 
 		float time = Gdx.graphics.getDeltaTime();
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
+
+		bar.update(time);
 
 		if (gameState == GameState.EXECUTION) {
 
@@ -647,6 +590,7 @@ public class Game implements ApplicationListener {
 		gameState = GameState.INPUT;
 		clearActions();
 		inputListener.beginInputStage(allPlayers());
+		bar.setPositionToDown();
 	}
 
 	public boolean beginExecution() {
@@ -657,6 +601,7 @@ public class Game implements ApplicationListener {
 			totalTime = 0;
 			this.gameState = GameState.EXECUTION;
 			ai.getComputerActions();
+			bar.setPositionToUp();
 			return true;
 		}
 	}
@@ -729,19 +674,7 @@ public class Game implements ApplicationListener {
 		starFull.dispose();
 		stats.dispose();
 		goalMessage.dispose();
-		d0.dispose();
-		d1.dispose();
-		d2.dispose();
-		d3.dispose();
-		d4.dispose();
-		d5.dispose();
-		d6.dispose();
-		d7.dispose();
-		d8.dispose();
-		d9.dispose();
-
 		whistleBlow.dispose();
-
 		batch.dispose();
 	}
 
@@ -778,9 +711,11 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 		} else if (gameState == GameState.PAUSED) {
 			gameState = gameStateToGoIntoWhenBackButtonPressed;
+			inputListener.exitPauseState();
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
+			inputListener.enterPauseState();
 		}
 		Log.i("GameState", gameState.toString());
 	}
