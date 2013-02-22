@@ -124,6 +124,14 @@ public abstract class Player extends Rectangle {
 		return action;
 	}
 
+	public Action getFinalAction() {
+		if (this.action == null) {
+			return null;
+		} else {
+			return action.getFinalAction();
+		}
+	}
+
 	/**
 	 * Used for player selection
 	 * 
@@ -407,6 +415,14 @@ public abstract class Player extends Rectangle {
 	}
 
 	public void mark(Player target) {
+		this.path = new Vector2[] { target.getBallPosition() };
+
+		if (hasBall()) {
+			executeNextAction();
+		}
+	}
+
+	public void followBall(Ball target) {
 		this.path = new Vector2[] { target.getBallPosition() };
 
 		if (hasBall()) {

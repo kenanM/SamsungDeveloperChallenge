@@ -17,10 +17,12 @@ public class Ball extends Rectangle {
 	private static Animation animation;
 	private static TextureRegion texture;
 	private static Texture animationSheet;
+	private static Texture hoverTexture;
 	private float stateTime = 0;
 	private static final int FRAMES = 4;
 
 	private static final int BALL_SIZE = 12;
+	private static final int HOVER_SIZE = 64;
 
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
@@ -38,6 +40,10 @@ public class Ball extends Rectangle {
 
 	public float getDeceleration() {
 		return deceleration;
+	}
+
+	public static float translateHoverCoordinate(float c) {
+		return c - (HOVER_SIZE / 2);
 	}
 
 	public float getBallX() {
@@ -69,10 +75,12 @@ public class Ball extends Rectangle {
 		animation = new Animation(0.10f, Utils.createTextureRegion(
 				animationSheet, FRAMES));
 		texture = animation.getKeyFrame(0);
+		hoverTexture = new Texture(Gdx.files.internal("ballHover.png"));
 	}
 
 	public static void dispose() {
 		animationSheet.dispose();
+		hoverTexture.dispose();
 	}
 
 	public void setOwner(Player player) {
@@ -119,10 +127,20 @@ public class Ball extends Rectangle {
 		velocity = new Vector2(0, 0);
 	}
 
+	public Texture getHighlightTexture() {
+		return hoverTexture;
+	}
+
 	public void draw(SpriteBatch batch) {
 		// draw sprite as is or stretch to fill rectangle
 		// batch.draw(TEXTURE, this.x, this.y);
 		batch.draw(texture, this.x, this.y, BALL_SIZE, BALL_SIZE);
+	}
+
+	public void drawHighlight(SpriteBatch batch) {
+		batch.draw(this.getHighlightTexture(),
+				translateHoverCoordinate(getBallPosition().x),
+				translateHoverCoordinate(getBallPosition().y));
 	}
 
 	public void move(Vector2 velocity) {

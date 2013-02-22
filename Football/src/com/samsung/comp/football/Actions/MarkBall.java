@@ -4,21 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Players.Player;
 
-public class Mark extends Action {
-
-	private Player target;
-	private Player player;
+public class MarkBall extends Action {
+	private Vector2 startPoint;
+	private Ball ball;
 	private static Texture markTexture;
 
-	public Mark(Player player, Player target) {
-		this.player = player;
-		this.target = target;
-	}
-
-	public Player getTarget() {
-		return target;
+	public MarkBall(Vector2 startPoint, Ball ball) {
+		this.startPoint = startPoint;
+		this.ball = ball;
 	}
 
 	public static void create(Texture texture) {
@@ -27,7 +23,7 @@ public class Mark extends Action {
 
 	@Override
 	public void execute(Player player) {
-		player.mark(target);
+		player.followBall(ball);
 	}
 
 	public static void dispose() {
@@ -36,17 +32,14 @@ public class Mark extends Action {
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		batch.draw(markTexture,
-				target.getPlayerPosition().x - markTexture.getWidth() / 2,
-				target.getPlayerPosition().y - markTexture.getHeight() / 2);
+		batch.draw(markTexture, ball.x - markTexture.getWidth() / 2, ball.y
+				- markTexture.getHeight() / 2);
 		super.draw(batch);
 	}
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(player.getPlayerPosition().x,
-				player.getPlayerPosition().y, target.getPlayerPosition().x,
-				target.getPlayerPosition().y);
+		renderer.line(startPoint.x, startPoint.y, startPoint.x, startPoint.y);
 		super.draw(renderer);
 	}
 
@@ -57,7 +50,7 @@ public class Mark extends Action {
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 		Vector2 position = initialPosition;
 
-		Vector2[] path = new Vector2[] { target.getPlayerPosition() };
+		Vector2[] path = { startPoint };
 
 		while (distance > 0 && path != null && path.length > 0
 				&& positionInPath < path.length) {
@@ -91,7 +84,7 @@ public class Mark extends Action {
 
 	@Override
 	public Vector2 getPosition() {
-		return target.getPlayerPosition();
+		return ball.getBallPosition();
 	}
 
 }
