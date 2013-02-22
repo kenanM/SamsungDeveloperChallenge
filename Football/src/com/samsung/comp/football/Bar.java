@@ -51,7 +51,7 @@ public class Bar extends Rectangle {
 
 	public void create() {
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
-		fadedIcon = new Texture(Gdx.files.internal("playIcon_faded.png"));
+		fadedIcon = new Texture(Gdx.files.internal("transparent_button.png"));
 		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
 		cancelIconPressed = new Texture(
 				Gdx.files.internal("cancelIconDepressed.png"));
