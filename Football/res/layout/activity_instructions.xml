@@ -3,13 +3,31 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <ImageView
-        android:id="@+id/image"
+    <ViewFlipper
+        android:id="@+id/flipper"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:src="@drawable/ic_action_search" />
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/screen_one" />
+
+        <ImageView
+            android:id="@+id/image01"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/screen_two" />
+
+        <ImageView
+            android:id="@+id/image02"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/screen_three" />
+    </ViewFlipper>
 
 </RelativeLayout>
