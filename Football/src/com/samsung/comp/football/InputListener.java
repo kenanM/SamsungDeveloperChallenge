@@ -336,7 +336,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private void assignMoveTo(Player player, int index) {
 		Log.i(TAG, "assigning Move command to " + player.toString());
-		if (player.getFinalAction() instanceof Mark) {
+		if (player.getFinalAction() instanceof Mark
+				|| player.getFinalAction() instanceof MarkBall) {
 			player.setAction(
 					new MoveToPosition(
 							lineInProgress.get(lineInProgress.size() - 1),
