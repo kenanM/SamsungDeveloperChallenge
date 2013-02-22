@@ -253,6 +253,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 						pressPoint(startVector);
 					}
 					lineInProgress.clear();
+				} else if (startAtBall && finishedAtBall
+						&& selectedPlayer != null) {
+					Log.i(TAG, "You marked the ball");
+					pressBall();
+					lineInProgress.clear();
 				} else if (start == null) {
 					Log.i(TAG, "You drew a line starting from a null position");
 					lineInProgress.clear();
