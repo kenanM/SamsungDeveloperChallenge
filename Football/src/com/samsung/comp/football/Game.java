@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
+import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
@@ -134,6 +135,7 @@ public class Game implements ApplicationListener {
 
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
+		MarkBall.create(new Texture(Gdx.files.internal("markingIcon.png")));
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
@@ -678,6 +680,8 @@ public class Game implements ApplicationListener {
 		Kick.dispose();
 		Move.dispose();
 		MoveToPosition.dispose();
+		Mark.dispose();
+		MarkBall.dispose();
 		pitchTexture.dispose();
 		playTexture.dispose();
 		starFull.dispose();

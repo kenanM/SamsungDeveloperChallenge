@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
+import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
@@ -36,6 +37,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private Player selectedPlayer;
 	private Player highlightedPlayer;
+	private boolean ballIsHighlighted;
 
 	private TeamColour playerColour;
 	private List<Player> selectablePlayers = new ArrayList<Player>();
@@ -104,7 +106,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	}
 
 	/**
-	 * hack lol stfu. Gets index of the position
+	 * hack lol stfu. Gets index of the position (probably legit and not too
+	 * hacky)
 	 */
 	private int findPlayerIndex(Vector2 point) {
 		Vector2 playerVector;
@@ -124,6 +127,18 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			}
 		}
 		return 0;
+	}
+
+	/**
+	 * Finds a ball that overlaps or is near a point, returns null if no player
+	 * found.
+	 * 
+	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
+	 *          FIELD COORDINATES
+	 */
+	private boolean findBall(Vector2 point) {
+		return (game.getBall().getBallPosition().epsilonEquals(point,
+				INPUT_EPSILON_VALUE)) ? true : false;
 	}
 
 	/**
@@ -205,15 +220,26 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				Player finish = findPlayer(lineInProgress.get(lineInProgress
 						.size() - 1));
 
+
 				Vector2 startVector = lineInProgress.get(0);
 				Vector2 endVector = lineInProgress
 						.get(lineInProgress.size() - 1);
 
+				boolean finishedAtBall = findBall(endVector);
+
 				// Note to self: the orderings here are very important
 				if (startVector.dst(endVector) < 6 && finish == null) {
 					Log.i(TAG, "You pressed: " + startVector.toString());
-					pressPoint(startVector);
+					if (finishedAtBall) {
+						Log.i(TAG, "You marked the ball");
+						pressBall();
+					} else {
+						pressPoint(startVector);
+					}
 					lineInProgress.clear();
+				} else if (finishedAtBall) {
+					Log.i(TAG, "You marked the ball");
+					pressBall();
 				} else if (start == null) {
 					Log.i(TAG, "You drew a line starting from a null position");
 					lineInProgress.clear();
@@ -238,7 +264,10 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return true;
 	}
 
-	/** Called when a line is drawn starting and finishing on top of a player */
+	/**
+	 * Called when a line is drawn starting and finishing on top of a player &
+	 * not a ball
+	 */
 	private void pressPlayer(Player pressedPlayer) {
 		Log.i(TAG, "Pressed player: " + pressedPlayer.toString());
 
@@ -267,6 +296,17 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		selectedPlayer = null;
 	}
 
+	/** Called when a line is drawn starting and finishing on top of a ball */
+	private void pressBall() {
+		Log.i(TAG, "Pressed ball: ");
+
+		if (selectedPlayer != null) {
+			selectedPlayer.addAction(new MarkBall(selectedPlayer
+					.getFuturePosition(), game.getBall()));
+			return;
+		}
+	}
+
 	private void pressPoint(Vector2 point) {
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new Kick(game.getBall(), point,
@@ -276,18 +316,17 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private void assignMoveTo(Player player, int index) {
 		Log.i(TAG, "assigning Move command to " + player.toString());
-		if (player.getFinalAction() instanceof Mark){
+		if (player.getFinalAction() instanceof Mark) {
 			player.setAction(
 					new MoveToPosition(
 							lineInProgress.get(lineInProgress.size() - 1),
-							lineInProgress.get(0)),
-					index);
+							lineInProgress.get(0)), index);
 		} else {
 			player.setAction(
 					new Move(lineInProgress.toArray(new Vector2[lineInProgress
 							.size()])), index);
 		}
-		
+
 		selectedPlayer = null;
 	}
 
@@ -310,6 +349,9 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (detectPresses) {
 			Player player = findPlayer(event);
 			setHighlightedPlayer(player);
+
+			Vector2 point = new Vector2(event.getX(), event.getY());
+			ballIsHighlighted = findBall(game.translateInputToField(point));
 		}
 		return false;
 	}
@@ -327,6 +369,9 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		}
 		if (selectedPlayer != null) {
 			selectedPlayer.drawSelect(batch);
+		}
+		if (ballIsHighlighted) {
+			game.getBall().drawHighlight(batch);
 		}
 	}
 

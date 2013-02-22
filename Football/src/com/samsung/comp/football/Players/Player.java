@@ -418,6 +418,14 @@ public abstract class Player extends Rectangle {
 		}
 	}
 
+	public void followBall(Ball target) {
+		this.path = new Vector2[] { target.getBallPosition() };
+
+		if (hasBall()) {
+			executeNextAction();
+		}
+	}
+
 	// TODO: Account for a moving player.
 	public void pass(Ball ball, Player target) {
 		if (hasBall()) {
