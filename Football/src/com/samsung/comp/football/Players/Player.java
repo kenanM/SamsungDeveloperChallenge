@@ -504,11 +504,6 @@ public abstract class Player extends Rectangle {
 		Vector2 position = getPlayerPosition();
 		Vector2 oldPosition = position.cpy();
 
-		if (path != null && path.length > 0 && positionInPath < path.length) {
-			this.stateTime += time;
-			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-		}
-
 		while (distance > 0 && path != null && path.length > 0
 				&& positionInPath < path.length) {
 
@@ -519,9 +514,9 @@ public abstract class Player extends Rectangle {
 				positionInPath++;
 				if (positionInPath != 0 && positionInPath == path.length) {
 					path = new Vector2[] {};
+					resetPathIndex();
 					if (action instanceof Move) {
 						executeNextAction();
-						resetPathIndex();
 					}
 					break;
 				}
@@ -533,6 +528,11 @@ public abstract class Player extends Rectangle {
 				rotation = movement.angle();
 				break;
 			}
+		}
+
+		if (oldPosition.dst(position) > 0) {
+			this.stateTime += time;
+			this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		}
 		return position;
 	}
