@@ -12,6 +12,8 @@ public class RedPlayer extends Player {
 	public RedPlayer(float x, float y) {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
+		this.rotation = 270;
+
 		this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
 		this.selectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("redPlayer.png"));
@@ -25,6 +27,7 @@ public class RedPlayer extends Player {
 			float tackleStop) {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
+		this.rotation = 270;
 		this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
 		this.selectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("redPlayer.png"));
