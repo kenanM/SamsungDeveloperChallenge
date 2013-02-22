@@ -27,9 +27,9 @@ public class GameActivity extends AndroidApplication {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		// set the music stream to be the same as the system stream
-		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-				audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM),
-				AudioManager.FLAG_SHOW_UI);
+		// audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+		// audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM),
+		// AudioManager.FLAG_SHOW_UI);
 
 		SoundManager soundManager = new SoundManager(audioManager);
 
