@@ -46,6 +46,10 @@ public class Ball extends Rectangle {
 		return c - (HOVER_SIZE / 2);
 	}
 
+	public static int getBallSize() {
+		return BALL_SIZE;
+	}
+
 	public float getBallX() {
 		return x + (BALL_SIZE / 2);
 	}

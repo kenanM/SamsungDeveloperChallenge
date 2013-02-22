@@ -577,6 +577,10 @@ public abstract class Player extends Rectangle {
 				getPlayerPosition().y - 12, 24, 24);
 	}
 
+	public void setRotation(float value) {
+		rotation = value;
+	}
+
 	private void restrictToField() {
 		this.x = this.x > (Game.VIRTUAL_SCREEN_WIDTH - PLAYER_SIZE) ? Game.VIRTUAL_SCREEN_WIDTH
 				- PLAYER_SIZE

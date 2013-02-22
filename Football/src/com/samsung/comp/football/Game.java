@@ -179,8 +179,8 @@ public class Game implements ApplicationListener {
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(507);
 		redPlayers.get(2).y = Player.translatePlayerCoordinate(704);
 
-		redPlayers.get(0).x = Player.translatePlayerCoordinate(338);
-		redPlayers.get(0).y = Player.translatePlayerCoordinate(768);
+		redPlayers.get(3).x = Player.translatePlayerCoordinate(338);
+		redPlayers.get(3).y = Player.translatePlayerCoordinate(768);
 
 		redGoalie.x = Player.translatePlayerCoordinate(338);
 		redGoalie.y = Player.translatePlayerCoordinate(900);
@@ -208,12 +208,8 @@ public class Game implements ApplicationListener {
 		whistleBlow.play();
 	}
 
-	private void setStartingPositions(TeamColour centerTeam) {
-		redPlayers.get(0).x = Player.translatePlayerCoordinate(338);
-		redPlayers.get(0).y = Player.translatePlayerCoordinate(768);
 
-		redPlayers.get(1).x = Player.translatePlayerCoordinate(338);
-		redPlayers.get(1).y = Player.translatePlayerCoordinate(640);
+	private void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
 		redPlayers.get(2).y = Player.translatePlayerCoordinate(704);
@@ -221,15 +217,8 @@ public class Game implements ApplicationListener {
 		redPlayers.get(3).x = Player.translatePlayerCoordinate(507);
 		redPlayers.get(3).y = Player.translatePlayerCoordinate(704);
 
-
 		redGoalie.x = Player.translatePlayerCoordinate(338);
 		redGoalie.y = Player.translatePlayerCoordinate(850);
-
-		bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
-		bluePlayers.get(0).y = Player.translatePlayerCoordinate(334);
-
-		bluePlayers.get(1).x = Player.translatePlayerCoordinate(338);
-		bluePlayers.get(1).y = Player.translatePlayerCoordinate(256);
 
 		bluePlayers.get(2).x = Player.translatePlayerCoordinate(169);
 		bluePlayers.get(2).y = Player.translatePlayerCoordinate(320);
@@ -240,41 +229,54 @@ public class Game implements ApplicationListener {
 		blueGoalie.x = Player.translatePlayerCoordinate(338);
 		blueGoalie.y = Player.translatePlayerCoordinate(174);
 
-
-		ball.x = Ball.translateBallCoordinate(338);
-		ball.y = Ball.translateBallCoordinate(512);
-
 		if (centerTeam == TeamColour.BLUE) {
 			bluePlayers.get(0).x = Player
 					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) - (Player
-							.getPlayerSize() * 1.5)));
+							.getPlayerSize())));
 			bluePlayers.get(0).y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
 
 			bluePlayers.get(1).x = Player
 					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) + (Player
-							.getPlayerSize() * 1.5)));
+							.getPlayerSize())));
 			bluePlayers.get(1).y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
+			
+			bluePlayers.get(0).setRotation(0);
+			bluePlayers.get(1).setRotation(180);
+		} else {
+			bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
+			bluePlayers.get(0).y = Player.translatePlayerCoordinate(334);
+
+			bluePlayers.get(1).x = Player.translatePlayerCoordinate(338);
+			bluePlayers.get(1).y = Player.translatePlayerCoordinate(256);
 		}
 
 		if (centerTeam == TeamColour.RED) {
 			redPlayers.get(0).x = Player
-					.translatePlayerCoordinate((float) (VIRTUAL_SCREEN_WIDTH - (Player
-							.getPlayerSize() * 1.5)));
+					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) - (Player
+							.getPlayerSize())));
 			redPlayers.get(0).y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
 
 			redPlayers.get(1).x = Player
-					.translatePlayerCoordinate((float) (VIRTUAL_SCREEN_WIDTH + (Player
-							.getPlayerSize() * 1.5)));
+					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) + (Player
+							.getPlayerSize())));
 			redPlayers.get(1).y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
+			
+			redPlayers.get(0).setRotation(0);
+			redPlayers.get(1).setRotation(180);
+		} else {
+			redPlayers.get(0).x = Player.translatePlayerCoordinate(338);
+			redPlayers.get(0).y = Player.translatePlayerCoordinate(768);
+
+			redPlayers.get(1).x = Player.translatePlayerCoordinate(338);
+			redPlayers.get(1).y = Player.translatePlayerCoordinate(640);
 		}
 
 		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
-
 
 		ball.resetBall();
 
@@ -304,8 +306,11 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(169, 320));
 		blueGoalie = new BlueGoalie(338, 124, this, 500);
 		
-		setStartingPositions(TeamColour.BLUE);
-
+		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
+			setStartingPositions(TeamColour.BLUE);
+		} else {
+			setStartingPositions(TeamColour.RED);
+		}
 		ai = new AI(this);
 
 		soundManager.play(whistleBlow);
@@ -608,6 +613,7 @@ public class Game implements ApplicationListener {
 			} else {
 				blueScore++;
 				goalScored = true;
+				setStartingPositions(TeamColour.RED);
 			}
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
 			if (ball.hasOwner() && ball.getOwner() == blueGoalie) {
@@ -615,11 +621,11 @@ public class Game implements ApplicationListener {
 			} else {
 				redScore++;
 				goalScored = true;
+				setStartingPositions(TeamColour.BLUE);
 			}
 		}
 
 		if (goalScored) {
-			setStartingPositions();
 			beginInputStage();
 			goalScoredDrawTime = 3f;
 			// TODO: Sound: blow whistle
