@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +15,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 
 public abstract class Player extends Rectangle {
@@ -536,9 +540,22 @@ public abstract class Player extends Rectangle {
 	public LinkedList<Action> getActions() {
 		LinkedList<Action> temp = new LinkedList<Action>();
 		if (action != null) {
+			temp.add(action);
 			temp.addAll(action.getActions());
 		}
 		return temp;
+	}
+
+	public boolean kicksBall() {
+		List<Action> actions = getActions();
+		Log.i("Player", "found: " + actions.size() + " actions");
+		for (Action action : actions) {
+			if (action instanceof Kick || action instanceof Pass) {
+				return true;
+			}
+		}
+		Log.i("Player", "player doesn't kick ball.. returning false");
+		return false;
 	}
 
 	public Rectangle getTackleHitbox() {

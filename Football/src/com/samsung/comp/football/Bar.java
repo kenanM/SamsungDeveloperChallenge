@@ -38,6 +38,7 @@ public class Bar extends Rectangle {
 
 	private float fadeTimer = 0;
 	private float cancelActionsTimer = 0;
+	private float textCountdownTimer = 3;
 
 	private boolean showingCancelButton = false;
 
@@ -81,6 +82,7 @@ public class Bar extends Rectangle {
 		}
 		fadeTimer += time;
 		cancelActionsTimer += time;
+		textCountdownTimer += time;
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -102,8 +104,10 @@ public class Bar extends Rectangle {
 			batch.draw(fadedIcon, cancelIconX, y);
 		}
 
-		text = "Red: " + game.getRedScore() + " Blue: " + game.getBlueScore()
-				+ "  " + game.getRemainingTime();
+		if (textCountdownTimer > 2) {
+			text = "Red: " + game.getRedScore() + " Blue: "
+					+ game.getBlueScore() + "      " + game.getRemainingTime();
+		}
 		bmf.draw(batch, text, (float) Game.VIRTUAL_SCREEN_WIDTH / 2 - 5, 15);
 	}
 
@@ -145,5 +149,10 @@ public class Bar extends Rectangle {
 		} else {
 			return false;
 		}
+	}
+
+	public void setText(String string) {
+		text = string;
+		textCountdownTimer = 0;
 	}
 }

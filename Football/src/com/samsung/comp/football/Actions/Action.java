@@ -73,6 +73,7 @@ public abstract class Action {
 	public LinkedList<Action> getActions() {
 		LinkedList<Action> temp = new LinkedList<Action>();
 		if (nextAction != null) {
+			temp.add(nextAction);
 			temp.addAll(nextAction.getActions());
 		}
 		return temp;

@@ -597,14 +597,23 @@ public class Game implements ApplicationListener {
 	public boolean beginExecution() {
 		if (gameState == GameState.PAUSED) {
 			return false;
-		} else {
-			Log.v("Game", "Beginning execution");
-			totalTime = 0;
-			this.gameState = GameState.EXECUTION;
-			ai.getComputerActions();
-			bar.setPositionToUp();
-			return true;
 		}
+
+		if (getHumanGoalie().hasBall()) {
+			if (!getHumanGoalie().kicksBall()) {
+				bar.setText("Goalie cannot hold onto the ball");
+				Log.i("Game", "Goalie needs to kick the ball");
+				return false;
+			}
+		}
+
+		Log.i("Game", "Beginning execution");
+		totalTime = 0;
+		this.gameState = GameState.EXECUTION;
+		ai.getComputerActions();
+		bar.setPositionToUp();
+		return true;
+
 	}
 
 	private List<Player> allPlayers() {
