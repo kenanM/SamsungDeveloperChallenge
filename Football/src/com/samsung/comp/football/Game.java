@@ -183,7 +183,7 @@ public class Game implements ApplicationListener {
 		redPlayers.get(3).y = Player.translatePlayerCoordinate(768);
 
 		redGoalie.x = Player.translatePlayerCoordinate(338);
-		redGoalie.y = Player.translatePlayerCoordinate(900);
+		redGoalie.y = Player.translatePlayerCoordinate(850);
 
 		bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
 		bluePlayers.get(0).y = Player.translatePlayerCoordinate(334);
@@ -198,10 +198,10 @@ public class Game implements ApplicationListener {
 		bluePlayers.get(3).y = Player.translatePlayerCoordinate(320);
 
 		blueGoalie.x = Player.translatePlayerCoordinate(338);
-		blueGoalie.y = Player.translatePlayerCoordinate(124);
+		blueGoalie.y = Player.translatePlayerCoordinate(174);
 
-		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
-		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
+		ball.x = Ball.translateBallCoordinate(338);
+		ball.y = Ball.translateBallCoordinate(512);
 
 		ball.resetBall();
 
@@ -286,9 +286,9 @@ public class Game implements ApplicationListener {
 			batch.draw(goalMessage,
 					VIRTUAL_SCREEN_WIDTH / 2 - goalMessage.getWidth() / 2,
 					(VIRTUAL_SCREEN_HEIGHT / 2 - goalMessage.getHeight() / 2)
-							+ (goalScoredDrawTime * 20) - (3f * 20), 0,
-					0, goalMessage.getWidth(), goalMessage.getHeight(), 1, 1,
-					0, 0, 0, goalMessage.getWidth(), goalMessage.getHeight(),
+							+ (goalScoredDrawTime * 20) - (3f * 20), 0, 0,
+					goalMessage.getWidth(), goalMessage.getHeight(), 1, 1, 0,
+					0, 0, goalMessage.getWidth(), goalMessage.getHeight(),
 					false, true);
 		}
 
@@ -602,14 +602,23 @@ public class Game implements ApplicationListener {
 	public boolean beginExecution() {
 		if (gameState == GameState.PAUSED) {
 			return false;
-		} else {
-			Log.v("Game", "Beginning execution");
-			totalTime = 0;
-			this.gameState = GameState.EXECUTION;
-			ai.getComputerActions();
-			bar.setPositionToUp();
-			return true;
 		}
+
+		if (getHumanGoalie().hasBall()) {
+			if (!getHumanGoalie().kicksBall()) {
+				bar.setText("Goalie cannot hold onto the ball");
+				Log.i("Game", "Goalie needs to kick the ball");
+				return false;
+			}
+		}
+
+		Log.i("Game", "Beginning execution");
+		totalTime = 0;
+		this.gameState = GameState.EXECUTION;
+		ai.getComputerActions();
+		bar.setPositionToUp();
+		return true;
+
 	}
 
 	private List<Player> allPlayers() {

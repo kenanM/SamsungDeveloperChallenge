@@ -12,6 +12,7 @@ public class BluePlayer extends Player {
 	public BluePlayer(float x, float y) {
 		super(x, y);
 		this.TEAM = TeamColour.BLUE;
+		this.rotation = 90;
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		this.selectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
 		this.walkSheet = new Texture(Gdx.files.internal("bluePlayer.png"));

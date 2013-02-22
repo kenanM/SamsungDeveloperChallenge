@@ -27,6 +27,9 @@ public class AI {
 	static final double BLUE_GOAL_AREA_TOP = 100;
 	static final double BLUE_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT * 0.33;
 
+	// Distance between any generated targets X values and the edge of the pitch
+	private final float buffer = 40;
+
 	// The distance from which the AI will attempt a shot
 	private static final float SHOOTING_RANGE = 250;
 
@@ -114,10 +117,6 @@ public class AI {
 		Collections.sort(list, new PlayerComparator(homeGoal));
 	}
 
-	private void sortPlayersByDistanceFromTargetGoal(List<Player> list) {
-		Collections.sort(list, new PlayerComparator(targetGoal));
-	}
-
 	private class PlayerComparator implements Comparator<Player> {
 
 		Vector2 target;
@@ -183,12 +182,8 @@ public class AI {
 
 	/** Instruct the player to move to a random spot within a given area */
 	private void moveToArea(Player player, double top, double bottom) {
-		// TODO remove the magic number from the following line
-		float x = (float) (40 + (Math.random()
-				* (Game.VIRTUAL_SCREEN_WIDTH - 40) + 1));
-
-		float y = (float) (bottom + (Math.random() * (top - bottom) + 1));
-		Log.v(TAG, "x:" + x + " y:" + y + "top/bottom " + top + "/" + bottom);
+		float x = rand(40, Game.VIRTUAL_SCREEN_WIDTH - 40);
+		float y = rand((float) bottom, (float) top);
 		moveToPosition(player, new Vector2(x, y));
 	}
 
@@ -212,4 +207,10 @@ public class AI {
 	private void shoot(Player player) {
 		player.addAction(new Kick(ball, targetGoal, player.getFuturePosition()));
 	}
+
+	/** Generate a random number between two values */
+	public static float rand(float max, float min) {
+		return min + (int) (Math.random() * ((max - min) + 1));
+	}
+
 }

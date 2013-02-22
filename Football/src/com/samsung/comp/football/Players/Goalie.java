@@ -14,7 +14,7 @@ public abstract class Goalie extends Player {
 	private static final long serialVersionUID = 8190782604566806240L;
 
 	protected Vector2 goal;
-	protected Vector2 vector;
+	protected Vector2 middle;
 	protected static final float DEFENSIVE_DISTANCE_FROM_GOAL = 150;
 	private final Texture unselectableHoverTexture;
 
@@ -50,7 +50,7 @@ public abstract class Goalie extends Player {
 				this.path = new Vector2[] { target };
 			} else {
 				// Otherwise move to middle of goal defense area
-				this.path = new Vector2[] { vector };
+				this.path = new Vector2[] { middle };
 			}
 
 			if (this.getPlayerPosition().x == path[0].x

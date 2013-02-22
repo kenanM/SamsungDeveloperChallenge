@@ -12,13 +12,11 @@ public class BlueGoalie extends Goalie {
 
 	public BlueGoalie(float playerX, float playerY, Game game, float saving) {
 		super(playerX, playerY, game);
-
+		savingSkill = saving;
 		this.goal = Game.BLUE_GOAL;
 		this.TEAM = TeamColour.BLUE;
-		this.vector = Game.BLUE_GOAL.cpy().add(0, DEFENSIVE_DISTANCE_FROM_GOAL);
-
-		this.x = vector.x;
-		this.y = vector.y;
+		this.rotation = 90;
+		this.middle = Game.BLUE_GOAL.cpy().sub(0, DEFENSIVE_DISTANCE_FROM_GOAL);
 
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		this.selectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
@@ -27,8 +25,6 @@ public class BlueGoalie extends Goalie {
 		this.walkAnimation = new Animation(0.10f, Utils.createTextureRegion(
 				walkSheet, NUMBER_OF_FRAMES));
 		this.currentFrame = walkAnimation.getKeyFrame(0);
-
-		savingSkill = saving;
 	}
 
 }
