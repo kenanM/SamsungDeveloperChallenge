@@ -303,6 +303,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new MarkBall(selectedPlayer
 					.getFuturePosition(), game.getBall()));
+			selectedPlayer = null;
 			return;
 		}
 	}
@@ -311,6 +312,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new Kick(game.getBall(), point,
 					selectedPlayer.getFuturePosition()));
+			selectedPlayer = null;
 		}
 	}
 
