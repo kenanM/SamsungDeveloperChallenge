@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.samsung.comp.football.Players.Player;
 
 public class Bar extends Rectangle {
 
@@ -13,16 +14,21 @@ public class Bar extends Rectangle {
 	private Texture bar;
 	private Texture fadedBar;
 	private Texture playIcon;
-	private Texture fadedPlayIcon;
+	private Texture fadedIcon;
+	private Texture cancelIcon;
+	private Texture cancelIconPressed;
 	private String text;
+	private Player selectedPlayer;
 
 	public enum Position {
 		UP, DOWN
 	};
 
 	private int upYValue;
-	private int xOffset = 25;
-
+	/** The distance between a button and a border */
+	private int offset = 25;
+	/** The 'X' coordinate of the cancel icon */
+	private int cancelIconX;
 	private int velocity = 150;
 
 	private Position position = Position.DOWN;
@@ -31,6 +37,9 @@ public class Bar extends Rectangle {
 	private BitmapFont bmf;
 
 	private float fadeTimer = 0;
+	private float cancelActionsTimer = 0;
+
+	private boolean showingCancelButton = false;
 
 	public Bar(Game game) {
 		this.game = game;
@@ -41,13 +50,17 @@ public class Bar extends Rectangle {
 
 	public void create() {
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
-		fadedPlayIcon = new Texture(Gdx.files.internal("playIcon_faded.png"));
+		fadedIcon = new Texture(Gdx.files.internal("playIcon_faded.png"));
+		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
+		cancelIconPressed = new Texture(
+				Gdx.files.internal("cancelIconDepressed.png"));
 		bar = new Texture(Gdx.files.internal("bar.png"));
 		fadedBar = new Texture(Gdx.files.internal("bar_faded.png"));
+		cancelIconX = Game.VIRTUAL_SCREEN_WIDTH - cancelIcon.getWidth()
+				- offset;
 		upYValue = -playIcon.getHeight();
 		this.y = upYValue;
 		this.x = 0;
-
 		this.height = playIcon.getHeight();
 		this.width = bar.getWidth();
 	}
@@ -67,15 +80,26 @@ public class Bar extends Rectangle {
 			y = 0;
 		}
 		fadeTimer += time;
+		cancelActionsTimer += time;
 	}
 
 	public void draw(SpriteBatch batch) {
 		if (fadeTimer > 0.2) {
 			batch.draw(bar, 0, 0);
-			batch.draw(playIcon, xOffset, y);
+			batch.draw(playIcon, offset, y);
 		} else {
 			batch.draw(fadedBar, 0, 0);
-			batch.draw(fadedPlayIcon, xOffset, y);
+			batch.draw(fadedIcon, offset, y);
+		}
+
+		if (showingCancelButton && fadeTimer > 0.2) {
+			if (cancelActionsTimer < 1) {
+				batch.draw(cancelIconPressed, cancelIconX, y);
+			} else {
+				batch.draw(cancelIcon, cancelIconX, y);
+			}
+		} else if (showingCancelButton) {
+			batch.draw(fadedIcon, cancelIconX, y);
 		}
 
 		text = "Red: " + game.getRedScore() + " Blue: " + game.getBlueScore()
@@ -92,11 +116,34 @@ public class Bar extends Rectangle {
 	}
 
 	public Rectangle getPlayIcon() {
-		return new Rectangle(xOffset, y, playIcon.getWidth(),
+		return new Rectangle(offset, y, playIcon.getWidth(),
 				playIcon.getHeight());
+	}
+
+	public Rectangle getCancelIcon() {
+		return new Rectangle(cancelIconX, y, cancelIcon.getWidth(),
+				cancelIcon.getHeight());
 	}
 
 	public void fade() {
 		fadeTimer = 0;
+	}
+
+	public void setSelectedPlayer(Player player) {
+		selectedPlayer = player;
+		if (selectedPlayer != null) {
+			showingCancelButton = true;
+		} else {
+			showingCancelButton = false;
+		}
+	}
+
+	public boolean press(float x, float y) {
+		if (showingCancelButton && getCancelIcon().contains(x, y)) {
+			cancelActionsTimer = 0;
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

@@ -154,11 +154,16 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return new ArrayList<Vector2>(lineInProgress);
 	}
 
-	Player getSelectedPlayer() {
+	private void setSelectedPlayer(Player player) {
+		selectedPlayer = player;
+		bar.setSelectedPlayer(player);
+	}
+
+	public Player getSelectedPlayer() {
 		return selectedPlayer;
 	}
 
-	Player getHighlightedPlayer() {
+	public Player getHighlightedPlayer() {
 		return highlightedPlayer;
 	}
 
@@ -174,12 +179,22 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			game.pauseMenu.onPress(event);
 		}
 
-		if (detectPresses
-				&& bar.getPlayIcon().contains(event.getX(), event.getY())) {
-			if (game.beginExecution()) {
-				selectedPlayer = null;
-				highlightedPlayer = null;
-				detectPresses = false;
+		Vector2 eventVector = game.translateInputToField(new Vector2(event
+				.getX(), event.getY()));
+		float x = eventVector.x;
+		float y = eventVector.y;
+
+		if (detectPresses) {
+			if (bar.getPlayIcon().contains(x, y)) {
+
+				if (game.beginExecution()) {
+					setSelectedPlayer(null);
+					highlightedPlayer = null;
+					detectPresses = false;
+				}
+			} else if (bar.press(x, y)) {
+				// TODO (Gavin): Change this to be 'undo last action'
+				selectedPlayer.clearAction();
 			}
 		}
 		return false;
@@ -273,11 +288,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 		if (selectedPlayer == null && isSelectable(pressedPlayer)) {
 			// Select this player
-			selectedPlayer = pressedPlayer;
+			setSelectedPlayer(pressedPlayer);
 			return;
 		} else if (selectedPlayer == pressedPlayer) {
 			// deselect the player
-			selectedPlayer = null;
+			setSelectedPlayer(null);
 			return;
 		}
 
@@ -293,7 +308,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 			// opposingTeam but is not a goalie then mark the second player
 			selectedPlayer.addAction(new Mark(selectedPlayer, pressedPlayer));
 		}
-		selectedPlayer = null;
+		setSelectedPlayer(null);
 	}
 
 	/** Called when a line is drawn starting and finishing on top of a ball */
@@ -303,7 +318,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new MarkBall(selectedPlayer
 					.getFuturePosition(), game.getBall()));
-			selectedPlayer = null;
+			setSelectedPlayer(null);
 			return;
 		}
 	}
@@ -312,7 +327,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new Kick(game.getBall(), point,
 					selectedPlayer.getFuturePosition()));
-			selectedPlayer = null;
+			setSelectedPlayer(null);
 		}
 	}
 
@@ -329,7 +344,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 							.size()])), index);
 		}
 
-		selectedPlayer = null;
+		setSelectedPlayer(null);
 	}
 
 	private void setHighlightedPlayer(Player player) {
@@ -358,13 +373,6 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		return false;
 	}
 
-	@Override
-	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
-		if (selectedPlayer != null) {
-			selectedPlayer.clearAction();
-		}
-	}
-
 	public void draw(SpriteBatch batch) {
 		if (highlightedPlayer != null) {
 			highlightedPlayer.drawHighlight(batch);
@@ -383,6 +391,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	public void exitPauseState() {
 		paused = false;
+	}
+
+	@Override
+	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
+		// Log.v(TAG, "onHoverButtonDown: " + arg1.getX() + ", " + arg1.getY());
 	}
 
 	@Override
