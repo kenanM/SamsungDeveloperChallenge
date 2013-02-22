@@ -12,12 +12,15 @@ public class Pass extends Action {
 	private Ball ball;
 	private Player target;
 	private Player kicker;
+	private Vector2 kickStartLocation;
 	private static Texture passIcon;
 
-	public Pass(Ball ball, Player kicker, Player target) {
+	public Pass(Ball ball, Player kicker, Player target,
+			Vector2 kickStartLocation) {
 		this.ball = ball;
 		this.kicker = kicker;
 		this.target = target;
+		this.kickStartLocation = kickStartLocation;
 	}
 
 	public static void create(Texture texture) {
@@ -31,7 +34,7 @@ public class Pass extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(kicker.getBallPosition().x, kicker.getBallPosition().y,
+		renderer.line(kickStartLocation.x, kickStartLocation.y,
 				target.getPlayerPosition().x, target.getPlayerPosition().y);
 		super.draw(renderer);
 	}
@@ -52,5 +55,10 @@ public class Pass extends Action {
 		} else {
 			return initialPosition;
 		}
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return kickStartLocation;
 	}
 }
