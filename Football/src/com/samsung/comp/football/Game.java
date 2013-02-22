@@ -489,14 +489,16 @@ public class Game implements ApplicationListener {
 		}
 
 		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
-				- stats.getWidth() / 2, starFull.getHeight(), 0, 0,
+				- stats.getWidth() / 2,
+				(VIRTUAL_SCREEN_HEIGHT - (5 * starFull.getHeight())), 0, 0,
 				stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
 				stats.getWidth(), stats.getHeight(), false, true);
 
 		for (int i = 1; i <= player.getStarsRunSpeed(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
-					starFull.getHeight(), 0, 0, starFull.getWidth(),
+					(VIRTUAL_SCREEN_HEIGHT - (5 * starFull.getHeight())), 0, 0,
+					starFull.getWidth(),
 					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
 					starFull.getHeight(), false, true);
 		}
@@ -504,7 +506,8 @@ public class Game implements ApplicationListener {
 		for (int i = 1; i <= player.getStarsShootSpeed(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
-					2 * starFull.getWidth(), 0, 0, starFull.getWidth(),
+					(VIRTUAL_SCREEN_HEIGHT - (4 * starFull.getHeight())), 0, 0,
+					starFull.getWidth(),
 					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
 					starFull.getHeight(), false, true);
 		}
@@ -512,7 +515,8 @@ public class Game implements ApplicationListener {
 		for (int i = 1; i <= player.getStarsTackleSkill(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
-					3 * starFull.getWidth(), 0, 0, starFull.getWidth(),
+					(VIRTUAL_SCREEN_HEIGHT - (3 * starFull.getHeight())), 0, 0,
+					starFull.getWidth(),
 					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
 					starFull.getHeight(), false, true);
 		}
@@ -520,7 +524,8 @@ public class Game implements ApplicationListener {
 		for (int i = 1; i <= player.getStarsTacklePreventionSkill(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
-					4 * starFull.getWidth(), 0, 0, starFull.getWidth(),
+					(VIRTUAL_SCREEN_HEIGHT - (2 * starFull.getHeight())), 0, 0,
+					starFull.getWidth(),
 					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
 					starFull.getHeight(), false, true);
 		}
