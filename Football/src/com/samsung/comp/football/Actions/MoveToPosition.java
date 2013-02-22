@@ -1,53 +1,85 @@
 package com.samsung.comp.football.Actions;
 
+import android.util.Log;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Players.Player;
 
-public class Mark extends Action {
+public class MoveToPosition extends Action {
 
-	private Player target;
-	private Player player;
-	private static Texture markTexture;
+	// This player would be the
+	private Vector2 startPoint;
+	private final Vector2 point;
+	private static Texture TEXTURE;
 
-	public Mark(Player player, Player target) {
-		this.player = player;
-		this.target = target;
-	}
-
-	public Player getTarget() {
-		return target;
+	public MoveToPosition(Vector2 path, Vector2 startPoint) {
+		this.point = path;
+		this.startPoint = startPoint;
 	}
 
 	public static void create(Texture texture) {
-		markTexture = texture;
+		// TODO this should override a super method.
+		TEXTURE = texture;
+	}
+
+	public static void dispose() {
+		TEXTURE.dispose();
 	}
 
 	@Override
 	public void execute(Player player) {
-		player.mark(target);
+		player.move(new Vector2[] { point });
 	}
 
-	public static void dispose() {
-		markTexture.dispose();
+	public Vector2 getPoint() {
+		return point;
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		batch.draw(markTexture,
-				target.getPlayerPosition().x - markTexture.getWidth() / 2,
-				target.getPlayerPosition().y - markTexture.getHeight() / 2);
+
+		if (point != null && startPoint != null) {
+
+			Vector2 firstPoint = startPoint;
+			Vector2 secondPoint = point;
+
+			float rotation = Utils.getMoveVector(firstPoint, secondPoint, 10)
+					.angle();
+
+			batch.draw(TEXTURE, secondPoint.x - (TEXTURE.getWidth() / 2),
+					secondPoint.y - (TEXTURE.getWidth() / 2),
+					TEXTURE.getWidth() / 2, TEXTURE.getHeight() / 2,
+					TEXTURE.getWidth(), TEXTURE.getHeight(), 1, 1,
+					rotation + 45 + 90, 0, 0, TEXTURE.getWidth(),
+					TEXTURE.getHeight(), false, true);
+		}
 		super.draw(batch);
 	}
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(player.getPlayerPosition().x,
-				player.getPlayerPosition().y, target.getPlayerPosition().x,
-				target.getPlayerPosition().y);
+		renderer.line(startPoint.x, startPoint.y, point.x, point.y);
 		super.draw(renderer);
+	}
+
+	@Override
+	public Vector2 getFuturePosition() {
+		if (nextAction != null) {
+			Vector2 nextPosition = nextAction.getFuturePosition();
+			if (nextPosition != null) {
+				return nextPosition;
+			}
+		}
+		return point;
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		Log.v("Move", "getPosition called");
+		return point;
 	}
 
 	@Override
@@ -55,9 +87,8 @@ public class Mark extends Action {
 			float speed, int positionInPath, boolean returnNulls) {
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
+		Vector2[] path = { startPoint, point };
 		Vector2 position = initialPosition;
-
-		Vector2[] path = new Vector2[] { target.getPlayerPosition() };
 
 		while (distance > 0 && path != null && path.length > 0
 				&& positionInPath < path.length) {
@@ -89,9 +120,5 @@ public class Mark extends Action {
 		return position;
 	}
 
-	@Override
-	public Vector2 getPosition() {
-		return target.getPlayerPosition();
-	}
-
 }
+

@@ -120,6 +120,14 @@ public abstract class Player extends Rectangle {
 		return action;
 	}
 
+	public Action getFinalAction() {
+		if (this.action == null) {
+			return null;
+		} else {
+			return action.getFinalAction();
+		}
+	}
+
 	/**
 	 * Used for player selection
 	 * 

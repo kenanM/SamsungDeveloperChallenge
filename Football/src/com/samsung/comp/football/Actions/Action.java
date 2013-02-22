@@ -15,6 +15,14 @@ public abstract class Action {
 		return nextAction;
 	}
 
+	public Action getFinalAction() {
+		if (nextAction != null) {
+			return nextAction.getFinalAction();
+		} else {
+			return this;
+		}
+	}
+
 	public void clearSubsequentActions() {
 		nextAction = null;
 	}

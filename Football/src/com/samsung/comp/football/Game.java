@@ -23,6 +23,7 @@ import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.BlueGoalie;
@@ -134,6 +135,7 @@ public class Game implements ApplicationListener {
 		Kick.create(new Texture(Gdx.files.internal("target.png")));
 		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
+		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 		Ball.create();
 		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
@@ -674,6 +676,8 @@ public class Game implements ApplicationListener {
 		}
 		Ball.dispose();
 		Kick.dispose();
+		Move.dispose();
+		MoveToPosition.dispose();
 		pitchTexture.dispose();
 		playTexture.dispose();
 		starFull.dispose();

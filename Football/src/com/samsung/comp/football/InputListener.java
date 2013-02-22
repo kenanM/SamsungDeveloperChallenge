@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
@@ -275,9 +276,18 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private void assignMoveTo(Player player, int index) {
 		Log.i(TAG, "assigning Move command to " + player.toString());
-		player.setAction(
-				new Move(lineInProgress.toArray(new Vector2[lineInProgress
-						.size()])), index);
+		if (player.getFinalAction() instanceof Mark){
+			player.setAction(
+					new MoveToPosition(
+							lineInProgress.get(lineInProgress.size() - 1),
+							lineInProgress.get(0)),
+					index);
+		} else {
+			player.setAction(
+					new Move(lineInProgress.toArray(new Vector2[lineInProgress
+							.size()])), index);
+		}
+		
 		selectedPlayer = null;
 	}
 
