@@ -9,12 +9,14 @@ import com.samsung.comp.football.Players.Player;
 public class Kick extends Action {
 
 	private Ball ball;
+	private Vector2 kickStartLocation;
 	private Vector2 target;
 	private static Texture targetTexture;
 
-	public Kick(Ball ball, Vector2 target) {
+	public Kick(Ball ball, Vector2 target, Vector2 kickStartLocation) {
 		this.ball = ball;
 		this.target = target;
+		this.kickStartLocation = kickStartLocation;
 	}
 
 	@Override
@@ -50,5 +52,10 @@ public class Kick extends Action {
 		} else {
 			return initialPosition;
 		}
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return kickStartLocation;
 	}
 }

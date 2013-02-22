@@ -1,6 +1,7 @@
 package com.samsung.comp.football;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.util.Log;
@@ -81,9 +82,11 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		Player temp = null;
 		Vector2 playerVector;
 		for (Player player : players) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
 
-			for (int i = 0; i < player.getPositionList().size(); i++) {
-				playerVector = player.getPositionList().get(i);
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
 				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
 					// We are biased to selectable players, return them before
 					// an unselectable one.
@@ -105,14 +108,16 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 	private int findPlayerIndex(Vector2 point) {
 		Vector2 playerVector;
 		for (Player player : players) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
 
-			for (int i = 0; i < player.getPositionList().size(); i++) {
-				playerVector = player.getPositionList().get(i);
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
 				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
 					// We are biased to selectable players, return them before
 					// an unselectable one.
 					if (isSelectable(player)) {
-						return i;
+						return pointsList.size() - 1 - i;
 					}
 				}
 			}
@@ -264,7 +269,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 		if (selectedPlayer != null && pressedPlayer.getTeam() == playerColour) {
 			// If both players are selectable pass between them
 			selectedPlayer.addAction(new Pass(game.getBall(), selectedPlayer,
-					pressedPlayer));
+					pressedPlayer, selectedPlayer.getFuturePosition()));
 
 		} else if (selectedPlayer != null
 				&& pressedPlayer.getTeam() != playerColour
@@ -278,7 +283,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private void pressPoint(Vector2 point) {
 		if (selectedPlayer != null) {
-			selectedPlayer.addAction(new Kick(game.getBall(), point));
+			selectedPlayer.addAction(new Kick(game.getBall(), point,
+					selectedPlayer.getFuturePosition()));
 		}
 	}
 
