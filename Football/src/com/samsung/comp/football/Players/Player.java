@@ -72,6 +72,10 @@ public abstract class Player extends Rectangle {
 		notificationTexture = texture;
 	}
 
+	public static int getPlayerSize() {
+		return PLAYER_SIZE;
+	}
+
 	public void setTimeSinceKick(float time) {
 		timeSinceKick = time;
 	}
