@@ -23,7 +23,7 @@ public abstract class Player extends Rectangle {
 	}
 
 	private static final long serialVersionUID = 1L;
-	private static final int PLAYER_SIZE = 50;
+	private static final int PLAYER_SIZE = 64;
 	private static final int HOVER_SIZE = 64;
 
 	protected Texture walkSheet;
