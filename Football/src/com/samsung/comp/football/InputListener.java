@@ -240,21 +240,19 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 				Vector2 endVector = lineInProgress
 						.get(lineInProgress.size() - 1);
 
+				boolean startAtBall = findBall(startVector);
 				boolean finishedAtBall = findBall(endVector);
 
 				// Note to self: the orderings here are very important
-				if (startVector.dst(endVector) < 6 && finish == null) {
+				if (startVector.dst(endVector) < 15 && finish == null) {
 					Log.i(TAG, "You pressed: " + startVector.toString());
-					if (finishedAtBall) {
+					if (startAtBall && finishedAtBall && selectedPlayer != null) {
 						Log.i(TAG, "You marked the ball");
 						pressBall();
 					} else {
 						pressPoint(startVector);
 					}
 					lineInProgress.clear();
-				} else if (finishedAtBall) {
-					Log.i(TAG, "You marked the ball");
-					pressBall();
 				} else if (start == null) {
 					Log.i(TAG, "You drew a line starting from a null position");
 					lineInProgress.clear();
