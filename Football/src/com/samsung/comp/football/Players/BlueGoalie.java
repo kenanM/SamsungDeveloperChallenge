@@ -16,7 +16,7 @@ public class BlueGoalie extends Goalie {
 		this.goal = Game.BLUE_GOAL;
 		this.TEAM = TeamColour.BLUE;
 		this.rotation = 90;
-		this.middle = Game.BLUE_GOAL.cpy().sub(0, DEFENSIVE_DISTANCE_FROM_GOAL);
+		this.middle = Game.BLUE_GOAL.cpy().add(0, DEFENSIVE_DISTANCE_FROM_GOAL);
 
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
 		this.selectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
