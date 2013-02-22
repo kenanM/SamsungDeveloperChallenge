@@ -210,6 +210,6 @@ public class AI {
 	}
 
 	private void shoot(Player player) {
-		player.addAction(new Kick(ball, targetGoal));
+		player.addAction(new Kick(ball, targetGoal, player.getFuturePosition()));
 	}
 }

@@ -268,7 +268,8 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private void pressPoint(Vector2 point) {
 		if (selectedPlayer != null) {
-			selectedPlayer.addAction(new Kick(game.getBall(), point));
+			selectedPlayer.addAction(new Kick(game.getBall(), point,
+					selectedPlayer.getFuturePosition()));
 		}
 	}
 
