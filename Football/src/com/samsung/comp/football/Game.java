@@ -88,6 +88,7 @@ public class Game implements ApplicationListener {
 	private GameState gameStateToGoIntoWhenBackButtonPressed = GameState.PAUSED;
 	private float remainingMatchTime;
 	private SpriteBatch batch;
+	private ShapeRenderer shapeRenderer;
 	private BitmapFont bmf;
 	private OrthographicCamera camera;
 
@@ -150,6 +151,7 @@ public class Game implements ApplicationListener {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
+		shapeRenderer = new ShapeRenderer();
 		bmf = new BitmapFont(true);
 		bmf.scale(.35f);
 
@@ -349,7 +351,6 @@ public class Game implements ApplicationListener {
 	}
 
 	private void drawShapeRenderer() {
-		ShapeRenderer shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		shapeRenderer.begin(ShapeType.Line);
 
@@ -689,6 +690,7 @@ public class Game implements ApplicationListener {
 		goalMessage.dispose();
 		whistleBlow.dispose();
 		batch.dispose();
+		shapeRenderer.dispose();
 	}
 
 	@Override

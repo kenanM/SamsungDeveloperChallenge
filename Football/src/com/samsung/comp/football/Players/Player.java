@@ -379,8 +379,6 @@ public abstract class Player extends Rectangle {
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
-		}
-		if (action.getNextAction() != null) {
 			executeNextAction();
 		}
 	}
@@ -404,8 +402,6 @@ public abstract class Player extends Rectangle {
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
-		}
-		if (action.getNextAction() != null) {
 			executeNextAction();
 		}
 	}
@@ -467,8 +463,6 @@ public abstract class Player extends Rectangle {
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
-		}
-		if (action.getNextAction() != null) {
 			executeNextAction();
 		}
 	}
