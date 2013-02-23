@@ -292,10 +292,10 @@ public class Game implements ApplicationListener {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new RedPlayer(338, 768, 520, 150, 100, 20));
-		redPlayers.add(new RedPlayer(338, 640, 540, 200, 80, 20));
-		redPlayers.add(new RedPlayer(169, 704, 550, 50, 100, 40));
-		redPlayers.add(new RedPlayer(507, 704, 530, 150, 80, 40));
+		redPlayers.add(new RedPlayer(338, 768, 520, 150, 100, 20, 380));
+		redPlayers.add(new RedPlayer(338, 640, 540, 200, 80, 20, 380));
+		redPlayers.add(new RedPlayer(169, 704, 550, 50, 100, 40, 420));
+		redPlayers.add(new RedPlayer(507, 704, 530, 150, 80, 40, 420));
 		redGoalie = new RedGoalie(338, 900, this, 500);
 
 		bluePlayers = new LinkedList<Player>();
@@ -528,6 +528,14 @@ public class Game implements ApplicationListener {
 					starFull.getWidth(),
 					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
 					starFull.getHeight(), false, true);
+		}
+
+		for (int i = 1; i <= player.getStarsSavingSkill(); i++) {
+			batch.draw(starFull,
+					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+					(VIRTUAL_SCREEN_HEIGHT - (1 * starFull.getHeight())), 0, 0,
+					starFull.getWidth(), starFull.getHeight(), 1, 1, 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), false, true);
 		}
 
 	}

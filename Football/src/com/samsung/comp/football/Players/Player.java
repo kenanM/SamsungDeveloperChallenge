@@ -310,7 +310,7 @@ public abstract class Player extends Rectangle {
 	}
 
 	public float getStarsSavingSkill() {
-		return savingSkill / 200;
+		return savingSkill / 100;
 	}
 
 	public int getStarsTacklePreventionSkill() {

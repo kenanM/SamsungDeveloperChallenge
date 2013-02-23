@@ -36,5 +36,6 @@ public class BluePlayer extends Player {
 		runSpeed = run;
 		tackleSkill = tackle;
 		tacklePreventionSkill = tackleStop;
+		this.savingSkill = savingSkill;
 	}
 }
