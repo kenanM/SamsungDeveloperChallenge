@@ -39,7 +39,8 @@ public class MarkBall extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(startPoint.x, startPoint.y, startPoint.x, startPoint.y);
+		renderer.line(startPoint.x, startPoint.y, ball.getBallX(),
+				ball.getBallY());
 		super.draw(renderer);
 	}
 

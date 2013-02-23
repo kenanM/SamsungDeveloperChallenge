@@ -24,7 +24,7 @@ public class RedPlayer extends Player {
 	}
 
 	public RedPlayer(float x, float y, float shoot, float run, float tackle,
-			float tackleStop) {
+			float tackleStop, float savingSkill) {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
 		this.rotation = 270;
@@ -39,6 +39,7 @@ public class RedPlayer extends Player {
 		runSpeed = run;
 		tackleSkill = tackle;
 		tacklePreventionSkill = tackleStop;
+		this.savingSkill = savingSkill;
 	}
 
 }

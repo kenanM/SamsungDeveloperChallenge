@@ -310,7 +310,7 @@ public abstract class Player extends Rectangle {
 	}
 
 	public float getStarsSavingSkill() {
-		return savingSkill / 200;
+		return savingSkill / 100;
 	}
 
 	public int getStarsTacklePreventionSkill() {
@@ -578,6 +578,10 @@ public abstract class Player extends Rectangle {
 	public Rectangle getTackleHitbox() {
 		return new Rectangle(getPlayerPosition().x - 12,
 				getPlayerPosition().y - 12, 24, 24);
+	}
+
+	public void setRotation(float value) {
+		rotation = value;
 	}
 
 	private void restrictToField() {
