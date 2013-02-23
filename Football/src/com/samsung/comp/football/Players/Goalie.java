@@ -31,6 +31,9 @@ public abstract class Goalie extends Player {
 	public void update(float time) {
 		if (hasBall()) {
 			Log.v("Goalie", "I have the ball gavin!");
+			if (getPlayerPosition().dst(goal) > DEFENSIVE_DISTANCE_FROM_GOAL * 1.5) {
+				executeNextAction();
+			}
 			super.update(time);
 		} else {
 			Ball ball = game.getBall();

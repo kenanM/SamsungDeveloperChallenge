@@ -56,7 +56,7 @@ public abstract class Player extends Rectangle {
 	Vector2[] path;
 	int positionInPath = 0;
 	float rotation;
-	private Action action;
+	protected Action action;
 	private float timeSinceKick = Game.BALL_PASS_TIME;
 	private Ball ball;
 
@@ -475,7 +475,10 @@ public abstract class Player extends Rectangle {
 		}
 	}
 
-	private void executeNextAction() {
+	protected void executeNextAction() {
+		if (action == null) {
+			return;
+		}
 		if (action.getNextAction() == null) {
 			action = null;
 		} else {

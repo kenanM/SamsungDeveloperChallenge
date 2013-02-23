@@ -108,7 +108,7 @@ public class Bar extends Rectangle {
 			text = "Red: " + game.getRedScore() + " Blue: "
 					+ game.getBlueScore() + "      " + game.getRemainingTime();
 		}
-		bmf.draw(batch, text, (float) Game.VIRTUAL_SCREEN_WIDTH / 2 - 5, 15);
+		bmf.draw(batch, text, playIcon.getWidth() + (offset * 4), 7);
 	}
 
 	public void setPositionToUp() {
