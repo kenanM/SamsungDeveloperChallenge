@@ -208,7 +208,6 @@ public class Game implements ApplicationListener {
 		whistleBlow.play();
 	}
 
-
 	private void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
@@ -241,7 +240,7 @@ public class Game implements ApplicationListener {
 							.getPlayerSize())));
 			bluePlayers.get(1).y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
-			
+
 			bluePlayers.get(0).setRotation(0);
 			bluePlayers.get(1).setRotation(180);
 		} else {
@@ -264,7 +263,7 @@ public class Game implements ApplicationListener {
 							.getPlayerSize())));
 			redPlayers.get(1).y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
-			
+
 			redPlayers.get(0).setRotation(0);
 			redPlayers.get(1).setRotation(180);
 		} else {
@@ -305,7 +304,7 @@ public class Game implements ApplicationListener {
 		bluePlayers.add(new BluePlayer(507, 320));
 		bluePlayers.add(new BluePlayer(169, 320));
 		blueGoalie = new BlueGoalie(338, 124, this, 500);
-		
+
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
 		} else {
@@ -488,8 +487,7 @@ public class Game implements ApplicationListener {
 			return;
 		}
 
-		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - (5 * starFull.getWidth())
-				- stats.getWidth() / 2,
+		batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth(),
 				(VIRTUAL_SCREEN_HEIGHT - (5 * starFull.getHeight())), 0, 0,
 				stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
 				stats.getWidth(), stats.getHeight(), false, true);
@@ -498,36 +496,32 @@ public class Game implements ApplicationListener {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
 					(VIRTUAL_SCREEN_HEIGHT - (5 * starFull.getHeight())), 0, 0,
-					starFull.getWidth(),
-					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
-					starFull.getHeight(), false, true);
+					starFull.getWidth(), starFull.getHeight(), 1, 1, 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), false, true);
 		}
 
 		for (int i = 1; i <= player.getStarsShootSpeed(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
 					(VIRTUAL_SCREEN_HEIGHT - (4 * starFull.getHeight())), 0, 0,
-					starFull.getWidth(),
-					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
-					starFull.getHeight(), false, true);
+					starFull.getWidth(), starFull.getHeight(), 1, 1, 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), false, true);
 		}
 
 		for (int i = 1; i <= player.getStarsTackleSkill(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
 					(VIRTUAL_SCREEN_HEIGHT - (3 * starFull.getHeight())), 0, 0,
-					starFull.getWidth(),
-					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
-					starFull.getHeight(), false, true);
+					starFull.getWidth(), starFull.getHeight(), 1, 1, 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), false, true);
 		}
 
 		for (int i = 1; i <= player.getStarsTacklePreventionSkill(); i++) {
 			batch.draw(starFull,
 					VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
 					(VIRTUAL_SCREEN_HEIGHT - (2 * starFull.getHeight())), 0, 0,
-					starFull.getWidth(),
-					starFull.getHeight(), 1, 1, 0, 0, 0, starFull.getWidth(),
-					starFull.getHeight(), false, true);
+					starFull.getWidth(), starFull.getHeight(), 1, 1, 0, 0, 0,
+					starFull.getWidth(), starFull.getHeight(), false, true);
 		}
 
 		for (int i = 1; i <= player.getStarsSavingSkill(); i++) {
