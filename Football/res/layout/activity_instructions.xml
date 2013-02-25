@@ -28,6 +28,27 @@
             android:layout_height="fill_parent"
             android:layout_marginTop="0dp"
             android:src="@drawable/screen_three" />
+
+        <ImageView
+            android:id="@+id/image02"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/screen_four" />
+
+        <ImageView
+            android:id="@+id/image02"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/screen_five" />
+
+        <ImageView
+            android:id="@+id/image02"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/screen_six" />
     </ViewFlipper>
 
 </RelativeLayout>
