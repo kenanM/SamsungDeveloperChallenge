@@ -387,6 +387,8 @@ public abstract class Player extends Rectangle {
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
+		}
+		if (action.getNextAction() != null) {
 			executeNextAction();
 		}
 	}
@@ -410,6 +412,8 @@ public abstract class Player extends Rectangle {
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
+		}
+		if (action.getNextAction() != null) {
 			executeNextAction();
 		}
 	}
@@ -430,7 +434,6 @@ public abstract class Player extends Rectangle {
 		}
 	}
 
-	// TODO: Account for a moving player.
 	public void pass(Ball ball, Player target) {
 		if (hasBall()) {
 
@@ -472,7 +475,9 @@ public abstract class Player extends Rectangle {
 			timeSinceKick = 0;
 			ball.removeOwner();
 		}
-		executeNextAction();
+		if (action.getNextAction() != null) {
+			executeNextAction();
+		}
 	}
 
 	protected void executeNextAction() {
