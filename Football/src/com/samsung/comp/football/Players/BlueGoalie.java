@@ -3,6 +3,7 @@ package com.samsung.comp.football.Players;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Utils;
 
@@ -10,7 +11,8 @@ public class BlueGoalie extends Goalie {
 
 	private static final long serialVersionUID = 7960723633348803798L;
 
-	public BlueGoalie(float playerX, float playerY, Game game, float saving) {
+	public BlueGoalie(float playerX, float playerY, AbstractGame game,
+			float saving) {
 		super(playerX, playerY, game);
 		savingSkill = saving;
 		this.goal = Game.BLUE_GOAL;

@@ -33,7 +33,7 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class AbstractGame implements ApplicationListener {
 
-	private int result;
+	protected int result;
 
 	// TODO: Remove these and other hard coded values
 	public static final float ROUND_TIME = 5;
@@ -114,34 +114,27 @@ public class AbstractGame implements ApplicationListener {
 	@Override
 	public void create() {
 
-		Texture.setEnforcePotImages(false);
+		createLibGdxItems();
+		createMainTextures();
+		createSfx();
+		createActions();
+		createIteractiveObjects();
+		createUI();
+		createRenderingObjects();
 
-		input = new LibGDXInput(this);
-		Gdx.input.setInputProcessor(input);
-		Gdx.input.setCatchBackKey(true);
+		humanColour = TeamColour.BLUE;
+		computerColour = TeamColour.RED;
 
-		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
-		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
-		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
-		starFull = new Texture(Gdx.files.internal("star.png"));
-		stats = new Texture(Gdx.files.internal("stats.png"));
-		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
+		inputListener.initialise();
 
-		whistleBlow = Gdx.audio.newSound(Gdx.files
-				.internal("sound/Whistle short 2.wav"));
+		remainingMatchTime = 3 * 60;
 
-		Kick.create(new Texture(Gdx.files.internal("target.png")));
-		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
-		MarkBall.create(new Texture(Gdx.files.internal("markingIcon.png")));
-		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
-		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
-		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
-		Ball.create();
-		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
+		beginInputStage();
 
-		pauseMenu = new PauseMenu(this);
-		bar = new Bar(this);
+	}
 
+
+	protected void createRenderingObjects() {
 		// create the camera and the SpriteBatch
 		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
@@ -150,19 +143,48 @@ public class AbstractGame implements ApplicationListener {
 		shapeRenderer = new ShapeRenderer();
 		bmf = new BitmapFont(true);
 		bmf.scale(.35f);
-
-		humanColour = TeamColour.BLUE;
-		computerColour = TeamColour.RED;
-		inputListener.initialise();
-
-		remainingMatchTime = 3 * 60;
-
-		ai = new AI(this);
-
-		beginInputStage();
-
 	}
 
+	protected void createUI() {
+		pauseMenu = new PauseMenu(this);
+		bar = new Bar(this);
+	}
+
+	protected void createIteractiveObjects() {
+		Ball.create();
+		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
+	}
+
+	protected void createSfx() {
+		whistleBlow = Gdx.audio.newSound(Gdx.files
+				.internal("sound/Whistle short 2.wav"));
+	}
+
+	protected void createActions() {
+		Kick.create(new Texture(Gdx.files.internal("target.png")));
+		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
+		MarkBall.create(new Texture(Gdx.files.internal("markingIcon.png")));
+		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
+		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
+		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
+	}
+
+	protected void createMainTextures() {
+		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
+		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
+		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
+		starFull = new Texture(Gdx.files.internal("star.png"));
+		stats = new Texture(Gdx.files.internal("stats.png"));
+		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
+	}
+
+	protected void createLibGdxItems() {
+		Texture.setEnforcePotImages(false);
+
+		input = new LibGDXInput(this);
+		Gdx.input.setInputProcessor(input);
+		Gdx.input.setCatchBackKey(true);
+	}
 
 	@Override
 	public void render() {

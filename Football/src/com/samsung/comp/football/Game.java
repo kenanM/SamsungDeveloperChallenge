@@ -2,21 +2,8 @@ package com.samsung.comp.football;
 
 import java.util.LinkedList;
 
-import android.util.Log;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.samsung.comp.football.Actions.Kick;
-import com.samsung.comp.football.Actions.Mark;
-import com.samsung.comp.football.Actions.MarkBall;
-import com.samsung.comp.football.Actions.Move;
-import com.samsung.comp.football.Actions.MoveToPosition;
-import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.BlueGoalie;
 import com.samsung.comp.football.Players.BluePlayer;
@@ -30,51 +17,24 @@ public class Game extends AbstractGame {
 	@Override
 	public void create() {
 
-		Texture.setEnforcePotImages(false);
-
-		input = new LibGDXInput(this);
-		Gdx.input.setInputProcessor(input);
-		Gdx.input.setCatchBackKey(true);
-
-		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
-		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
-		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
-		starFull = new Texture(Gdx.files.internal("star.png"));
-		stats = new Texture(Gdx.files.internal("stats.png"));
-		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
-
-		whistleBlow = Gdx.audio.newSound(Gdx.files
-				.internal("sound/Whistle short 2.wav"));
-
-		Kick.create(new Texture(Gdx.files.internal("target.png")));
-		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
-		MarkBall.create(new Texture(Gdx.files.internal("markingIcon.png")));
-		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
-		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
-		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
-		Ball.create();
-		Player.create(new Texture(Gdx.files.internal("exclaimationMark.png")));
-
-		pauseMenu = new PauseMenu(this);
-		bar = new Bar(this);
-
-		// create the camera and the SpriteBatch
-		// TODO these are not necessarily the dimensions we want.
-		camera = new OrthographicCamera();
-		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
-		batch = new SpriteBatch();
-		shapeRenderer = new ShapeRenderer();
-		bmf = new BitmapFont(true);
-		bmf.scale(.35f);
+		createLibGdxItems();
+		createMainTextures();
+		createSfx();
+		createActions();
+		createIteractiveObjects();
+		createUI();
+		createRenderingObjects();
 
 		createNewPlayersAndBall();
+
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
+
+		ai = new AI(this);
+
 		inputListener.initialise();
 
 		remainingMatchTime = 3 * 60;
-
-		ai = new AI(this);
 
 		beginInputStage();
 	}
@@ -181,7 +141,6 @@ public class Game extends AbstractGame {
 		} else {
 			setStartingPositions(TeamColour.RED);
 		}
-		ai = new AI(this);
 
 		soundManager.play(whistleBlow);
 	}
@@ -207,28 +166,7 @@ public class Game extends AbstractGame {
 		drawShapeRenderer();
 	}
 
-
-	public String getRemainingTime() {
-
-		int minutes = (int) remainingMatchTime / 60;
-		int seconds = (int) remainingMatchTime % 60;
-
-		String remainingTimeString = (seconds > 9) ? minutes + ":" + seconds
-				: minutes + ":0" + seconds;
-
-		return remainingTimeString;
-	}
-
-
-
-	public int getRedScore() {
-		return redScore;
-	}
-
-	public int getBlueScore() {
-		return blueScore;
-	}
-
+	@Override
 	protected void goalScoredDetection() {
 		boolean goalScored = false;
 		if (RED_GOAL_AREA.contains(ball)) {
@@ -257,64 +195,14 @@ public class Game extends AbstractGame {
 		}
 	}
 
-	public Ball getBall() {
-		return ball;
-	}
-
-	public void setInputListener(InputListener inputListener) {
-		this.inputListener = inputListener;
-	}
-
-	public void setSoundManager(SoundManager soundManager) {
-		this.soundManager = soundManager;
-	}
-
-	public void clearActions() {
-		for (Player player : allPlayers()) {
-			player.reset();
-		}
-	}
-
 	@Override
 	public void dispose() {
-		// dispose of all the native resources
-		for (Player player : allPlayers()) {
-			player.dispose();
-		}
-		Ball.dispose();
-		Kick.dispose();
-		Move.dispose();
-		MoveToPosition.dispose();
-		Mark.dispose();
-		MarkBall.dispose();
-		pitchTexture.dispose();
-		playTexture.dispose();
-		starFull.dispose();
-		stats.dispose();
-		goalMessage.dispose();
-		whistleBlow.dispose();
-		batch.dispose();
-		shapeRenderer.dispose();
+		super.dispose();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-	}
-
-	public void backButtonPressed() {
-		Log.i("GameState", "Back button pressed");
-		if (gameState == GameState.FINISHED) {
-			Gdx.app.exit();
-		} else if (gameState == GameState.PAUSED) {
-			gameState = gameStateToGoIntoWhenBackButtonPressed;
-			inputListener.exitPauseState();
-		} else {
-			gameStateToGoIntoWhenBackButtonPressed = gameState;
-			gameState = GameState.PAUSED;
-			inputListener.enterPauseState();
-		}
-		Log.i("GameState", gameState.toString());
 	}
 
 	@Override

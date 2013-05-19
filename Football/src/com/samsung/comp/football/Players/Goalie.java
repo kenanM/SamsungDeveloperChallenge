@@ -5,6 +5,7 @@ import android.util.Log;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Utils;
@@ -18,9 +19,9 @@ public abstract class Goalie extends Player {
 	protected static final float DEFENSIVE_DISTANCE_FROM_GOAL = 150;
 	private final Texture unselectableHoverTexture;
 
-	private Game game;
+	private AbstractGame game;
 
-	public Goalie(float playerX, float playerY, Game game) {
+	public Goalie(float playerX, float playerY, AbstractGame game) {
 		super(playerX, playerY);
 		this.game = game;
 		unselectableHoverTexture = new Texture(
