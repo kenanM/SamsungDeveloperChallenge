@@ -13,10 +13,10 @@ public class PauseMenu {
 
 	private static Texture pauseTexture;
 	private static Texture quitGameTexture;
-	private Game game;
+	private AbstractGame game;
 	private static Rectangle quitButton;
 
-	public PauseMenu(Game game) {
+	public PauseMenu(AbstractGame game) {
 		this.game = game;
 		pauseTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
 		quitGameTexture = new Texture(Gdx.files.internal("quitGame.png"));

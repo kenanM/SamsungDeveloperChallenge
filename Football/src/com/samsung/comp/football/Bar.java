@@ -33,7 +33,7 @@ public class Bar extends Rectangle {
 
 	private Position position = Position.DOWN;
 
-	private final Game game;
+	private final AbstractGame game;
 	private BitmapFont bmf;
 
 	private float fadeTimer = 0;
@@ -42,7 +42,7 @@ public class Bar extends Rectangle {
 
 	private boolean showingCancelButton = false;
 
-	public Bar(Game game) {
+	public Bar(AbstractGame game) {
 		this.game = game;
 		bmf = new BitmapFont(true);
 		bmf.scale(.35f);

@@ -27,7 +27,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private static final String TAG = "InputListener";
 
-	private final Game game;
+	private final AbstractGame game;
 
 	private boolean detectPresses = false;
 	private boolean paused = false;
@@ -46,7 +46,7 @@ public class InputListener implements SPenTouchListener, SPenHoverListener {
 
 	private Bar bar;
 
-	public InputListener(Game game) {
+	public InputListener(AbstractGame game) {
 		this.game = game;
 	}
 

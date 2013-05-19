@@ -33,7 +33,7 @@ public class AI {
 	// The distance from which the AI will attempt a shot
 	private static final float SHOOTING_RANGE = 250;
 
-	private Game game;
+	private AbstractGame game;
 	private TeamColour teamColour;
 	private Player goalie;
 	private Ball ball;
@@ -41,7 +41,7 @@ public class AI {
 	private Vector2 targetGoal;
 	private Vector2 homeGoal;
 
-	public AI(Game game) {
+	public AI(AbstractGame game) {
 		// Decide whether the AI or the Game should carry out the
 		// "if(teamColour == TeamColour.RED)" logic
 		this.game = game;

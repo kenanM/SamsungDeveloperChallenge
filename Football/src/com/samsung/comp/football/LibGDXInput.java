@@ -2,13 +2,13 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.samsung.comp.football.Game.GameState;
+import com.samsung.comp.football.AbstractGame.GameState;
 
 public class LibGDXInput implements InputProcessor{
 
-	private final Game game;
+	private final AbstractGame game;
 
-	public LibGDXInput(Game game) {
+	public LibGDXInput(AbstractGame game) {
 		this.game = game;
 	}
 
