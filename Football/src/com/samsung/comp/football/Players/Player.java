@@ -17,6 +17,7 @@ import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 
@@ -525,7 +526,8 @@ public abstract class Player extends Rectangle {
 				if (positionInPath != 0 && positionInPath == path.length) {
 					path = new Vector2[] {};
 					resetPathIndex();
-					if (action instanceof Move) {
+					if (action instanceof Move
+							|| action instanceof MoveToPosition) {
 						executeNextAction();
 					}
 					break;
