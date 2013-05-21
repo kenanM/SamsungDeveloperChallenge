@@ -31,7 +31,7 @@ import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
-public class AbstractGame implements ApplicationListener {
+public abstract class AbstractGame implements ApplicationListener {
 
 	protected int result;
 
