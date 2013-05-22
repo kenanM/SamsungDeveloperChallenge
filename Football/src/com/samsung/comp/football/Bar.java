@@ -1,10 +1,13 @@
 package com.samsung.comp.football;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.samsung.comp.football.AbstractGame.GameState;
 import com.samsung.comp.football.Players.Player;
 
 public class Bar extends Rectangle {
@@ -142,17 +145,35 @@ public class Bar extends Rectangle {
 		}
 	}
 
-	public boolean press(float x, float y) {
-		if (showingCancelButton && getCancelIcon().contains(x, y)) {
+	public void onPress(float x, float y) {
+		if (getPlayIcon().contains(x, y)) {
+			playButtonPressed();
+
+		} else if (showingCancelButton && getCancelIcon().contains(x, y)) {
+			// TODO (Gavin): Change this to be 'undo last action'
 			cancelActionsTimer = 0;
-			return true;
-		} else {
-			return false;
+			selectedPlayer.clearAction();
 		}
 	}
 
 	public void setText(String string) {
 		text = string;
 		textCountdownTimer = 0;
+	}
+
+	public void playButtonPressed() {
+		if (game.getGameState() == GameState.PAUSED) {
+			return;
+		}
+
+		if (game.getHumanGoalie().hasBall()) {
+			if (!game.getHumanGoalie().kicksBall()) {
+				game.getBar().setText("Goalie cannot hold onto the ball");
+				Log.i("Game", "Goalie needs to kick the ball");
+				return;
+			}
+		}
+
+		game.beginExecution();
 	}
 }

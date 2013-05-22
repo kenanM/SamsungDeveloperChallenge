@@ -92,8 +92,8 @@ public abstract class AbstractGame implements ApplicationListener {
 	protected List<Player> bluePlayers = new LinkedList<Player>();
 	protected Goalie redGoalie;
 	protected Goalie blueGoalie;
-
 	protected Ball ball;
+
 	// TODO: Rename to elapsedRoundTime?
 	protected float totalTime = 0;
 	protected float goalScoredDrawTime = 0f;
@@ -132,7 +132,6 @@ public abstract class AbstractGame implements ApplicationListener {
 		beginInputStage();
 
 	}
-
 
 	protected void createRenderingObjects() {
 		// create the camera and the SpriteBatch
@@ -244,10 +243,13 @@ public abstract class AbstractGame implements ApplicationListener {
 
 		if (gameState == GameState.INPUT) {
 
-			for (Player player : allPlayers()) {
+			for (Player player : getAllPlayers()) {
 				drawActions(player.getAction(), batch);
 			}
 
+			/**
+			 * TODO: Switch to AbstractInputStrategy
+			 */
 			inputListener.draw(batch);
 			drawPlayerStats(batch, inputListener.getHighlightedPlayer());
 
@@ -262,7 +264,7 @@ public abstract class AbstractGame implements ApplicationListener {
 			// Execution stage
 		}
 
-		for (Player player : allPlayers()) {
+		for (Player player : getAllPlayers()) {
 			player.draw(batch);
 		}
 
@@ -319,7 +321,7 @@ public abstract class AbstractGame implements ApplicationListener {
 
 			shapeRenderer.setColor(0, 0, 0, 0);
 
-			for (Player player : allPlayers()) {
+			for (Player player : getAllPlayers()) {
 				drawActions(player.getAction(), shapeRenderer);
 			}
 
@@ -418,7 +420,7 @@ public abstract class AbstractGame implements ApplicationListener {
 
 			remainingMatchTime -= time;
 
-			for (Player player : allPlayers()) {
+			for (Player player : getAllPlayers()) {
 				player.executeAction();
 				player.update(time);
 			}
@@ -441,7 +443,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	}
 
 	protected void tackleDetection(float time) {
-		for (Player player : allPlayers()) {
+		for (Player player : getAllPlayers()) {
 
 			if (player.getTackleHitbox().overlaps(ball)
 					&& ball.getOwner() != player
@@ -544,7 +546,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	}
 
 	public void clearActions() {
-		for (Player player : allPlayers()) {
+		for (Player player : getAllPlayers()) {
 			player.reset();
 		}
 	}
@@ -552,32 +554,20 @@ public abstract class AbstractGame implements ApplicationListener {
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
 		clearActions();
-		inputListener.beginInputStage(allPlayers());
+		inputListener.beginInputStage(getAllPlayers());
 		bar.setPositionToDown();
 	}
 
-	public boolean beginExecution() {
-		if (gameState == GameState.PAUSED) {
-			return false;
-		}
-
-		if (getHumanGoalie().hasBall()) {
-			if (!getHumanGoalie().kicksBall()) {
-				bar.setText("Goalie cannot hold onto the ball");
-				Log.i("Game", "Goalie needs to kick the ball");
-				return false;
-			}
-		}
-
+	public void beginExecution() {
 		Log.i("Game", "Beginning execution");
 		totalTime = 0;
 		this.gameState = GameState.EXECUTION;
 		ai.getComputerActions();
 		bar.setPositionToUp();
-		return true;
+		// inputStrategy.deselectPlayers();
 	}
 
-	protected List<Player> allPlayers() {
+	public List<Player> getAllPlayers() {
 		List<Player> result = new LinkedList<Player>();
 		result.addAll(redPlayers);
 		result.add(redGoalie);
@@ -639,7 +629,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		for (Player player : allPlayers()) {
+		for (Player player : getAllPlayers()) {
 			player.dispose();
 		}
 		Ball.dispose();
@@ -707,5 +697,10 @@ public abstract class AbstractGame implements ApplicationListener {
 	@Override
 	public void resume() {
 	}
+
+
+
+
+
 
 }

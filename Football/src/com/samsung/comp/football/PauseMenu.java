@@ -1,13 +1,11 @@
 package com.samsung.comp.football;
 
 import android.util.Log;
-import android.view.MotionEvent;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class PauseMenu {
 
@@ -37,11 +35,7 @@ public class PauseMenu {
 				quitGameTexture.getHeight());
 	}
 
-	public void onPress(MotionEvent event) {
-		Vector2 position = game.translateInputToField(new Vector2(event.getX(),
-				event.getY()));
-		float x = position.x;
-		float y = position.y;
+	public void onPress(float x, float y) {
 
 		Log.i("PauseMenu", x + ", " + y);
 
