@@ -14,7 +14,7 @@ public abstract class AbstractInputStrategy {
 	protected static final String TAG = "AbstractInputStrategy";
 
 	protected static final float INPUT_EPSILON_VALUE = 32;
-	protected ArrayList<Vector2> lineInProgress;
+	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
 
 	protected AbstractGame game;
 
@@ -22,7 +22,7 @@ public abstract class AbstractInputStrategy {
 	protected Player highlightedPlayer;
 	protected boolean isBallHighlighted;
 
-	protected List<Vector2> getLineBeingDrawn() {
+	public List<Vector2> getLineBeingDrawn() {
 		return new ArrayList<Vector2>(lineInProgress);
 	}
 
@@ -139,13 +139,18 @@ public abstract class AbstractInputStrategy {
 	public void draw(SpriteBatch batch) {
 		if (highlightedPlayer != null) {
 			highlightedPlayer.drawHighlight(batch);
+			game.drawTimeLinePoints(highlightedPlayer);
 		}
 		if (selectedPlayer != null) {
 			selectedPlayer.drawSelect(batch);
+			game.drawTimeLinePoints(selectedPlayer);
 		}
 		if (isBallHighlighted) {
 			game.getBall().drawHighlight(batch);
 		}
+
+		game.drawPlayerStats(batch, selectedPlayer);
+
 	}
 
 	public void deselectPlayers() {

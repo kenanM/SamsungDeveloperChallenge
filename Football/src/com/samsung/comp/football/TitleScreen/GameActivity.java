@@ -1,5 +1,6 @@
 package com.samsung.comp.football.TitleScreen;
 
+import input.SPenInputStrategy;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -8,7 +9,6 @@ import android.view.View;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.samsung.comp.football.Game;
-import com.samsung.comp.football.InputListener;
 import com.samsung.comp.football.SoundManager;
 import com.samsung.spen.lib.input.SPenEventLibrary;
 
@@ -28,13 +28,13 @@ public class GameActivity extends AndroidApplication {
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		SoundManager soundManager = new SoundManager(audioManager);
 
-		InputListener inputListener = new InputListener(game);
-		game.setInputListener(inputListener);
+		SPenInputStrategy sPenInputStrategy = new SPenInputStrategy(game);
+		game.setInputStrategy(sPenInputStrategy);
 		game.setSoundManager(soundManager);
 		View gameView = initializeForView(game, useGL2);
 		SPenEventLibrary spen = new SPenEventLibrary();
-		spen.setSPenTouchListener(gameView, inputListener);
-		spen.setSPenHoverListener(gameView, inputListener);
+		spen.setSPenTouchListener(gameView, sPenInputStrategy);
+		spen.setSPenHoverListener(gameView, sPenInputStrategy);
 		setContentView(gameView);
 	}
 }

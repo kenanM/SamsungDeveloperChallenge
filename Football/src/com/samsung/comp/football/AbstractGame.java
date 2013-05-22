@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import input.AbstractInputStrategy;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -100,7 +102,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	protected int redScore = 0;
 	protected int blueScore = 0;
 
-	protected InputListener inputListener;
+	protected AbstractInputStrategy inputStrategy;
 	protected LibGDXInput input;
 	protected SoundManager soundManager;
 
@@ -124,8 +126,6 @@ public abstract class AbstractGame implements ApplicationListener {
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
-
-		inputListener.initialise();
 
 		remainingMatchTime = 3 * 60;
 
@@ -250,15 +250,8 @@ public abstract class AbstractGame implements ApplicationListener {
 			/**
 			 * TODO: Switch to AbstractInputStrategy
 			 */
-			inputListener.draw(batch);
-			drawPlayerStats(batch, inputListener.getHighlightedPlayer());
+			inputStrategy.draw(batch);
 
-			if (inputListener.getHighlightedPlayer() != null) {
-				drawTimeLinePoints(inputListener.getHighlightedPlayer());
-			}
-			if (inputListener.getSelectedPlayer() != null) {
-				drawTimeLinePoints(inputListener.getSelectedPlayer());
-			}
 
 		} else {
 			// Execution stage
@@ -277,7 +270,7 @@ public abstract class AbstractGame implements ApplicationListener {
 		batch.end();
 	}
 
-	protected void drawTimeLinePoints(Player player) {
+	public void drawTimeLinePoints(Player player) {
 		Vector2[] points = player.getTimeLinePoints();
 		if (points == null) {
 			return;
@@ -308,7 +301,7 @@ public abstract class AbstractGame implements ApplicationListener {
 
 		if (gameState == GameState.INPUT) {
 			shapeRenderer.setColor(255, 255, 255, 255);
-			List<Vector2> lineInProgress = inputListener.getLineBeingDrawn();
+			List<Vector2> lineInProgress = inputStrategy.getLineBeingDrawn();
 
 			for (int i = 0; i < lineInProgress.size() - 1; i++) {
 				Vector2 a = lineInProgress.get(i);
@@ -355,7 +348,7 @@ public abstract class AbstractGame implements ApplicationListener {
 		return blueScore;
 	}
 
-	protected void drawPlayerStats(SpriteBatch batch, Player player) {
+	public void drawPlayerStats(SpriteBatch batch, Player player) {
 		if (player == null) {
 			return;
 		}
@@ -537,8 +530,8 @@ public abstract class AbstractGame implements ApplicationListener {
 		return ball;
 	}
 
-	public void setInputListener(InputListener inputListener) {
-		this.inputListener = inputListener;
+	public void setInputStrategy(AbstractInputStrategy inputStrategy) {
+		this.inputStrategy = inputStrategy;
 	}
 
 	public void setSoundManager(SoundManager soundManager) {
@@ -554,7 +547,6 @@ public abstract class AbstractGame implements ApplicationListener {
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
 		clearActions();
-		inputListener.beginInputStage(getAllPlayers());
 		bar.setPositionToDown();
 	}
 
@@ -681,11 +673,9 @@ public abstract class AbstractGame implements ApplicationListener {
 			Gdx.app.exit();
 		} else if (gameState == GameState.PAUSED) {
 			gameState = gameStateToGoIntoWhenBackButtonPressed;
-			inputListener.exitPauseState();
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
-			inputListener.enterPauseState();
 		}
 		Log.i("GameState", gameState.toString());
 	}

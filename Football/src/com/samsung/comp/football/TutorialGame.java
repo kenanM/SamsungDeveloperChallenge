@@ -6,6 +6,10 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class TutorialGame extends AbstractGame {
 
+	enum TutorialPhase {
+		Move, Follow, Shoot, Pass, Mark
+	}
+
 	@Override
 	public void create() {
 
@@ -21,8 +25,6 @@ public class TutorialGame extends AbstractGame {
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
-
-		inputListener.initialise();
 
 		remainingMatchTime = 3 * 60;
 

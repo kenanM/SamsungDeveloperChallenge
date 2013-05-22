@@ -32,8 +32,6 @@ public class Game extends AbstractGame {
 
 		ai = new AI(this);
 
-		inputListener.initialise();
-
 		remainingMatchTime = 3 * 60;
 
 		beginInputStage();
