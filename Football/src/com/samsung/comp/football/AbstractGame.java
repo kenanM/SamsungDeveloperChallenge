@@ -569,6 +569,10 @@ public abstract class AbstractGame implements ApplicationListener {
 		return result;
 	}
 
+	public Player getSelectedPlayer() {
+		return inputStrategy.getSelectedPlayer();
+	}
+
 	public TeamColour getHumanColour() {
 		return humanColour;
 	}

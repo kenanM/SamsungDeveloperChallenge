@@ -157,4 +157,8 @@ public abstract class AbstractInputStrategy {
 		highlightedPlayer = null;
 	}
 
+	public Player getSelectedPlayer() {
+		return selectedPlayer;
+	}
+
 }

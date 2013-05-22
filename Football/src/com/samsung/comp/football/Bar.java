@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.samsung.comp.football.AbstractGame.GameState;
-import com.samsung.comp.football.Players.Player;
 
 public class Bar extends Rectangle {
 
@@ -21,7 +20,6 @@ public class Bar extends Rectangle {
 	private Texture cancelIcon;
 	private Texture cancelIconPressed;
 	private String text;
-	private Player selectedPlayer;
 
 	public enum Position {
 		UP, DOWN
@@ -42,8 +40,6 @@ public class Bar extends Rectangle {
 	private float fadeTimer = 0;
 	private float cancelActionsTimer = 0;
 	private float textCountdownTimer = 3;
-
-	private boolean showingCancelButton = false;
 
 	public Bar(AbstractGame game) {
 		this.game = game;
@@ -97,13 +93,13 @@ public class Bar extends Rectangle {
 			batch.draw(fadedIcon, offset, y);
 		}
 
-		if (showingCancelButton && fadeTimer > 0.2) {
+		if (isCancelButtonShown() && fadeTimer > 0.2) {
 			if (cancelActionsTimer < 1) {
 				batch.draw(cancelIconPressed, cancelIconX, y);
 			} else {
 				batch.draw(cancelIcon, cancelIconX, y);
 			}
-		} else if (showingCancelButton) {
+		} else if (isCancelButtonShown()) {
 			batch.draw(fadedIcon, cancelIconX, y);
 		}
 
@@ -136,23 +132,14 @@ public class Bar extends Rectangle {
 		fadeTimer = 0;
 	}
 
-	public void setSelectedPlayer(Player player) {
-		selectedPlayer = player;
-		if (selectedPlayer != null) {
-			showingCancelButton = true;
-		} else {
-			showingCancelButton = false;
-		}
-	}
-
 	public void onPress(float x, float y) {
 		if (getPlayIcon().contains(x, y)) {
 			playButtonPressed();
 
-		} else if (showingCancelButton && getCancelIcon().contains(x, y)) {
+		} else if (isCancelButtonShown() && getCancelIcon().contains(x, y)) {
 			// TODO (Gavin): Change this to be 'undo last action'
 			cancelActionsTimer = 0;
-			selectedPlayer.clearAction();
+			game.getSelectedPlayer().clearAction();
 		}
 	}
 
@@ -175,5 +162,9 @@ public class Bar extends Rectangle {
 		}
 
 		game.beginExecution();
+	}
+
+	private boolean isCancelButtonShown() {
+		return game.getSelectedPlayer() != null;
 	}
 }
