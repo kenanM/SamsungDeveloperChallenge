@@ -546,6 +546,7 @@ public abstract class AbstractGame implements ApplicationListener {
 
 	public void beginInputStage() {
 		gameState = GameState.INPUT;
+		inputStrategy.deselectPlayers();
 		clearActions();
 		bar.setPositionToDown();
 	}
