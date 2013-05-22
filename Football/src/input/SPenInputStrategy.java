@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.AbstractGame.GameState;
@@ -226,18 +225,6 @@ public class SPenInputStrategy extends AbstractInputStrategy implements
 			isBallHighlighted = findBall(game.translateInputToField(point));
 		}
 		return false;
-	}
-
-	public void draw(SpriteBatch batch) {
-		if (highlightedPlayer != null) {
-			highlightedPlayer.drawHighlight(batch);
-		}
-		if (selectedPlayer != null) {
-			selectedPlayer.drawSelect(batch);
-		}
-		if (isBallHighlighted) {
-			game.getBall().drawHighlight(batch);
-		}
 	}
 
 	@Override

@@ -140,6 +140,7 @@ public abstract class AbstractInputStrategy {
 		if (highlightedPlayer != null) {
 			highlightedPlayer.drawHighlight(batch);
 			game.drawTimeLinePoints(highlightedPlayer);
+			game.drawPlayerStats(batch, highlightedPlayer);
 		}
 		if (selectedPlayer != null) {
 			selectedPlayer.drawSelect(batch);
@@ -148,8 +149,6 @@ public abstract class AbstractInputStrategy {
 		if (isBallHighlighted) {
 			game.getBall().drawHighlight(batch);
 		}
-
-		game.drawPlayerStats(batch, selectedPlayer);
 
 	}
 
