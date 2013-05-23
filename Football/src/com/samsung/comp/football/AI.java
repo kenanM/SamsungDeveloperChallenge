@@ -138,7 +138,8 @@ public class AI {
 	}
 
 	/** Finds the player in the list nearest a given Vector */
-	public Player playerNearestVector(List<Player> listOfPlayers, Vector2 vector) {
+	private Player playerNearestVector(List<Player> listOfPlayers,
+			Vector2 vector) {
 		float minValue = Float.MAX_VALUE;
 		Player minPlayer = null;
 
