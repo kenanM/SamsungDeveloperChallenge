@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class TutorialGame extends AbstractGame {
@@ -26,7 +27,7 @@ public class TutorialGame extends AbstractGame {
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
 
-		remainingMatchTime = 3 * 60;
+		remainingMatchTime = 0;
 
 		beginInputStage();
 	}
@@ -66,6 +67,37 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	@Override
+	protected void update() {
+
+		float time = Gdx.graphics.getDeltaTime();
+		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
+
+		bar.update(time);
+
+		if (gameState == GameState.EXECUTION) {
+
+			totalTime += time;
+
+			for (Player player : getAllPlayers()) {
+				player.executeAction();
+				player.update(time);
+			}
+
+			ball.update(time);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+			tackleDetection(time);
+			goalScoredDetection();
+
+			if (totalTime >= ROUND_TIME) {
+				gameState = GameState.INPUT;
+				beginInputStage();
+			}
+
+		}
+	}
+
+	@Override
 	protected void goalScoredDetection() {
 		boolean goalScored = false;
 		if (RED_GOAL_AREA.contains(ball)) {
@@ -92,6 +124,11 @@ public class TutorialGame extends AbstractGame {
 			// TODO: Sound: blow whistle
 			// TODO: Sound: crowd cheer
 		}
+	}
+
+	@Override
+	public String getRemainingTime() {
+		return "--:--";
 	}
 
 	@Override
