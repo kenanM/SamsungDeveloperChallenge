@@ -113,6 +113,8 @@ public abstract class AbstractGame implements ApplicationListener {
 	public PauseMenu pauseMenu;
 	public Bar bar;
 
+	protected abstract void setStartingPositions(TeamColour centerTeam);
+
 	@Override
 	public void create() {
 
@@ -491,6 +493,7 @@ public abstract class AbstractGame implements ApplicationListener {
 			} else {
 				blueScore++;
 				goalScored = true;
+				setStartingPositions(TeamColour.RED);
 			}
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
 			if (ball.hasOwner() && ball.getOwner() == blueGoalie) {
@@ -498,6 +501,7 @@ public abstract class AbstractGame implements ApplicationListener {
 			} else {
 				redScore++;
 				goalScored = true;
+				setStartingPositions(TeamColour.BLUE);
 			}
 		}
 

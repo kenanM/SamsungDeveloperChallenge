@@ -37,7 +37,8 @@ public class Game extends AbstractGame {
 		beginInputStage();
 	}
 
-	private void setStartingPositions(TeamColour centerTeam) {
+	@Override
+	protected void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
 		redPlayers.get(2).y = Player.translatePlayerCoordinate(704);
@@ -162,35 +163,6 @@ public class Game extends AbstractGame {
 
 		drawSpriteBatch();
 		drawShapeRenderer();
-	}
-
-	@Override
-	protected void goalScoredDetection() {
-		boolean goalScored = false;
-		if (RED_GOAL_AREA.contains(ball)) {
-			if (ball.hasOwner() && ball.getOwner() == redGoalie) {
-				// do nothing
-			} else {
-				blueScore++;
-				goalScored = true;
-				setStartingPositions(TeamColour.RED);
-			}
-		} else if (BLUE_GOAL_AREA.contains(ball)) {
-			if (ball.hasOwner() && ball.getOwner() == blueGoalie) {
-				// do nothing
-			} else {
-				redScore++;
-				goalScored = true;
-				setStartingPositions(TeamColour.BLUE);
-			}
-		}
-
-		if (goalScored) {
-			beginInputStage();
-			goalScoredDrawTime = 3f;
-			// TODO: Sound: blow whistle
-			// TODO: Sound: crowd cheer
-		}
 	}
 
 	@Override
