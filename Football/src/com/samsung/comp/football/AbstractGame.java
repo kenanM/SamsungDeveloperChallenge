@@ -97,7 +97,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	protected Ball ball;
 
 	// TODO: Rename to elapsedRoundTime?
-	protected float totalTime = 0;
+	protected float elapsedRoundTime = 0;
 	protected float goalScoredDrawTime = 0f;
 	protected int redScore = 0;
 	protected int blueScore = 0;
@@ -416,7 +416,7 @@ public abstract class AbstractGame implements ApplicationListener {
 
 		if (gameState == GameState.EXECUTION) {
 
-			totalTime += time;
+			elapsedRoundTime += time;
 
 			remainingMatchTime -= time;
 
@@ -431,7 +431,7 @@ public abstract class AbstractGame implements ApplicationListener {
 			tackleDetection(time);
 			goalScoredDetection();
 
-			if (totalTime >= ROUND_TIME) {
+			if (elapsedRoundTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
 				beginInputStage();
 			}
@@ -562,7 +562,7 @@ public abstract class AbstractGame implements ApplicationListener {
 
 	public void beginExecution() {
 		Log.i("Game", "Beginning execution");
-		totalTime = 0;
+		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		ai.getComputerActions();
 		bar.setPositionToUp();

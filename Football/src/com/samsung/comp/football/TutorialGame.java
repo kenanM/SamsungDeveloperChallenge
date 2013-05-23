@@ -77,7 +77,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (gameState == GameState.EXECUTION) {
 
-			totalTime += time;
+			elapsedRoundTime += time;
 
 			for (Player player : getAllPlayers()) {
 				player.executeAction();
@@ -92,7 +92,7 @@ public class TutorialGame extends AbstractGame {
 				goalScoredDetection();
 			}
 
-			if (totalTime >= ROUND_TIME) {
+			if (elapsedRoundTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
 				beginInputStage();
 			}
