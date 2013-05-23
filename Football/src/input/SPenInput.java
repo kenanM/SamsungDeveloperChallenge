@@ -44,13 +44,7 @@ public class SPenInput extends AbstractInput implements
 		float x = eventVector.x;
 		float y = eventVector.y;
 
-		if (game.getGameState() == GameState.PAUSED) {
-			game.pauseMenu.onPress(x, y);
-		}
-
-		if (game.getGameState() == GameState.INPUT) {
-			game.getBar().onPress(x, y);
-		}
+		game.onPress(x, y);
 		return false;
 	}
 
@@ -60,15 +54,7 @@ public class SPenInput extends AbstractInput implements
 		Vector2 eventVector = game.translateInputToField(new Vector2(event
 				.getX(), event.getY()));
 
-		if (game.getGameState() == GameState.PAUSED) {
-			game.pauseMenu.onPress(eventVector.x, eventVector.y);
-		}
-
-
-		if (game.getBar() != null
-				&& game.getBar().contains(eventVector.x, eventVector.y)) {
-			game.getBar().fade();
-		}
+		game.onPress(eventVector.x, eventVector.y);
 
 		if (game.getGameState() == GameState.INPUT) {
 			int action = event.getAction();

@@ -33,7 +33,7 @@ import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
-public abstract class AbstractGame implements ApplicationListener {
+public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	protected int result;
 
@@ -110,7 +110,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	protected TeamColour computerColour;
 
 	protected AI ai;
-	public PauseMenu pauseMenu;
+	public TextArea textArea;
 	public Bar bar;
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
@@ -146,7 +146,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	}
 
 	protected void createUI() {
-		pauseMenu = new PauseMenu(this);
+		textArea = new TextArea(this);
 		bar = new Bar(this);
 	}
 
@@ -261,7 +261,7 @@ public abstract class AbstractGame implements ApplicationListener {
 		ball.draw(batch);
 
 		if (gameState == GameState.PAUSED) {
-			pauseMenu.draw(batch);
+			textArea.draw(batch);
 		}
 
 		batch.end();
@@ -630,6 +630,21 @@ public abstract class AbstractGame implements ApplicationListener {
 		double vx = (vector.x / scaleFactor) - xOffset;
 		double vy = (vector.y / scaleFactor) - yOffset;
 		return new Vector2((float) vx, (float) vy);
+	}
+
+	public void onPress(float x, float y) {
+		if (getGameState() == GameState.PAUSED) {
+			textArea.onPress(x, y);
+		}
+
+		if (getGameState() == GameState.INPUT) {
+			bar.onPress(x, y);
+		}
+	}
+
+	@Override
+	public void observerUpdate() {
+		gameState = gameStateToGoIntoWhenBackButtonPressed;
 	}
 
 	@Override

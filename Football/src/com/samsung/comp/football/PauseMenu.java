@@ -7,40 +7,42 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-public class PauseMenu {
+public class PauseMenu extends TextArea {
 
-	private static Texture pauseTexture;
-	private static Texture quitGameTexture;
-	private AbstractGame game;
+	private static Texture quitButtonTexture;
 	private static Rectangle quitButton;
 
-	public PauseMenu(AbstractGame game) {
-		this.game = game;
-		pauseTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
-		quitGameTexture = new Texture(Gdx.files.internal("quitGame.png"));
+	public PauseMenu() {
+		areaTexture = new Texture(Gdx.files.internal("pauseScreen.png"));
+		quitButtonTexture = new Texture(Gdx.files.internal("quitGame.png"));
 		quitButton = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH / 2
-				- quitGameTexture.getWidth() / 2,
-				Game.VIRTUAL_SCREEN_HEIGHT / 2, quitGameTexture.getWidth(),
-				quitGameTexture.getHeight());
+				- quitButtonTexture.getWidth() / 2,
+				Game.VIRTUAL_SCREEN_HEIGHT / 2, quitButtonTexture.getWidth(),
+				quitButtonTexture.getHeight());
+
+		this.x = Game.VIRTUAL_SCREEN_WIDTH / 2 - areaTexture.getWidth() / 2;
+		this.y = Game.VIRTUAL_SCREEN_HEIGHT / 2 - areaTexture.getHeight() / 2;
+		this.width = areaTexture.getWidth();
+		this.height = areaTexture.getHeight();
 	}
 
+	@Override
 	public void draw(SpriteBatch batch) {
-		batch.draw(pauseTexture,
-				Game.VIRTUAL_SCREEN_WIDTH / 2 - pauseTexture.getWidth() / 2,
-				Game.VIRTUAL_SCREEN_HEIGHT / 2 - pauseTexture.getHeight() / 2,
-				pauseTexture.getWidth(), pauseTexture.getHeight());
-		batch.draw(quitGameTexture, Game.VIRTUAL_SCREEN_WIDTH / 2
-				- quitGameTexture.getWidth() / 2,
-				Game.VIRTUAL_SCREEN_HEIGHT / 2, quitGameTexture.getWidth(),
-				quitGameTexture.getHeight());
+		batch.draw(areaTexture, x, y, width, height);
+		batch.draw(quitButtonTexture, Game.VIRTUAL_SCREEN_WIDTH / 2
+				- quitButtonTexture.getWidth() / 2,
+				Game.VIRTUAL_SCREEN_HEIGHT / 2, quitButtonTexture.getWidth(),
+				quitButtonTexture.getHeight());
 	}
 
+	@Override
 	public void onPress(float x, float y) {
 
 		Log.i("PauseMenu", x + ", " + y);
 
 		if (quitButton.contains(x, y)) {
 			Gdx.app.exit();
+			// notifyObserver();
 		}
 	}
 }
