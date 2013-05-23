@@ -166,6 +166,7 @@ public class Bar extends Rectangle {
 	}
 
 	private boolean isCancelButtonShown() {
-		return game.getSelectedPlayer() != null;
+		return (game.getSelectedPlayer() != null && game.getSelectedPlayer()
+				.getAction() != null);
 	}
 }
