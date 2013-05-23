@@ -95,7 +95,6 @@ public abstract class Player extends Rectangle {
 		} else {
 			this.action.addNextAction(newAction);
 		}
-
 	}
 
 	public Action getAction(int index) throws IndexOutOfBoundsException {
@@ -220,7 +219,7 @@ public abstract class Player extends Rectangle {
 		return positionInPath;
 	}
 
-	public void clearAction() {
+	public void clearActions() {
 		if (this.action != null) {
 			this.action.clearSubsequentActions();
 		}
@@ -232,7 +231,7 @@ public abstract class Player extends Rectangle {
 	}
 
 	public void reset() {
-		clearAction();
+		clearActions();
 		resetPathIndex();
 		path = null;
 	}

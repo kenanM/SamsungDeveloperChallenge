@@ -139,7 +139,7 @@ public class Bar extends Rectangle {
 		} else if (isCancelButtonShown() && getCancelIcon().contains(x, y)) {
 			// TODO (Gavin): Change this to be 'undo last action'
 			cancelActionsTimer = 0;
-			game.getSelectedPlayer().clearAction();
+			game.getSelectedPlayer().clearActions();
 		}
 	}
 
@@ -153,6 +153,7 @@ public class Bar extends Rectangle {
 			return;
 		}
 
+		// TODO: this implementation...ewww. Also can still hold via long runs.
 		if (game.getHumanGoalie().hasBall()) {
 			if (!game.getHumanGoalie().kicksBall()) {
 				game.getBar().setText("Goalie cannot hold onto the ball");
