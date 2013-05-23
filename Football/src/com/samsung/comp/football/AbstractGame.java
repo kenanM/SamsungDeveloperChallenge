@@ -1,6 +1,6 @@
 package com.samsung.comp.football;
 
-import input.AbstractInputStrategy;
+import input.AbstractInput;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -102,7 +102,7 @@ public abstract class AbstractGame implements ApplicationListener {
 	protected int redScore = 0;
 	protected int blueScore = 0;
 
-	protected AbstractInputStrategy inputStrategy;
+	protected AbstractInput inputStrategy;
 	protected LibGDXInput input;
 	protected SoundManager soundManager;
 
@@ -535,7 +535,7 @@ public abstract class AbstractGame implements ApplicationListener {
 		return ball;
 	}
 
-	public void setInputStrategy(AbstractInputStrategy inputStrategy) {
+	public void setInputStrategy(AbstractInput inputStrategy) {
 		this.inputStrategy = inputStrategy;
 	}
 

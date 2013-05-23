@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Players.Player;
 
-public abstract class AbstractInputStrategy {
+public abstract class AbstractInput {
 
 	protected static final String TAG = "AbstractInputStrategy";
 

@@ -17,12 +17,12 @@ import com.samsung.comp.football.Players.Player;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 
-public class SPenInputStrategy extends AbstractInputStrategy implements
+public class SPenInput extends AbstractInput implements
 		SPenTouchListener, SPenHoverListener {
 
 	private static final String TAG = "GameInputStrategy";
 
-	public SPenInputStrategy(AbstractGame game) {
+	public SPenInput(AbstractGame game) {
 		this.game = game;
 	}
 
