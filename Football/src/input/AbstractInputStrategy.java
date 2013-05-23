@@ -26,35 +26,6 @@ public abstract class AbstractInputStrategy {
 		return new ArrayList<Vector2>(lineInProgress);
 	}
 
-	// protected void addPassToPlayer(Player player) {
-	// selectedPlayer.addAction(new Pass(game.getBall(), selectedPlayer,
-	// player, selectedPlayer.getBallPosition()));
-	// }
-	//
-	// protected void addMarkPlayer(Player player) {
-	// selectedPlayer.addAction(new Mark(selectedPlayer, player));
-	// }
-	//
-	// protected void addFollowBall(Player player) {
-	// selectedPlayer.addAction(new MarkBall(selectedPlayer
-	// .getPlayerPosition(), game.getBall()));
-	// }
-	//
-	// protected void addKick(Player player, Vector2 target) {
-	// selectedPlayer.addAction(new Kick(game.getBall(), target,
-	// selectedPlayer.getBallPosition()));
-	// }
-	//
-	// protected void highlightPlayer(Player player) {
-	// if (game.getGameState() == GameState.INPUT) {
-	// highlightedPlayer = player;
-	// }
-	// }
-	//
-	// protected void setIsBallHighlighted(boolean bool) {
-	// isBallHighlighted = bool;
-	// }
-
 	/**
 	 * Finds a player that overlaps or is near a point, returns null if no
 	 * player found.

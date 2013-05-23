@@ -153,7 +153,8 @@ public class Bar extends Rectangle {
 			return;
 		}
 
-		// TODO: this implementation...ewww. Also can still hold via long runs.
+		// TODO: this implementation...ewww. Also can still hold ball via long
+		// runs.
 		if (game.getHumanGoalie().hasBall()) {
 			if (!game.getHumanGoalie().kicksBall()) {
 				game.getBar().setText("Goalie cannot hold onto the ball");

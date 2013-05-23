@@ -135,7 +135,6 @@ public abstract class AbstractGame implements ApplicationListener {
 
 	protected void createRenderingObjects() {
 		// create the camera and the SpriteBatch
-		// TODO these are not necessarily the dimensions we want.
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
@@ -247,9 +246,6 @@ public abstract class AbstractGame implements ApplicationListener {
 				drawActions(player.getAction(), batch);
 			}
 
-			/**
-			 * TODO: Switch to AbstractInputStrategy
-			 */
 			inputStrategy.draw(batch);
 
 		} else {

@@ -36,7 +36,6 @@ public class Move extends Action {
 	}
 
 	public static void create(Texture texture) {
-		// TODO this should override a super method.
 		TEXTURE = texture;
 	}
 
