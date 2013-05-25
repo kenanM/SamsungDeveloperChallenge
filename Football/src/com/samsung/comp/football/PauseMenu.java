@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -27,7 +28,7 @@ public class PauseMenu extends TextArea {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, BitmapFont bmf) {
 		batch.draw(areaTexture, x, y, width, height);
 		batch.draw(quitButtonTexture, Game.VIRTUAL_SCREEN_WIDTH / 2
 				- quitButtonTexture.getWidth() / 2,

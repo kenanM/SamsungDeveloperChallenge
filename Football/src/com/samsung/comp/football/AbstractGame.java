@@ -263,10 +263,12 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 			player.draw(batch);
 		}
 
-		ball.draw(batch);
+		if (ball != null) {
+			ball.draw(batch);
+		}
 
 		if (gameState == GameState.PAUSED) {
-			textAreaFactory().draw(batch);
+			textAreaFactory().draw(batch, bmf);
 		}
 
 		batch.end();
@@ -557,7 +559,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 		}
 	}
 
-	public void beginInputStage() {
+	protected void beginInputStage() {
 		gameState = GameState.INPUT;
 		inputStrategy.deselectPlayers();
 		clearActions();
@@ -575,10 +577,18 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	public List<Player> getAllPlayers() {
 		List<Player> result = new LinkedList<Player>();
-		result.addAll(redPlayers);
-		result.add(redGoalie);
-		result.addAll(bluePlayers);
-		result.add(blueGoalie);
+		if (redPlayers != null) {
+			result.addAll(redPlayers);
+		}
+		if (redGoalie != null) {
+			result.add(redGoalie);
+		}
+		if (bluePlayers != null) {
+			result.addAll(bluePlayers);
+		}
+		if (blueGoalie != null) {
+			result.add(blueGoalie);
+		}
 		return result;
 	}
 

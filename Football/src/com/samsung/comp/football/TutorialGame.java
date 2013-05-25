@@ -8,8 +8,10 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 public class TutorialGame extends AbstractGame {
 
 	enum TutorialPhase {
-		Move, Follow, Shoot, Pass, Mark
+		MOVE, FOLLOW, SHOOT, PASS, MARK, QUEUEING, GOALIE,
 	}
+
+	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 
 	@Override
 	public void create() {
@@ -44,6 +46,33 @@ public class TutorialGame extends AbstractGame {
 		// create the players
 
 
+	}
+
+	@Override
+	protected void beginInputStage() {
+		gameState = GameState.INPUT;
+		inputStrategy.deselectPlayers();
+		clearActions();
+		bar.setPositionToDown();
+		
+		if (tutorialPhase == TutorialPhase.MOVE) {
+			textArea.setText("Welcome to the tutorial. This game is separated into phases. "
+					+ "Draw a line from your player to give them the command to move. "
+					+ "Press the play button with your finger when you want them to carry out your order.");
+		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+			textArea.setText("Welcome");
+		} else if (tutorialPhase == TutorialPhase.SHOOT) {
+			textArea.setText("Welcome");
+		} else if (tutorialPhase == TutorialPhase.PASS) {
+			textArea.setText("Welcome");
+		} else if (tutorialPhase == TutorialPhase.MARK) {
+			textArea.setText("Welcome");
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+			textArea.setText("Welcome");
+		} else if (tutorialPhase == TutorialPhase.GOALIE) {
+			textArea.setText("Welcome");
+		}
+		textAreaTypeDisplayed = 0;
 	}
 
 	@Override

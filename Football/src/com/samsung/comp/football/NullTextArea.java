@@ -1,5 +1,6 @@
 package com.samsung.comp.football;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class NullTextArea extends TextArea {
@@ -20,7 +21,7 @@ public class NullTextArea extends TextArea {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, BitmapFont bmf) {
 	}
 
 	@Override

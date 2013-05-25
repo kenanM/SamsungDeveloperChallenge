@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -9,7 +10,7 @@ public class TextArea extends Rectangle implements Observable {
 
 	private static final long serialVersionUID = 1L;
 	protected Texture areaTexture;
-	protected String text;
+	protected String text = "NO TEXT";
 	// normally a list of observers
 	protected Observer observer;
 
@@ -58,14 +59,20 @@ public class TextArea extends Rectangle implements Observable {
 		}
 	}
 
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, BitmapFont bmf) {
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
 				areaTexture.getHeight());
+
+		bmf.drawWrapped(batch, text, x + 30, y + 45, width);
 	}
 
 	public void onPress(float x, float y) {
 		if (this.contains(x, y)) {
 			notifyCanClose();
 		}
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 }
