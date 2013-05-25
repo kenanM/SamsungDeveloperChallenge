@@ -60,8 +60,12 @@ public class TutorialGame extends AbstractGame {
 		if (tutorialPhase == TutorialPhase.MOVE) {
 			if (bluePlayers.get(0).getPlayerY() >= VIRTUAL_SCREEN_HEIGHT / 2) {
 				tutorialPhase = TutorialPhase.FOLLOW;
+				createNewBall();
 			}
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+			if (bluePlayers.get(0).hasBall()) {
+				tutorialPhase = TutorialPhase.SHOOT;
+			}
 
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 
@@ -76,6 +80,10 @@ public class TutorialGame extends AbstractGame {
 
 	}
 
+	private void createNewBall() {
+		ball = new Ball(VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
+	}
+
 	protected void displayTutorialMessage() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
 			textArea.setText("Welcome to the tutorial. This game is separated into 5 second intervals.\n"
@@ -83,6 +91,7 @@ public class TutorialGame extends AbstractGame {
 					+ "Press the play button with your finger when you want them to carry out your order.\n\n"
 					+ "Try moving this player to the bottom half of the pitch.\n\n"
 					+ "Tap or press back to close this window. ");
+			// Phase 1
 			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			textArea.setText("Nice. ");
