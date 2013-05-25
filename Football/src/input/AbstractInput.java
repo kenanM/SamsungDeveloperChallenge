@@ -98,7 +98,7 @@ public abstract class AbstractInput {
 	}
 
 	protected boolean isSelectable(Player player) {
-		if (game.getHumanGoalie().hasBall()) {
+		if (game.getHumanGoalie().hasBall() && game.getHumanGoalie() == player) {
 			return true;
 		}
 		if (game.getHumanPlayers().contains(player)) {
