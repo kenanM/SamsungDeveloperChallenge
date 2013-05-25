@@ -727,7 +727,9 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	/**
 	 * Returns the TextArea or pauseMenu based on the stored type value. Used to
-	 * get what is being displayed.
+	 * get what is being displayed. Can replace the textAreaTypeDisplayed field
+	 * with a single textArea field but may cause performance hit to android
+	 * (worth checking).
 	 * 
 	 * @return
 	 */
