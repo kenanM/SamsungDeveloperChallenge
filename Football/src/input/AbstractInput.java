@@ -92,17 +92,25 @@ public abstract class AbstractInput {
 	 *          FIELD COORDINATES
 	 */
 	protected boolean findBall(Vector2 point) {
+		if (game.getBall() == null) {
+			return false;
+		}
+
 		return (game.getBall().getBallPosition().epsilonEquals(point,
 				INPUT_EPSILON_VALUE)) ? true
 				: false;
 	}
 
 	protected boolean isSelectable(Player player) {
-		if (game.getHumanGoalie().hasBall() && game.getHumanGoalie() == player) {
-			return true;
-		}
 		if (game.getHumanPlayers().contains(player)) {
 			return true;
+		}
+
+		if (game.getHumanGoalie() != null) {
+			if (game.getHumanGoalie().hasBall()
+					&& game.getHumanGoalie() == player) {
+				return true;
+			}
 		}
 		return false;
 	}
