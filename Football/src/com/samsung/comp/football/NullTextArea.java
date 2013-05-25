@@ -16,7 +16,7 @@ public class NullTextArea extends TextArea {
 	}
 
 	@Override
-	public void notifyObserver() {
+	public void notifyCanClose() {
 	}
 
 	@Override

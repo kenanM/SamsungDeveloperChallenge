@@ -647,7 +647,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 	}
 
 	@Override
-	public void observerUpdate() {
+	public void onNotifyCanClose() {
 		gameState = gameStateToGoIntoWhenBackButtonPressed;
 		textAreaTypeDisplayed = -1;
 	}

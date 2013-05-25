@@ -52,9 +52,9 @@ public class TextArea extends Rectangle implements Observable {
 	}
 
 	@Override
-	public void notifyObserver() {
+	public void notifyCanClose() {
 		if (observer != null) {
-			observer.observerUpdate();
+			observer.onNotifyCanClose();
 		}
 	}
 
@@ -65,7 +65,7 @@ public class TextArea extends Rectangle implements Observable {
 
 	public void onPress(float x, float y) {
 		if (this.contains(x, y)) {
-			notifyObserver();
+			notifyCanClose();
 		}
 	}
 }
