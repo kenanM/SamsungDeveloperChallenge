@@ -110,7 +110,10 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 	protected TeamColour computerColour;
 
 	protected AI ai;
-	public TextArea textArea;
+	protected int textAreaTypeDisplayed = -1;
+	protected PauseMenu pauseMenu;
+	protected TextArea textArea;
+	protected NullTextArea nullTextArea;
 	public Bar bar;
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
@@ -146,7 +149,9 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 	}
 
 	protected void createUI() {
+		pauseMenu = new PauseMenu();
 		textArea = new TextArea(this);
+		nullTextArea = new NullTextArea();
 		bar = new Bar(this);
 	}
 
@@ -261,7 +266,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 		ball.draw(batch);
 
 		if (gameState == GameState.PAUSED) {
-			textArea.draw(batch);
+			textAreaFactory().draw(batch);
 		}
 
 		batch.end();
@@ -415,7 +420,6 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 		bar.update(time);
 
 		if (gameState == GameState.EXECUTION) {
-
 			elapsedRoundTime += time;
 
 			remainingMatchTime -= time;
@@ -634,7 +638,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	public void onPress(float x, float y) {
 		if (getGameState() == GameState.PAUSED) {
-			textArea.onPress(x, y);
+			textAreaFactory().onPress(x, y);
 		}
 
 		if (getGameState() == GameState.INPUT) {
@@ -645,6 +649,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 	@Override
 	public void observerUpdate() {
 		gameState = gameStateToGoIntoWhenBackButtonPressed;
+		textAreaTypeDisplayed = -1;
 	}
 
 	@Override
@@ -702,11 +707,14 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 			Gdx.app.exit();
 		} else if (gameState == GameState.PAUSED) {
 			gameState = gameStateToGoIntoWhenBackButtonPressed;
+			textAreaTypeDisplayed = -1;
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
+			textAreaTypeDisplayed = 1;
 		}
 		Log.i("GameState", gameState.toString());
+
 	}
 
 	@Override
@@ -715,6 +723,25 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	@Override
 	public void resume() {
+	}
+
+	/**
+	 * Returns the TextArea or pauseMenu based on the stored type value. Used to
+	 * get what is being displayed.
+	 * 
+	 * @return
+	 */
+	protected TextArea textAreaFactory() {
+		if (textAreaTypeDisplayed < 0) {
+			return nullTextArea;
+		}
+		if (textAreaTypeDisplayed == 0) {
+			return textArea;
+		}
+		if (textAreaTypeDisplayed == 1) {
+			return pauseMenu;
+		}
+		return null;
 	}
 
 }
