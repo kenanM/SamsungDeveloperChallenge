@@ -51,24 +51,51 @@ public class TutorialGame extends AbstractGame {
 		clearActions();
 		bar.setPositionToDown();
 		
+		checkPhaseCompletion();
+		displayTutorialMessage();
+	}
+
+	// If these get complex then refactor to use state objects.
+	private void checkPhaseCompletion() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
-			textArea.setText("Welcome to the tutorial. This game is separated into 5 second intervals. "
-					+ "Draw a line from your player to give them the command to move. "
-					+ "Press the play button with your finger when you want them to carry out your order. "
+			if (bluePlayers.get(0).getPlayerY() >= VIRTUAL_SCREEN_HEIGHT / 2) {
+				tutorialPhase = TutorialPhase.FOLLOW;
+			}
+		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+
+		} else if (tutorialPhase == TutorialPhase.SHOOT) {
+
+		} else if (tutorialPhase == TutorialPhase.PASS) {
+
+		} else if (tutorialPhase == TutorialPhase.MARK) {
+
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+		} else if (tutorialPhase == TutorialPhase.GOALIE) {
+
+		}
+
+	}
+
+	protected void displayTutorialMessage() {
+		if (tutorialPhase == TutorialPhase.MOVE) {
+			textArea.setText("Welcome to the tutorial. This game is separated into 5 second intervals.\n"
+					+ "Draw a line from your player to give them a path to follow.\n"
+					+ "Press the play button with your finger when you want them to carry out your order.\n\n"
+					+ "Try moving this player to the bottom half of the pitch.\n\n"
 					+ "Tap or press back to close this window. ");
 			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
-			textArea.setText("Welcome");
+			textArea.setText("Nice. ");
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-			textArea.setText("Welcome");
+			textArea.setText("Shooting");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-			textArea.setText("Welcome");
+			textArea.setText("Passing");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
-			textArea.setText("Welcome");
+			textArea.setText("Marking");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-			textArea.setText("Welcome");
+			textArea.setText("Queueing actions.");
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
-			textArea.setText("Welcome");
+			textArea.setText("The goal keeper.");
 		}
 		textAreaTypeDisplayed = 0;
 		gameState = GameState.PAUSED;
