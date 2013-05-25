@@ -270,7 +270,9 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 		}
 
 		if (gameState == GameState.PAUSED) {
+			bmf.scale(.22f);
 			textAreaFactory().draw(batch, bmf);
+			bmf.scale(-.22f);
 		}
 
 		batch.end();
