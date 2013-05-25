@@ -63,7 +63,7 @@ public class TextArea extends Rectangle implements Observable {
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
 				areaTexture.getHeight());
 
-		bmf.drawWrapped(batch, text, x + 30, y + 45, width);
+		bmf.drawWrapped(batch, text, x + 30, y + 45, width - 45);
 	}
 
 	public void onPress(float x, float y) {

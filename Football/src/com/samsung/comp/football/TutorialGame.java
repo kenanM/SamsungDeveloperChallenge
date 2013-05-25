@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
@@ -29,7 +30,7 @@ public class TutorialGame extends AbstractGame {
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
 
-		remainingMatchTime = 0;
+		remainingMatchTime = ROUND_TIME;
 
 		beginInputStage();
 	}
@@ -40,12 +41,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void createNewPlayersAndBall() {
-
-		// Create a ball
-
-		// create the players
-
-
+		bluePlayers.add(new BluePlayer(338, 256));
 	}
 
 	@Override
@@ -56,9 +52,10 @@ public class TutorialGame extends AbstractGame {
 		bar.setPositionToDown();
 		
 		if (tutorialPhase == TutorialPhase.MOVE) {
-			textArea.setText("Welcome to the tutorial. This game is separated into phases. "
+			textArea.setText("Welcome to the tutorial. This game is separated into 5 second intervals. "
 					+ "Draw a line from your player to give them the command to move. "
-					+ "Press the play button with your finger when you want them to carry out your order.");
+					+ "Press the play button with your finger when you want them to carry out your order. "
+					+ "Tap or press back to close this window. ");
 			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			textArea.setText("Welcome");
@@ -89,6 +86,7 @@ public class TutorialGame extends AbstractGame {
 
 	@Override
 	public void beginExecution() {
+		remainingMatchTime = ROUND_TIME;
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		bar.setPositionToUp();
@@ -126,6 +124,7 @@ public class TutorialGame extends AbstractGame {
 		if (gameState == GameState.EXECUTION) {
 
 			elapsedRoundTime += time;
+			remainingMatchTime -= time;
 
 			for (Player player : getAllPlayers()) {
 				player.executeAction();
@@ -148,10 +147,6 @@ public class TutorialGame extends AbstractGame {
 		}
 	}
 
-	@Override
-	public String getRemainingTime() {
-		return "--:--";
-	}
 
 	@Override
 	public void dispose() {
