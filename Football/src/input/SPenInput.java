@@ -54,12 +54,16 @@ public class SPenInput extends AbstractInput implements
 		Vector2 eventVector = game.translateInputToField(new Vector2(event
 				.getX(), event.getY()));
 
+		int action = event.getAction();
+		if (action == MotionEvent.ACTION_DOWN) {
+			game.onPress(eventVector.x, eventVector.y);
+		}
+
 		if (game.getGameState() == GameState.INPUT) {
-			int action = event.getAction();
+
 			if (action == MotionEvent.ACTION_DOWN) {
 				lineInProgress.clear();
 				lineInProgress.add(eventVector);
-				game.onPress(eventVector.x, eventVector.y);
 				return true;
 			}
 
