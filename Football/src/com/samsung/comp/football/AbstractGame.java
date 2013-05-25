@@ -83,6 +83,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	protected static Random rng;
 	protected GameState gameState = GameState.EXECUTION;
+	// TODO: This needs to go. Replace with separate pause / not paused enum.
 	protected GameState gameStateToGoIntoWhenBackButtonPressed = GameState.PAUSED;
 	protected float remainingMatchTime;
 	protected SpriteBatch batch;
@@ -110,6 +111,7 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 	protected TeamColour computerColour;
 
 	protected AI ai;
+	// TODO: This also needs to go if it can take the performance hit.
 	protected int textAreaTypeDisplayed = -1;
 	protected PauseMenu pauseMenu;
 	protected TextArea textArea;

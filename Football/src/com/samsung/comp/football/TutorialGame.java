@@ -75,6 +75,7 @@ public class TutorialGame extends AbstractGame {
 		}
 		textAreaTypeDisplayed = 0;
 		gameState = GameState.PAUSED;
+		gameStateToGoIntoWhenBackButtonPressed = GameState.INPUT;
 	}
 
 	@Override
