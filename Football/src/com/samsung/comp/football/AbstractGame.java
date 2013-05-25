@@ -727,6 +727,24 @@ public abstract class AbstractGame implements ApplicationListener, Observer {
 
 	}
 
+	public void playButtonPressed() {
+		if (getGameState() == GameState.PAUSED) {
+			return;
+		}
+
+		// TODO: this implementation...ewww. Also can still hold ball via long
+		// runs.
+		if (getHumanGoalie().hasBall()) {
+			if (!getHumanGoalie().kicksBall()) {
+				getBar().setText("Goalie cannot hold onto the ball");
+				Log.i("Game", "Goalie needs to kick the ball");
+				return;
+			}
+		}
+
+		beginExecution();
+	}
+
 	@Override
 	public void pause() {
 	}

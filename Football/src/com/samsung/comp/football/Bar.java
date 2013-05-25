@@ -1,13 +1,10 @@
 package com.samsung.comp.football;
 
-import android.util.Log;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.samsung.comp.football.AbstractGame.GameState;
 
 public class Bar extends Rectangle {
 
@@ -134,7 +131,7 @@ public class Bar extends Rectangle {
 
 	public void onPress(float x, float y) {
 		if (getPlayIcon().contains(x, y)) {
-			playButtonPressed();
+			game.playButtonPressed();
 
 		} else if (isCancelButtonShown() && getCancelIcon().contains(x, y)) {
 			// TODO (Gavin): Change this to be 'undo last action'
@@ -146,24 +143,6 @@ public class Bar extends Rectangle {
 	public void setText(String string) {
 		text = string;
 		textCountdownTimer = 0;
-	}
-
-	public void playButtonPressed() {
-		if (game.getGameState() == GameState.PAUSED) {
-			return;
-		}
-
-		// TODO: this implementation...ewww. Also can still hold ball via long
-		// runs.
-		if (game.getHumanGoalie().hasBall()) {
-			if (!game.getHumanGoalie().kicksBall()) {
-				game.getBar().setText("Goalie cannot hold onto the ball");
-				Log.i("Game", "Goalie needs to kick the ball");
-				return;
-			}
-		}
-
-		game.beginExecution();
 	}
 
 	private boolean isCancelButtonShown() {

@@ -59,6 +59,7 @@ public class TutorialGame extends AbstractGame {
 			textArea.setText("Welcome to the tutorial. This game is separated into phases. "
 					+ "Draw a line from your player to give them the command to move. "
 					+ "Press the play button with your finger when you want them to carry out your order.");
+			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			textArea.setText("Welcome");
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
@@ -73,6 +74,22 @@ public class TutorialGame extends AbstractGame {
 			textArea.setText("Welcome");
 		}
 		textAreaTypeDisplayed = 0;
+		gameState = GameState.PAUSED;
+	}
+
+	@Override
+	public void playButtonPressed() {
+		if (gameState == GameState.PAUSED) {
+			return;
+		}
+
+		beginExecution();
+	}
+
+	@Override
+	public void beginExecution() {
+		this.gameState = GameState.EXECUTION;
+		bar.setPositionToUp();
 	}
 
 	@Override
