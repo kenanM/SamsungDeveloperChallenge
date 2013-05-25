@@ -14,6 +14,7 @@ import com.samsung.comp.football.R;
 
 public class MainApplication extends Activity {
 
+	Button startTutorialButton;
 	Button startGameButton;
 	Button howToPlay;
 	Button aboutUs;
@@ -32,6 +33,15 @@ public class MainApplication extends Activity {
 				AudioManager.MODE_NORMAL);
 
 		setContentView(R.layout.activity_main);
+
+		startTutorialButton = (Button) findViewById(R.id.startTutorialGame);
+		startTutorialButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainApplication.this,
+						TutorialGameActivity.class));
+			}
+		});
 
 		startGameButton = (Button) findViewById(R.id.startGame);
 		startGameButton.setOnClickListener(new OnClickListener() {

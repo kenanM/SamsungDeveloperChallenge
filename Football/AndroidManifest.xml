@@ -22,6 +22,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".TitleScreen.TutorialGameActivity"
+            android:label="Football"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".TitleScreen.GameActivity"
             android:label="Football"
             android:screenOrientation="portrait" >

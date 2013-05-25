@@ -8,5 +8,6 @@
     <string name="about_us">About Us</string>
     <string name="stringOne">This is where the first set of instructions go.</string>
     <string name="stringTwo">This is where the second set of instructions go.</string>
+    <string name="start_tutorial">Start Tutorial</string>
 
 </resources>
