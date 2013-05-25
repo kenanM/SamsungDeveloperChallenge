@@ -89,6 +89,7 @@ public class TutorialGame extends AbstractGame {
 
 	@Override
 	public void beginExecution() {
+		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		bar.setPositionToUp();
 	}
