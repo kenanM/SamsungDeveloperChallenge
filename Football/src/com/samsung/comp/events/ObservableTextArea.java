@@ -1,4 +1,4 @@
-package events;
+package com.samsung.comp.events;
 
 
 public interface ObservableTextArea extends Observable {

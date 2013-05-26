@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.events.TextAreaObserver;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
@@ -33,7 +34,6 @@ import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
-import events.TextAreaObserver;
 
 public abstract class AbstractGame implements ApplicationListener, TextAreaObserver {
 

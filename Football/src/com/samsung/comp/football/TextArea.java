@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.samsung.comp.events.ObservableTextArea;
+import com.samsung.comp.events.TextAreaObserver;
 
-import events.ObservableTextArea;
-import events.TextAreaObserver;
 
 public class TextArea extends Rectangle implements ObservableTextArea {
 

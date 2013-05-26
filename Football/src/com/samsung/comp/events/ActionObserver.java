@@ -1,4 +1,4 @@
-package events;
+package com.samsung.comp.events;
 
 import com.samsung.comp.football.Actions.Action;
 

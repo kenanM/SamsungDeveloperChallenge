@@ -239,6 +239,7 @@ public abstract class Player extends Rectangle {
 	public void executeAction() {
 		if (action != null) {
 			action.execute(this);
+			// TODO: Fire event(action)
 		}
 	}
 
