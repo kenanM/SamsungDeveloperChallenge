@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.events.ActionFiredObserver;
+import com.samsung.comp.events.ObservableActionFired;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
@@ -21,7 +23,7 @@ import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 
-public abstract class Player extends Rectangle {
+public abstract class Player extends Rectangle implements ObservableActionFired {
 
 	public enum TeamColour {
 		RED, BLUE
@@ -37,6 +39,8 @@ public abstract class Player extends Rectangle {
 	private float stateTime = 0l;
 	/** The dimensions of the run animation */
 	protected static final int NUMBER_OF_FRAMES = 10;
+
+	protected ActionFiredObserver observer;
 
 	protected Texture hoverTexture;
 	protected Texture selectTexture;
@@ -67,6 +71,21 @@ public abstract class Player extends Rectangle {
 		this.y = translatePlayerCoordinate(playerY);
 		this.width = PLAYER_SIZE;
 		this.height = PLAYER_SIZE;
+	}
+
+	@Override
+	public void subscribe(ActionFiredObserver observer) {
+		this.observer = observer;
+	}
+
+	@Override
+	public void unsubscribe(ActionFiredObserver observer) {
+		this.observer = null;
+	}
+
+	@Override
+	public void notifyActionFired(Player player, Action action) {
+		observer.onActionFired(player, action);
 	}
 
 	public static void create(Texture texture) {
@@ -239,7 +258,7 @@ public abstract class Player extends Rectangle {
 	public void executeAction() {
 		if (action != null) {
 			action.execute(this);
-			// TODO: Fire event(action)
+			this.notifyActionFired(this, action);
 		}
 	}
 
