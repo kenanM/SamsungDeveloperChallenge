@@ -6,13 +6,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-public class TextArea extends Rectangle implements Observable {
+import events.ObservableTextArea;
+import events.TextAreaObserver;
+
+public class TextArea extends Rectangle implements ObservableTextArea {
 
 	private static final long serialVersionUID = 1L;
 	protected Texture areaTexture;
 	protected String text = "NO TEXT";
 	// normally a list of observers
-	protected Observer observer;
+	protected TextAreaObserver observer;
 
 	public TextArea() {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
@@ -22,7 +25,7 @@ public class TextArea extends Rectangle implements Observable {
 		height = areaTexture.getHeight();
 	}
 
-	public TextArea(Observer observer) {
+	public TextArea(TextAreaObserver observer) {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
 		this.x = Game.VIRTUAL_SCREEN_WIDTH / 2 - areaTexture.getWidth() / 2;
 		this.y = Game.VIRTUAL_SCREEN_HEIGHT / 2 - areaTexture.getHeight() / 2;
@@ -38,18 +41,6 @@ public class TextArea extends Rectangle implements Observable {
 		this.height = height;
 		this.text = text;
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
-	}
-
-	@Override
-	public void attach(Observer observer) {
-		this.observer = observer;
-	}
-
-	@Override
-	public void remove(Observer observer) {
-		if (this.observer == observer) {
-			observer = null;
-		}
 	}
 
 	@Override

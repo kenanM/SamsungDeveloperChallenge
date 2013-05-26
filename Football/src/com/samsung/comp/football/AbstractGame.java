@@ -33,7 +33,9 @@ import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
-public abstract class AbstractGame implements ApplicationListener, Observer {
+import events.TextAreaObserver;
+
+public abstract class AbstractGame implements ApplicationListener, TextAreaObserver {
 
 	protected int result;
 
