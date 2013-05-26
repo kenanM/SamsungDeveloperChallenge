@@ -2,11 +2,14 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.samsung.comp.events.ActionFiredObserver;
+import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
-public class TutorialGame extends AbstractGame {
+public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	enum TutorialPhase {
 		MOVE, FOLLOW, SHOOT, PASS, MARK, QUEUEING, GOALIE,
@@ -38,6 +41,12 @@ public class TutorialGame extends AbstractGame {
 	@Override
 	protected void setStartingPositions(TeamColour centerTeam) {
 
+		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
+		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
+
+		ball.resetBall();
+
+		whistleBlow.play();
 	}
 
 	private void createNewPlayersAndBall() {
@@ -61,6 +70,7 @@ public class TutorialGame extends AbstractGame {
 			if (bluePlayers.get(0).getPlayerY() >= VIRTUAL_SCREEN_HEIGHT / 2) {
 				tutorialPhase = TutorialPhase.FOLLOW;
 				createNewBall();
+				bluePlayers.get(0).subscribe(this);
 			}
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			if (bluePlayers.get(0).hasBall()) {
@@ -81,7 +91,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void createNewBall() {
-		ball = new Ball(VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
+		ball = new Ball(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
 	}
 
 	protected void displayTutorialMessage() {
@@ -200,6 +210,14 @@ public class TutorialGame extends AbstractGame {
 
 	@Override
 	public void resume() {
+	}
+
+	@Override
+	public void onActionFired(Player player, Action action) {
+		if (bluePlayers.get(0) == player && action instanceof MarkBall) {
+			tutorialPhase = TutorialPhase.SHOOT;
+			bluePlayers.get(0).unsubscribe(this);
+		}
 	}
 
 }

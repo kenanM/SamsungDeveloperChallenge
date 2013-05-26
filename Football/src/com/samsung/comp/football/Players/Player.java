@@ -257,8 +257,10 @@ public abstract class Player extends Rectangle implements ObservableActionFired 
 
 	public void executeAction() {
 		if (action != null) {
+			if (observer != null) {
+				this.notifyActionFired(this, action);
+			}
 			action.execute(this);
-			this.notifyActionFired(this, action);
 		}
 	}
 
