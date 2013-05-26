@@ -1,6 +1,5 @@
 package com.samsung.comp.football.TitleScreen;
 
-import input.SPenInput;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.samsung.comp.football.SoundManager;
 import com.samsung.comp.football.TutorialGame;
+import com.samsung.comp.input.SPenInput;
 import com.samsung.spen.lib.input.SPenEventLibrary;
 
 public class TutorialGameActivity extends AndroidApplication {

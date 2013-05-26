@@ -1,4 +1,4 @@
-package input;
+package com.samsung.comp.input;
 
 import java.util.ArrayList;
 import java.util.Collections;

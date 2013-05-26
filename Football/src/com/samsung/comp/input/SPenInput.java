@@ -1,4 +1,4 @@
-package input;
+package com.samsung.comp.input;
 
 import android.util.Log;
 import android.view.MotionEvent;

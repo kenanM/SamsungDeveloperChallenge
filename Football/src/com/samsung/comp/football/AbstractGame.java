@@ -1,6 +1,5 @@
 package com.samsung.comp.football;
 
-import input.AbstractInput;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +32,7 @@ import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.input.AbstractInput;
 
 
 public abstract class AbstractGame implements ApplicationListener, TextAreaObserver {
