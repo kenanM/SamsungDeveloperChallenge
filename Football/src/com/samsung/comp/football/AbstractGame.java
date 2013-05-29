@@ -253,7 +253,7 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 
 		if (gameState == GameState.INPUT) {
 
-			for (Player player : getAllPlayers()) {
+			for (Player player : getHumanPlayers()) {
 				drawActions(player.getAction(), batch);
 			}
 
@@ -329,7 +329,7 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 
 			shapeRenderer.setColor(0, 0, 0, 0);
 
-			for (Player player : getAllPlayers()) {
+			for (Player player : getHumanPlayers()) {
 				drawActions(player.getAction(), shapeRenderer);
 			}
 
