@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.samsung.comp.events.ActionFiredObserver;
 import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.MarkBall;
+import com.samsung.comp.football.Actions.Mark;
+import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
@@ -14,6 +16,8 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	enum TutorialPhase {
 		MOVE, FOLLOW, SHOOT, PASS, MARK, QUEUEING, GOALIE,
 	}
+
+	boolean q1 = false;
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 
@@ -28,7 +32,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		createUI();
 		createRenderingObjects();
 
-		createNewPlayersAndBall();
+		createFirstPlayer();
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
@@ -47,10 +51,28 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		ball.resetBall();
 
 		whistleBlow.play();
+
+		onGoalScored();
 	}
 
-	private void createNewPlayersAndBall() {
-		bluePlayers.add(new BluePlayer(338, 256));
+	private void onGoalScored() {
+		if (tutorialPhase == TutorialPhase.SHOOT) {
+			tutorialPhase = TutorialPhase.PASS;
+			createSecondPlayer();
+		}
+
+	}
+
+	private void createFirstPlayer() {
+		Player p = new BluePlayer(338, 256);
+		p.subscribe(this);
+		bluePlayers.add(p);
+	}
+
+	private void createSecondPlayer() {
+		Player p = new BluePlayer(338, 256);
+		p.subscribe(this);
+		bluePlayers.add(p);
 	}
 
 	@Override
@@ -70,20 +92,21 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 			if (bluePlayers.get(0).getPlayerY() >= VIRTUAL_SCREEN_HEIGHT / 2) {
 				tutorialPhase = TutorialPhase.FOLLOW;
 				createNewBall();
-				bluePlayers.get(0).subscribe(this);
 			}
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.SHOOT;
 			}
-
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-
+			// Handled by onGoalScored()
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-
+			if (bluePlayers.get(1).hasBall()) {
+				tutorialPhase = TutorialPhase.MARK;
+			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
-
+			// Handled by onActionFired()
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 
 		}
@@ -96,12 +119,11 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	protected void displayTutorialMessage() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
-			textArea.setText("Welcome to the tutorial. This game is separated into 5 second intervals.\n"
-					+ "Draw a line from your player to give them a path to follow.\n"
-					+ "Press the play button with your finger when you want them to carry out your order.\n\n"
-					+ "Try moving this player to the bottom half of the pitch.\n\n"
+			textArea.setText("Welcome to the tutorial. \n\n"
+					+ "Draw a line from your player to give them a path to follow.\n\n"
+					+ "Press the play button and they'll run for 5 seconds.\n\n"
+					+ "Move this player to the bottom half of the pitch.\n\n"
 					+ "Tap or press back to close this window. ");
-			// Phase 1
 			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			textArea.setText("Nice. ");
@@ -113,6 +135,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 			textArea.setText("Marking");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			textArea.setText("Queueing actions.");
+			q1 = false;
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			textArea.setText("The goal keeper.");
 		}
@@ -214,9 +237,17 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	@Override
 	public void onActionFired(Player player, Action action) {
-		if (bluePlayers.get(0) == player && action instanceof MarkBall) {
-			tutorialPhase = TutorialPhase.SHOOT;
-			bluePlayers.get(0).unsubscribe(this);
+		if (tutorialPhase == TutorialPhase.MARK) {
+			if (action instanceof Mark) {
+				tutorialPhase = TutorialPhase.QUEUEING;
+			}
+		}
+ else if (tutorialPhase == TutorialPhase.QUEUEING) {
+			if (action instanceof Move) {
+				q1 = true;
+			} else if (action instanceof Pass && q1 == true) {
+				tutorialPhase = TutorialPhase.GOALIE;
+			}
 		}
 	}
 
