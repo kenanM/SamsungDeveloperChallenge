@@ -78,10 +78,18 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		p.subscribe(this);
 		bluePlayers.add(p);
 
-		p.addAction(new MoveToPosition(new Vector2(338, 256), new Vector2(338,
-				256)));
+		ball.setOwner(p);
+		p.addAction(new MoveToPosition(new Vector2(
+				VIRTUAL_SCREEN_WIDTH * 2 / 3, 256), new Vector2(0, 256)));
 		p.executeAction();
 		p.clearActions();
+
+		Player p0 = bluePlayers.get(0);
+		p0.addAction(
+				new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 3,
+				750), new Vector2(0, 0)));
+		p0.executeAction();
+		p0.clearActions();
 		update = true;
 	}
 
@@ -92,6 +100,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 				VIRTUAL_SCREEN_HEIGHT * 2 / 3), p.getPlayerPosition()));
 		redPlayers.add(p);
 		p.executeAction();
+		p.clearActions();
 
 		Player owner = ball.getOwner();
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
@@ -129,7 +138,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 				createSecondPlayer();
 			}
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-			if (bluePlayers.get(1).hasBall()) {
+			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
 				createEnemyPlayer();
 			}
@@ -161,8 +170,8 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 					+ "How else are you going to score? \n\n"
 					+ "Shoot the ball into either goal.");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-			textArea.setText("Now our second player's turned up. Lets pass the ball to them. \n\n"
-					+ "Select your first player then tap on the second to give an order to pass to them. \n\n");
+			textArea.setText("Now our second player turned up with the ball. Lets pass the ball back. \n\n"
+					+ "Select the new player then tap on the other to give an order to pass to them. \n\n");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			textArea.setText("Marking");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
