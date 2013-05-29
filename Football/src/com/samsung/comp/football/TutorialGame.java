@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredObserver;
 import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
@@ -94,13 +93,12 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	}
 
 	private void setupTacklePhase() {
-		Player p = new RedPlayer(VIRTUAL_SCREEN_WIDTH / 2,
+		Player p = new RedPlayer(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT);
-		p.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 2,
-				VIRTUAL_SCREEN_HEIGHT * 2 / 3), p.getPlayerPosition()));
 		redPlayers.add(p);
-		p.executeAction();
-		p.clearActions();
+
+		Player p1 = new RedPlayer(VIRTUAL_SCREEN_WIDTH * 2 / 3, 0);
+		redPlayers.add(p1);
 
 		Player owner = ball.getOwner();
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
@@ -118,7 +116,45 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		
 		update = false;
 		checkPhaseCompletion();
+		runPhaseSpecficActions();
 		displayTutorialMessage();
+	}
+
+	private void runPhaseSpecficActions() {
+		if (tutorialPhase == TutorialPhase.MOVE) {
+			
+		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+			
+		} else if (tutorialPhase == TutorialPhase.SHOOT) {
+			
+		} else if (tutorialPhase == TutorialPhase.PASS) {
+			
+		} else if (tutorialPhase == TutorialPhase.MARK) {
+			Player p = redPlayers.get(0);
+			Player p1 = redPlayers.get(1);
+
+			ball.setOwner(p);
+
+			// Move to original position
+			p.addAction(new MoveToPosition(
+					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p
+							.getPlayerPosition()));
+			p.executeAction();
+
+			p1.addAction(new MoveToPosition(
+					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
+							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p
+							.getPlayerPosition()));
+			p1.executeAction();
+			p1.clearActions();
+			p.clearActions();
+			update = true;
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+
+		} else if (tutorialPhase == TutorialPhase.GOALIE) {
+
+		}
 	}
 
 	// If these get complex then refactor to use state objects.
@@ -143,7 +179,11 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 				setupTacklePhase();
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
-			// Handled by onActionFired()
+			if (ball.hasOwner()) {
+				if (ball.getOwner().getTeam() == getHumanColour()) {
+					tutorialPhase = TutorialPhase.QUEUEING;
+				}
+			}
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
@@ -173,7 +213,10 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 			textArea.setText("Now our second player turned up with the ball. Lets pass the ball back. \n\n"
 					+ "Select the new player then tap on the other to give an order to pass to them. \n\n");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
-			textArea.setText("Marking");
+			textArea.setText("Marking opponents: \n\n"
+					+ "Select your player, then select a red player to mark them. \n\n"
+					+ "They'll follow them until they get the ball. \n\n"
+					+ "Mark both of these players and get the ball back.");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			textArea.setText("Queueing actions.");
 			q1 = false;
@@ -200,6 +243,25 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		bar.setPositionToUp();
+
+		// Really should do something about these checks now being everywhere
+		if (tutorialPhase == TutorialPhase.MARK) {
+			Player p = redPlayers.get(0);
+			Player p1 = redPlayers.get(1);
+
+			// Add Move to target
+			p.addAction(new Pass(ball, p, p1, p.getPlayerPosition()));
+
+			p.addAction(new MoveToPosition(
+					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
+							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p
+							.getPlayerPosition()));
+
+			p1.addAction(new MoveToPosition(
+					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p
+							.getPlayerPosition()));
+		}
 	}
 
 	@Override
@@ -290,12 +352,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	@Override
 	public void onActionFired(Player player, Action action) {
-		if (tutorialPhase == TutorialPhase.MARK) {
-			if (action instanceof Mark) {
-				tutorialPhase = TutorialPhase.QUEUEING;
-			}
-		}
- else if (tutorialPhase == TutorialPhase.QUEUEING) {
+		if (tutorialPhase == TutorialPhase.QUEUEING) {
 			if (action instanceof Move) {
 				q1 = true;
 			} else if (action instanceof Pass && q1 == true) {
