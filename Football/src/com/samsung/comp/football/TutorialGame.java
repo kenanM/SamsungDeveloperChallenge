@@ -12,6 +12,7 @@ import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.football.Players.RedPlayer;
 
 public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
@@ -77,9 +78,25 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		p.subscribe(this);
 		bluePlayers.add(p);
 
-		p.addAction(new MoveToPosition(new Vector2(338, 256), p
-				.getPlayerPosition()));
+		p.addAction(new MoveToPosition(new Vector2(338, 256), new Vector2(338,
+				256)));
 		p.executeAction();
+		p.clearActions();
+		update = true;
+	}
+
+	private void createEnemyPlayer() {
+		Player p = new RedPlayer(VIRTUAL_SCREEN_WIDTH / 2,
+				VIRTUAL_SCREEN_HEIGHT);
+		p.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 2,
+				VIRTUAL_SCREEN_HEIGHT * 2 / 3), p.getPlayerPosition()));
+		redPlayers.add(p);
+		p.executeAction();
+
+		Player owner = ball.getOwner();
+		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
+		owner.executeAction();
+		owner.clearActions();
 		update = true;
 	}
 
@@ -114,6 +131,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(1).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
+				createEnemyPlayer();
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			// Handled by onActionFired()
