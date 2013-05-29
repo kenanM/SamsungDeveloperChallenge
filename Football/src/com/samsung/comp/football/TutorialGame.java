@@ -64,9 +64,13 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	}
 
 	private void createFirstPlayer() {
-		Player p = new BluePlayer(338, 256);
+		Player p = new BluePlayer(338, VIRTUAL_SCREEN_HEIGHT / 3);
 		p.subscribe(this);
 		bluePlayers.add(p);
+	}
+
+	private void createNewBall() {
+		ball = new Ball(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 3);
 	}
 
 	private void createSecondPlayer() {
@@ -113,10 +117,6 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	}
 
-	private void createNewBall() {
-		ball = new Ball(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
-	}
-
 	protected void displayTutorialMessage() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
 			textArea.setText("Welcome to the tutorial. \n\n"
@@ -126,9 +126,14 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 					+ "Tap or press back to close this window. ");
 			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
-			textArea.setText("Nice. ");
+			textArea.setText("Nice. Now we've put a ball onto the upper half of the pitch. \n\n"
+					+ "Tap on your player to select them, then tap the ball.\n\n"
+					+ "Your player will run straight towards the ball to collect it.\n\n"
+					+ "Don't forget to hit the play button when you're ready.");
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-			textArea.setText("Shooting");
+			textArea.setText("Tap on your player to select them again, then tap on the pitch to shoot. \n\n"
+					+ "How else are you going to score? \n\n"
+					+ "Shoot the ball into either goal.");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			textArea.setText("Passing");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
