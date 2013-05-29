@@ -2,10 +2,12 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredObserver;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.Move;
+import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
@@ -20,6 +22,8 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	boolean q1 = false;
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
+	private boolean shootCompleted = false;
+	private boolean update = false;
 
 	@Override
 	public void create() {
@@ -52,15 +56,10 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 		whistleBlow.play();
 
-		onGoalScored();
-	}
-
-	private void onGoalScored() {
 		if (tutorialPhase == TutorialPhase.SHOOT) {
-			tutorialPhase = TutorialPhase.PASS;
-			createSecondPlayer();
+			shootCompleted = true;
+			update = true;
 		}
-
 	}
 
 	private void createFirstPlayer() {
@@ -74,9 +73,14 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	}
 
 	private void createSecondPlayer() {
-		Player p = new BluePlayer(338, 256);
+		Player p = new BluePlayer(0, 256);
 		p.subscribe(this);
 		bluePlayers.add(p);
+
+		p.addAction(new MoveToPosition(new Vector2(338, 256), p
+				.getPlayerPosition()));
+		p.executeAction();
+		update = true;
 	}
 
 	@Override
@@ -86,6 +90,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		clearActions();
 		bar.setPositionToDown();
 		
+		update = false;
 		checkPhaseCompletion();
 		displayTutorialMessage();
 	}
@@ -102,7 +107,10 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 				tutorialPhase = TutorialPhase.SHOOT;
 			}
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-			// Handled by onGoalScored()
+			if (shootCompleted) {
+				tutorialPhase = TutorialPhase.PASS;
+				createSecondPlayer();
+			}
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(1).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
@@ -135,7 +143,8 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 					+ "How else are you going to score? \n\n"
 					+ "Shoot the ball into either goal.");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-			textArea.setText("Passing");
+			textArea.setText("Now our second player's turned up. Lets pass the ball to them. \n\n"
+					+ "Select your first player then tap on the second to give an order to pass to them. \n\n");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			textArea.setText("Marking");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
@@ -218,6 +227,18 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 				beginInputStage();
 			}
 
+		} else if (update) {
+			for (Player player : getAllPlayers()) {
+				player.update(time);
+			}
+
+			if (ball != null) {
+				ball.update(time);
+				ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+						VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+				tackleDetection(time);
+				goalScoredDetection();
+			}
 		}
 	}
 
