@@ -37,7 +37,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		createUI();
 		createRenderingObjects();
 
-		createFirstPlayer();
+		setupMovePhase();
 
 		humanColour = TeamColour.BLUE;
 		computerColour = TeamColour.RED;
@@ -63,17 +63,17 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		}
 	}
 
-	private void createFirstPlayer() {
+	private void setupMovePhase() {
 		Player p = new BluePlayer(338, VIRTUAL_SCREEN_HEIGHT / 3);
 		p.subscribe(this);
 		bluePlayers.add(p);
 	}
 
-	private void createNewBall() {
+	private void setupFollowBallPhase() {
 		ball = new Ball(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 3);
 	}
 
-	private void createSecondPlayer() {
+	private void setupPassPhase() {
 		Player p = new BluePlayer(0, 256);
 		p.subscribe(this);
 		bluePlayers.add(p);
@@ -93,7 +93,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		update = true;
 	}
 
-	private void createEnemyPlayer() {
+	private void setupTacklePhase() {
 		Player p = new RedPlayer(VIRTUAL_SCREEN_WIDTH / 2,
 				VIRTUAL_SCREEN_HEIGHT);
 		p.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 2,
@@ -126,7 +126,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		if (tutorialPhase == TutorialPhase.MOVE) {
 			if (bluePlayers.get(0).getPlayerY() >= VIRTUAL_SCREEN_HEIGHT / 2) {
 				tutorialPhase = TutorialPhase.FOLLOW;
-				createNewBall();
+				setupFollowBallPhase();
 			}
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			if (bluePlayers.get(0).hasBall()) {
@@ -135,12 +135,12 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 			if (shootCompleted) {
 				tutorialPhase = TutorialPhase.PASS;
-				createSecondPlayer();
+				setupPassPhase();
 			}
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
-				createEnemyPlayer();
+				setupTacklePhase();
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			// Handled by onActionFired()
