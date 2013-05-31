@@ -79,14 +79,14 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 		ball.setOwner(p);
 		p.addAction(new MoveToPosition(new Vector2(
-				VIRTUAL_SCREEN_WIDTH * 2 / 3, 256), new Vector2(0, 256)));
+				VIRTUAL_SCREEN_WIDTH * 2 / 3, 256), p));
 		p.executeAction();
 		p.clearActions();
 
 		Player p0 = bluePlayers.get(0);
 		p0.addAction(
 				new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 3,
-				750), new Vector2(0, 0)));
+				750), p));
 		p0.executeAction();
 		p0.clearActions();
 		update = true;
@@ -138,14 +138,12 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 			// Move to original position
 			p.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p
-							.getPlayerPosition()));
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
 			p.executeAction();
 
 			p1.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p
-							.getPlayerPosition()));
+							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
 			p1.executeAction();
 			p1.clearActions();
 			p.clearActions();
@@ -254,15 +252,11 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 			p.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 1 / 6), new Vector2(
-							VIRTUAL_SCREEN_WIDTH * 1 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 5 / 6)));
+							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
 
 			p1.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 5 / 6), new Vector2(
-							VIRTUAL_SCREEN_WIDTH * 2 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 1 / 6)));
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
 		}
 	}
 

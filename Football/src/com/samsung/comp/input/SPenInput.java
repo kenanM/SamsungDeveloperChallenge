@@ -179,12 +179,18 @@ public class SPenInput extends AbstractInput implements
 
 	private void assignMoveTo(Player player, int index) {
 		Log.i(TAG, "assigning Move command to " + player.toString());
-		if (player.getFinalAction() instanceof Mark
-				|| player.getFinalAction() instanceof MarkBall) {
+		// TODO: Refactor Marking into a generic abstract following action
+		if (player.getFinalAction() instanceof Mark) {
+			Mark markAction = (Mark) player.getFinalAction();
 			player.setAction(
 					new MoveToPosition(
 							lineInProgress.get(lineInProgress.size() - 1),
-							lineInProgress.get(0)), index);
+							markAction.getTarget()), index);
+		} else if (player.getFinalAction() instanceof MarkBall) {
+			player.setAction(
+					new MoveToPosition(
+							lineInProgress.get(lineInProgress.size() - 1), game
+									.getBall()), index);
 		} else {
 			player.setAction(
 					new Move(lineInProgress.toArray(new Vector2[lineInProgress

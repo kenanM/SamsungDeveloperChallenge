@@ -10,12 +10,11 @@ import com.samsung.comp.football.Players.Player;
 
 public class MoveToPosition extends Action {
 
-	// This player would be the
-	private Vector2 startPoint;
+	private Followable startPoint;
 	private final Vector2 point;
 	private static Texture TEXTURE;
 
-	public MoveToPosition(Vector2 path, Vector2 startPoint) {
+	public MoveToPosition(Vector2 path, Followable startPoint) {
 		this.point = path;
 		this.startPoint = startPoint;
 	}
@@ -42,7 +41,7 @@ public class MoveToPosition extends Action {
 
 		if (point != null && startPoint != null) {
 
-			Vector2 firstPoint = startPoint;
+			Vector2 firstPoint = startPoint.getPosition();
 			Vector2 secondPoint = point;
 
 			float rotation = Utils.getMoveVector(firstPoint, secondPoint, 10)
@@ -60,7 +59,8 @@ public class MoveToPosition extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(startPoint.x, startPoint.y, point.x, point.y);
+		renderer.line(startPoint.getPosition().x, startPoint.getPosition().y,
+				point.x, point.y);
 		super.draw(renderer);
 	}
 
@@ -86,13 +86,13 @@ public class MoveToPosition extends Action {
 			float speed, int positionInPath, boolean returnNulls) {
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
-		Vector2[] path = { startPoint, point };
+		Vector2[] path = { startPoint.getPosition(), point };
 		Vector2 position = initialPosition;
 
 		while (distance > 0 && path != null && path.length > 0
 				&& positionInPath < path.length) {
 
-			Vector2 target = path[positionInPath];
+			Vector2 target = path[positionInPath+1];
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
 				position.set(target);

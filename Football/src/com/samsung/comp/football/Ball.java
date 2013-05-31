@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Actions.Followable;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Player;
 
-public class Ball extends Rectangle {
+public class Ball extends Rectangle implements Followable {
 
 	private static final long serialVersionUID = -3523719737664937244L;
 
@@ -36,6 +37,11 @@ public class Ball extends Rectangle {
 
 		width = BALL_SIZE;
 		height = BALL_SIZE;
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return getBallPosition();
 	}
 
 	public float getDeceleration() {

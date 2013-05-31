@@ -17,13 +17,15 @@ import com.samsung.comp.events.ObservableActionFired;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Action;
+import com.samsung.comp.football.Actions.Followable;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 
-public abstract class Player extends Rectangle implements ObservableActionFired {
+public abstract class Player extends Rectangle implements
+		ObservableActionFired, Followable {
 
 	public enum TeamColour {
 		RED, BLUE
@@ -71,6 +73,11 @@ public abstract class Player extends Rectangle implements ObservableActionFired 
 		this.y = translatePlayerCoordinate(playerY);
 		this.width = PLAYER_SIZE;
 		this.height = PLAYER_SIZE;
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return getPlayerPosition();
 	}
 
 	@Override
