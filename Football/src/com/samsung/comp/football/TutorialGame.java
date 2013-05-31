@@ -254,13 +254,15 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 			p.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p
-							.getPlayerPosition()));
+							VIRTUAL_SCREEN_HEIGHT * 1 / 6), new Vector2(
+							VIRTUAL_SCREEN_WIDTH * 1 / 3,
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6)));
 
 			p1.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p
-							.getPlayerPosition()));
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6), new Vector2(
+							VIRTUAL_SCREEN_WIDTH * 2 / 3,
+							VIRTUAL_SCREEN_HEIGHT * 1 / 6)));
 		}
 	}
 
