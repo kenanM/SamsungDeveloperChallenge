@@ -162,8 +162,8 @@ public class SPenInput extends AbstractInput implements
 		Log.i(TAG, "Pressed ball: ");
 
 		if (selectedPlayer != null) {
-			selectedPlayer.addAction(new MarkBall(selectedPlayer
-					.getFuturePosition(), game.getBall()));
+			selectedPlayer.addAction(new MarkBall(selectedPlayer, game
+					.getBall()));
 			selectedPlayer = null;
 			return;
 		}
