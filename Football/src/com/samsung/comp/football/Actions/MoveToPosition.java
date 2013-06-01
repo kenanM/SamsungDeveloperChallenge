@@ -86,20 +86,19 @@ public class MoveToPosition extends Action {
 			float speed, int positionInPath, boolean returnNulls) {
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
-		Vector2[] path = { startPoint.getPosition(), point };
+
 		Vector2 position = initialPosition;
+		Vector2 target = point;
 
-		while (distance > 0 && path != null && path.length > 0
-				&& positionInPath < path.length) {
+		while (distance > 0 && positionInPath == 0) {
 
-			Vector2 target = path[positionInPath+1];
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
 				position.set(target);
 				positionInPath++;
 
 				// if reached end of path
-				if (positionInPath != 0 && positionInPath == path.length) {
+				if (positionInPath != 0) {
 					if (nextAction != null) {
 						float remainingTime = distance / speed;
 						return nextAction.getFuturePosition(remainingTime,
@@ -108,6 +107,7 @@ public class MoveToPosition extends Action {
 						return returnNulls ? null : position;
 					}
 				}
+
 			} else {
 				// Move towards the next position (which is out of reach).
 				Vector2 movement = Utils.getMoveVector(position, target,

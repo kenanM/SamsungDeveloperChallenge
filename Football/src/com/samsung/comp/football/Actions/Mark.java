@@ -55,21 +55,19 @@ public class Mark extends Action {
 			float speed, int positionInPath, boolean returnNulls) {
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
+
 		Vector2 position = initialPosition;
+		Vector2 target = this.target.getPlayerPosition();
 
-		Vector2[] path = new Vector2[] { target.getPlayerPosition() };
+		while (distance > 0 && positionInPath == 0) {
 
-		while (distance > 0 && path != null && path.length > 0
-				&& positionInPath < path.length) {
-
-			Vector2 target = path[positionInPath];
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
 				position.set(target);
 				positionInPath++;
 
 				// if reached end of path
-				if (positionInPath != 0 && positionInPath == path.length) {
+				if (positionInPath != 0) {
 					if (nextAction != null) {
 						float remainingTime = distance / speed;
 						return nextAction.getFuturePosition(remainingTime,
