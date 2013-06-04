@@ -1,7 +1,6 @@
 package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredObserver;
 import com.samsung.comp.football.Actions.Action;
@@ -258,27 +257,6 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
 		}
-	}
-
-	@Override
-	public void render() {
-
-		update();
-
-		// clear the screen with a dark blue color.
-		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight);
-		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-		// tell the camera to update its matrices.
-		camera.update();
-
-		// tell the SpriteBatch to render in the
-		// coordinate system specified by the camera.
-		batch.setProjectionMatrix(camera.combined);
-
-		drawSpriteBatch();
-		drawShapeRenderer();
 	}
 
 	@Override
