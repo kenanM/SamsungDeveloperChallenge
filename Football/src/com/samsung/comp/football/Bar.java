@@ -11,7 +11,6 @@ public class Bar extends Rectangle {
 	private static final long serialVersionUID = 1L;
 
 	private Texture bar;
-	private Texture fadedBar;
 	private Texture playIcon;
 	private Texture fadedIcon;
 	private Texture cancelIcon;
@@ -52,7 +51,6 @@ public class Bar extends Rectangle {
 		cancelIconPressed = new Texture(
 				Gdx.files.internal("cancelIconDepressed.png"));
 		bar = new Texture(Gdx.files.internal("bar.png"));
-		fadedBar = new Texture(Gdx.files.internal("bar_faded.png"));
 		cancelIconX = Game.VIRTUAL_SCREEN_WIDTH - cancelIcon.getWidth()
 				- offset;
 		upYValue = -playIcon.getHeight();
@@ -82,13 +80,8 @@ public class Bar extends Rectangle {
 	}
 
 	public void draw(SpriteBatch batch) {
-		if (fadeTimer > 0.2) {
-			batch.draw(bar, 0, 0);
-			batch.draw(playIcon, offset, y);
-		} else {
-			batch.draw(fadedBar, 0, 0);
-			batch.draw(fadedIcon, offset, y);
-		}
+		batch.draw(bar, 0, 0);
+		batch.draw(playIcon, offset, y);
 
 		if (isCancelButtonShown() && fadeTimer > 0.2) {
 			if (cancelActionsTimer < 1) {
