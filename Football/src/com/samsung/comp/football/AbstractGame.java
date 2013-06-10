@@ -1,6 +1,5 @@
 package com.samsung.comp.football;
 
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -34,8 +33,8 @@ import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.input.AbstractInput;
 
-
-public abstract class AbstractGame implements ApplicationListener, TextAreaObserver {
+public abstract class AbstractGame implements ApplicationListener,
+		TextAreaObserver {
 
 	protected int result;
 
@@ -145,7 +144,9 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 	protected void createRenderingObjects() {
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
+		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT
+				+ bar.getHeight());
+		camera.translate(0, -bar.getHeight());
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		bmf = new BitmapFont(true);
@@ -201,7 +202,8 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 		update();
 
 		// clear the screen with a dark blue color.
-		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight);
+		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight
+				+ (int) bar.getHeight());
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -649,6 +651,12 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 	public Vector2 translateInputToField(Vector2 vector) {
 		double vx = (vector.x / scaleFactor) - xOffset;
 		double vy = (vector.y / scaleFactor) - yOffset;
+
+		try {
+			vy -= bar.getHeight() / scaleFactor;
+		} catch (NullPointerException e) {
+		}
+
 		return new Vector2((float) vx, (float) vy);
 	}
 
@@ -692,17 +700,18 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 
 	@Override
 	public void resize(int width, int height) {
-		double screenRatio = (double) width / (double) height;
+		int pitchHeight = (int) (height - bar.getHeight());
+		double screenRatio = (double) width / (double) pitchHeight;
 		double pitchImageRatio = (double) VIRTUAL_SCREEN_WIDTH
 				/ (double) VIRTUAL_SCREEN_HEIGHT;
 
-		if (width > height) {
+		if (width > pitchHeight) {
 			// Need to draw pitch on it's side
 		}
 
 		if (screenRatio > pitchImageRatio) {
 			// Borders to left and right
-			scaleFactor = (double) height / (double) VIRTUAL_SCREEN_HEIGHT;
+			scaleFactor = (double) pitchHeight / (double) VIRTUAL_SCREEN_HEIGHT;
 			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
 			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * scaleFactor);
 			xOffset = (width - drawnPitchWidth) / 2;
@@ -713,7 +722,7 @@ public abstract class AbstractGame implements ApplicationListener, TextAreaObser
 			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
 			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * scaleFactor);
 			xOffset = 0;
-			yOffset = (height - drawnPitchHeight) / 2;
+			yOffset = (pitchHeight - drawnPitchHeight) / 2;
 		}
 	}
 

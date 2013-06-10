@@ -12,7 +12,6 @@ public class Bar extends Rectangle {
 
 	private Texture bar;
 	private Texture playIcon;
-	private Texture fadedIcon;
 	private Texture cancelIcon;
 	private Texture cancelIconPressed;
 	private String text;
@@ -33,7 +32,6 @@ public class Bar extends Rectangle {
 	private final AbstractGame game;
 	private BitmapFont bmf;
 
-	private float fadeTimer = 0;
 	private float cancelActionsTimer = 0;
 	private float textCountdownTimer = 3;
 
@@ -46,15 +44,14 @@ public class Bar extends Rectangle {
 
 	public void create() {
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
-		fadedIcon = new Texture(Gdx.files.internal("transparent_button.png"));
 		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
 		cancelIconPressed = new Texture(
 				Gdx.files.internal("cancelIconDepressed.png"));
 		bar = new Texture(Gdx.files.internal("bar.png"));
 		cancelIconX = Game.VIRTUAL_SCREEN_WIDTH - cancelIcon.getWidth()
 				- offset;
-		upYValue = -playIcon.getHeight();
-		this.y = upYValue;
+		upYValue = -2 * playIcon.getHeight();
+		this.y = -playIcon.getHeight();
 		this.x = 0;
 		this.height = playIcon.getHeight();
 		this.width = bar.getWidth();
@@ -64,40 +61,38 @@ public class Bar extends Rectangle {
 
 		if (position == Position.UP && this.y > upYValue) {
 			this.y -= velocity * time;
-		} else if (position == Position.DOWN && this.y < 0) {
+		} else if (position == Position.DOWN && this.y < -playIcon.getHeight()) {
 			this.y += velocity * time;
 		}
 
 		if (this.y < upYValue) {
 			y = upYValue;
 		}
-		if (this.y > 0) {
-			y = 0;
+		if (this.y > -playIcon.getHeight()) {
+			y = -playIcon.getHeight();
 		}
-		fadeTimer += time;
 		cancelActionsTimer += time;
 		textCountdownTimer += time;
 	}
 
 	public void draw(SpriteBatch batch) {
-		batch.draw(bar, 0, 0);
+		batch.draw(bar, 0, -playIcon.getHeight());
 		batch.draw(playIcon, offset, y);
 
-		if (isCancelButtonShown() && fadeTimer > 0.2) {
+		if (isCancelButtonShown()) {
 			if (cancelActionsTimer < 1) {
 				batch.draw(cancelIconPressed, cancelIconX, y);
 			} else {
 				batch.draw(cancelIcon, cancelIconX, y);
 			}
-		} else if (isCancelButtonShown()) {
-			batch.draw(fadedIcon, cancelIconX, y);
 		}
 
 		if (textCountdownTimer > 2) {
 			text = "Red: " + game.getRedScore() + " Blue: "
 					+ game.getBlueScore() + "      " + game.getRemainingTime();
 		}
-		bmf.draw(batch, text, playIcon.getWidth() + (offset * 4), 7);
+		bmf.draw(batch, text, playIcon.getWidth() + (offset * 4),
+				7 - playIcon.getHeight());
 	}
 
 	public void setPositionToUp() {
@@ -118,8 +113,8 @@ public class Bar extends Rectangle {
 				cancelIcon.getHeight());
 	}
 
+	// TODO: Delete me
 	public void fade() {
-		fadeTimer = 0;
 	}
 
 	public void onPress(float x, float y) {
