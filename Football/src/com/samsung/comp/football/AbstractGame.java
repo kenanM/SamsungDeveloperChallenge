@@ -1,13 +1,19 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -31,10 +37,10 @@ import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
-import com.samsung.comp.input.AbstractInput;
+import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public abstract class AbstractGame implements ApplicationListener,
-		TextAreaObserver {
+		TextAreaObserver, InputProcessor, SPenHoverListener {
 
 	protected int result;
 
@@ -43,6 +49,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	public static final float BALL_CHANGE_TIME = 1f;
 	public static final float BALL_PASS_TIME = 0.5f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
+	public static final float INPUT_EPSILON_VALUE = 32;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
 	public static final int VIRTUAL_SCREEN_HEIGHT = 1024;
 	// TODO: Restrict input, ball / player movement etc. to these
@@ -62,6 +69,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			975);
 	public static final Vector2 BLUE_GOAL = new Vector2(PLAYING_AREA_WIDTH / 2,
 			24);
+
+	private static final String INPUT_TAG = "GameInputStrategy";
 
 	protected int xOffset;
 	protected int yOffset;
@@ -104,8 +113,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected int redScore = 0;
 	protected int blueScore = 0;
 
-	protected AbstractInput inputStrategy;
-	protected LibGDXInput input;
 	protected SoundManager soundManager;
 
 	protected TeamColour humanColour;
@@ -118,6 +125,11 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected TextArea textArea;
 	protected NullTextArea nullTextArea;
 	public Bar bar;
+
+	protected Player selectedPlayer;
+	protected Player highlightedPlayer;
+	protected boolean isBallHighlighted;
+	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
@@ -191,8 +203,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void createLibGdxItems() {
 		Texture.setEnforcePotImages(false);
 
-		input = new LibGDXInput(this);
-		Gdx.input.setInputProcessor(input);
+		Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
 	}
 
@@ -259,7 +270,20 @@ public abstract class AbstractGame implements ApplicationListener,
 				drawActions(player.getAction(), batch);
 			}
 
-			inputStrategy.draw(batch);
+			if (highlightedPlayer != null) {
+				highlightedPlayer.drawHighlight(batch);
+				drawTimeLinePoints(highlightedPlayer);
+				drawPlayerStats(batch, highlightedPlayer);
+			}
+
+			if (selectedPlayer != null) {
+				selectedPlayer.drawSelect(batch);
+				drawTimeLinePoints(selectedPlayer);
+			}
+
+			if (isBallHighlighted) {
+				ball.drawHighlight(batch);
+			}
 
 		} else {
 			// Execution stage
@@ -318,7 +342,6 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (gameState == GameState.INPUT) {
 			shapeRenderer.setColor(255, 255, 255, 255);
-			List<Vector2> lineInProgress = inputStrategy.getLineBeingDrawn();
 
 			for (int i = 0; i < lineInProgress.size() - 1; i++) {
 				Vector2 a = lineInProgress.get(i);
@@ -553,10 +576,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		return ball;
 	}
 
-	public void setInputStrategy(AbstractInput inputStrategy) {
-		this.inputStrategy = inputStrategy;
-	}
-
 	public void setSoundManager(SoundManager soundManager) {
 		this.soundManager = soundManager;
 	}
@@ -569,7 +588,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected void beginInputStage() {
 		gameState = GameState.INPUT;
-		inputStrategy.deselectPlayers();
+		selectedPlayer = null;
+		highlightedPlayer = null;
 		clearActions();
 		bar.setPositionToDown();
 	}
@@ -601,7 +621,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public Player getSelectedPlayer() {
-		return inputStrategy.getSelectedPlayer();
+		return selectedPlayer;
 	}
 
 	public TeamColour getHumanColour() {
@@ -787,6 +807,300 @@ public abstract class AbstractGame implements ApplicationListener,
 			return pauseMenu;
 		}
 		return null;
+	}
+
+	/**
+	 * Finds a player that overlaps or is near a point, returns null if no
+	 * player found.
+	 * 
+	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
+	 *          FIELD COORDINATES
+	 */
+	protected Player findPlayer(Vector2 point) {
+		Player temp = null;
+		Vector2 playerVector;
+		for (Player player : getAllPlayers()) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
+					// We are biased to selectable players, return them before
+					// an unselectable one.
+					if (isSelectable(player)) {
+						return player;
+					} else {
+						temp = player;
+					}
+				}
+			}
+
+		}
+		return temp;
+	}
+
+	/**
+	 * Looks for a player at or near the specified point. Gets index of the
+	 * selected position (Possibly a hack). Returns an integer indicating how
+	 * far in the list of actions has been selected.
+	 * 
+	 * @return The action list queue index at the selected position
+	 */
+	protected int findPlayerIndex(Vector2 point) {
+		Vector2 playerVector;
+		for (Player player : getAllPlayers()) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
+					// We are biased to selectable players, return them before
+					// an unselectable one.
+					if (isSelectable(player)) {
+						return pointsList.size() - 1 - i;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Finds if the ball overlaps or is near a point.
+	 * 
+	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
+	 *          FIELD COORDINATES
+	 */
+	protected boolean findBall(Vector2 point) {
+		if (getBall() == null) {
+			return false;
+		}
+
+		return (getBall().getBallPosition().epsilonEquals(point,
+				INPUT_EPSILON_VALUE)) ? true : false;
+	}
+
+	protected boolean isSelectable(Player player) {
+		if (getHumanPlayers().contains(player)) {
+			return true;
+		}
+
+		if (getHumanGoalie() != null) {
+			if (getHumanGoalie().hasBall() && getHumanGoalie() == player) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Called when a line is drawn starting and finishing on top of a player &
+	 * not a ball
+	 */
+	private void pressPlayer(Player pressedPlayer) {
+
+		if (selectedPlayer == null && isSelectable(pressedPlayer)) {
+			selectedPlayer = pressedPlayer;
+			return;
+		} else if (selectedPlayer == pressedPlayer) {
+			selectedPlayer = null;
+			return;
+		}
+
+		if (selectedPlayer != null
+				&& pressedPlayer.getTeam() == getHumanColour()) {
+			// If both players are selectable pass between them
+			selectedPlayer.addAction(new Pass(ball, selectedPlayer,
+					pressedPlayer, selectedPlayer.getFuturePosition()));
+
+		} else if (selectedPlayer != null
+				&& pressedPlayer.getTeam() != getHumanColour()
+				&& pressedPlayer != getComputerGoalie()) {
+			// If the first player is selectable, the second player is on the
+			// opposingTeam but is not a goalie then mark the second player
+			selectedPlayer.addAction(new Mark(selectedPlayer, pressedPlayer));
+		}
+		selectedPlayer = null;
+	}
+
+	/** Called when a line is drawn starting and finishing on top of a ball */
+	private void pressBall() {
+		Log.i(INPUT_TAG, "Pressed ball: ");
+
+		if (selectedPlayer != null) {
+			selectedPlayer.addAction(new MarkBall(selectedPlayer, ball));
+			selectedPlayer = null;
+			return;
+		}
+	}
+
+	private void pressPoint(Vector2 point) {
+		if (selectedPlayer != null) {
+			selectedPlayer.addAction(new Kick(getBall(), point, selectedPlayer
+					.getFuturePosition()));
+			selectedPlayer = null;
+		}
+	}
+
+	private void assignMoveTo(Player player, int index) {
+		Log.i(INPUT_TAG, "assigning Move command to " + player.toString());
+
+		if (index != 0) {
+			// TODO: Refactor Marking into a generic abstract following action
+			if (player.getAction(index) instanceof Mark) {
+				Mark markAction = (Mark) player.getAction(index);
+				player.setAction(
+						new MoveToPosition(lineInProgress.get(lineInProgress
+								.size() - 1), markAction.getTarget()), index);
+			} else if (player.getAction(index) instanceof MarkBall) {
+				player.setAction(
+						new MoveToPosition(lineInProgress.get(lineInProgress
+								.size() - 1), ball), index);
+			} else {
+				player.setAction(
+						new Move(lineInProgress
+								.toArray(new Vector2[lineInProgress.size()])),
+						index);
+			}
+		} else {
+			player.setAction(
+					new Move(lineInProgress.toArray(new Vector2[lineInProgress
+							.size()])), index);
+		}
+
+		selectedPlayer = null;
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.BACK) {
+			backButtonPressed();
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+		Vector2 eventVector = translateInputToField(new Vector2(screenX,
+				screenY));
+
+		onPress(eventVector.x, eventVector.y);
+
+		if (getGameState() == GameState.INPUT) {
+			lineInProgress.clear();
+			lineInProgress.add(eventVector);
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if (lineInProgress.size() < 1) {
+			return false;
+		}
+
+		Player start = findPlayer(lineInProgress.get(0));
+		Player finish = findPlayer(lineInProgress
+				.get(lineInProgress.size() - 1));
+
+		Vector2 startVector = lineInProgress.get(0);
+		Vector2 endVector = lineInProgress.get(lineInProgress.size() - 1);
+
+		boolean startAtBall = findBall(startVector);
+		boolean finishedAtBall = findBall(endVector);
+
+		// Note to self: the orderings here are very important
+		if (startVector.dst(endVector) < 15 && finish == null) {
+			Log.i(INPUT_TAG, "You pressed: " + startVector.toString());
+			if (startAtBall && finishedAtBall && selectedPlayer != null) {
+				Log.i(INPUT_TAG, "You marked the ball");
+				pressBall();
+			} else {
+				pressPoint(startVector);
+			}
+			lineInProgress.clear();
+		} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
+			Log.i(INPUT_TAG, "You marked the ball");
+			pressBall();
+			lineInProgress.clear();
+		} else if (start == null) {
+			Log.i(INPUT_TAG, "You drew a line starting from a null position");
+			lineInProgress.clear();
+		} else if (start == finish) {
+			Log.i(INPUT_TAG, "You selected a player");
+			pressPlayer(start);
+			lineInProgress.clear();
+		} else if (!isSelectable(start)) {
+			Log.i(INPUT_TAG, "Your line started from an unselectable player");
+			lineInProgress.clear();
+		} else if (isSelectable(start)) {
+			Log.i(INPUT_TAG, "You drew a line from a player");
+			int index = findPlayerIndex(lineInProgress.get(0));
+			Log.i(INPUT_TAG,
+					"You drew a line from a player " + String.valueOf(index));
+			assignMoveTo(start, index);
+			lineInProgress.clear();
+		}
+		return true;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+		if (getGameState() == GameState.INPUT) {
+			lineInProgress.add(translateInputToField(new Vector2(screenX,
+					screenY)));
+		}
+		return true;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
+	}
+
+	@Override
+	public boolean onHover(View arg0, MotionEvent event) {
+		Vector2 hoverPoint = translateInputToField(new Vector2(event.getX(),
+				event.getY()));
+
+		if (bar != null && bar.contains(hoverPoint.x, hoverPoint.y)) {
+			Log.i("BAR", "hover eventVector: " + hoverPoint.toString() + " "
+					+ bar.toString());
+		}
+
+		if (getGameState() == GameState.INPUT) {
+			highlightedPlayer = findPlayer(hoverPoint);
+			isBallHighlighted = findBall(hoverPoint);
+		}
+		return false;
+	}
+
+	@Override
+	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
+	}
+
+	@Override
+	public void onHoverButtonUp(View arg0, MotionEvent arg1) {
 	}
 
 }

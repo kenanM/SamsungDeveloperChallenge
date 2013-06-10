@@ -109,7 +109,8 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	@Override
 	protected void beginInputStage() {
 		gameState = GameState.INPUT;
-		inputStrategy.deselectPlayers();
+		selectedPlayer = null;
+		highlightedPlayer = null;
 		clearActions();
 		bar.setPositionToDown();
 		
