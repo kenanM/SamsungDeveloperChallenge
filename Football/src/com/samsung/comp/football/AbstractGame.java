@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -595,7 +594,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void beginExecution() {
-		Log.i("Game", "Beginning execution");
+		Gdx.app.log("Game", "Beginning execution");
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		ai.getComputerActions();
@@ -737,7 +736,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void backButtonPressed() {
-		Log.i("GameState", "Back button pressed");
+		Gdx.app.log("GameState", "Back button pressed");
 		if (gameState == GameState.FINISHED) {
 			Gdx.app.exit();
 		} else if (gameState == GameState.PAUSED) {
@@ -748,7 +747,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			gameState = GameState.PAUSED;
 			textAreaTypeDisplayed = 1;
 		}
-		Log.i("GameState", gameState.toString());
+		Gdx.app.log("GameState", gameState.toString());
 
 	}
 
@@ -762,7 +761,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (getHumanGoalie().hasBall()) {
 			if (!getHumanGoalie().kicksBall()) {
 				getBar().setText("Goalie cannot hold onto the ball");
-				Log.i("Game", "Goalie needs to kick the ball");
+				Gdx.app.log("Game", "Goalie needs to kick the ball");
 				return;
 			}
 		}
@@ -917,7 +916,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	/** Called when a line is drawn starting and finishing on top of a ball */
 	private void pressBall() {
-		Log.i(INPUT_TAG, "Pressed ball: ");
+		Gdx.app.log(INPUT_TAG, "Pressed ball: ");
 
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new MarkBall(selectedPlayer, ball));
@@ -935,7 +934,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	private void assignMoveTo(Player player, int index) {
-		Log.i(INPUT_TAG, "assigning Move command to " + player.toString());
+		Gdx.app.log(INPUT_TAG, "assigning Move command to " + player.toString());
 
 		if (index != 0) {
 			// TODO: Refactor Marking into a generic abstract following action
@@ -1028,32 +1027,34 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		// Note to self: the orderings here are very important
 		if (startVector.dst(endVector) < 15 && finish == null) {
-			Log.i(INPUT_TAG, "You pressed: " + startVector.toString());
+			Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
 			if (startAtBall && finishedAtBall && selectedPlayer != null) {
-				Log.i(INPUT_TAG, "You marked the ball");
+				Gdx.app.log(INPUT_TAG, "You marked the ball");
 				pressBall();
 			} else {
 				pressPoint(startVector);
 			}
 			lineInProgress.clear();
 		} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
-			Log.i(INPUT_TAG, "You marked the ball");
+			Gdx.app.log(INPUT_TAG, "You marked the ball");
 			pressBall();
 			lineInProgress.clear();
 		} else if (start == null) {
-			Log.i(INPUT_TAG, "You drew a line starting from a null position");
+			Gdx.app.log(INPUT_TAG,
+					"You drew a line starting from a null position");
 			lineInProgress.clear();
 		} else if (start == finish) {
-			Log.i(INPUT_TAG, "You selected a player");
+			Gdx.app.log(INPUT_TAG, "You selected a player");
 			pressPlayer(start);
 			lineInProgress.clear();
 		} else if (!isSelectable(start)) {
-			Log.i(INPUT_TAG, "Your line started from an unselectable player");
+			Gdx.app.log(INPUT_TAG,
+					"Your line started from an unselectable player");
 			lineInProgress.clear();
 		} else if (isSelectable(start)) {
-			Log.i(INPUT_TAG, "You drew a line from a player");
+			Gdx.app.log(INPUT_TAG, "You drew a line from a player");
 			int index = findPlayerIndex(lineInProgress.get(0));
-			Log.i(INPUT_TAG,
+			Gdx.app.log(INPUT_TAG,
 					"You drew a line from a player " + String.valueOf(index));
 			assignMoveTo(start, index);
 			lineInProgress.clear();
@@ -1093,7 +1094,8 @@ public abstract class AbstractGame implements ApplicationListener,
 				event.getY()));
 
 		if (bar != null && bar.contains(hoverPoint.x, hoverPoint.y)) {
-			Log.i("BAR", "hover eventVector: " + hoverPoint.toString() + " "
+			Gdx.app.log("BAR", "hover eventVector: " + hoverPoint.toString()
+					+ " "
 					+ bar.toString());
 		}
 

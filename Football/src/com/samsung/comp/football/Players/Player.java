@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.util.Log;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -600,13 +599,13 @@ public abstract class Player extends Rectangle implements
 
 	public boolean kicksBall() {
 		List<Action> actions = getActions();
-		Log.i("Player", "found: " + actions.size() + " actions");
+		Gdx.app.log("Player", "found: " + actions.size() + " actions");
 		for (Action action : actions) {
 			if (action instanceof Kick || action instanceof Pass) {
 				return true;
 			}
 		}
-		Log.i("Player", "player doesn't kick ball.. returning false");
+		Gdx.app.log("Player", "player doesn't kick ball.. returning false");
 		return false;
 	}
 
