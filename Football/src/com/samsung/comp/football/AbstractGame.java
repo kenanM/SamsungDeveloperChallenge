@@ -991,6 +991,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		if (getGameState() == GameState.INPUT) {
+
 			bar.onPress(point.x, point.y);
 
 			if (getGameState() == GameState.INPUT) {
@@ -1034,31 +1035,30 @@ public abstract class AbstractGame implements ApplicationListener,
 			} else {
 				pressPoint(startVector);
 			}
-			lineInProgress.clear();
+
 		} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
 			Gdx.app.log(INPUT_TAG, "You marked the ball");
 			pressBall();
-			lineInProgress.clear();
+
 		} else if (start == null) {
 			Gdx.app.log(INPUT_TAG,
 					"You drew a line starting from a null position");
-			lineInProgress.clear();
+
 		} else if (start == finish) {
 			Gdx.app.log(INPUT_TAG, "You selected a player");
 			pressPlayer(start);
-			lineInProgress.clear();
 		} else if (!isSelectable(start)) {
 			Gdx.app.log(INPUT_TAG,
 					"Your line started from an unselectable player");
-			lineInProgress.clear();
 		} else if (isSelectable(start)) {
 			Gdx.app.log(INPUT_TAG, "You drew a line from a player");
 			int index = findPlayerIndex(lineInProgress.get(0));
 			Gdx.app.log(INPUT_TAG,
 					"You drew a line from a player " + String.valueOf(index));
 			assignMoveTo(start, index);
-			lineInProgress.clear();
+
 		}
+		lineInProgress.clear();
 		return true;
 	}
 
