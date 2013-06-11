@@ -680,16 +680,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		return new Vector2((float) vx, (float) vy);
 	}
 
-	public void onPress(float x, float y) {
-		if (getGameState() == GameState.PAUSED) {
-			textAreaFactory().onPress(x, y);
-		}
-
-		if (getGameState() == GameState.INPUT) {
-			bar.onPress(x, y);
-		}
-	}
-
 	@Override
 	public void onNotifyCanClose() {
 		gameState = gameStateToGoIntoWhenBackButtonPressed;
@@ -994,14 +984,23 @@ public abstract class AbstractGame implements ApplicationListener,
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		Vector2 eventVector = translateInputToField(new Vector2(screenX,
+		Vector2 point = translateInputToField(new Vector2(screenX,
 				screenY));
 
-		onPress(eventVector.x, eventVector.y);
+		if (getGameState() == GameState.PAUSED) {
+			textAreaFactory().onPress(point.x, point.y);
+		}
 
 		if (getGameState() == GameState.INPUT) {
+			bar.onPress(point.x, point.y);
+
+			if (getGameState() == GameState.INPUT) {
+				highlightedPlayer = findPlayer(point);
+				isBallHighlighted = findBall(point);
+			}
+
 			lineInProgress.clear();
-			lineInProgress.add(eventVector);
+			lineInProgress.add(point);
 		}
 
 		return true;
@@ -1009,6 +1008,10 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+		highlightedPlayer = null;
+		isBallHighlighted = false;
+
 		if (lineInProgress.size() < 1) {
 			return false;
 		}
@@ -1070,7 +1073,13 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
+		Vector2 hoverPoint = translateInputToField(new Vector2(screenX, screenY));
+
+		if (getGameState() == GameState.INPUT) {
+			highlightedPlayer = findPlayer(hoverPoint);
+			isBallHighlighted = findBall(hoverPoint);
+		}
+		return true;
 	}
 
 	@Override
@@ -1092,7 +1101,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			highlightedPlayer = findPlayer(hoverPoint);
 			isBallHighlighted = findBall(hoverPoint);
 		}
-		return false;
+		return true;
 	}
 
 	@Override
