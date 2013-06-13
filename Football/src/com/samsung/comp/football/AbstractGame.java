@@ -997,10 +997,12 @@ public abstract class AbstractGame implements ApplicationListener,
 			if (getGameState() == GameState.INPUT) {
 				highlightedPlayer = findPlayer(point);
 				isBallHighlighted = findBall(point);
-			}
 
-			lineInProgress.clear();
-			lineInProgress.add(point);
+				if (!bar.contains(point.x, point.y)) {
+					lineInProgress.clear();
+					lineInProgress.add(point);
+				}
+			}
 		}
 
 		return true;
@@ -1068,9 +1070,12 @@ public abstract class AbstractGame implements ApplicationListener,
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 
+		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
+
 		if (getGameState() == GameState.INPUT) {
-			lineInProgress.add(translateInputToField(new Vector2(screenX,
-					screenY)));
+			if (!bar.contains(point.x, point.y)) {
+				lineInProgress.add(point);
+			}
 		}
 		return true;
 	}
