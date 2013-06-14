@@ -492,7 +492,8 @@ public abstract class AbstractGame implements ApplicationListener,
 					&& ball.getOwner() != player
 					&& !(ball.getOwner() instanceof Goalie)
 					&& ball.getTimeSinceTackle() > BALL_CHANGE_TIME
-					&& player.getTimeSinceKick() > BALL_PASS_TIME) {
+					&& player.getTimeSinceKick() > BALL_PASS_TIME
+					&& player.getTimeFailedTackle() > BALL_CHANGE_TIME) {
 
 				if (ball.hasOwner()) {
 					if (ball.getOwner().getTeam() != player.getTeam()) {
@@ -508,6 +509,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						// failed to collect ball
 						player.setNoticationTime(.75f);
 						player.setTimeSinceKick(0);
+						player.setTimeSinceFailedTackle(0);
 					}
 				}
 			}
@@ -525,6 +527,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			// failed the tackle
 			player.setNoticationTime(.75f);
 			player.setTimeSinceKick(.75f);
+			player.setTimeSinceFailedTackle(0);
 		}
 	}
 

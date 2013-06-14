@@ -64,6 +64,7 @@ public abstract class Player extends Rectangle implements
 	float rotation;
 	protected Action action;
 	private float timeSinceKick = Game.BALL_PASS_TIME;
+	private float timeSinceFailedTackle = Game.BALL_CHANGE_TIME;
 	private Ball ball;
 
 	// TODO: MUST INITIALISE PLAYER STATS
@@ -108,6 +109,14 @@ public abstract class Player extends Rectangle implements
 
 	public float getTimeSinceKick() {
 		return timeSinceKick;
+	}
+
+	public void setTimeSinceFailedTackle(float time) {
+		timeSinceFailedTackle = time;
+	}
+
+	public float getTimeFailedTackle() {
+		return timeSinceFailedTackle;
 	}
 
 	public void setNoticationTime(float time) {
@@ -529,6 +538,7 @@ public abstract class Player extends Rectangle implements
 
 		Vector2 position = moveAlongPath(time);
 		timeSinceKick = timeSinceKick + time;
+		timeSinceFailedTackle = timeSinceFailedTackle + time;
 		notificationTime -= (notificationTime > 0) ? time : 0;
 
 		this.x = Player.translatePlayerCoordinate(position.x);
