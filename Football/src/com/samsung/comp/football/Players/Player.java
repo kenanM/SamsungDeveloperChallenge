@@ -412,6 +412,7 @@ public abstract class Player extends Rectangle implements
 			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
 					target, shootSpeed);
 			ball.move(ballVelocity);
+			rotation = ballVelocity.angle();
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
@@ -437,6 +438,7 @@ public abstract class Player extends Rectangle implements
 			Vector2 ballVelocity = Utils.getMoveVector(getPlayerPosition(),
 					target, (float) lowestSpeed);
 			ball.move(ballVelocity);
+			rotation = ballVelocity.angle();
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
@@ -451,6 +453,7 @@ public abstract class Player extends Rectangle implements
 
 		if (hasBall()) {
 			executeNextAction();
+			path = null;
 		}
 	}
 
@@ -459,6 +462,7 @@ public abstract class Player extends Rectangle implements
 
 		if (hasBall()) {
 			executeNextAction();
+			path = null;
 		}
 	}
 
@@ -499,6 +503,7 @@ public abstract class Player extends Rectangle implements
 					targetFuturePosition, lowestSpeed);
 
 			ball.move(ballVelocity);
+			rotation = ballVelocity.angle();
 			ball.resetTimeSinceTackle();
 			timeSinceKick = 0;
 			ball.removeOwner();
@@ -550,7 +555,7 @@ public abstract class Player extends Rectangle implements
 				distance -= position.dst(target);
 				position.set(target);
 				positionInPath++;
-				if (positionInPath != 0 && positionInPath == path.length) {
+				if (positionInPath == path.length) {
 					path = new Vector2[] {};
 					resetPathIndex();
 					if (action instanceof Move
