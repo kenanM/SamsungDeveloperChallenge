@@ -269,6 +269,10 @@ public abstract class AbstractGame implements ApplicationListener,
 				drawActions(player.getAction(), batch);
 			}
 
+			if (getHumanGoalie() != null) {
+				drawActions(getHumanGoalie().getAction(), batch);
+			}
+
 			if (highlightedPlayer != null) {
 				highlightedPlayer.drawHighlight(batch);
 				drawTimeLinePoints(highlightedPlayer);
@@ -357,6 +361,9 @@ public abstract class AbstractGame implements ApplicationListener,
 				drawActions(player.getAction(), shapeRenderer);
 			}
 
+			if (getHumanGoalie() != null) {
+				drawActions(getHumanGoalie().getAction(), shapeRenderer);
+			}
 		} else {
 			// Execution stage
 		}
