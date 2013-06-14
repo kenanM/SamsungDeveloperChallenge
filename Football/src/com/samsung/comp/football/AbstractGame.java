@@ -500,7 +500,7 @@ public abstract class AbstractGame implements ApplicationListener,
 					} else {
 						// failed to collect ball
 						player.setNoticationTime(.75f);
-						player.setTimeSinceKick(.75f);
+						player.setTimeSinceKick(0);
 					}
 				}
 			}
