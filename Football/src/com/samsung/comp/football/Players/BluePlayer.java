@@ -22,7 +22,7 @@ public class BluePlayer extends Player {
 	}
 
 	public BluePlayer(float x, float y, float shoot, float run, float tackle,
-			float tackleStop) {
+			float tackleStop, float savingSkill) {
 		super(x, y);
 		this.TEAM = TeamColour.RED;
 		this.hoverTexture = new Texture(Gdx.files.internal("blue hover.png"));
