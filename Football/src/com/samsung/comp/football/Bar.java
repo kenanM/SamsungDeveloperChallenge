@@ -16,15 +16,16 @@ public class Bar extends Rectangle {
 	private Texture cancelIconPressed;
 	private String text;
 
+	private Rectangle playIconRectangle;
+	private Rectangle cancelIconRectangle;
+
 	public enum Position {
 		UP, DOWN
 	};
 
 	private int upYValue;
 	/** The distance between a button and a border */
-	private int offset = 25;
-	/** The 'X' coordinate of the cancel icon */
-	private int cancelIconX;
+	private int xOffset = 25;
 	private int velocity = 150;
 
 	private Position position = Position.DOWN;
@@ -43,47 +44,58 @@ public class Bar extends Rectangle {
 	}
 
 	public void create() {
+		bar = new Texture(Gdx.files.internal("bar.png"));
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
 		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
 		cancelIconPressed = new Texture(
 				Gdx.files.internal("cancelIconDepressed.png"));
-		bar = new Texture(Gdx.files.internal("bar.png"));
-		cancelIconX = Game.VIRTUAL_SCREEN_WIDTH - cancelIcon.getWidth()
-				- offset;
+
 		upYValue = -2 * playIcon.getHeight();
+
 		this.y = -playIcon.getHeight();
 		this.x = 0;
 		this.height = playIcon.getHeight();
-		this.width = bar.getWidth();
+		this.width = Game.VIRTUAL_SCREEN_WIDTH;
+
+		playIconRectangle = new Rectangle(xOffset, this.y, playIcon.getWidth(),
+				playIcon.getHeight());
+		cancelIconRectangle = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH
+				- cancelIcon.getWidth() - xOffset, this.y,
+				cancelIcon.getWidth(),
+				cancelIcon.getHeight());
 	}
 
 	public void update(Float time) {
 
-		if (position == Position.UP && this.y > upYValue) {
-			this.y -= velocity * time;
-		} else if (position == Position.DOWN && this.y < -playIcon.getHeight()) {
-			this.y += velocity * time;
+		if (position == Position.UP && playIconRectangle.y > upYValue) {
+			playIconRectangle.y -= velocity * time;
+		} else if (position == Position.DOWN
+				&& playIconRectangle.y < -playIcon.getHeight()) {
+			playIconRectangle.y += velocity * time;
 		}
 
-		if (this.y < upYValue) {
-			y = upYValue;
+		if (playIconRectangle.y < upYValue) {
+			playIconRectangle.y = upYValue;
 		}
-		if (this.y > -playIcon.getHeight()) {
-			y = -playIcon.getHeight();
+		if (playIconRectangle.y > this.y) {
+			playIconRectangle.y = this.y;
 		}
+
 		cancelActionsTimer += time;
 		textCountdownTimer += time;
 	}
 
 	public void draw(SpriteBatch batch) {
-		batch.draw(bar, 0, -playIcon.getHeight());
-		batch.draw(playIcon, offset, y);
+		batch.draw(bar, x, y);
+		batch.draw(playIcon, playIconRectangle.x, playIconRectangle.y);
 
 		if (isCancelButtonShown()) {
 			if (cancelActionsTimer < 1) {
-				batch.draw(cancelIconPressed, cancelIconX, y);
+				batch.draw(cancelIconPressed, cancelIconRectangle.x,
+						cancelIconRectangle.y);
 			} else {
-				batch.draw(cancelIcon, cancelIconX, y);
+				batch.draw(cancelIcon, cancelIconRectangle.x,
+						cancelIconRectangle.y);
 			}
 		}
 
@@ -91,10 +103,11 @@ public class Bar extends Rectangle {
 			text = "Red: " + game.getRedScore() + " Blue: "
 					+ game.getBlueScore() + "      " + game.getRemainingTime();
 		}
-		bmf.draw(batch, text, playIcon.getWidth() + (offset * 4),
+		bmf.draw(batch, text, playIcon.getWidth() + (xOffset * 4),
 				7 - playIcon.getHeight());
 	}
 
+	//
 	public void setPositionToUp() {
 		position = Position.UP;
 	}
@@ -103,25 +116,11 @@ public class Bar extends Rectangle {
 		position = Position.DOWN;
 	}
 
-	public Rectangle getPlayIcon() {
-		return new Rectangle(offset, y, playIcon.getWidth(),
-				playIcon.getHeight());
-	}
-
-	public Rectangle getCancelIcon() {
-		return new Rectangle(cancelIconX, y, cancelIcon.getWidth(),
-				cancelIcon.getHeight());
-	}
-
-	// TODO: Delete me
-	public void fade() {
-	}
-
 	public void onPress(float x, float y) {
-		if (getPlayIcon().contains(x, y)) {
+		if (playIconRectangle.contains(x, y)) {
 			game.playButtonPressed();
 
-		} else if (isCancelButtonShown() && getCancelIcon().contains(x, y)) {
+		} else if (isCancelButtonShown() && cancelIconRectangle.contains(x, y)) {
 			// TODO (Gavin): Change this to be 'undo last action'
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().clearActions();
