@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.samsung.comp.football.AbstractGame.GameState;
 
 public class Bar extends Rectangle {
 
@@ -23,11 +24,13 @@ public class Bar extends Rectangle {
 		UP, DOWN
 	};
 
-	private int upYValue;
+	private float upYValue;
 	/** The distance between a button and a border */
 	private int xOffset = 25;
 	private int velocity = 150;
+	// private float playIconMoveDistance = 2 * playIcon.getHeight();
 
+	private boolean positionedAtTop = true;
 	private Position position = Position.DOWN;
 
 	private final AbstractGame game;
@@ -37,25 +40,34 @@ public class Bar extends Rectangle {
 	private float textCountdownTimer = 3;
 
 	public Bar(AbstractGame game) {
+		this(game, true);
+	}
+
+	public Bar(AbstractGame game, boolean topOfScreen) {
 		this.game = game;
 		bmf = new BitmapFont(true);
 		bmf.scale(.35f);
-		create();
+		create(topOfScreen);
 	}
 
-	public void create() {
+	public void create(boolean topOfScreen) {
 		bar = new Texture(Gdx.files.internal("bar.png"));
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
 		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
 		cancelIconPressed = new Texture(
 				Gdx.files.internal("cancelIconDepressed.png"));
 
-		upYValue = -2 * playIcon.getHeight();
+		positionedAtTop = topOfScreen;
 
-		this.y = -playIcon.getHeight();
+		this.y = positionedAtTop ? -playIcon.getHeight()
+				: Game.VIRTUAL_SCREEN_HEIGHT;
 		this.x = 0;
+
 		this.height = playIcon.getHeight();
 		this.width = Game.VIRTUAL_SCREEN_WIDTH;
+
+		upYValue = positionedAtTop ? this.y - playIcon.getHeight() : this.y
+				+ playIcon.getHeight();
 
 		playIconRectangle = new Rectangle(xOffset, this.y, playIcon.getWidth(),
 				playIcon.getHeight());
@@ -67,18 +79,39 @@ public class Bar extends Rectangle {
 
 	public void update(Float time) {
 
-		if (position == Position.UP && playIconRectangle.y > upYValue) {
-			playIconRectangle.y -= velocity * time;
-		} else if (position == Position.DOWN
-				&& playIconRectangle.y < -playIcon.getHeight()) {
-			playIconRectangle.y += velocity * time;
-		}
+		// Refactor: Separate the algorithms for moving the bar at the top and
+		// bottom with a Strategy pattern
+		if (positionedAtTop) {
 
-		if (playIconRectangle.y < upYValue) {
-			playIconRectangle.y = upYValue;
-		}
-		if (playIconRectangle.y > this.y) {
-			playIconRectangle.y = this.y;
+			if (position == Position.UP && playIconRectangle.y > upYValue) {
+				playIconRectangle.y = playIconRectangle.y - velocity * time;
+			} else if (position == Position.DOWN
+					&& playIconRectangle.y < -playIcon.getHeight()) {
+				playIconRectangle.y = playIconRectangle.y + velocity * time;
+			}
+
+			if (playIconRectangle.y < upYValue) {
+				playIconRectangle.y = upYValue;
+			}
+			if (playIconRectangle.y > this.y) {
+				playIconRectangle.y = this.y;
+			}
+
+		} else {
+
+			if (position == Position.UP && playIconRectangle.y < upYValue) {
+				playIconRectangle.y = playIconRectangle.y + velocity * time;
+			} else if (position == Position.DOWN
+					&& playIconRectangle.y > -playIcon.getHeight()) {
+				playIconRectangle.y = playIconRectangle.y - velocity * time;
+			}
+
+			if (playIconRectangle.y > upYValue) {
+				playIconRectangle.y = upYValue;
+			}
+			if (playIconRectangle.y < this.y) {
+				playIconRectangle.y = this.y;
+			}
 		}
 
 		cancelActionsTimer += time;
@@ -103,8 +136,11 @@ public class Bar extends Rectangle {
 			text = "Red: " + game.getRedScore() + " Blue: "
 					+ game.getBlueScore() + "      " + game.getRemainingTime();
 		}
-		bmf.draw(batch, text, playIcon.getWidth() + (xOffset * 4),
-				7 - playIcon.getHeight());
+		bmf.draw(batch, text, playIcon.getWidth() + (xOffset * 4), this.y + 7);
+
+		if (game.getGameState() == GameState.EXECUTION) {
+			bmf.draw(batch, "Executing...", xOffset, this.y + 7);
+		}
 	}
 
 	//

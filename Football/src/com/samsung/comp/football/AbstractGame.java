@@ -124,6 +124,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected TextArea textArea;
 	protected NullTextArea nullTextArea;
 	public Bar bar;
+	protected boolean positionUIBarAtTop = false;
 
 	protected Player selectedPlayer;
 	protected Player highlightedPlayer;
@@ -157,7 +158,12 @@ public abstract class AbstractGame implements ApplicationListener,
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT
 				+ bar.getHeight());
+		if (positionUIBarAtTop) {
+			// Move the camera
 		camera.translate(0, -bar.getHeight());
+		} else {
+			// Leave the camera at the top left
+		}
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		bmf = new BitmapFont(true);
@@ -168,7 +174,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		pauseMenu = new PauseMenu();
 		textArea = new TextArea(this);
 		nullTextArea = new NullTextArea();
-		bar = new Bar(this);
+		bar = new Bar(this, positionUIBarAtTop);
 	}
 
 	protected void createIteractiveObjects() {
@@ -681,8 +687,15 @@ public abstract class AbstractGame implements ApplicationListener,
 		double vx = (vector.x / scaleFactor) - xOffset;
 		double vy = (vector.y / scaleFactor) - yOffset;
 
+
+
 		try {
-			vy -= bar.getHeight() / scaleFactor;
+			if (positionUIBarAtTop) {
+				vy -= bar.getHeight() / scaleFactor;
+			} else {
+				
+			}
+
 		} catch (NullPointerException e) {
 		}
 
