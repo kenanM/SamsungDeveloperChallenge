@@ -124,7 +124,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected TextArea textArea;
 	protected NullTextArea nullTextArea;
 	public Bar bar;
-	protected boolean positionUIBarAtTop = false;
+	protected boolean positionUIBarAtTop = true;
+	private boolean repositionCameraOnUpdate = false;
 
 	protected Player selectedPlayer;
 	protected Player highlightedPlayer;
@@ -160,9 +161,15 @@ public abstract class AbstractGame implements ApplicationListener,
 				+ bar.getHeight());
 		if (positionUIBarAtTop) {
 			// Move the camera
-		camera.translate(0, -bar.getHeight());
+			camera.translate(0, -bar.getHeight());
+			Gdx.app.log("CAMERA_POSITION", "Camera position: "
+					+ camera.position.x + "," + camera.position.y + ","
+					+ camera.position.z + " UP ");
 		} else {
-			// Leave the camera at the top left
+			// Leave the camera at the top
+			Gdx.app.log("CAMERA_POSITION", "Camera position: "
+					+ camera.position.x + "," + camera.position.y + ","
+					+ camera.position.z + " down ");
 		}
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -459,6 +466,26 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected void update() {
 
+		if (repositionCameraOnUpdate) {
+			positionUIBarAtTop = !positionUIBarAtTop;
+			bar = new Bar(this, positionUIBarAtTop);
+
+			if (positionUIBarAtTop) {
+				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
+						(VIRTUAL_SCREEN_HEIGHT / 2) - (bar.getHeight() / 2), 0);
+				Gdx.app.log("CAMERA_POSITION", "Camera position: "
+						+ camera.position.x + "," + camera.position.y + ","
+						+ " UP ");
+			} else {
+				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
+						(VIRTUAL_SCREEN_HEIGHT / 2) + (bar.getHeight() / 2), 0);
+				Gdx.app.log("CAMERA_POSITION", "Camera position: "
+						+ camera.position.x + "," + camera.position.y + ","
+						+ " DOWN ");
+			}
+			repositionCameraOnUpdate = false;
+		}
+
 		float time = Gdx.graphics.getDeltaTime();
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
@@ -687,13 +714,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		double vx = (vector.x / scaleFactor) - xOffset;
 		double vy = (vector.y / scaleFactor) - yOffset;
 
-
-
 		try {
 			if (positionUIBarAtTop) {
 				vy -= bar.getHeight() / scaleFactor;
 			} else {
-				
+
 			}
 
 		} catch (NullPointerException e) {
@@ -1006,8 +1031,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		Vector2 point = translateInputToField(new Vector2(screenX,
-				screenY));
+		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getGameState() == GameState.PAUSED) {
 			textAreaFactory().onPress(point.x, point.y);
@@ -1126,8 +1150,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (bar != null && bar.contains(hoverPoint.x, hoverPoint.y)) {
 			Gdx.app.log("BAR", "hover eventVector: " + hoverPoint.toString()
-					+ " "
-					+ bar.toString());
+					+ " " + bar.toString());
 		}
 
 		if (getGameState() == GameState.INPUT) {
@@ -1139,6 +1162,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public void onHoverButtonDown(View arg0, MotionEvent arg1) {
+		// repositionCameraOnUpdate = true;
 	}
 
 	@Override
