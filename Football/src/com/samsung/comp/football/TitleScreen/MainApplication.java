@@ -87,8 +87,6 @@ public class MainApplication extends Activity {
 		switch (item.getItemId()) {
 		case R.id.statusBarTop:
 			item.setChecked(!item.isChecked());
-			item.getGroupId();
-
 			return true;
 		case R.id.statusBarBottom:
 			item.setChecked(!item.isChecked());
@@ -96,5 +94,11 @@ public class MainApplication extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// This is called every time the menu button is pressed.
+		return false;
 	}
 }
