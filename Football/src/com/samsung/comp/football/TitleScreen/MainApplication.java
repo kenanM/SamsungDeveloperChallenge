@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -79,5 +80,21 @@ public class MainApplication extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.statusBarTop:
+			item.setChecked(!item.isChecked());
+			item.getGroupId();
+
+			return true;
+		case R.id.statusBarBottom:
+			item.setChecked(!item.isChecked());
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }

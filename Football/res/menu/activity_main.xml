@@ -1,5 +1,36 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_settings"
-        android:title="@string/menu_settings"
-        android:orderInCategory="100" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:title="@string/menu_settings"/>
+    <item
+        android:id="@+id/StatusBarTop"
+        android:enabled="true"
+        android:orderInCategory="0"
+        android:title="@string/status_Bar_Location_MenuItem"
+        android:visible="true">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true"
+                android:visible="true" >
+                <item
+                    android:id="@+id/statusBarTop"
+                    android:checked="false"
+                    android:enabled="true"
+                    android:orderInCategory="0"
+                    android:title="Top"
+                    android:visible="true"/>
+                <item
+                    android:id="@+id/statusBarBottom"
+                    android:checked="true"
+                    android:enabled="true"
+                    android:orderInCategory="1"
+                    android:title="Bottom"
+                    android:visible="true"/>
+            </group>
+        </menu>
+    </item>
+
 </menu>
