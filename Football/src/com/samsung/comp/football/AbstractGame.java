@@ -54,9 +54,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	// TODO: Restrict input, ball / player movement etc. to these
 	public static final int PLAYING_AREA_WIDTH = 670;
 	public static final int PLAYING_AREA_HEIGHT = 1024;
-	// Image here isn't vertical symmetrical
-	public static final Rectangle PLAYING_AREA = new Rectangle(23, 41,
-			676 - 23 - 23, 1024 - 41 - 45);
 
 	// TODO: HACK: rough area for goal here
 	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 0, 110,
