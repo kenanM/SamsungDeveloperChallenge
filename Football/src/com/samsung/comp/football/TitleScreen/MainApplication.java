@@ -99,6 +99,6 @@ public class MainApplication extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// This is called every time the menu button is pressed.
-		return false;
+		return super.onPrepareOptionsMenu(menu);
 	}
 }
