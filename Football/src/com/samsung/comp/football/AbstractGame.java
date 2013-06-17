@@ -118,11 +118,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected TeamColour computerColour;
 
 	protected AI ai;
-	// TODO: This also needs to go if it can take the performance hit.
-	protected int textAreaTypeDisplayed = -1;
-	protected PauseMenu pauseMenu;
 	protected TextArea textArea;
-	protected NullTextArea nullTextArea;
 	public Bar bar;
 	protected boolean positionUIBarAtTop = true;
 	private boolean repositionCameraOnUpdate = false;
@@ -178,9 +174,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void createUI() {
-		pauseMenu = new PauseMenu();
 		textArea = new TextArea(this);
-		nullTextArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 	}
 
@@ -315,7 +309,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (gameState == GameState.PAUSED) {
 			bmf.scale(.22f);
-			textAreaFactory().draw(batch, bmf);
+			textArea.draw(batch, bmf);
 			bmf.scale(-.22f);
 		}
 
@@ -730,7 +724,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	@Override
 	public void onNotifyCanClose() {
 		gameState = gameStateToGoIntoWhenBackButtonPressed;
-		textAreaTypeDisplayed = -1;
+		textArea = new NullTextArea();
 	}
 
 	@Override
@@ -789,11 +783,11 @@ public abstract class AbstractGame implements ApplicationListener,
 			Gdx.app.exit();
 		} else if (gameState == GameState.PAUSED) {
 			gameState = gameStateToGoIntoWhenBackButtonPressed;
-			textAreaTypeDisplayed = -1;
+			textArea = new NullTextArea();
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
-			textAreaTypeDisplayed = 1;
+			textArea = new PauseMenu();
 		}
 		Gdx.app.log("GameState", gameState.toString());
 
@@ -823,27 +817,6 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public void resume() {
-	}
-
-	/**
-	 * Returns the TextArea or pauseMenu based on the stored type value. Used to
-	 * get what is being displayed. Can replace the textAreaTypeDisplayed field
-	 * with a single textArea field but may cause performance hit to android
-	 * (worth checking).
-	 * 
-	 * @return
-	 */
-	protected TextArea textAreaFactory() {
-		if (textAreaTypeDisplayed < 0) {
-			return nullTextArea;
-		}
-		if (textAreaTypeDisplayed == 0) {
-			return textArea;
-		}
-		if (textAreaTypeDisplayed == 1) {
-			return pauseMenu;
-		}
-		return null;
 	}
 
 	/**
@@ -1034,7 +1007,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getGameState() == GameState.PAUSED) {
-			textAreaFactory().onPress(point.x, point.y);
+			textArea.onPress(point.x, point.y);
 		}
 
 		if (getGameState() == GameState.INPUT) {

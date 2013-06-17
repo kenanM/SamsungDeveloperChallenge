@@ -191,6 +191,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	}
 
 	protected void displayTutorialMessage() {
+		textArea = new TextArea(this);
 		if (tutorialPhase == TutorialPhase.MOVE) {
 			textArea.setText("Welcome to the tutorial. \n\n"
 					+ "Draw a line from your player to give them a path to follow.\n\n"
@@ -221,7 +222,6 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			textArea.setText("The goal keeper.");
 		}
-		textAreaTypeDisplayed = 0;
 		gameState = GameState.PAUSED;
 		gameStateToGoIntoWhenBackButtonPressed = GameState.INPUT;
 	}
