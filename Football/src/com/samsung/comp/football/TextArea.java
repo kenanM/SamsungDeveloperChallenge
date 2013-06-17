@@ -1,6 +1,7 @@
 package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,7 +55,10 @@ public class TextArea extends Rectangle implements ObservableTextArea {
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
 				areaTexture.getHeight());
 
+		Color tempColor = bmf.getColor();
+		bmf.setColor(Color.BLACK);
 		bmf.drawWrapped(batch, text, x + 30, y + 25, width - 45 - 25);
+		bmf.setColor(tempColor);
 	}
 
 	public void onPress(float x, float y) {
