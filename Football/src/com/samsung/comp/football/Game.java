@@ -2,6 +2,7 @@ package com.samsung.comp.football;
 
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.BlueGoalie;
 import com.samsung.comp.football.Players.BluePlayer;
@@ -140,6 +141,40 @@ public class Game extends AbstractGame {
 		}
 
 		soundManager.play(whistleBlow);
+	}
+
+	@Override
+	protected void update() {
+		float time = Gdx.graphics.getDeltaTime();
+		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
+
+		bar.update(time);
+
+		if (gameState == GameState.EXECUTION) {
+			elapsedRoundTime += time;
+
+			remainingMatchTime -= time;
+
+			for (Player player : getAllPlayers()) {
+				player.executeAction();
+				player.update(time);
+			}
+
+			ball.update(time);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+			tackleDetection(time);
+			goalScoredDetection();
+
+			if (elapsedRoundTime >= ROUND_TIME) {
+				gameState = GameState.INPUT;
+				beginInputStage();
+			}
+
+			if (remainingMatchTime < 0) {
+				matchFinish();
+			}
+		}
 	}
 
 	@Override

@@ -218,6 +218,26 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		update();
 
+		if (repositionCameraOnUpdate) {
+			positionUIBarAtTop = !positionUIBarAtTop;
+			bar = new Bar(this, positionUIBarAtTop);
+
+			if (positionUIBarAtTop) {
+				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
+						(VIRTUAL_SCREEN_HEIGHT / 2) - (bar.getHeight() / 2), 0);
+				Gdx.app.log("CAMERA_POSITION", "Camera position: "
+						+ camera.position.x + "," + camera.position.y + ","
+						+ " UP ");
+			} else {
+				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
+						(VIRTUAL_SCREEN_HEIGHT / 2) + (bar.getHeight() / 2), 0);
+				Gdx.app.log("CAMERA_POSITION", "Camera position: "
+						+ camera.position.x + "," + camera.position.y + ","
+						+ " DOWN ");
+			}
+			repositionCameraOnUpdate = false;
+		}
+
 		// clear the screen with a dark blue color.
 		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight
 				+ (int) bar.getHeight());
@@ -458,59 +478,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
-	protected void update() {
-
-		if (repositionCameraOnUpdate) {
-			positionUIBarAtTop = !positionUIBarAtTop;
-			bar = new Bar(this, positionUIBarAtTop);
-
-			if (positionUIBarAtTop) {
-				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
-						(VIRTUAL_SCREEN_HEIGHT / 2) - (bar.getHeight() / 2), 0);
-				Gdx.app.log("CAMERA_POSITION", "Camera position: "
-						+ camera.position.x + "," + camera.position.y + ","
-						+ " UP ");
-			} else {
-				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
-						(VIRTUAL_SCREEN_HEIGHT / 2) + (bar.getHeight() / 2), 0);
-				Gdx.app.log("CAMERA_POSITION", "Camera position: "
-						+ camera.position.x + "," + camera.position.y + ","
-						+ " DOWN ");
-			}
-			repositionCameraOnUpdate = false;
-		}
-
-		float time = Gdx.graphics.getDeltaTime();
-		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
-
-		bar.update(time);
-
-		if (gameState == GameState.EXECUTION) {
-			elapsedRoundTime += time;
-
-			remainingMatchTime -= time;
-
-			for (Player player : getAllPlayers()) {
-				player.executeAction();
-				player.update(time);
-			}
-
-			ball.update(time);
-			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
-					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-			tackleDetection(time);
-			goalScoredDetection();
-
-			if (elapsedRoundTime >= ROUND_TIME) {
-				gameState = GameState.INPUT;
-				beginInputStage();
-			}
-
-			if (remainingMatchTime < 0) {
-				matchFinish();
-			}
-		}
-	}
+	abstract protected void update();
 
 	protected void tackleDetection(float time) {
 		for (Player player : getAllPlayers()) {
