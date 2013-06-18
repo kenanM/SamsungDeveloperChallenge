@@ -124,6 +124,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Player highlightedPlayer;
 	protected boolean isBallHighlighted;
 	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
+	boolean team1Turn = true;
 	
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
@@ -859,16 +860,30 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected boolean isSelectable(Player player) {
-		if (getHumanPlayers().contains(player)) {
-			return true;
-		}
-
-		if (getHumanGoalie() != null) {
-			if (getHumanGoalie().hasBall() && getHumanGoalie() == player) {
+		if (team1Turn) {
+			if (getHumanPlayers().contains(player)) {
 				return true;
 			}
+
+			if (getHumanGoalie() != null) {
+				if (getHumanGoalie().hasBall() && getHumanGoalie() == player) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			if (getComputerPlayers().contains(player)) {
+				return true;
+			}
+
+			if (getComputerGoalie() != null) {
+				if (getComputerGoalie().hasBall()
+						&& getComputerGoalie() == player) {
+					return true;
+				}
+			}
+			return false;
 		}
-		return false;
 	}
 
 	/**
