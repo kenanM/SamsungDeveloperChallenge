@@ -26,8 +26,8 @@ public class Game extends AbstractGame {
 
 		createNewPlayersAndBall();
 
-		humanColour = TeamColour.BLUE;
-		computerColour = TeamColour.RED;
+		team1 = TeamColour.BLUE;
+		team2 = TeamColour.RED;
 
 		ai = new AI(this);
 

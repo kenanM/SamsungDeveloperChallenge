@@ -111,8 +111,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected SoundManager soundManager;
 
-	protected TeamColour humanColour;
-	protected TeamColour computerColour;
+	protected TeamColour team1;
+	protected TeamColour team2;
 
 	protected AI ai;
 	protected TextArea textArea;
@@ -124,7 +124,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Player highlightedPlayer;
 	protected boolean isBallHighlighted;
 	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
-
+	
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
 	@Override
@@ -138,8 +138,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		createUI();
 		createRenderingObjects();
 
-		humanColour = TeamColour.BLUE;
-		computerColour = TeamColour.RED;
+		team1 = TeamColour.BLUE;
+		team2 = TeamColour.RED;
 
 		remainingMatchTime = 3 * 60;
 
@@ -601,7 +601,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		this.gameState = GameState.EXECUTION;
 		ai.getComputerActions();
 		bar.setPositionToUp();
-		// inputStrategy.deselectPlayers();
 	}
 
 	public List<Player> getAllPlayers() {
@@ -626,15 +625,15 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public TeamColour getHumanColour() {
-		return humanColour;
+		return team1;
 	}
 
 	public TeamColour getComputerColour() {
-		return computerColour;
+		return team2;
 	}
 
 	public List<Player> getHumanPlayers() {
-		if (humanColour == TeamColour.RED) {
+		if (team1 == TeamColour.RED) {
 			return redPlayers;
 		} else {
 			return bluePlayers;
@@ -642,7 +641,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public List<Player> getComputerPlayers() {
-		if (computerColour == TeamColour.RED) {
+		if (team2 == TeamColour.RED) {
 			return redPlayers;
 		} else {
 			return bluePlayers;
@@ -650,7 +649,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public Player getHumanGoalie() {
-		if (humanColour == TeamColour.RED) {
+		if (team1 == TeamColour.RED) {
 			return redGoalie;
 		} else {
 			return blueGoalie;
@@ -658,7 +657,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public Player getComputerGoalie() {
-		if (computerColour == TeamColour.RED) {
+		if (team2 == TeamColour.RED) {
 			return redGoalie;
 		} else {
 			return blueGoalie;

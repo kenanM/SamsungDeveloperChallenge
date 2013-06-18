@@ -37,8 +37,8 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 		setupMovePhase();
 
-		humanColour = TeamColour.BLUE;
-		computerColour = TeamColour.RED;
+		team1 = TeamColour.BLUE;
+		team2 = TeamColour.RED;
 
 		remainingMatchTime = ROUND_TIME;
 
