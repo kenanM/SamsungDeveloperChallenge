@@ -599,7 +599,9 @@ public abstract class AbstractGame implements ApplicationListener,
 		Gdx.app.log("Game", "Beginning execution");
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
-		ai.getComputerActions();
+		if (ai != null) {
+			ai.getComputerActions();
+		}
 		bar.setPositionToUp();
 	}
 
