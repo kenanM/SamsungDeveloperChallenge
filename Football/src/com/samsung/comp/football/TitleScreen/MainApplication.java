@@ -17,6 +17,7 @@ public class MainApplication extends Activity {
 
 	Button startTutorialButton;
 	Button startGameButton;
+	Button startMultiplayerButton;
 	Button howToPlay;
 	Button aboutUs;
 
@@ -50,6 +51,15 @@ public class MainApplication extends Activity {
 			public void onClick(View v) {
 				startActivity(new Intent(MainApplication.this,
 						GameActivity.class));
+			}
+		});
+
+		startMultiplayerButton = (Button) findViewById(R.id.startMultiplayerGame);
+		startMultiplayerButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainApplication.this,
+						MultiplayerGameActivity.class));
 			}
 		});
 
