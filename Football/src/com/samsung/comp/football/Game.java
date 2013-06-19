@@ -156,8 +156,8 @@ public class Game extends AbstractGame {
 			remainingMatchTime -= time;
 
 			for (Player player : getAllPlayers()) {
-				player.executeAction();
 				player.update(time);
+				player.executeAction();
 			}
 
 			ball.update(time);
