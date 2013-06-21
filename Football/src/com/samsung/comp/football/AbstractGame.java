@@ -1029,41 +1029,39 @@ public abstract class AbstractGame implements ApplicationListener,
 		boolean startAtBall = findBall(startVector);
 		boolean finishedAtBall = findBall(endVector);
 
-		if (!bar.contains(startVector.x, startVector.y)) {
-
-			// Note to self: the orderings here are very important
-			if (start == null && finish == null ) {
-				Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
-				if (startAtBall && finishedAtBall && selectedPlayer != null) {
-					Gdx.app.log(INPUT_TAG, "You marked the ball");
-					pressBall();
-				} else {
-					pressPoint(endVector);
-				}
-
-			} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
+		// Note to self: the orderings here are very important
+		if (start == null && finish == null) {
+			Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
+			if (startAtBall && finishedAtBall && selectedPlayer != null) {
 				Gdx.app.log(INPUT_TAG, "You marked the ball");
 				pressBall();
-
-			} else if (start == null) {
-				Gdx.app.log(INPUT_TAG,
-						"You drew a line starting from a null position");
-
-			} else if (start == finish) {
-				Gdx.app.log(INPUT_TAG, "You selected a player");
-				pressPlayer(start);
-			} else if (!isSelectable(start)) {
-				Gdx.app.log(INPUT_TAG,
-						"Your line started from an unselectable player");
-			} else if (isSelectable(start)) {
-				Gdx.app.log(INPUT_TAG, "You drew a line from a player");
-				int index = findPlayerIndex(lineInProgress.get(0));
-				Gdx.app.log(INPUT_TAG, "You drew a line from a player "
-						+ String.valueOf(index));
-				assignMoveTo(start, index);
-
+			} else {
+				pressPoint(endVector);
 			}
+
+		} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
+			Gdx.app.log(INPUT_TAG, "You marked the ball");
+			pressBall();
+
+		} else if (start == null) {
+			Gdx.app.log(INPUT_TAG,
+					"You drew a line starting from a null position");
+
+		} else if (start == finish) {
+			Gdx.app.log(INPUT_TAG, "You selected a player");
+			pressPlayer(start);
+		} else if (!isSelectable(start)) {
+			Gdx.app.log(INPUT_TAG,
+					"Your line started from an unselectable player");
+		} else if (isSelectable(start)) {
+			Gdx.app.log(INPUT_TAG, "You drew a line from a player");
+			int index = findPlayerIndex(lineInProgress.get(0));
+			Gdx.app.log(INPUT_TAG,
+					"You drew a line from a player " + String.valueOf(index));
+			assignMoveTo(start, index);
+
 		}
+
 		lineInProgress.clear();
 		return true;
 	}
