@@ -1032,13 +1032,13 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (!bar.contains(startVector.x, startVector.y)) {
 
 			// Note to self: the orderings here are very important
-			if (startVector.dst(endVector) < 15 && finish == null) {
+			if (start == null && finish == null ) {
 				Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
 				if (startAtBall && finishedAtBall && selectedPlayer != null) {
 					Gdx.app.log(INPUT_TAG, "You marked the ball");
 					pressBall();
 				} else {
-					pressPoint(startVector);
+					pressPoint(endVector);
 				}
 
 			} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
