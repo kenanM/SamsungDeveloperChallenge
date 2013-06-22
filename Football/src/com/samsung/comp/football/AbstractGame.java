@@ -1093,6 +1093,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (getGameState() == GameState.INPUT) {
 			if (!bar.contains(point.x, point.y)) {
 				lineInProgress.add(point);
+				cursor.setLocation(point.x, point.y);
 
 				Player start = findPlayer(lineInProgress.get(0));
 				Player finish = findPlayer(lineInProgress
@@ -1104,19 +1105,15 @@ public abstract class AbstractGame implements ApplicationListener,
 				boolean startAtBall = findBall(startVector);
 				boolean finishedAtBall = findBall(endVector);
 
-				// Note to self: the orderings here are very important
 				if (start == null && finish == null) {
-					Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
 					if (startAtBall && finishedAtBall && selectedPlayer != null) {
 						if (selectedPlayer != null) {
 							cursor.setVisibility(true);
-							cursor.setLocation(point.x, point.y);
 							cursor.setTexture(markBallSprite);
 						}
 					} else {
 						if (selectedPlayer != null) {
 							cursor.setVisibility(true);
-							cursor.setLocation(point.x, point.y);
 							cursor.setTexture(kickSprite);
 						}
 					}
@@ -1124,9 +1121,29 @@ public abstract class AbstractGame implements ApplicationListener,
 				} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
 					if (selectedPlayer != null) {
 						cursor.setVisibility(true);
-						cursor.setLocation(point.x, point.y);
 						cursor.setTexture(markBallSprite);
 					}
+				} else if (start == null) {
+					cursor.setVisibility(false);
+
+				} else if (start == finish) {
+					if (selectedPlayer == start) {
+						cursor.setVisibility(false);
+					} else if (selectedPlayer != null
+							&& start.getTeam() == getHumanColour()) {
+						cursor.setTexture(passSprite);
+						cursor.setVisibility(true);
+
+					} else if (selectedPlayer != null
+							&& start.getTeam() != getHumanColour()
+							&& start != getComputerGoalie()) {
+						cursor.setTexture(markSprite);
+						cursor.setVisibility(true);
+					}
+				} else if (isSelectable(start)) {
+					cursor.setVisibility(false);
+				} else {
+					cursor.setVisibility(false);
 				}
 			}
 		}
