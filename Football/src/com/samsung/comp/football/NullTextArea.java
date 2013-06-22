@@ -9,11 +9,6 @@ public class NullTextArea extends TextArea {
 	public NullTextArea() {
 	}
 
-	@Override
-	public void buttonPressFired() {
-	}
-
-	@Override
 	public void draw(SpriteBatch batch, BitmapFont bmf) {
 	}
 

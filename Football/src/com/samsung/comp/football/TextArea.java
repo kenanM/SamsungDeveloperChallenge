@@ -6,11 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.samsung.comp.events.ButtonPressEvent;
 import com.samsung.comp.events.ButtonPressListener;
 
 
-public class TextArea extends Rectangle implements ButtonPressEvent {
+public class TextArea extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
 	protected Texture areaTexture;
@@ -35,13 +34,6 @@ public class TextArea extends Rectangle implements ButtonPressEvent {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
 	}
 
-	@Override
-	public void buttonPressFired() {
-		if (observer != null) {
-			observer.onButtonPress();
-		}
-	}
-
 	public void draw(SpriteBatch batch, BitmapFont bmf) {
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
 				areaTexture.getHeight());
@@ -54,7 +46,7 @@ public class TextArea extends Rectangle implements ButtonPressEvent {
 
 	public void onPress(float x, float y) {
 		if (this.contains(x, y)) {
-			buttonPressFired();
+			observer.onButtonPress();
 		}
 	}
 
@@ -62,14 +54,12 @@ public class TextArea extends Rectangle implements ButtonPressEvent {
 		this.text = text;
 	}
 
-	@Override
 	public void setListener(ButtonPressListener observer) {
 		this.observer = observer;
 
 	}
 
-	@Override
-	public void clearListener(ButtonPressListener observer) {
+	public void clearListener() {
 		this.observer = null;
 
 	}
