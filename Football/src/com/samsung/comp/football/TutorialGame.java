@@ -2,7 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.events.ActionFiredObserver;
+import com.samsung.comp.events.ActionFiredListener;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
@@ -12,7 +12,7 @@ import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.Players.RedPlayer;
 
-public class TutorialGame extends AbstractGame implements ActionFiredObserver {
+public class TutorialGame extends AbstractGame {
 
 	enum TutorialPhase {
 		MOVE, FOLLOW, SHOOT, PASS, MARK, QUEUEING, GOALIE,
@@ -63,7 +63,12 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	private void setupMovePhase() {
 		Player p = new BluePlayer(338, VIRTUAL_SCREEN_HEIGHT / 3);
-		p.subscribe(this);
+		p.subscribe(new ActionFiredListener() {
+			@Override
+			public void onActionFired(Player player, Action action) {
+				actionFired(player, action);
+			}
+		});
 		bluePlayers.add(p);
 	}
 
@@ -73,7 +78,12 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 
 	private void setupPassPhase() {
 		Player p = new BluePlayer(0, 256);
-		p.subscribe(this);
+		p.subscribe(new ActionFiredListener() {
+			@Override
+			public void onActionFired(Player player, Action action) {
+				actionFired(player, action);
+			}
+		});
 		bluePlayers.add(p);
 
 		ball.setOwner(p);
@@ -325,8 +335,7 @@ public class TutorialGame extends AbstractGame implements ActionFiredObserver {
 	public void resume() {
 	}
 
-	@Override
-	public void onActionFired(Player player, Action action) {
+	public void actionFired(Player player, Action action) {
 		if (tutorialPhase == TutorialPhase.QUEUEING) {
 			if (action instanceof Move) {
 				q1 = true;
