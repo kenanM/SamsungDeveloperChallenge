@@ -124,8 +124,15 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Player highlightedPlayer;
 	protected boolean isBallHighlighted;
 	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
+	protected Cursor cursor;
 	boolean team1Turn = true;
 	
+	protected Texture kickSprite;
+	protected Texture markSprite;
+	protected Texture markBallSprite;
+	protected Texture passSprite;
+	protected Texture KickSprite;
+
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
 	@Override
@@ -174,6 +181,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void createUI() {
 		textArea = new TextArea(this);
 		bar = new Bar(this, positionUIBarAtTop);
+		cursor = new Cursor();
 	}
 
 	protected void createIteractiveObjects() {
@@ -187,12 +195,17 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void createActions() {
-		Kick.create(new Texture(Gdx.files.internal("target.png")));
-		Mark.create(new Texture(Gdx.files.internal("markingIcon.png")));
-		MarkBall.create(new Texture(Gdx.files.internal("markingIcon.png")));
+		kickSprite = new Texture(Gdx.files.internal("target.png"));
+		passSprite = new Texture(Gdx.files.internal("passingIcon.png"));
+		markSprite = new Texture(Gdx.files.internal("markingIcon.png"));
+		markBallSprite = new Texture(Gdx.files.internal("markingIcon.png"));
+		
+		Kick.create(kickSprite);
+		Pass.create(passSprite);
+		Mark.create(markSprite);
+		MarkBall.create(markBallSprite);
 		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
 		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
-		Pass.create(new Texture(Gdx.files.internal("passingIcon.png")));
 	}
 
 	protected void createMainTextures() {
@@ -311,6 +324,10 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			if (isBallHighlighted) {
 				ball.drawHighlight(batch);
+			}
+
+			if (cursor != null) {
+				cursor.draw(batch);
 			}
 
 		} else {
@@ -1014,6 +1031,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		highlightedPlayer = null;
 		isBallHighlighted = false;
+		cursor.setVisibility(false);
 
 		if (lineInProgress.size() < 1) {
 			return false;
@@ -1063,6 +1081,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		lineInProgress.clear();
+		cursor.setVisibility(false);
 		return true;
 	}
 
@@ -1074,6 +1093,41 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (getGameState() == GameState.INPUT) {
 			if (!bar.contains(point.x, point.y)) {
 				lineInProgress.add(point);
+
+				Player start = findPlayer(lineInProgress.get(0));
+				Player finish = findPlayer(lineInProgress
+						.get(lineInProgress.size() - 1));
+
+				Vector2 startVector = lineInProgress.get(0);
+				Vector2 endVector = lineInProgress.get(lineInProgress.size() - 1);
+
+				boolean startAtBall = findBall(startVector);
+				boolean finishedAtBall = findBall(endVector);
+
+				// Note to self: the orderings here are very important
+				if (start == null && finish == null) {
+					Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
+					if (startAtBall && finishedAtBall && selectedPlayer != null) {
+						if (selectedPlayer != null) {
+							cursor.setVisibility(true);
+							cursor.setLocation(point.x, point.y);
+							cursor.setTexture(markBallSprite);
+						}
+					} else {
+						if (selectedPlayer != null) {
+							cursor.setVisibility(true);
+							cursor.setLocation(point.x, point.y);
+							cursor.setTexture(kickSprite);
+						}
+					}
+
+				} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
+					if (selectedPlayer != null) {
+						cursor.setVisibility(true);
+						cursor.setLocation(point.x, point.y);
+						cursor.setTexture(markBallSprite);
+					}
+				}
 			}
 		}
 		return true;
