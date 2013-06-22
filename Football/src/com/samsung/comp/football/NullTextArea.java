@@ -10,7 +10,7 @@ public class NullTextArea extends TextArea {
 	}
 
 	@Override
-	public void notifyCanClose() {
+	public void buttonPressFired() {
 	}
 
 	@Override

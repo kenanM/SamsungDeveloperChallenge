@@ -6,17 +6,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.samsung.comp.events.ObservableTextArea;
-import com.samsung.comp.events.TextAreaObserver;
+import com.samsung.comp.events.ButtonPressEvent;
+import com.samsung.comp.events.ButtonPressListener;
 
 
-public class TextArea extends Rectangle implements ObservableTextArea {
+public class TextArea extends Rectangle implements ButtonPressEvent {
 
 	private static final long serialVersionUID = 1L;
 	protected Texture areaTexture;
 	protected String text = "NO TEXT";
 	// normally a list of observers
-	protected TextAreaObserver observer;
+	protected ButtonPressListener observer;
 
 	public TextArea() {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
@@ -26,7 +26,7 @@ public class TextArea extends Rectangle implements ObservableTextArea {
 		height = areaTexture.getHeight();
 	}
 
-	public TextArea(TextAreaObserver observer) {
+	public TextArea(ButtonPressListener observer) {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
 		this.x = Game.VIRTUAL_SCREEN_WIDTH / 2 - areaTexture.getWidth() / 2;
 		this.y = Game.VIRTUAL_SCREEN_HEIGHT / 2 - areaTexture.getHeight() / 2;
@@ -45,9 +45,9 @@ public class TextArea extends Rectangle implements ObservableTextArea {
 	}
 
 	@Override
-	public void notifyCanClose() {
+	public void buttonPressFired() {
 		if (observer != null) {
-			observer.onNotifyCanClose();
+			observer.onButtonPress();
 		}
 	}
 
@@ -63,11 +63,23 @@ public class TextArea extends Rectangle implements ObservableTextArea {
 
 	public void onPress(float x, float y) {
 		if (this.contains(x, y)) {
-			notifyCanClose();
+			buttonPressFired();
 		}
 	}
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	@Override
+	public void subscribe(ButtonPressListener observer) {
+		this.observer = observer;
+
+	}
+
+	@Override
+	public void unsubscribe(ButtonPressListener observer) {
+		this.observer = null;
+
 	}
 }

@@ -24,7 +24,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.events.TextAreaObserver;
+import com.samsung.comp.events.ButtonPressListener;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
@@ -39,7 +39,7 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public abstract class AbstractGame implements ApplicationListener,
-		TextAreaObserver, InputProcessor, SPenHoverListener {
+		ButtonPressListener, InputProcessor, SPenHoverListener {
 
 	protected int result;
 
@@ -706,7 +706,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	@Override
-	public void onNotifyCanClose() {
+	public void onButtonPress() {
 		gameState = gameStateToGoIntoWhenBackButtonPressed;
 		textArea = new NullTextArea();
 	}
