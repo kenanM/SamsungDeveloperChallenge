@@ -26,15 +26,6 @@ public class TextArea extends Rectangle implements ButtonPressEvent {
 		height = areaTexture.getHeight();
 	}
 
-	public TextArea(ButtonPressListener observer) {
-		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
-		this.x = Game.VIRTUAL_SCREEN_WIDTH / 2 - areaTexture.getWidth() / 2;
-		this.y = Game.VIRTUAL_SCREEN_HEIGHT / 2 - areaTexture.getHeight() / 2;
-		width = areaTexture.getWidth();
-		height = areaTexture.getHeight();
-		this.observer = observer;
-	}
-
 	public TextArea(float x, float y, float width, float height, String text) {
 		this.x = x;
 		this.y = y;
