@@ -63,7 +63,7 @@ public class TutorialGame extends AbstractGame {
 
 	private void setupMovePhase() {
 		Player p = new BluePlayer(338, VIRTUAL_SCREEN_HEIGHT / 3);
-		p.subscribe(new ActionFiredListener() {
+		p.setListener(new ActionFiredListener() {
 			@Override
 			public void onActionFired(Player player, Action action) {
 				actionFired(player, action);
@@ -78,7 +78,7 @@ public class TutorialGame extends AbstractGame {
 
 	private void setupPassPhase() {
 		Player p = new BluePlayer(0, 256);
-		p.subscribe(new ActionFiredListener() {
+		p.setListener(new ActionFiredListener() {
 			@Override
 			public void onActionFired(Player player, Action action) {
 				actionFired(player, action);

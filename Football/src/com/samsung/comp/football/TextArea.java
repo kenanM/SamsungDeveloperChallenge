@@ -72,13 +72,13 @@ public class TextArea extends Rectangle implements ButtonPressEvent {
 	}
 
 	@Override
-	public void subscribe(ButtonPressListener observer) {
+	public void setListener(ButtonPressListener observer) {
 		this.observer = observer;
 
 	}
 
 	@Override
-	public void unsubscribe(ButtonPressListener observer) {
+	public void clearListener(ButtonPressListener observer) {
 		this.observer = null;
 
 	}

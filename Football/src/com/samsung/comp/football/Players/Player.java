@@ -81,12 +81,12 @@ public abstract class Player extends Rectangle implements
 	}
 
 	@Override
-	public void subscribe(ActionFiredListener listener) {
+	public void setListener(ActionFiredListener listener) {
 		this.listener = listener;
 	}
 
 	@Override
-	public void unsubscribe(ActionFiredListener listener) {
+	public void clearListener(ActionFiredListener listener) {
 		this.listener = null;
 	}
 
