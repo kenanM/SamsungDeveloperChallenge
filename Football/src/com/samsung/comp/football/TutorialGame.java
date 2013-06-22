@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
+import com.samsung.comp.events.ButtonPressListener;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
@@ -201,7 +202,13 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	protected void displayTutorialMessage() {
-		textArea = new TextArea(this);
+		textArea = new TextArea();
+		textArea.setListener(new ButtonPressListener() {
+			@Override
+			public void onButtonPress() {
+				textAreaButtonPressed();
+			}
+		});
 		if (tutorialPhase == TutorialPhase.MOVE) {
 			textArea.setText("Welcome to the tutorial. \n\n"
 					+ "Draw a line from your player to give them a path to follow.\n\n"

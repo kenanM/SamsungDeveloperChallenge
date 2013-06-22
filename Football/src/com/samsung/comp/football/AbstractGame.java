@@ -39,7 +39,7 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public abstract class AbstractGame implements ApplicationListener,
-		ButtonPressListener, InputProcessor, SPenHoverListener {
+		InputProcessor, SPenHoverListener {
 
 	protected int result;
 
@@ -179,7 +179,13 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void createUI() {
-		textArea = new TextArea(this);
+		textArea = new TextArea();
+		textArea.setListener(new ButtonPressListener() {
+			@Override
+			public void onButtonPress() {
+				textAreaButtonPressed();
+			}
+		});
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
 	}
@@ -706,12 +712,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	@Override
-	public void onButtonPress() {
-		gameState = gameStateToGoIntoWhenBackButtonPressed;
-		textArea = new NullTextArea();
-	}
-
-	@Override
 	public void dispose() {
 		// dispose of all the native resources
 		for (Player player : getAllPlayers()) {
@@ -793,6 +793,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		beginExecution();
+	}
+
+	protected void textAreaButtonPressed() {
+		gameState = gameStateToGoIntoWhenBackButtonPressed;
+		textArea = new NullTextArea();
 	}
 
 	@Override
