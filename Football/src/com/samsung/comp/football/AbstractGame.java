@@ -1131,7 +1131,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						return true;
 					} else {
 						// Move player
-						cursor.setTexture(kickSprite);
+						cursor.setTexture(null);
 						return true;
 					}
 				} else {
@@ -1239,55 +1239,6 @@ public abstract class AbstractGame implements ApplicationListener,
 				}
 			}
 		}
-
-		// if (getGameState() == GameState.INPUT) {
-		//
-		// if (hoverPoint.y >= 1) {
-		// cursor.setLocation(hoverPoint.x, hoverPoint.y);
-		// } else {
-		// cursor.setVisibility(false);
-		// }
-		//
-		// Player hoverPlayer = findPlayer(hoverPoint);
-		// boolean hoverBall = findBall(hoverPoint);
-		//
-		// if (selectedPlayer == null) {
-		// cursor.setHighlightedPlayer(hoverPlayer);
-		// isBallHighlighted = hoverBall;
-		// } else {
-		// if (hoverPlayer == null) {
-		// if (hoverBall) {
-		// cursor.setVisibility(true);
-		// cursor.setTexture(markBallSprite);
-		// } else {
-		// cursor.setVisibility(true);
-		// cursor.setTexture(kickSprite);
-		// }
-		// } else if (hoverBall) {
-		// cursor.setVisibility(true);
-		// cursor.setTexture(markBallSprite);
-		// } else if (hoverPlayer == null) {
-		// cursor.setVisibility(false);
-		//
-		// } else if (selectedPlayer == hoverPlayer) {
-		// cursor.setVisibility(false);
-		// } else if (selectedPlayer != null
-		// && hoverPlayer.getTeam() == getHumanColour()) {
-		// cursor.setTexture(passSprite);
-		// cursor.setVisibility(true);
-		//
-		// } else if (selectedPlayer != null
-		// && hoverPlayer.getTeam() != getHumanColour()
-		// && hoverPlayer != getComputerGoalie()) {
-		// cursor.setTexture(markSprite);
-		// cursor.setVisibility(true);
-		// } else if (isSelectable(hoverPlayer)) {
-		// cursor.setVisibility(false);
-		// } else {
-		// cursor.setVisibility(false);
-		// }
-		// }
-		// }
 		return true;
 	}
 
