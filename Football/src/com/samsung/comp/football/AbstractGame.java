@@ -1193,6 +1193,42 @@ public abstract class AbstractGame implements ApplicationListener,
 					+ " " + bar.toString());
 		}
 
+		if (getGameState() == GameState.INPUT) {
+			if (!bar.contains(hoverPoint.x, hoverPoint.y)) {
+
+				Player hoverPlayer = findPlayer(hoverPoint);
+				isBallHighlighted = findBall(hoverPoint);
+				cursor.setLocation(hoverPoint.x, hoverPoint.y);
+				cursor.setHighlightedPlayer(hoverPlayer);
+
+				if (selectedPlayer != null) {
+					if (isBallHighlighted) {
+						// Mark ball action
+						cursor.setTexture(markBallSprite);
+						return true;
+					} else if (hoverPlayer == null) {
+						// Kick action
+						cursor.setTexture(kickSprite);
+						return true;
+					} else if (hoverPlayer.getTeam() == getHumanColour()) {
+						if (hoverPlayer == selectedPlayer) {
+							// Deselect player
+							cursor.setTexture(null);
+							return true;
+						} else {
+							// Pass action
+							cursor.setTexture(passSprite);
+							return true;
+						}
+					} else {
+						// Mark player action
+						cursor.setTexture(markSprite);
+						return true;
+					}
+				}
+			}
+		}
+
 		// if (getGameState() == GameState.INPUT) {
 		//
 		// if (hoverPoint.y >= 1) {
