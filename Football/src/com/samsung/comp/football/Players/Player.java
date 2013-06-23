@@ -528,6 +528,8 @@ public abstract class Player extends Rectangle implements Followable {
 	public void update(float time) {
 
 		Vector2 position = moveAlongPath(time);
+		executeAction();
+
 		timeSinceKick = timeSinceKick + time;
 		timeSinceFailedTackle = timeSinceFailedTackle + time;
 		notificationTime -= (notificationTime > 0) ? time : 0;

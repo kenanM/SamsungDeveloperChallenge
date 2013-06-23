@@ -157,7 +157,6 @@ public class Game extends AbstractGame {
 
 			for (Player player : getAllPlayers()) {
 				player.update(time);
-				player.executeAction();
 			}
 
 			ball.update(time);

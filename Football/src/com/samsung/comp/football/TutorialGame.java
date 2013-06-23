@@ -291,7 +291,6 @@ public class TutorialGame extends AbstractGame {
 			remainingMatchTime -= time;
 
 			for (Player player : getAllPlayers()) {
-				player.executeAction();
 				player.update(time);
 			}
 
