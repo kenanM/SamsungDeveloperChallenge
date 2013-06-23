@@ -160,6 +160,7 @@ public class Bar extends Rectangle {
 			// TODO (Gavin): Change this to be 'undo last action'
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().clearActions();
+			game.clearSelectedPlayer();
 		}
 	}
 

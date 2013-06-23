@@ -648,6 +648,10 @@ public abstract class AbstractGame implements ApplicationListener,
 		return selectedPlayer;
 	}
 
+	public void clearSelectedPlayer() {
+		selectedPlayer = null;
+	}
+
 	public TeamColour getHumanColour() {
 		return team1;
 	}
@@ -1191,6 +1195,13 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (bar != null && bar.contains(hoverPoint.x, hoverPoint.y)) {
 			Gdx.app.log("BAR", "hover eventVector: " + hoverPoint.toString()
 					+ " " + bar.toString());
+		}
+
+		if (hoverPoint.x <= 1 && hoverPoint.y <= 1) {
+			isBallHighlighted = false;
+			cursor.setHighlightedPlayer(null);
+			cursor.setTexture(null);
+			return false;
 		}
 
 		if (getGameState() == GameState.INPUT) {
