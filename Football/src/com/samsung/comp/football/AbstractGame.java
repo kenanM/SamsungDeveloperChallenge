@@ -131,6 +131,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture markBallSprite;
 	protected Texture passSprite;
 	protected Texture KickSprite;
+	protected Texture moveSprite;
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
@@ -204,13 +205,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		passSprite = new Texture(Gdx.files.internal("passingIcon.png"));
 		markSprite = new Texture(Gdx.files.internal("markingIcon.png"));
 		markBallSprite = new Texture(Gdx.files.internal("markingIcon.png"));
+		moveSprite = new Texture(Gdx.files.internal("arrowhead.png"));
 
 		Kick.create(kickSprite);
 		Pass.create(passSprite);
 		Mark.create(markSprite);
 		MarkBall.create(markBallSprite);
-		Move.create(new Texture(Gdx.files.internal("arrowhead.png")));
-		MoveToPosition.create(new Texture(Gdx.files.internal("arrowhead.png")));
+		Move.create(moveSprite);
+		MoveToPosition.create(moveSprite);
 	}
 
 	protected void createMainTextures() {
@@ -1131,7 +1133,17 @@ public abstract class AbstractGame implements ApplicationListener,
 						return true;
 					} else {
 						// Move player
-						cursor.setTexture(null);
+						cursor.setTexture(moveSprite);
+
+						if (lineInProgress.size() >= 5) {
+							Vector2 nearEndPoint = lineInProgress
+									.get(lineInProgress.size() - 5);
+							float rotation = new Vector2(endVector.x
+									- nearEndPoint.x, endVector.y
+									- nearEndPoint.y).angle();
+							cursor.setRotation(rotation);
+						}
+
 						return true;
 					}
 				} else {
@@ -1162,7 +1174,17 @@ public abstract class AbstractGame implements ApplicationListener,
 						}
 					} else {
 						// Move player
-						cursor.setTexture(null);
+						cursor.setTexture(moveSprite);
+
+						if (lineInProgress.size() >= 5) {
+							Vector2 nearEndPoint = lineInProgress
+									.get(lineInProgress.size() - 5);
+							float rotation = new Vector2(endVector.x
+									- nearEndPoint.x, endVector.y
+									- nearEndPoint.y).angle();
+							cursor.setRotation(rotation);
+						}
+
 						return true;
 					}
 				}

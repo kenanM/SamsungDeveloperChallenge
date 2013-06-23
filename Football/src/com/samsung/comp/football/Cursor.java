@@ -9,6 +9,7 @@ public class Cursor {
 	protected Texture texture;
 	protected Vector2 location = new Vector2(0, 0);
 	protected Player highlightedPlayer;
+	protected float rotation;
 
 	public Cursor() {
 	}
@@ -29,12 +30,18 @@ public class Cursor {
 		this.highlightedPlayer = player;
 	}
 
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+
 	public void draw(SpriteBatch batch) {
 		if (texture != null) {
 			batch.draw(this.texture, location.x - texture.getWidth() / 2,
-					location.y - texture.getHeight() / 2, texture.getWidth(),
-					texture.getHeight(), 0, 0, texture.getWidth(),
-					texture.getHeight(), false, false);
+					location.y - texture.getHeight() / 2,
+					texture.getWidth() / 2, texture.getHeight() / 2,
+					texture.getWidth(), texture.getHeight(), 1, 1,
+					this.rotation + 45 + 90, 0, 0, texture.getWidth(),
+					texture.getHeight(), false, true);
 		}
 
 		if (highlightedPlayer != null) {
