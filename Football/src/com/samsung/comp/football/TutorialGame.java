@@ -121,7 +121,7 @@ public class TutorialGame extends AbstractGame {
 	protected void beginInputStage() {
 		gameState = GameState.INPUT;
 		selectedPlayer = null;
-		highlightedPlayer = null;
+		cursor.setHighlightedPlayer(null);
 		clearActions();
 		bar.setPositionToDown();
 		

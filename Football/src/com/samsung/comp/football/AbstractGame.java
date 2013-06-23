@@ -121,12 +121,11 @@ public abstract class AbstractGame implements ApplicationListener,
 	private boolean repositionCameraOnUpdate = false;
 
 	protected Player selectedPlayer;
-	protected Player highlightedPlayer;
 	protected boolean isBallHighlighted;
 	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
 	protected Cursor cursor;
 	boolean team1Turn = true;
-	
+
 	protected Texture kickSprite;
 	protected Texture markSprite;
 	protected Texture markBallSprite;
@@ -205,7 +204,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		passSprite = new Texture(Gdx.files.internal("passingIcon.png"));
 		markSprite = new Texture(Gdx.files.internal("markingIcon.png"));
 		markBallSprite = new Texture(Gdx.files.internal("markingIcon.png"));
-		
+
 		Kick.create(kickSprite);
 		Pass.create(passSprite);
 		Mark.create(markSprite);
@@ -317,10 +316,9 @@ public abstract class AbstractGame implements ApplicationListener,
 				drawActions(getHumanGoalie().getAction(), batch);
 			}
 
-			if (highlightedPlayer != null) {
-				highlightedPlayer.drawHighlight(batch);
-				drawTimeLinePoints(highlightedPlayer);
-				drawPlayerStats(batch, highlightedPlayer);
+			if (cursor.getHighlightedPlayer() != null) {
+				drawTimeLinePoints(cursor.getHighlightedPlayer());
+				drawPlayerStats(batch, cursor.getHighlightedPlayer());
 			}
 
 			if (selectedPlayer != null) {
@@ -614,7 +612,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void beginInputStage() {
 		gameState = GameState.INPUT;
 		selectedPlayer = null;
-		highlightedPlayer = null;
+		cursor.setHighlightedPlayer(null);
 		clearActions();
 		bar.setPositionToDown();
 	}
@@ -1018,7 +1016,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			bar.onPress(point.x, point.y);
 
 			if (getGameState() == GameState.INPUT) {
-				highlightedPlayer = findPlayer(point);
+				cursor.setHighlightedPlayer(findPlayer(point));
 				isBallHighlighted = findBall(point);
 
 				if (!bar.contains(point.x, point.y)) {
@@ -1034,7 +1032,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-		highlightedPlayer = null;
+		cursor.setHighlightedPlayer(null);
 		isBallHighlighted = false;
 		cursor.setVisibility(false);
 
@@ -1098,57 +1096,67 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (getGameState() == GameState.INPUT) {
 			if (!bar.contains(point.x, point.y)) {
 				lineInProgress.add(point);
+				if (lineInProgress.size() < 2) {
+					return false;
+				}
 				cursor.setLocation(point.x, point.y);
 
-				Player start = findPlayer(lineInProgress.get(0));
-				Player finish = findPlayer(lineInProgress
-						.get(lineInProgress.size() - 1));
+				Player startPlayer = findPlayer(lineInProgress.get(0));
+				Player endPlayer = findPlayer(lineInProgress.get(lineInProgress
+						.size() - 1));
 
 				Vector2 startVector = lineInProgress.get(0);
-				Vector2 endVector = lineInProgress.get(lineInProgress.size() - 1);
+				Vector2 endVector = lineInProgress
+						.get(lineInProgress.size() - 1);
 
 				boolean startAtBall = findBall(startVector);
-				boolean finishedAtBall = findBall(endVector);
+				boolean endAtBall = findBall(endVector);
+				boolean tapBall = (startAtBall && endAtBall);
+				boolean tapPlayer = (startPlayer == endPlayer);
 
-				if (start == null && finish == null) {
-					if (startAtBall && finishedAtBall && selectedPlayer != null) {
-						if (selectedPlayer != null) {
-							cursor.setVisibility(true);
-							cursor.setTexture(markBallSprite);
+				if (selectedPlayer == null) {
+					if (startPlayer == null) {
+						// Does nothing
+						cursor.setVisibility(false);
+						return true;
+					} else if (tapPlayer) {
+						// Select player
+						return true;
+					} else {
+						// Move player
+						cursor.setVisibility(false);
+						return true;
+					}
+				} else {
+					if (tapBall) {
+						// Mark ball action
+						cursor.showTexture(markBallSprite);
+						return true;
+					}
+					if (startPlayer == null) {
+						// Kick action
+						cursor.showTexture(kickSprite);
+						return true;
+					} else if (tapPlayer) {
+						if (startPlayer.getTeam() == getHumanColour()) {
+							if (startPlayer == selectedPlayer) {
+								// Select player
+								return true;
+							} else {
+								// Pass action
+								cursor.showTexture(passSprite);
+								return true;
+							}
+						} else {
+							// Mark player action
+							cursor.showTexture(markSprite);
+							return true;
 						}
 					} else {
-						if (selectedPlayer != null) {
-							cursor.setVisibility(true);
-							cursor.setTexture(kickSprite);
-						}
-					}
-
-				} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
-					if (selectedPlayer != null) {
-						cursor.setVisibility(true);
-						cursor.setTexture(markBallSprite);
-					}
-				} else if (start == null) {
-					cursor.setVisibility(false);
-
-				} else if (start == finish) {
-					if (selectedPlayer == start) {
+						// Move player
 						cursor.setVisibility(false);
-					} else if (selectedPlayer != null
-							&& start.getTeam() == getHumanColour()) {
-						cursor.setTexture(passSprite);
-						cursor.setVisibility(true);
-
-					} else if (selectedPlayer != null
-							&& start.getTeam() != getHumanColour()
-							&& start != getComputerGoalie()) {
-						cursor.setTexture(markSprite);
-						cursor.setVisibility(true);
+						return true;
 					}
-				} else if (isSelectable(start)) {
-					cursor.setVisibility(false);
-				} else {
-					cursor.setVisibility(false);
 				}
 			}
 		}
@@ -1160,7 +1168,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		Vector2 hoverPoint = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getGameState() == GameState.INPUT) {
-			highlightedPlayer = findPlayer(hoverPoint);
+			cursor.setHighlightedPlayer(findPlayer(hoverPoint));
 			isBallHighlighted = findBall(hoverPoint);
 		}
 		return true;
@@ -1181,10 +1189,54 @@ public abstract class AbstractGame implements ApplicationListener,
 					+ " " + bar.toString());
 		}
 
-		if (getGameState() == GameState.INPUT) {
-			highlightedPlayer = findPlayer(hoverPoint);
-			isBallHighlighted = findBall(hoverPoint);
-		}
+		// if (getGameState() == GameState.INPUT) {
+		//
+		// if (hoverPoint.y >= 1) {
+		// cursor.setLocation(hoverPoint.x, hoverPoint.y);
+		// } else {
+		// cursor.setVisibility(false);
+		// }
+		//
+		// Player hoverPlayer = findPlayer(hoverPoint);
+		// boolean hoverBall = findBall(hoverPoint);
+		//
+		// if (selectedPlayer == null) {
+		// cursor.setHighlightedPlayer(hoverPlayer);
+		// isBallHighlighted = hoverBall;
+		// } else {
+		// if (hoverPlayer == null) {
+		// if (hoverBall) {
+		// cursor.setVisibility(true);
+		// cursor.setTexture(markBallSprite);
+		// } else {
+		// cursor.setVisibility(true);
+		// cursor.setTexture(kickSprite);
+		// }
+		// } else if (hoverBall) {
+		// cursor.setVisibility(true);
+		// cursor.setTexture(markBallSprite);
+		// } else if (hoverPlayer == null) {
+		// cursor.setVisibility(false);
+		//
+		// } else if (selectedPlayer == hoverPlayer) {
+		// cursor.setVisibility(false);
+		// } else if (selectedPlayer != null
+		// && hoverPlayer.getTeam() == getHumanColour()) {
+		// cursor.setTexture(passSprite);
+		// cursor.setVisibility(true);
+		//
+		// } else if (selectedPlayer != null
+		// && hoverPlayer.getTeam() != getHumanColour()
+		// && hoverPlayer != getComputerGoalie()) {
+		// cursor.setTexture(markSprite);
+		// cursor.setVisibility(true);
+		// } else if (isSelectable(hoverPlayer)) {
+		// cursor.setVisibility(false);
+		// } else {
+		// cursor.setVisibility(false);
+		// }
+		// }
+		// }
 		return true;
 	}
 
