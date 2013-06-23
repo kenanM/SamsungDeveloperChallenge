@@ -1017,6 +1017,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			if (getGameState() == GameState.INPUT) {
 				cursor.setHighlightedPlayer(findPlayer(point));
+				cursor.setTexture(null);
+
 				isBallHighlighted = findBall(point);
 
 				if (!bar.contains(point.x, point.y)) {
@@ -1034,7 +1036,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		cursor.setHighlightedPlayer(null);
 		isBallHighlighted = false;
-		cursor.setVisibility(false);
+		cursor.setTexture(null);
 
 		if (lineInProgress.size() < 1) {
 			return false;
@@ -1084,7 +1086,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		lineInProgress.clear();
-		cursor.setVisibility(false);
+		cursor.setTexture(null);
 		return true;
 	}
 
@@ -1117,44 +1119,46 @@ public abstract class AbstractGame implements ApplicationListener,
 				if (selectedPlayer == null) {
 					if (startPlayer == null) {
 						// Does nothing
-						cursor.setVisibility(false);
+						cursor.setTexture(null);
 						return true;
 					} else if (tapPlayer) {
 						// Select player
+						cursor.setTexture(null);
 						return true;
 					} else {
 						// Move player
-						cursor.setVisibility(false);
+						cursor.setTexture(kickSprite);
 						return true;
 					}
 				} else {
 					if (tapBall) {
 						// Mark ball action
-						cursor.showTexture(markBallSprite);
+						cursor.setTexture(markBallSprite);
 						return true;
 					}
 					if (startPlayer == null) {
 						// Kick action
-						cursor.showTexture(kickSprite);
+						cursor.setTexture(kickSprite);
 						return true;
 					} else if (tapPlayer) {
 						if (startPlayer.getTeam() == getHumanColour()) {
 							if (startPlayer == selectedPlayer) {
-								// Select player
+								// Deselect player
+								cursor.setTexture(null);
 								return true;
 							} else {
 								// Pass action
-								cursor.showTexture(passSprite);
+								cursor.setTexture(passSprite);
 								return true;
 							}
 						} else {
 							// Mark player action
-							cursor.showTexture(markSprite);
+							cursor.setTexture(markSprite);
 							return true;
 						}
 					} else {
 						// Move player
-						cursor.setVisibility(false);
+						cursor.setTexture(null);
 						return true;
 					}
 				}
