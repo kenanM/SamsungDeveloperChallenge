@@ -1108,6 +1108,7 @@ public abstract class AbstractGame implements ApplicationListener,
 					return false;
 				}
 				cursor.setLocation(point.x, point.y);
+				cursor.setRotation(0);
 
 				Player startPlayer = findPlayer(lineInProgress.get(0));
 				Player endPlayer = findPlayer(lineInProgress.get(lineInProgress
@@ -1141,7 +1142,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							float rotation = new Vector2(endVector.x
 									- nearEndPoint.x, endVector.y
 									- nearEndPoint.y).angle();
-							cursor.setRotation(rotation);
+							cursor.setRotation(rotation + 45 + 90);
 						}
 
 						return true;
@@ -1182,7 +1183,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							float rotation = new Vector2(endVector.x
 									- nearEndPoint.x, endVector.y
 									- nearEndPoint.y).angle();
-							cursor.setRotation(rotation);
+							cursor.setRotation(rotation + 45 + 90);
 						}
 
 						return true;

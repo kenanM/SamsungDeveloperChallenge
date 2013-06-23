@@ -40,7 +40,7 @@ public class Cursor {
 					location.y - texture.getHeight() / 2,
 					texture.getWidth() / 2, texture.getHeight() / 2,
 					texture.getWidth(), texture.getHeight(), 1, 1,
-					this.rotation + 45 + 90, 0, 0, texture.getWidth(),
+					this.rotation, 0, 0, texture.getWidth(),
 					texture.getHeight(), false, true);
 		}
 
