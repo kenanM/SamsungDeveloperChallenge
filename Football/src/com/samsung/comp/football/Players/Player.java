@@ -73,7 +73,7 @@ public class Player extends Rectangle implements Followable {
 		this.TEAM = teamColour;
 
 		if (teamColour == TeamColour.RED) {
-			this.rotation = 270;
+			this.rotation = 90;
 			this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
 			this.selectTexture = new Texture(
 					Gdx.files.internal("redSelect.png"));
@@ -82,7 +82,7 @@ public class Player extends Rectangle implements Followable {
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		} else {
 			this.TEAM = TeamColour.BLUE;
-			this.rotation = 90;
+			this.rotation = 270;
 			this.hoverTexture = new Texture(
 					Gdx.files.internal("blue hover.png"));
 			this.selectTexture = new Texture(
