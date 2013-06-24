@@ -160,6 +160,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT
 				+ bar.getHeight());
+		camera.zoom = 1f;
 		if (positionUIBarAtTop) {
 			// Move the camera
 			camera.translate(0, -bar.getHeight());
