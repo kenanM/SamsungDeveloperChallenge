@@ -22,7 +22,7 @@ import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 
-public abstract class Player extends Rectangle implements Followable {
+public class Player extends Rectangle implements Followable {
 
 	public enum TeamColour {
 		RED, BLUE
@@ -65,12 +65,45 @@ public abstract class Player extends Rectangle implements Followable {
 	private float timeSinceFailedTackle = Game.BALL_CHANGE_TIME;
 	private Ball ball;
 
-	// TODO: MUST INITIALISE PLAYER STATS
-	public Player(float playerX, float playerY) {
-		this.x = translatePlayerCoordinate(playerX);
-		this.y = translatePlayerCoordinate(playerY);
+	public Player(float x, float y, TeamColour teamColour) {
+		this.x = translatePlayerCoordinate(x);
+		this.y = translatePlayerCoordinate(y);
 		this.width = PLAYER_SIZE;
 		this.height = PLAYER_SIZE;
+		this.TEAM = teamColour;
+
+		if (teamColour == TeamColour.RED) {
+			this.rotation = 270;
+			this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
+			this.selectTexture = new Texture(
+					Gdx.files.internal("redSelect.png"));
+			this.walkSheet = new Texture(Gdx.files.internal("redPlayer.png"));
+			this.walkAnimation = new Animation(0.10f,
+					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
+		} else {
+			this.TEAM = TeamColour.BLUE;
+			this.rotation = 90;
+			this.hoverTexture = new Texture(
+					Gdx.files.internal("blue hover.png"));
+			this.selectTexture = new Texture(
+					Gdx.files.internal("blueSelect.png"));
+			this.walkSheet = new Texture(Gdx.files.internal("bluePlayer.png"));
+			this.walkAnimation = new Animation(0.10f,
+					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
+		}
+		this.currentFrame = walkAnimation.getKeyFrame(0);
+	}
+
+	public Player(float x, float y, TeamColour teamColour, float shoot,
+			float run, float tackle, float tackleStop, float savingSkill) {
+
+		this(x, y, teamColour);
+
+		this.shootSpeed = shoot;
+		this.runSpeed = run;
+		this.tackleSkill = tackle;
+		this.tacklePreventionSkill = tackleStop;
+		this.savingSkill = savingSkill;
 	}
 
 	@Override

@@ -8,10 +8,8 @@ import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
-import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
-import com.samsung.comp.football.Players.RedPlayer;
 
 public class TutorialGame extends AbstractGame {
 
@@ -63,7 +61,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupMovePhase() {
-		Player p = new BluePlayer(338, VIRTUAL_SCREEN_HEIGHT / 3);
+		Player p = new Player(338, VIRTUAL_SCREEN_HEIGHT / 3, TeamColour.BLUE);
 		p.setListener(new ActionFiredListener() {
 			@Override
 			public void onActionFired(Player player, Action action) {
@@ -78,7 +76,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupPassPhase() {
-		Player p = new BluePlayer(0, 256);
+		Player p = new Player(0, 256, TeamColour.BLUE);
 		p.setListener(new ActionFiredListener() {
 			@Override
 			public void onActionFired(Player player, Action action) {
@@ -103,11 +101,11 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupTacklePhase() {
-		Player p = new RedPlayer(VIRTUAL_SCREEN_WIDTH * 1 / 3,
-				VIRTUAL_SCREEN_HEIGHT);
+		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
+				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
 		redPlayers.add(p);
 
-		Player p1 = new RedPlayer(VIRTUAL_SCREEN_WIDTH * 2 / 3, 0);
+		Player p1 = new Player(VIRTUAL_SCREEN_WIDTH * 2 / 3, 0, TeamColour.RED);
 		redPlayers.add(p1);
 
 		Player owner = ball.getOwner();

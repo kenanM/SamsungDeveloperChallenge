@@ -12,10 +12,8 @@ import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
-import com.samsung.comp.football.Players.BluePlayer;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
-import com.samsung.comp.football.Players.RedPlayer;
 
 public class AI {
 
@@ -154,11 +152,7 @@ public class AI {
 
 	/** Checks whether the ball is in the computer players side of the court */
 	private boolean computerControlsBall() {
-		if (teamColour == TeamColour.RED) {
-			return (ball.hasOwner() && ball.getOwner() instanceof RedPlayer);
-		} else {
-			return (ball.hasOwner() && ball.getOwner() instanceof BluePlayer);
-		}
+		return (ball.hasOwner() && ball.getOwner().getTeam() == teamColour);
 	}
 
 	private void moveTodDefensivePosition(Player player) {

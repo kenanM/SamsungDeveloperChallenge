@@ -4,13 +4,14 @@ import android.util.Log;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Utils;
 
-public abstract class Goalie extends Player {
+public class Goalie extends Player {
 
 	private static final long serialVersionUID = 8190782604566806240L;
 
@@ -21,11 +22,46 @@ public abstract class Goalie extends Player {
 
 	private AbstractGame game;
 
-	public Goalie(float playerX, float playerY, AbstractGame game) {
-		super(playerX, playerY);
+	public Goalie(float playerX, float playerY, TeamColour teamColour,
+			AbstractGame game, float saving) {
+		super(playerX, playerY, teamColour);
 		this.game = game;
 		unselectableHoverTexture = new Texture(
 				Gdx.files.internal("unselectableHover.png"));
+
+		savingSkill = saving;
+
+		if (teamColour == TeamColour.BLUE) {
+			this.goal = Game.BLUE_GOAL;
+			this.TEAM = TeamColour.BLUE;
+			this.rotation = 90;
+			this.middle = Game.BLUE_GOAL.cpy().add(0,
+					DEFENSIVE_DISTANCE_FROM_GOAL);
+
+			this.hoverTexture = new Texture(
+					Gdx.files.internal("blue hover.png"));
+			this.selectTexture = new Texture(
+					Gdx.files.internal("blueSelect.png"));
+			this.walkSheet = new Texture(Gdx.files.internal("greenPlayer.png"));
+			this.walkAnimation = new Animation(0.10f,
+					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
+		} else {
+			this.goal = Game.RED_GOAL;
+			this.TEAM = TeamColour.RED;
+			this.rotation = 270;
+			this.middle = Game.RED_GOAL.cpy().sub(0,
+					DEFENSIVE_DISTANCE_FROM_GOAL);
+
+			this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
+			this.selectTexture = new Texture(
+					Gdx.files.internal("redSelect.png"));
+
+			this.walkSheet = new Texture(Gdx.files.internal("yellowPlayer.png"));
+			this.walkAnimation = new Animation(0.10f,
+					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
+			this.currentFrame = walkAnimation.getKeyFrame(0);
+		}
+		this.currentFrame = walkAnimation.getKeyFrame(0);
 	}
 
 	@Override

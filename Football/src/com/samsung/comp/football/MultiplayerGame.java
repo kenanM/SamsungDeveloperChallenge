@@ -4,12 +4,9 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.samsung.comp.football.Actions.Utils;
-import com.samsung.comp.football.Players.BlueGoalie;
-import com.samsung.comp.football.Players.BluePlayer;
+import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
-import com.samsung.comp.football.Players.RedGoalie;
-import com.samsung.comp.football.Players.RedPlayer;
 
 public class MultiplayerGame extends AbstractGame {
 
@@ -118,19 +115,23 @@ public class MultiplayerGame extends AbstractGame {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new RedPlayer(338, 768, 520, 150, 100, 20, 380));
-		redPlayers.add(new RedPlayer(338, 640, 540, 200, 80, 20, 380));
-		redPlayers.add(new RedPlayer(169, 704, 550, 50, 100, 40, 420));
-		redPlayers.add(new RedPlayer(507, 704, 530, 150, 80, 40, 420));
-		redGoalie = new RedGoalie(338, 900, this, 500);
+		redPlayers.add(new Player(338, 768, TeamColour.RED, 520, 150, 100, 20,
+				380));
+		redPlayers.add(new Player(338, 640, TeamColour.RED, 540, 200, 80, 20,
+				380));
+		redPlayers.add(new Player(169, 704, TeamColour.RED, 550, 50, 100, 40,
+				420));
+		redPlayers.add(new Player(507, 704, TeamColour.RED, 530, 150, 80, 40,
+				420));
+		redGoalie = new Goalie(338, 900, TeamColour.RED, this, 500);
 
 		bluePlayers = new LinkedList<Player>();
 
-		bluePlayers.add(new BluePlayer(338, 256));
-		bluePlayers.add(new BluePlayer(338, 384));
-		bluePlayers.add(new BluePlayer(507, 320));
-		bluePlayers.add(new BluePlayer(169, 320));
-		blueGoalie = new BlueGoalie(338, 124, this, 500);
+		bluePlayers.add(new Player(338, 256, TeamColour.BLUE));
+		bluePlayers.add(new Player(338, 384, TeamColour.BLUE));
+		bluePlayers.add(new Player(507, 320, TeamColour.BLUE));
+		bluePlayers.add(new Player(169, 320, TeamColour.BLUE));
+		blueGoalie = new Goalie(338, 124, TeamColour.BLUE, this, 500);
 
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
