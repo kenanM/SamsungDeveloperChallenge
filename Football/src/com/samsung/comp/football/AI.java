@@ -20,10 +20,10 @@ public class AI {
 	private static final String TAG = "AI";
 
 	// Denotes different regions by splitting the pitch into thirds
-	static final double RED_GOAL_AREA_TOP = Game.VIRTUAL_SCREEN_HEIGHT * 0.66;
-	static final double RED_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT - 100;
-	static final double BLUE_GOAL_AREA_TOP = 100;
-	static final double BLUE_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT * 0.33;
+	static final double BLUE_GOAL_AREA_TOP = Game.VIRTUAL_SCREEN_HEIGHT * 0.66;
+	static final double BLUE_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT - 100;
+	static final double RED_GOAL_AREA_TOP = 100;
+	static final double RED_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT * 0.33;
 
 	// Distance between any generated targets X values and the edge of the pitch
 	private final float buffer = 40;

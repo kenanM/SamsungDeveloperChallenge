@@ -37,22 +37,22 @@ public class Game extends AbstractGame {
 	protected void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
-		redPlayers.get(2).y = Player.translatePlayerCoordinate(704);
+		redPlayers.get(2).y = Player.translatePlayerCoordinate(320);
 
 		redPlayers.get(3).x = Player.translatePlayerCoordinate(507);
-		redPlayers.get(3).y = Player.translatePlayerCoordinate(704);
+		redPlayers.get(3).y = Player.translatePlayerCoordinate(320);
 
 		redGoalie.x = Player.translatePlayerCoordinate(338);
-		redGoalie.y = Player.translatePlayerCoordinate(850);
+		redGoalie.y = Player.translatePlayerCoordinate(174);
 
 		bluePlayers.get(2).x = Player.translatePlayerCoordinate(169);
-		bluePlayers.get(2).y = Player.translatePlayerCoordinate(320);
+		bluePlayers.get(2).y = Player.translatePlayerCoordinate(704);
 
 		bluePlayers.get(3).x = Player.translatePlayerCoordinate(507);
-		bluePlayers.get(3).y = Player.translatePlayerCoordinate(320);
+		bluePlayers.get(3).y = Player.translatePlayerCoordinate(704);
 
 		blueGoalie.x = Player.translatePlayerCoordinate(338);
-		blueGoalie.y = Player.translatePlayerCoordinate(174);
+		blueGoalie.y = Player.translatePlayerCoordinate(850);
 
 		if (centerTeam == TeamColour.BLUE) {
 			bluePlayers.get(0).x = Player
@@ -71,10 +71,10 @@ public class Game extends AbstractGame {
 			bluePlayers.get(1).setRotation(180);
 		} else {
 			bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
-			bluePlayers.get(0).y = Player.translatePlayerCoordinate(334);
+			bluePlayers.get(0).y = Player.translatePlayerCoordinate(768);
 
 			bluePlayers.get(1).x = Player.translatePlayerCoordinate(338);
-			bluePlayers.get(1).y = Player.translatePlayerCoordinate(256);
+			bluePlayers.get(1).y = Player.translatePlayerCoordinate(640);
 		}
 
 		if (centerTeam == TeamColour.RED) {
@@ -94,10 +94,10 @@ public class Game extends AbstractGame {
 			redPlayers.get(1).setRotation(180);
 		} else {
 			redPlayers.get(0).x = Player.translatePlayerCoordinate(338);
-			redPlayers.get(0).y = Player.translatePlayerCoordinate(768);
+			redPlayers.get(0).y = Player.translatePlayerCoordinate(334);
 
 			redPlayers.get(1).x = Player.translatePlayerCoordinate(338);
-			redPlayers.get(1).y = Player.translatePlayerCoordinate(640);
+			redPlayers.get(1).y = Player.translatePlayerCoordinate(256);
 		}
 
 		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
@@ -117,23 +117,23 @@ public class Game extends AbstractGame {
 		// create the players
 		redPlayers = new LinkedList<Player>();
 
-		redPlayers.add(new Player(338, 768, TeamColour.RED, 520, 150, 100, 20,
+		redPlayers.add(new Player(338, 256, TeamColour.RED, 520, 150, 100, 20,
 				380));
-		redPlayers.add(new Player(338, 640, TeamColour.RED, 540, 200, 80, 20,
+		redPlayers.add(new Player(338, 384, TeamColour.RED, 540, 200, 80, 20,
 				380));
-		redPlayers.add(new Player(169, 704, TeamColour.RED, 550, 50, 100, 40,
+		redPlayers.add(new Player(169, 320, TeamColour.RED, 550, 50, 100, 40,
 				420));
-		redPlayers.add(new Player(507, 704, TeamColour.RED, 530, 150, 80, 40,
+		redPlayers.add(new Player(507, 320, TeamColour.RED, 530, 150, 80, 40,
 				420));
-		redGoalie = new Goalie(338, 900, TeamColour.RED, this, 500);
+		redGoalie = new Goalie(338, 124, TeamColour.RED, this, 500);
 
 		bluePlayers = new LinkedList<Player>();
 
-		bluePlayers.add(new Player(338, 256, TeamColour.BLUE));
-		bluePlayers.add(new Player(338, 384, TeamColour.BLUE));
-		bluePlayers.add(new Player(507, 320, TeamColour.BLUE));
-		bluePlayers.add(new Player(169, 320, TeamColour.BLUE));
-		blueGoalie = new Goalie(338, 124, TeamColour.BLUE, this, 500);
+		bluePlayers.add(new Player(338, 768, TeamColour.BLUE));
+		bluePlayers.add(new Player(338, 640, TeamColour.BLUE));
+		bluePlayers.add(new Player(507, 704, TeamColour.BLUE));
+		bluePlayers.add(new Player(169, 704, TeamColour.BLUE));
+		blueGoalie = new Goalie(338, 900, TeamColour.BLUE, this, 500);
 
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);

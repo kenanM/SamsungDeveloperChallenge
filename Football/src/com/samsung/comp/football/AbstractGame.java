@@ -56,14 +56,14 @@ public abstract class AbstractGame implements ApplicationListener,
 	public static final int PLAYING_AREA_HEIGHT = 1024;
 
 	// TODO: HACK: rough area for goal here
-	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 0, 110,
+	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 0, 110,
 			44);
-	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 980, 110,
+	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 980, 110,
 			44);
 
-	public static final Vector2 RED_GOAL = new Vector2(PLAYING_AREA_WIDTH / 2,
-			975);
 	public static final Vector2 BLUE_GOAL = new Vector2(PLAYING_AREA_WIDTH / 2,
+			975);
+	public static final Vector2 RED_GOAL = new Vector2(PLAYING_AREA_WIDTH / 2,
 			24);
 
 	private static final String INPUT_TAG = "GameInputStrategy";

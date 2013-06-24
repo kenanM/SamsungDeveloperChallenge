@@ -35,7 +35,7 @@ public class Goalie extends Player {
 			this.goal = Game.BLUE_GOAL;
 			this.TEAM = TeamColour.BLUE;
 			this.rotation = 90;
-			this.middle = Game.BLUE_GOAL.cpy().add(0,
+			this.middle = Game.BLUE_GOAL.cpy().sub(0,
 					DEFENSIVE_DISTANCE_FROM_GOAL);
 
 			this.hoverTexture = new Texture(
@@ -49,7 +49,7 @@ public class Goalie extends Player {
 			this.goal = Game.RED_GOAL;
 			this.TEAM = TeamColour.RED;
 			this.rotation = 270;
-			this.middle = Game.RED_GOAL.cpy().sub(0,
+			this.middle = Game.RED_GOAL.cpy().add(0,
 					DEFENSIVE_DISTANCE_FROM_GOAL);
 
 			this.hoverTexture = new Texture(Gdx.files.internal("red hover.png"));
