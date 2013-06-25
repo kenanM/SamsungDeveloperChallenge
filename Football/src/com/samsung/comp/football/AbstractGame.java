@@ -482,6 +482,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			if (remainingMatchTime < 0) {
 				matchFinish();
 			}
+			ai.getComputerActions();
 		}
 	}
 
@@ -607,7 +608,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		Gdx.app.log("Game", "Beginning execution");
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
-		ai.getComputerActions();
 		bar.setPositionToUp();
 		// inputStrategy.deselectPlayers();
 	}
