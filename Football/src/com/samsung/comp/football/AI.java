@@ -39,6 +39,8 @@ public class AI {
 	private Vector2 targetGoal;
 	private Vector2 homeGoal;
 
+	// TODO: Should construct AI with a teamColour, then use
+	// getPlayers(TeamColour colour) as appropriate
 	public AI(AbstractGame game) {
 		// Decide whether the AI or the Game should carry out the
 		// "if(teamColour == TeamColour.RED)" logic
