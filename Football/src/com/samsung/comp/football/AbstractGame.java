@@ -957,13 +957,13 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		if (selectedPlayer != null
-				&& pressedPlayer.getTeam() == getHumanColour()) {
+				&& pressedPlayer.getTeam() == getCurrentTeamColour()) {
 			// If both players are selectable pass between them
 			selectedPlayer.addAction(new Pass(ball, selectedPlayer,
 					pressedPlayer, selectedPlayer.getFuturePosition()));
 
 		} else if (selectedPlayer != null
-				&& pressedPlayer.getTeam() != getHumanColour()
+				&& pressedPlayer.getTeam() != getCurrentTeamColour()
 				&& pressedPlayer != getComputerGoalie()) {
 			// If the first player is selectable, the second player is on the
 			// opposingTeam but is not a goalie then mark the second player
