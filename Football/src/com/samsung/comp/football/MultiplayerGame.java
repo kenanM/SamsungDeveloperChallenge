@@ -146,6 +146,7 @@ public class MultiplayerGame extends AbstractGame {
 	public void beginExecution() {
 		if (currentTeam == TeamColour.BLUE) {
 			currentTeam = TeamColour.RED;
+			bar.setCurrentPlayerIndicator(redSelectTexture);
 		} else {
 			Gdx.app.log("Game", "Beginning execution");
 			elapsedRoundTime = 0;
@@ -198,6 +199,7 @@ public class MultiplayerGame extends AbstractGame {
 			if (elapsedRoundTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
 				currentTeam = TeamColour.BLUE;
+				bar.setCurrentPlayerIndicator(blueSelectTexture);
 				beginInputStage();
 			}
 

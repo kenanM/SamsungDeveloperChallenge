@@ -131,6 +131,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture passSprite;
 	protected Texture KickSprite;
 	protected Texture moveSprite;
+	protected Texture redSelectTexture;
+	protected Texture blueSelectTexture;
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
@@ -187,6 +189,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 		});
 		bar = new Bar(this, positionUIBarAtTop);
+		bar.setCurrentPlayerIndicator(blueSelectTexture);
 		cursor = new Cursor();
 	}
 
@@ -222,6 +225,10 @@ public abstract class AbstractGame implements ApplicationListener,
 		starFull = new Texture(Gdx.files.internal("star.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
+
+		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
+		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
+
 	}
 
 	protected void createLibGdxItems() {
@@ -239,6 +246,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (repositionCameraOnUpdate) {
 			positionUIBarAtTop = !positionUIBarAtTop;
 			bar = new Bar(this, positionUIBarAtTop);
+			bar.setCurrentPlayerIndicator(blueSelectTexture);
 
 			if (positionUIBarAtTop) {
 				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,
