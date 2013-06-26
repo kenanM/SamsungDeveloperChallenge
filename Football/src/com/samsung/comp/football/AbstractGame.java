@@ -826,8 +826,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		// TODO: this implementation...ewww. Also can still hold ball via long
 		// runs.
-		if (getHumanGoalie().hasBall()) {
-			if (!getHumanGoalie().kicksBall()) {
+		if (getGoalie(currentTeam).hasBall()) {
+			if (!getGoalie(currentTeam).kicksBall()) {
 				getBar().setText("Goalie cannot hold onto the ball");
 				Gdx.app.log("Game", "Goalie needs to kick the ball");
 				return;
@@ -930,7 +930,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 		if (getGoalie(currentTeam) != null) {
-				if (getHumanGoalie().hasBall() && getHumanGoalie() == player) {
+			if (getGoalie(currentTeam).hasBall()
+					&& getGoalie(currentTeam) == player) {
 					return true;
 				}
 			}
