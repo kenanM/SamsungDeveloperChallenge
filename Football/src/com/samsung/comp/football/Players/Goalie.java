@@ -106,7 +106,7 @@ public class Goalie extends Player {
 
 	@Override
 	public Texture getHighlightTexture() {
-		if (!hasBall() && game.getHumanColour() == getTeam()) {
+		if (!hasBall() && game.getCurrentTeamColour() == getTeam()) {
 			return unselectableHoverTexture;
 		} else {
 			return super.getHighlightTexture();

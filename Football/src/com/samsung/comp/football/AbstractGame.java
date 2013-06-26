@@ -680,6 +680,10 @@ public abstract class AbstractGame implements ApplicationListener,
 		return team2;
 	}
 
+	public TeamColour getCurrentTeamColour() {
+		return currentTeam;
+	}
+
 	/**
 	 * depreciated Use getPlayers(TeamColour colour) instead
 	 * 
