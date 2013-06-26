@@ -319,7 +319,9 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			if (cursor.getHighlightedPlayer() != null) {
-				drawTimeLinePoints(cursor.getHighlightedPlayer());
+				if (isSelectable(cursor.getHighlightedPlayer())) {
+					drawTimeLinePoints(cursor.getHighlightedPlayer());
+				}
 				drawPlayerStats(batch, cursor.getHighlightedPlayer());
 			}
 
