@@ -583,9 +583,9 @@ public abstract class AbstractGame implements ApplicationListener,
 		bmf.setColor(Color.BLACK);
 		bmf.setScale(3);
 
-		if (blueScore > redScore && getHumanColour() == TeamColour.BLUE) {
+		if (blueScore > redScore && team1 == TeamColour.BLUE) {
 			result = 1;
-		} else if (blueScore > redScore && getHumanColour() == TeamColour.RED) {
+		} else if (blueScore > redScore && team1 == TeamColour.RED) {
 			result = 1;
 		} else if (blueScore == redScore) {
 			result = 0;
@@ -671,11 +671,18 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
-	// TODO: Something about naming convention?
+	/**
+	 * Depreciated.
+	 * 
+	 * @return team1
+	 */
 	public TeamColour getHumanColour() {
 		return team1;
 	}
 
+	/**
+	 * Depreciated if AI becomes constructed with a colour.
+	 */
 	public TeamColour getComputerColour() {
 		return team2;
 	}
@@ -1188,7 +1195,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						cursor.setTexture(kickSprite);
 						return true;
 					} else if (tapPlayer) {
-						if (startPlayer.getTeam() == getHumanColour()) {
+						if (startPlayer.getTeam() == getCurrentTeamColour()) {
 							if (startPlayer == selectedPlayer) {
 								// Deselect player
 								cursor.setTexture(null);
@@ -1274,7 +1281,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						// Kick action
 						cursor.setTexture(kickSprite);
 						return true;
-					} else if (hoverPlayer.getTeam() == getHumanColour()) {
+					} else if (hoverPlayer.getTeam() == getCurrentTeamColour()) {
 						if (hoverPlayer == selectedPlayer) {
 							// Deselect player
 							cursor.setTexture(null);

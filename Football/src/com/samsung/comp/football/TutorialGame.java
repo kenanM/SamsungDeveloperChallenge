@@ -187,7 +187,7 @@ public class TutorialGame extends AbstractGame {
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			if (ball.hasOwner()) {
-				if (ball.getOwner().getTeam() == getHumanColour()) {
+				if (ball.getOwner().getTeam() == team1) {
 					tutorialPhase = TutorialPhase.QUEUEING;
 				}
 			}
