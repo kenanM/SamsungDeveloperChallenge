@@ -971,7 +971,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		} else if (selectedPlayer != null
 				&& pressedPlayer.getTeam() != getCurrentTeamColour()
-				&& pressedPlayer != getComputerGoalie()) {
+				&& pressedPlayer instanceof Goalie) {
 			// If the first player is selectable, the second player is on the
 			// opposingTeam but is not a goalie then mark the second player
 			selectedPlayer.addAction(new Mark(selectedPlayer, pressedPlayer));
