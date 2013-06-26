@@ -113,6 +113,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected TeamColour team1;
 	protected TeamColour team2;
+	protected TeamColour currentTeam = TeamColour.BLUE;
 
 	protected AI ai;
 	protected TextArea textArea;
@@ -124,7 +125,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected boolean isBallHighlighted;
 	protected ArrayList<Vector2> lineInProgress = new ArrayList<Vector2>();
 	protected Cursor cursor;
-	boolean team1Turn = true;
 
 	protected Texture kickSprite;
 	protected Texture markSprite;
@@ -655,6 +655,23 @@ public abstract class AbstractGame implements ApplicationListener,
 		selectedPlayer = null;
 	}
 
+	public List<Player> getPlayers(TeamColour colour) {
+		if (colour == TeamColour.RED) {
+			return redPlayers;
+		} else {
+			return bluePlayers;
+		}
+	}
+
+	public Player getGoalie(TeamColour colour) {
+		if (colour == TeamColour.RED) {
+			return redGoalie;
+		} else {
+			return blueGoalie;
+		}
+	}
+
+	// TODO: Something about naming convention?
 	public TeamColour getHumanColour() {
 		return team1;
 	}
@@ -663,6 +680,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		return team2;
 	}
 
+	/**
+	 * depreciated Use getPlayers(TeamColour colour) instead
+	 * 
+	 * @return Team1's players
+	 */
 	public List<Player> getHumanPlayers() {
 		if (team1 == TeamColour.RED) {
 			return redPlayers;
@@ -671,6 +693,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
+	/**
+	 * depreciated Use getPlayers(TeamColour colour) instead
+	 * 
+	 * @return Team2's Players
+	 */
 	public List<Player> getComputerPlayers() {
 		if (team2 == TeamColour.RED) {
 			return redPlayers;
@@ -679,6 +706,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
+	/**
+	 * depreciated Use getGoalie(TeamColour colour) instead
+	 * 
+	 * @return Team1's Goalie
+	 */
 	public Player getHumanGoalie() {
 		if (team1 == TeamColour.RED) {
 			return redGoalie;
@@ -687,6 +719,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
+	/**
+	 * depreciated Use getGoalie(TeamColour colour) instead
+	 * 
+	 * @return Team2's Goalie
+	 */
 	public Player getComputerGoalie() {
 		if (team2 == TeamColour.RED) {
 			return redGoalie;
@@ -887,30 +924,17 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected boolean isSelectable(Player player) {
-		if (team1Turn) {
-			if (getHumanPlayers().contains(player)) {
+
+		if (getPlayers(currentTeam).contains(player)) {
 				return true;
 			}
 
-			if (getHumanGoalie() != null) {
+		if (getGoalie(currentTeam) != null) {
 				if (getHumanGoalie().hasBall() && getHumanGoalie() == player) {
 					return true;
 				}
 			}
 			return false;
-		} else {
-			if (getComputerPlayers().contains(player)) {
-				return true;
-			}
-
-			if (getComputerGoalie() != null) {
-				if (getComputerGoalie().hasBall()
-						&& getComputerGoalie() == player) {
-					return true;
-				}
-			}
-			return false;
-		}
 	}
 
 	/**
