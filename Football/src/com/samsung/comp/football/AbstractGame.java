@@ -311,12 +311,12 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (gameState == GameState.INPUT) {
 
-			for (Player player : getHumanPlayers()) {
+			for (Player player : getPlayers(currentTeam)) {
 				drawActions(player.getAction(), batch);
 			}
 
-			if (getHumanGoalie() != null) {
-				drawActions(getHumanGoalie().getAction(), batch);
+			if (getGoalie(currentTeam) != null) {
+				drawActions(getGoalie(currentTeam).getAction(), batch);
 			}
 
 			if (cursor.getHighlightedPlayer() != null) {
@@ -406,12 +406,12 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			shapeRenderer.setColor(0, 0, 0, 0);
 
-			for (Player player : getHumanPlayers()) {
+			for (Player player : getPlayers(currentTeam)) {
 				drawActions(player.getAction(), shapeRenderer);
 			}
 
-			if (getHumanGoalie() != null) {
-				drawActions(getHumanGoalie().getAction(), shapeRenderer);
+			if (getGoalie(currentTeam) != null) {
+				drawActions(getGoalie(currentTeam).getAction(), shapeRenderer);
 			}
 		} else {
 			// Execution stage
