@@ -43,6 +43,7 @@ public class Player extends Rectangle implements Followable {
 
 	protected Texture hoverTexture;
 	protected Texture selectTexture;
+	protected TextureRegion hoverRegion;
 
 	protected static Texture notificationTexture;
 	private float notificationTime = 0f;
@@ -92,6 +93,9 @@ public class Player extends Rectangle implements Followable {
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		}
 		this.currentFrame = walkAnimation.getKeyFrame(0);
+
+		this.hoverRegion = new TextureRegion(hoverTexture, HOVER_SIZE,
+				HOVER_SIZE);
 	}
 
 	public Player(float x, float y, TeamColour teamColour, float shoot,
@@ -354,8 +358,14 @@ public class Player extends Rectangle implements Followable {
 		return currentFrame;
 	}
 
-	public Texture getHighlightTexture() {
-		return hoverTexture;
+	public TextureRegion getHighlightTexture() {
+		return hoverRegion;
+	}
+
+	public Rectangle getHighlightRectangle() {
+		return new Rectangle(translateHoverCoordinate(this.getPlayerX()),
+				translateHoverCoordinate(this.getPlayerY()), HOVER_SIZE,
+				HOVER_SIZE);
 	}
 
 	public int getStarsShootSpeed() {
@@ -419,7 +429,7 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public void drawHighlight(SpriteBatch batch) {
-		batch.draw(this.getHighlightTexture(),
+		batch.draw(getHighlightTexture(),
 				translateHoverCoordinate(getPlayerX()),
 				translateHoverCoordinate(getPlayerY()));
 	}

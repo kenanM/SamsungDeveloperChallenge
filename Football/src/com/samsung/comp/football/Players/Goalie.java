@@ -5,6 +5,7 @@ import android.util.Log;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Ball;
@@ -19,6 +20,7 @@ public class Goalie extends Player {
 	protected Vector2 middle;
 	protected static final float DEFENSIVE_DISTANCE_FROM_GOAL = 150;
 	private final Texture unselectableHoverTexture;
+	private final TextureRegion unselectableRegion;
 
 	private AbstractGame game;
 
@@ -28,6 +30,8 @@ public class Goalie extends Player {
 		this.game = game;
 		unselectableHoverTexture = new Texture(
 				Gdx.files.internal("unselectableHover.png"));
+		unselectableRegion = new TextureRegion(unselectableHoverTexture, 13,
+				13, 64, 64);
 
 		savingSkill = saving;
 
@@ -59,7 +63,6 @@ public class Goalie extends Player {
 			this.walkSheet = new Texture(Gdx.files.internal("yellowPlayer.png"));
 			this.walkAnimation = new Animation(0.10f,
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
-			this.currentFrame = walkAnimation.getKeyFrame(0);
 		}
 		this.currentFrame = walkAnimation.getKeyFrame(0);
 	}
@@ -105,9 +108,9 @@ public class Goalie extends Player {
 	}
 
 	@Override
-	public Texture getHighlightTexture() {
+	public TextureRegion getHighlightTexture() {
 		if (!hasBall() && game.getCurrentTeamColour() == getTeam()) {
-			return unselectableHoverTexture;
+			return unselectableRegion;
 		} else {
 			return super.getHighlightTexture();
 		}
