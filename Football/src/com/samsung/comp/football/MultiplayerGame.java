@@ -153,7 +153,8 @@ public class MultiplayerGame extends AbstractGame {
 			this.gameState = GameState.EXECUTION;
 			bar.setPositionToUp();
 		}
-
+		selectedPlayer = null;
+		cursor.setHighlightedPlayer(null);
 	}
 
 	@Override
