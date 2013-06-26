@@ -56,8 +56,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	public static final int PLAYING_AREA_HEIGHT = 1024;
 
 	// TODO: HACK: rough area for goal here
-	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 0, 110,
-			44);
+	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 0, 110, 44);
 	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 980, 110,
 			44);
 
@@ -937,16 +936,16 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected boolean isSelectable(Player player) {
 
 		if (getPlayers(currentTeam).contains(player)) {
-				return true;
-			}
+			return true;
+		}
 
 		if (getGoalie(currentTeam) != null) {
 			if (getGoalie(currentTeam).hasBall()
 					&& getGoalie(currentTeam) == player) {
-					return true;
-				}
+				return true;
 			}
-			return false;
+		}
+		return false;
 	}
 
 	/**
