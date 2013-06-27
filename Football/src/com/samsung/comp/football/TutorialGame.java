@@ -21,7 +21,7 @@ public class TutorialGame extends AbstractGame {
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 	private boolean shootCompleted = false;
-	private boolean update = false;
+	private float setupTime = 0f;
 
 	@Override
 	public void create() {
@@ -56,7 +56,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (tutorialPhase == TutorialPhase.SHOOT) {
 			shootCompleted = true;
-			update = true;
+			setupTime = 0f;
 		}
 	}
 
@@ -97,7 +97,7 @@ public class TutorialGame extends AbstractGame {
 				750), p));
 		p0.executeAction();
 		p0.clearActions();
-		update = true;
+		setupTime = 3f;
 	}
 
 	private void setupTacklePhase() {
@@ -112,7 +112,7 @@ public class TutorialGame extends AbstractGame {
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
 		owner.executeAction();
 		owner.clearActions();
-		update = true;
+		setupTime = 5f;
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class TutorialGame extends AbstractGame {
 		clearActions();
 		bar.setPositionToDown();
 		
-		update = false;
+		setupTime = 0f;
 		checkPhaseCompletion();
 		runPhaseSpecficActions();
 		displayTutorialMessage();
@@ -156,7 +156,7 @@ public class TutorialGame extends AbstractGame {
 			p1.executeAction();
 			p1.clearActions();
 			p.clearActions();
-			update = true;
+			setupTime = 5f;
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
@@ -305,7 +305,8 @@ public class TutorialGame extends AbstractGame {
 				beginInputStage();
 			}
 
-		} else if (update) {
+		} else if (setupTime > 0) {
+			setupTime -= time;
 			for (Player player : getAllPlayers()) {
 				player.update(time);
 			}

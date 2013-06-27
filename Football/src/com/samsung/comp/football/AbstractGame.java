@@ -24,7 +24,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.events.ButtonPressListener;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
@@ -181,13 +180,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void createUI() {
-		textArea = new TextArea();
-		textArea.setListener(new ButtonPressListener() {
-			@Override
-			public void onButtonPress() {
-				textAreaButtonPressed();
-			}
-		});
+		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		bar.setCurrentPlayerIndicator(blueSelectTexture);
 		cursor = new Cursor();
