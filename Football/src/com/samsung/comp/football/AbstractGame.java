@@ -1005,8 +1005,8 @@ public abstract class AbstractGame implements ApplicationListener,
 				&& !(pressedPlayer instanceof Goalie)) {
 			// If the first player is selectable, the second player is on the
 			// opposingTeam but is not a goalie then mark the second player
-			selectedPlayer.addAction(new Mark(selectedPlayer.getFinalAction()
-					.getPosition(), pressedPlayer));
+			selectedPlayer.addAction(new Mark(selectedPlayer
+					.getFuturePosition(), pressedPlayer));
 		}
 		selectedPlayer = null;
 	}
@@ -1017,7 +1017,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (selectedPlayer != null) {
 			selectedPlayer.addAction(new MarkBall(selectedPlayer
-					.getFinalAction().getPosition(), ball));
+					.getFuturePosition(), ball));
 			selectedPlayer = null;
 			return;
 		}
