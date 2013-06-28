@@ -332,13 +332,12 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			for (Player player : getPlayers(currentTeam)) {
 				drawActions(player.getAction(), batch,
-						(player == cursor.getHighlightedPlayer() || player == selectedPlayer));
+						(player == cursor.getHighlightedPlayer()|| player == selectedPlayer));
 			}
 
 			if (getGoalie(currentTeam) != null) {
 				drawActions(getGoalie(currentTeam).getAction(), batch,
-						(getGoalie(currentTeam) == cursor
-								.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
+						(getGoalie(currentTeam) == cursor.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
 			}
 
 			if (cursor.getHighlightedPlayer() != null) {
@@ -431,7 +430,14 @@ public abstract class AbstractGame implements ApplicationListener,
 			shapeRenderer.setColor(0, 0, 0, 0);
 
 			for (Player player : getPlayers(currentTeam)) {
-				drawActions(player.getAction(), shapeRenderer);
+				if (player == selectedPlayer
+						|| player == cursor.getHighlightedPlayer()) {
+					shapeRenderer.setColor(0, 0, 255, 0);
+					drawActions(player.getAction(), shapeRenderer);
+					shapeRenderer.setColor(0, 0, 0, 0);
+				} else {
+					drawActions(player.getAction(), shapeRenderer);
+				}
 			}
 
 			if (getGoalie(currentTeam) != null) {
