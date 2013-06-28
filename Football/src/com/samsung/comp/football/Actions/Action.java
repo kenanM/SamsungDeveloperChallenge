@@ -89,9 +89,9 @@ public abstract class Action {
 
 	public abstract void execute(Player player);
 
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, boolean highlighted) {
 		if (nextAction != null) {
-			nextAction.draw(batch);
+			nextAction.draw(batch, highlighted);
 		}
 	}
 

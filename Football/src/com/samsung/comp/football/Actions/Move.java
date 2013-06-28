@@ -12,6 +12,7 @@ public class Move extends Action {
 
 	private final Vector2[] path;
 	private static Texture TEXTURE;
+	private static Texture highlightedTexture;
 	// TODO: remove this & references from attributes list
 	private float rotation = 0;
 
@@ -35,8 +36,9 @@ public class Move extends Action {
 		}
 	}
 
-	public static void create(Texture texture) {
+	public static void create(Texture texture, Texture highlighted) {
 		TEXTURE = texture;
+		highlightedTexture = highlighted;
 	}
 
 	public static void dispose() {
@@ -58,7 +60,7 @@ public class Move extends Action {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, boolean highlighted) {
 
 		// Arbitrary number to ensure points aren't the same
 		if (path != null && path.length > 5) {
@@ -69,14 +71,27 @@ public class Move extends Action {
 			float rotation = Utils.getMoveVector(firstPoint, secondPoint, 10)
 					.angle();
 
-			batch.draw(TEXTURE, secondPoint.x - (TEXTURE.getWidth() / 2),
-					secondPoint.y - (TEXTURE.getWidth() / 2),
-					TEXTURE.getWidth() / 2, TEXTURE.getHeight() / 2,
-					TEXTURE.getWidth(), TEXTURE.getHeight(), 1, 1,
-					rotation + 45 + 90, 0, 0, TEXTURE.getWidth(),
-					TEXTURE.getHeight(), false, true);
+			if (highlighted) {
+				batch.draw(highlightedTexture, secondPoint.x
+						- (highlightedTexture.getWidth() / 2), secondPoint.y
+						- (highlightedTexture.getWidth() / 2),
+						highlightedTexture.getWidth() / 2,
+						highlightedTexture.getHeight() / 2,
+						highlightedTexture.getWidth(),
+						highlightedTexture.getHeight(), 1, 1,
+						rotation + 45 + 90, 0, 0,
+						highlightedTexture.getWidth(),
+						highlightedTexture.getHeight(), false, true);
+			} else {
+				batch.draw(TEXTURE, secondPoint.x - (TEXTURE.getWidth() / 2),
+						secondPoint.y - (TEXTURE.getWidth() / 2),
+						TEXTURE.getWidth() / 2, TEXTURE.getHeight() / 2,
+						TEXTURE.getWidth(), TEXTURE.getHeight(), 1, 1,
+						rotation + 45 + 90, 0, 0, TEXTURE.getWidth(),
+						TEXTURE.getHeight(), false, true);
+			}
 		}
-		super.draw(batch);
+		super.draw(batch, highlighted);
 	}
 
 	@Override

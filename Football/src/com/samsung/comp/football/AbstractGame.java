@@ -130,6 +130,14 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture passSprite;
 	protected Texture KickSprite;
 	protected Texture moveSprite;
+
+	protected Texture kickSpriteHighlighted;
+	protected Texture markSpriteHighlighted;
+	protected Texture markBallSpriteHighlighted;
+	protected Texture passSpriteHighlighted;
+	protected Texture KickSpriteHighlighted;
+	protected Texture moveSpriteHighlighted;
+
 	protected Texture redSelectTexture;
 	protected Texture blueSelectTexture;
 
@@ -203,12 +211,23 @@ public abstract class AbstractGame implements ApplicationListener,
 		markBallSprite = new Texture(Gdx.files.internal("markingIcon.png"));
 		moveSprite = new Texture(Gdx.files.internal("arrowhead.png"));
 
-		Kick.create(kickSprite);
-		Pass.create(passSprite);
-		Mark.create(markSprite);
-		MarkBall.create(markBallSprite);
-		Move.create(moveSprite);
-		MoveToPosition.create(moveSprite);
+		kickSpriteHighlighted = new Texture(
+				Gdx.files.internal("targetBlue.png"));
+		passSpriteHighlighted = new Texture(
+				Gdx.files.internal("passingIconBlue.png"));
+		markSpriteHighlighted = new Texture(
+				Gdx.files.internal("markingIconBlue.png"));
+		markBallSpriteHighlighted = new Texture(
+				Gdx.files.internal("markingIconBlue.png"));
+		moveSpriteHighlighted = new Texture(
+				Gdx.files.internal("arrowheadBlue.png"));
+
+		Kick.create(kickSprite, kickSpriteHighlighted);
+		Pass.create(passSprite, passSpriteHighlighted);
+		Mark.create(markSprite, markSpriteHighlighted);
+		MarkBall.create(markBallSprite, markBallSpriteHighlighted);
+		Move.create(moveSprite, moveSpriteHighlighted);
+		MoveToPosition.create(moveSprite, moveSpriteHighlighted);
 	}
 
 	protected void createMainTextures() {
@@ -312,11 +331,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (gameState == GameState.INPUT) {
 
 			for (Player player : getPlayers(currentTeam)) {
-				drawActions(player.getAction(), batch);
+				drawActions(player.getAction(), batch,
+						(player == cursor.getHighlightedPlayer() || player == selectedPlayer));
 			}
 
 			if (getGoalie(currentTeam) != null) {
-				drawActions(getGoalie(currentTeam).getAction(), batch);
+				drawActions(getGoalie(currentTeam).getAction(), batch,
+						(getGoalie(currentTeam) == cursor
+								.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
 			}
 
 			if (cursor.getHighlightedPlayer() != null) {
@@ -422,9 +444,10 @@ public abstract class AbstractGame implements ApplicationListener,
 		shapeRenderer.end();
 	}
 
-	protected void drawActions(Action action, SpriteBatch batch) {
+	protected void drawActions(Action action, SpriteBatch batch,
+			boolean highlighted) {
 		if (action != null) {
-			action.draw(batch);
+			action.draw(batch, highlighted);
 		}
 	}
 

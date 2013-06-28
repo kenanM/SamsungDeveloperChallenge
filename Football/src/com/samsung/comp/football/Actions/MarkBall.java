@@ -11,14 +11,16 @@ public class MarkBall extends Action {
 	private Player player;
 	private Ball ball;
 	private static Texture markTexture;
+	private static Texture highlightedTexture;
 
 	public MarkBall(Player startPoint, Ball ball) {
 		this.player = startPoint;
 		this.ball = ball;
 	}
 
-	public static void create(Texture texture) {
+	public static void create(Texture texture, Texture highlighted) {
 		markTexture = texture;
+		highlightedTexture = highlighted;
 	}
 
 	@Override
@@ -31,10 +33,16 @@ public class MarkBall extends Action {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
-		batch.draw(markTexture, ball.x - markTexture.getWidth() / 2, ball.y
-				- markTexture.getHeight() / 2);
-		super.draw(batch);
+	public void draw(SpriteBatch batch, boolean highlighted) {
+		if (highlighted) {
+			batch.draw(highlightedTexture,
+					ball.x - (highlightedTexture.getHeight() / 2), ball.y
+							- (highlightedTexture.getWidth() / 2));
+		} else {
+			batch.draw(markTexture, ball.x - markTexture.getWidth() / 2, ball.y
+					- markTexture.getHeight() / 2);
+		}
+		super.draw(batch, highlighted);
 	}
 
 	@Override

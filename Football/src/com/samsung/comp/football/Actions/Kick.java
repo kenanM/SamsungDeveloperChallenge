@@ -12,6 +12,7 @@ public class Kick extends Action {
 	private Vector2 kickStartLocation;
 	private Vector2 target;
 	private static Texture targetTexture;
+	private static Texture highlightedTexture;
 
 	public Kick(Ball ball, Vector2 target, Vector2 kickStartLocation) {
 		this.ball = ball;
@@ -28,8 +29,9 @@ public class Kick extends Action {
 		return target;
 	}
 
-	public static void create(Texture texture) {
+	public static void create(Texture texture, Texture highlighted) {
 		targetTexture = texture;
+		highlightedTexture = highlighted;
 	}
 
 	public static void dispose() {
@@ -37,10 +39,18 @@ public class Kick extends Action {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
-		batch.draw(targetTexture, target.x - (targetTexture.getHeight() / 2),
-				target.y - (targetTexture.getWidth() / 2));
-		super.draw(batch);
+	public void draw(SpriteBatch batch, boolean highlighted) {
+		if (highlighted) {
+			batch.draw(highlightedTexture,
+					target.x - (highlightedTexture.getHeight() / 2), target.y
+							- (highlightedTexture.getWidth() / 2));
+		} else {
+			batch.draw(targetTexture, target.x
+					- (targetTexture.getHeight() / 2), target.y
+					- (targetTexture.getWidth() / 2));
+		}
+
+		super.draw(batch, highlighted);
 	}
 
 	@Override

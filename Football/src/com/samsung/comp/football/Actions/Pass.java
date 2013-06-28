@@ -14,6 +14,7 @@ public class Pass extends Action {
 	private Player kicker;
 	private Vector2 kickStartLocation;
 	private static Texture passIcon;
+	private static Texture highlightedTexture;
 
 	public Pass(Ball ball, Player kicker, Player target,
 			Vector2 kickStartLocation) {
@@ -23,8 +24,9 @@ public class Pass extends Action {
 		this.kickStartLocation = kickStartLocation;
 	}
 
-	public static void create(Texture texture) {
+	public static void create(Texture texture, Texture highlighted) {
 		passIcon = texture;
+		highlightedTexture = highlighted;
 	}
 
 	@Override
@@ -40,10 +42,17 @@ public class Pass extends Action {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
-		batch.draw(passIcon, target.getPlayerPosition().x - passIcon.getWidth()
-				/ 2, target.getPlayerPosition().y - passIcon.getHeight() / 2);
-		super.draw(batch);
+	public void draw(SpriteBatch batch, boolean highlighted) {
+		if (highlighted) {
+			batch.draw(highlightedTexture, target.getPlayerPosition().x
+					- passIcon.getWidth() / 2, target.getPlayerPosition().y
+					- passIcon.getHeight() / 2);
+		} else {
+			batch.draw(passIcon,
+					target.getPlayerPosition().x - passIcon.getWidth() / 2,
+					target.getPlayerPosition().y - passIcon.getHeight() / 2);
+		}
+		super.draw(batch, highlighted);
 	}
 
 	@Override

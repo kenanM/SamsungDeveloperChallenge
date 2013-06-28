@@ -11,6 +11,7 @@ public class Mark extends Action {
 	private Player target;
 	private Player player;
 	private static Texture markTexture;
+	private static Texture highlightedTexture;
 
 	public Mark(Player player, Player target) {
 		this.player = player;
@@ -21,8 +22,9 @@ public class Mark extends Action {
 		return target;
 	}
 
-	public static void create(Texture texture) {
+	public static void create(Texture texture, Texture highlighted) {
 		markTexture = texture;
+		highlightedTexture = highlighted;
 	}
 
 	@Override
@@ -35,11 +37,17 @@ public class Mark extends Action {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
-		batch.draw(markTexture,
-				target.getPlayerPosition().x - markTexture.getWidth() / 2,
-				target.getPlayerPosition().y - markTexture.getHeight() / 2);
-		super.draw(batch);
+	public void draw(SpriteBatch batch, boolean highlighted) {
+		if (highlighted) {
+			batch.draw(highlightedTexture, target.getPlayerPosition().x
+					- markTexture.getWidth() / 2, target.getPlayerPosition().y
+					- markTexture.getHeight() / 2);
+		} else {
+			batch.draw(markTexture,
+					target.getPlayerPosition().x - markTexture.getWidth() / 2,
+					target.getPlayerPosition().y - markTexture.getHeight() / 2);
+		}
+		super.draw(batch, highlighted);
 	}
 
 	@Override
