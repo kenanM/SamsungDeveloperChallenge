@@ -8,13 +8,13 @@ import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Players.Player;
 
 public class MarkBall extends Action {
-	private Player player;
+	private Vector2 startPoint;
 	private Ball ball;
 	private static Texture markTexture;
 	private static Texture highlightedTexture;
 
-	public MarkBall(Player startPoint, Ball ball) {
-		this.player = startPoint;
+	public MarkBall(Vector2 startPoint, Ball ball) {
+		this.startPoint = startPoint;
 		this.ball = ball;
 	}
 
@@ -47,7 +47,7 @@ public class MarkBall extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(player.getPlayerX(), player.getPlayerY(),
+		renderer.line(startPoint.x, startPoint.y,
 				ball.getBallX(),
 				ball.getBallY());
 		super.draw(renderer);

@@ -9,12 +9,12 @@ import com.samsung.comp.football.Players.Player;
 public class Mark extends Action {
 
 	private Player target;
-	private Player player;
+	private Vector2 startPoint;
 	private static Texture markTexture;
 	private static Texture highlightedTexture;
 
-	public Mark(Player player, Player target) {
-		this.player = player;
+	public Mark(Vector2 startPoint, Player target) {
+		this.startPoint = startPoint;
 		this.target = target;
 	}
 
@@ -52,8 +52,7 @@ public class Mark extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(player.getPlayerPosition().x,
-				player.getPlayerPosition().y, target.getPlayerPosition().x,
+		renderer.line(startPoint.x, startPoint.y, target.getPlayerPosition().x,
 				target.getPlayerPosition().y);
 		super.draw(renderer);
 	}

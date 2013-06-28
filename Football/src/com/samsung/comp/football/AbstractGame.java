@@ -1005,7 +1005,8 @@ public abstract class AbstractGame implements ApplicationListener,
 				&& !(pressedPlayer instanceof Goalie)) {
 			// If the first player is selectable, the second player is on the
 			// opposingTeam but is not a goalie then mark the second player
-			selectedPlayer.addAction(new Mark(selectedPlayer, pressedPlayer));
+			selectedPlayer.addAction(new Mark(selectedPlayer.getFinalAction()
+					.getPosition(), pressedPlayer));
 		}
 		selectedPlayer = null;
 	}
@@ -1015,7 +1016,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		Gdx.app.log(INPUT_TAG, "Pressed ball: ");
 
 		if (selectedPlayer != null) {
-			selectedPlayer.addAction(new MarkBall(selectedPlayer, ball));
+			selectedPlayer.addAction(new MarkBall(selectedPlayer
+					.getFinalAction().getPosition(), ball));
 			selectedPlayer = null;
 			return;
 		}
