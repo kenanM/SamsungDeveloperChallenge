@@ -74,9 +74,8 @@ public class Bar extends Rectangle {
 		playIconRectangle = new Rectangle(xOffset, this.y, this.getHeight(),
 				this.getHeight());
 		cancelIconRectangle = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH
-				- cancelIcon.getWidth() - xOffset, this.y,
-				cancelIcon.getWidth(),
-				cancelIcon.getHeight());
+				- this.getHeight() - xOffset, this.y, this.getHeight(),
+				this.getHeight());
 
 		currentPlayerRectangle = new Rectangle(playIconRectangle.x
 				+ playIconRectangle.getWidth(), playIconRectangle.y,
@@ -133,10 +132,16 @@ public class Bar extends Rectangle {
 		if (isCancelButtonShown()) {
 			if (cancelActionsTimer < 1) {
 				batch.draw(cancelIconPressed, cancelIconRectangle.x,
-						cancelIconRectangle.y);
+						cancelIconRectangle.y, cancelIconRectangle.width,
+						cancelIconRectangle.height, 0, 0,
+						cancelIcon.getWidth(), cancelIcon.getHeight(), false,
+						true);
 			} else {
 				batch.draw(cancelIcon, cancelIconRectangle.x,
-						cancelIconRectangle.y);
+						cancelIconRectangle.y, cancelIconRectangle.width,
+						cancelIconRectangle.height, 0, 0,
+						cancelIcon.getWidth(), cancelIcon.getHeight(), false,
+						true);
 			}
 		}
 
