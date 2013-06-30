@@ -14,13 +14,12 @@ public class TextArea extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	protected Texture areaTexture;
 	protected String text = "NO TEXT";
-	// normally a list of observers
 	protected ButtonPressListener observer;
 
 	public TextArea() {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
-		this.x = Game.VIRTUAL_SCREEN_WIDTH / 2 - areaTexture.getWidth() / 2;
-		this.y = Game.VIRTUAL_SCREEN_HEIGHT / 2 - areaTexture.getHeight() / 2;
+		this.x = 0;
+		this.y = Game.VIRTUAL_SCREEN_HEIGHT - areaTexture.getHeight();
 		width = areaTexture.getWidth();
 		height = areaTexture.getHeight();
 	}
@@ -36,18 +35,20 @@ public class TextArea extends Rectangle {
 
 	public void draw(SpriteBatch batch, BitmapFont bmf) {
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
-				areaTexture.getHeight());
+				areaTexture.getHeight(), 0, 0, areaTexture.getWidth(),
+				areaTexture.getHeight(), false, true);
 
 		Color tempColor = bmf.getColor();
 		bmf.setColor(Color.BLACK);
-		bmf.drawWrapped(batch, text, x + 30, y + 25, width - 45 - 25);
+		bmf.drawWrapped(batch, text, (60), Game.VIRTUAL_SCREEN_HEIGHT - 978,
+				600);
 		bmf.setColor(tempColor);
 	}
 
 	public void onPress(float x, float y) {
-		if (this.contains(x, y)) {
-			observer.onButtonPress();
-		}
+		// if (this.contains(x, y)) {
+		observer.onButtonPress();
+		// }
 	}
 
 	public void setText(String text) {
