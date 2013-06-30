@@ -131,6 +131,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture passSprite;
 	protected Texture KickSprite;
 	protected Texture moveSprite;
+	protected Texture unselectableSprite;
 
 	protected Texture kickSpriteHighlighted;
 	protected Texture markSpriteHighlighted;
@@ -214,6 +215,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		markSprite = new Texture(Gdx.files.internal("markingIcon.png"));
 		markBallSprite = new Texture(Gdx.files.internal("markingIcon.png"));
 		moveSprite = new Texture(Gdx.files.internal("arrowhead.png"));
+		unselectableSprite = new Texture(
+				Gdx.files.internal("unselectableHover.png"));
 
 		kickSpriteHighlighted = new Texture(
 				Gdx.files.internal("targetBlue.png"));
@@ -1249,7 +1252,11 @@ public abstract class AbstractGame implements ApplicationListener,
 							}
 						} else {
 							// Mark player action
-							cursor.setTexture(markSprite);
+							if (endPlayer instanceof Goalie) {
+								cursor.setTexture(unselectableSprite);
+							} else {
+								cursor.setTexture(markSprite);
+							}
 							return true;
 						}
 					} else {
@@ -1335,7 +1342,11 @@ public abstract class AbstractGame implements ApplicationListener,
 						}
 					} else {
 						// Mark player action
-						cursor.setTexture(markSprite);
+						if (hoverPlayer instanceof Goalie) {
+							cursor.setTexture(unselectableSprite);
+						} else {
+							cursor.setTexture(markSprite);
+						}
 						return true;
 					}
 				}
