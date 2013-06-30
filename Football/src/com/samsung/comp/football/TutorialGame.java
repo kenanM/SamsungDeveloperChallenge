@@ -131,7 +131,22 @@ public class TutorialGame extends AbstractGame {
 
 	private void runPhaseSpecficActions() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
-			
+			arrows.add(new Arrow(pointer, bluePlayers.get(0).getPlayerX(),
+					bluePlayers.get(0).y));
+			Arrow a1 = new Arrow(pointer);
+			Arrow a2 = new Arrow(pointer);
+			Arrow a3 = new Arrow(pointer);
+			a1.pointAt(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
+			a2.pointAt(VIRTUAL_SCREEN_WIDTH / 2 + a2.getWidth(),
+					VIRTUAL_SCREEN_HEIGHT / 2);
+			a3.pointAt(VIRTUAL_SCREEN_WIDTH / 2 - a3.getWidth(),
+					VIRTUAL_SCREEN_HEIGHT / 2);
+			arrows.add(a1);
+			arrows.add(a2);
+			arrows.add(a3);
+			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
+			arrows.add(a);
+
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
@@ -256,6 +271,7 @@ public class TutorialGame extends AbstractGame {
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		bar.setPositionToUp();
+		arrows.clear();
 
 		// Really should do something about these checks now being everywhere
 		if (tutorialPhase == TutorialPhase.MARK) {
@@ -273,6 +289,7 @@ public class TutorialGame extends AbstractGame {
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
 		}
+
 	}
 
 	@Override
