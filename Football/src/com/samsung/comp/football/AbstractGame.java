@@ -100,6 +100,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Goalie redGoalie;
 	protected Goalie blueGoalie;
 	protected Ball ball;
+	protected ArrayList<Arrow> arrows = new ArrayList<Arrow>();
 
 	// TODO: Rename to elapsedRoundTime?
 	protected float elapsedRoundTime = 0;
@@ -140,6 +141,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected Texture redSelectTexture;
 	protected Texture blueSelectTexture;
+
+	protected Texture pointer;
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
 
@@ -188,6 +191,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void createUI() {
+		pointer = new Texture(Gdx.files.internal("pointerOrange.png"));
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		bar.setCurrentPlayerIndicator(blueSelectTexture);
@@ -345,6 +349,10 @@ public abstract class AbstractGame implements ApplicationListener,
 					drawTimeLinePoints(cursor.getHighlightedPlayer());
 				}
 				drawPlayerStats(batch, cursor.getHighlightedPlayer());
+			}
+
+			for (Arrow arrow : arrows) {
+				arrow.draw(batch);
 			}
 
 			if (selectedPlayer != null) {
