@@ -61,18 +61,18 @@ public class Bar extends Rectangle {
 
 		positionedAtTop = topOfScreen;
 
-		this.y = positionedAtTop ? -playIcon.getHeight()
+		this.y = positionedAtTop ? -64
 				: Game.VIRTUAL_SCREEN_HEIGHT;
 		this.x = 0;
 
-		this.height = playIcon.getHeight();
+		this.height = 64;
 		this.width = Game.VIRTUAL_SCREEN_WIDTH;
 
 		upYValue = positionedAtTop ? this.y - playIcon.getHeight() : this.y
 				+ playIcon.getHeight();
 
-		playIconRectangle = new Rectangle(xOffset, this.y, playIcon.getWidth(),
-				playIcon.getHeight());
+		playIconRectangle = new Rectangle(xOffset, this.y, this.getHeight(),
+				this.getHeight());
 		cancelIconRectangle = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH
 				- cancelIcon.getWidth() - xOffset, this.y,
 				cancelIcon.getWidth(),
@@ -126,8 +126,9 @@ public class Bar extends Rectangle {
 	}
 
 	public void draw(SpriteBatch batch) {
-		batch.draw(bar, x, y);
-		batch.draw(playIcon, playIconRectangle.x, playIconRectangle.y);
+		batch.draw(bar, x, y, this.getWidth(), this.getHeight());
+		batch.draw(playIcon, playIconRectangle.x, playIconRectangle.y,
+				playIconRectangle.width, playIconRectangle.height);
 
 		if (isCancelButtonShown()) {
 			if (cancelActionsTimer < 1) {
