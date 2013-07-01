@@ -35,12 +35,12 @@ public class MarkBall extends Action {
 	@Override
 	public void draw(SpriteBatch batch, boolean highlighted) {
 		if (highlighted) {
-			batch.draw(highlightedTexture,
-					ball.x - (highlightedTexture.getHeight() / 2), ball.y
-							- (highlightedTexture.getWidth() / 2));
+			batch.draw(highlightedTexture, ball.getBallX()
+					- (highlightedTexture.getHeight() / 2), ball.getBallY()
+					- (highlightedTexture.getWidth() / 2));
 		} else {
-			batch.draw(markTexture, ball.x - markTexture.getWidth() / 2, ball.y
-					- markTexture.getHeight() / 2);
+			batch.draw(markTexture, ball.getBallX() - markTexture.getWidth()
+					/ 2, ball.getBallY() - markTexture.getHeight() / 2);
 		}
 		super.draw(batch, highlighted);
 	}
