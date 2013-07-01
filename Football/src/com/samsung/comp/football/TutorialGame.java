@@ -148,9 +148,21 @@ public class TutorialGame extends AbstractGame {
 			arrows.add(a);
 
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+			Arrow a1 = new Arrow(pointer);
+			a1.pointAt(bluePlayers.get(0).getPlayerX(), bluePlayers.get(0).y);
 			
+			Arrow a2 = new Arrow(pointer);
+			a2.pointAt(ball.getBallX(), ball.y);
+			arrows.add(a1);
+			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
+			Arrow a1 = new Arrow(pointer);
+			a1.pointAt(ball.getBallX(), ball.y);
 			
+			Arrow a2 = new Arrow(pointer);
+			a2.pointAt(Game.RED_GOAL.x, Game.RED_GOAL.y);
+			arrows.add(a1);
+			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			
 		} else if (tutorialPhase == TutorialPhase.MARK) {
