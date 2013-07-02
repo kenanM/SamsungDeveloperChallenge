@@ -184,6 +184,14 @@ public class TutorialGame extends AbstractGame {
 			p1.clearActions();
 			p.clearActions();
 			setupTime = 5f;
+
+			Arrow a1 = new Arrow(pointer);
+			Arrow a2 = new Arrow(pointer);
+			a1.follow(p);
+			a2.follow(p1);
+			arrows.add(a1);
+			arrows.add(a2);
+
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
@@ -329,6 +337,10 @@ public class TutorialGame extends AbstractGame {
 				goalScoredDetection();
 			}
 
+			for (Arrow arrow : arrows) {
+				arrow.update();
+			}
+
 			if (elapsedRoundTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
 				beginInputStage();
@@ -346,6 +358,10 @@ public class TutorialGame extends AbstractGame {
 						VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
 				tackleDetection(time);
 				goalScoredDetection();
+			}
+
+			for (Arrow arrow : arrows) {
+				arrow.update();
 			}
 		}
 	}
