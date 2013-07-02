@@ -8,6 +8,7 @@ import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
+import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
@@ -21,6 +22,7 @@ public class TutorialGame extends AbstractGame {
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 	private boolean shootCompleted = false;
+	private boolean queueCompleted = false;
 	private float setupTime = 0f;
 
 	@Override
@@ -56,6 +58,9 @@ public class TutorialGame extends AbstractGame {
 
 		if (tutorialPhase == TutorialPhase.SHOOT) {
 			shootCompleted = true;
+			setupTime = 0f;
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+			queueCompleted = true;
 			setupTime = 0f;
 		}
 	}
@@ -112,6 +117,32 @@ public class TutorialGame extends AbstractGame {
 		owner.executeAction();
 		owner.clearActions();
 		setupTime = 5f;
+	}
+
+	private void setupQueuePhase() {
+		Player p = redPlayers.get(1);
+
+		// p.addAction(new MoveToPosition(new Vector2(
+		// VIRTUAL_SCREEN_WIDTH * 2 / 3, VIRTUAL_SCREEN_HEIGHT * 2 / 3), p));
+		p.addAction(new MoveToPosition(new Vector2(
+				(VIRTUAL_SCREEN_WIDTH * 2 / 3), VIRTUAL_SCREEN_HEIGHT * 5 / 6),
+				p));
+		p.addAction(new MoveToPosition(new Vector2(
+				(VIRTUAL_SCREEN_WIDTH * 2 / 3) - 50,
+				VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
+		p.executeAction();
+
+		Player owner = ball.getOwner();
+		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
+		owner.executeAction();
+		owner.clearActions();
+
+		setupTime = 3f;
+	}
+
+	private void setupGoaliePhase() {
+		redGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2, 0, TeamColour.RED,
+				this, 420);
 	}
 
 	@Override
@@ -182,7 +213,7 @@ public class TutorialGame extends AbstractGame {
 			p1.executeAction();
 			p1.clearActions();
 			p.clearActions();
-			setupTime = 5f;
+			setupTime = 2f;
 
 			Arrow a1 = new Arrow(pointer);
 			Arrow a2 = new Arrow(pointer);
@@ -223,10 +254,14 @@ public class TutorialGame extends AbstractGame {
 			if (ball.hasOwner()) {
 				if (ball.getOwner().getTeam() == team1) {
 					tutorialPhase = TutorialPhase.QUEUEING;
+					setupQueuePhase();
 				}
 			}
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-
+			if (queueCompleted) {
+				tutorialPhase = TutorialPhase.GOALIE;
+				setupGoaliePhase();
+			}
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 
 		}
