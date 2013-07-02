@@ -363,6 +363,10 @@ public class TutorialGame extends AbstractGame {
 			for (Arrow arrow : arrows) {
 				arrow.update();
 			}
+
+			if (setupTime <= 0) {
+				clearActions();
+			}
 		}
 	}
 
