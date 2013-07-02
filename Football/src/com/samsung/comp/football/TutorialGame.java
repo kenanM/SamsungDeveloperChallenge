@@ -142,7 +142,7 @@ public class TutorialGame extends AbstractGame {
 
 	private void setupGoaliePhase() {
 		redGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2, 0, TeamColour.RED,
-				this, 420);
+				this, 500);
 	}
 
 	@Override
