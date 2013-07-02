@@ -289,11 +289,11 @@ public class TutorialGame extends AbstractGame {
 					+ "Your player will run straight towards the ball to collect it.\n\n"
 					+ "Don't forget to hit the play button when you're ready.");
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-			textArea.setText("Tap on your player to select them again, then tap on the pitch to shoot. \n\n"
+			textArea.setText("Now that you have the ball, tap on your player to select them again, then tap on the pitch to shoot. \n\n"
 					+ "How else are you going to score? \n\n"
 					+ "Shoot the ball into either goal.");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-			textArea.setText("Now our second player turned up with the ball. Lets pass the ball back. \n\n"
+			textArea.setText("Now our second player has turned up with the ball. Lets pass the ball back. \n\n"
 					+ "Select the new player then tap on the other to give an order to pass to them. \n\n");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			textArea.setText("Marking opponents: \n\n"
@@ -301,10 +301,16 @@ public class TutorialGame extends AbstractGame {
 					+ "They'll follow them until they get the ball. \n\n"
 					+ "Mark both of these players and get the ball back.");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-			textArea.setText("Queueing actions.");
+			textArea.setText("You can give multiple actions to any player to plan out better strategies and maneuvers. \n\n"
+					+ "You can continue a path from any of your previous actions, and "
+					+ "continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
+					+ "Try tackling the red player and scoring a goal straight away.");
 			q1 = false;
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
-			textArea.setText("The goal keeper.");
+			textArea.setText("The goal keeper acts differently than your other players. \n\n"
+					+ "It moves automatically, and you can give them instructions only when they have the ball. \n\n"
+					+ "If they are holding the ball, they must be ordered to pass or kick it before play can continue. \n\n"
+					+ "Goal keepers also have a better chance of stopping a fast moving ball than other players do.");
 		}
 		gameState = GameState.PAUSED;
 		gameStateToGoIntoWhenBackButtonPressed = GameState.INPUT;
