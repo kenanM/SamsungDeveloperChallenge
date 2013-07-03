@@ -606,6 +606,8 @@ public class Player extends Rectangle implements Followable {
 				distance -= position.dst(target);
 				position.set(target);
 				positionInPath++;
+				rotation = Utils.getMoveVector(oldPosition, target, distance)
+						.angle();
 				if (positionInPath == path.length) {
 					path = new Vector2[] {};
 					resetPathIndex();
