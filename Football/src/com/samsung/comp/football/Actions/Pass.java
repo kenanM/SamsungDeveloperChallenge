@@ -36,8 +36,32 @@ public class Pass extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.line(kickStartLocation.x, kickStartLocation.y,
-				target.getPlayerPosition().x, target.getPlayerPosition().y);
+		Vector2 fullLineVector = new Vector2(target.getPlayerPosition().x
+				- kickStartLocation.x, target.getPlayerPosition().y
+				- kickStartLocation.y);
+		float fullLineDistance = fullLineVector.dst(Vector2.Zero);
+
+		Vector2 partialLineVector = Utils.getMoveVector(kickStartLocation,
+				target.getPlayerPosition(), 32);
+		float partialLineDistance = partialLineVector.dst(Vector2.Zero);
+		float distanceTravelled = 0f;
+
+		Vector2 currentPosition = new Vector2(kickStartLocation);
+		Vector2 targetPosition = kickStartLocation.cpy().add(partialLineVector);
+
+		while (distanceTravelled < fullLineDistance - partialLineDistance) {
+
+			renderer.line(currentPosition.x, currentPosition.y,
+					targetPosition.x, targetPosition.y);
+
+			currentPosition.add(partialLineVector);
+			targetPosition.add(partialLineVector);
+			distanceTravelled += partialLineDistance;
+
+			currentPosition.add(partialLineVector);
+			targetPosition.add(partialLineVector);
+			distanceTravelled += partialLineDistance;
+		}
 		super.draw(renderer);
 	}
 
