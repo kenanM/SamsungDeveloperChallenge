@@ -491,8 +491,13 @@ public class Player extends Rectangle implements Followable {
 		}
 	}
 
-	public void mark(Player target) {
-		this.path = new Vector2[] { target.getBallPosition() };
+	public void mark(Player target, Ball ball) {
+
+		Vector2 markPosition = target.getPlayerPosition().add(
+				Utils.getMoveVector(target.getPlayerPosition(),
+						ball.getBallPosition(), 32));
+
+		this.path = new Vector2[] { markPosition };
 
 		if (hasBall()) {
 			executeNextAction();

@@ -1017,7 +1017,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			// If the first player is selectable, the second player is on the
 			// opposingTeam but is not a goalie then mark the second player
 			selectedPlayer.addAction(new Mark(selectedPlayer
-					.getFuturePosition(), pressedPlayer));
+					.getFuturePosition(), pressedPlayer, this.getBall()));
 		}
 		selectedPlayer = null;
 	}

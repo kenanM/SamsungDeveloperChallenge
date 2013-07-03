@@ -4,18 +4,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Players.Player;
 
 public class Mark extends Action {
 
 	private Player target;
+	private Ball ball;
 	private Vector2 startPoint;
 	private static Texture markTexture;
 	private static Texture highlightedTexture;
 
-	public Mark(Vector2 startPoint, Player target) {
+	public Mark(Vector2 startPoint, Player target, Ball ball) {
 		this.startPoint = startPoint;
 		this.target = target;
+		this.ball = ball;
 	}
 
 	public Player getTarget() {
@@ -29,7 +32,7 @@ public class Mark extends Action {
 
 	@Override
 	public void execute(Player player) {
-		player.mark(target);
+		player.mark(target, ball);
 	}
 
 	public static void dispose() {
