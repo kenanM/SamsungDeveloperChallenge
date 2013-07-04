@@ -2,10 +2,7 @@ package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.samsung.comp.events.ActionFiredListener;
 import com.samsung.comp.events.ButtonPressListener;
-import com.samsung.comp.football.Actions.Action;
-import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Players.Goalie;
@@ -17,8 +14,6 @@ public class TutorialGame extends AbstractGame {
 	enum TutorialPhase {
 		MOVE, FOLLOW, SHOOT, PASS, MARK, QUEUEING, GOALIE,
 	}
-
-	boolean q1 = false;
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 	private boolean shootCompleted = false;
@@ -71,12 +66,6 @@ public class TutorialGame extends AbstractGame {
 
 	private void setupMovePhase() {
 		Player p = new Player(338, VIRTUAL_SCREEN_HEIGHT / 3, TeamColour.BLUE);
-		p.setListener(new ActionFiredListener() {
-			@Override
-			public void onActionFired(Player player, Action action) {
-				actionFired(player, action);
-			}
-		});
 		bluePlayers.add(p);
 	}
 
@@ -86,12 +75,6 @@ public class TutorialGame extends AbstractGame {
 
 	private void setupPassPhase() {
 		Player p = new Player(0, 256, TeamColour.BLUE);
-		p.setListener(new ActionFiredListener() {
-			@Override
-			public void onActionFired(Player player, Action action) {
-				actionFired(player, action);
-			}
-		});
 		bluePlayers.add(p);
 
 		ball.setOwner(p);
@@ -309,7 +292,6 @@ public class TutorialGame extends AbstractGame {
 					+ "You can continue a path from any of your previous actions, and "
 					+ "continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
 					+ "Try tackling the red player and scoring a goal straight away.");
-			q1 = false;
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			textArea.setText("The goal keeper acts differently than your other players. \n\n"
 					+ "It moves automatically, and you can give them instructions only when they have the ball. \n\n"
@@ -432,15 +414,4 @@ public class TutorialGame extends AbstractGame {
 	@Override
 	public void resume() {
 	}
-
-	public void actionFired(Player player, Action action) {
-		if (tutorialPhase == TutorialPhase.QUEUEING) {
-			if (action instanceof Move) {
-				q1 = true;
-			} else if (action instanceof Pass && q1 == true) {
-				tutorialPhase = TutorialPhase.GOALIE;
-			}
-		}
-	}
-
 }
