@@ -429,8 +429,15 @@ public class Player extends Rectangle implements Followable {
 		// batch.draw(this.getTexture(), this.x, this.y);
 		// batch.draw(this.getTexture(), this.x, this.y, PLAYER_SIZE,
 		// PLAYER_SIZE);
-		batch.draw(getTexture(), x, y, PLAYER_SIZE / 2, PLAYER_SIZE / 2,
-				PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
+
+		// Gets a region centered on the player
+		TextureRegion asd = new TextureRegion(getTexture(), getTexture()
+				.getRegionWidth() / 2 - PLAYER_SIZE / 2, getTexture()
+				.getRegionHeight() / 2 - PLAYER_SIZE / 2, PLAYER_SIZE,
+				PLAYER_SIZE);
+
+		batch.draw(asd, x, y, PLAYER_SIZE / 2, PLAYER_SIZE / 2, PLAYER_SIZE,
+				PLAYER_SIZE, 1, 1, rotation, true);
 
 		if (this.notificationTime > 0) {
 			batch.draw(notificationTexture,
