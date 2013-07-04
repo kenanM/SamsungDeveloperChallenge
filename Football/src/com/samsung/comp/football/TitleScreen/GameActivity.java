@@ -21,7 +21,7 @@ public class GameActivity extends AndroidApplication {
 		cfg.useAccelerometer = false;
 		cfg.useCompass = false;
 		boolean useGL2 = false;
-		Game game = new Game();
+		Game game = new Game(new ActionResolverAndroid(this));
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

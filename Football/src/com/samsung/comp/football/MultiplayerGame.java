@@ -10,6 +10,10 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class MultiplayerGame extends AbstractGame {
 
+	public MultiplayerGame(ActionResolver actionResolver) {
+		this.actionResolver = actionResolver;
+	}
+
 	@Override
 	public void create() {
 

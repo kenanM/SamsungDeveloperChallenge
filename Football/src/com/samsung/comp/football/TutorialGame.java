@@ -25,6 +25,10 @@ public class TutorialGame extends AbstractGame {
 	private boolean queueCompleted = false;
 	private float setupTime = 0f;
 
+	public TutorialGame(ActionResolver actionResolver) {
+		this.actionResolver = actionResolver;
+	}
+
 	@Override
 	public void create() {
 

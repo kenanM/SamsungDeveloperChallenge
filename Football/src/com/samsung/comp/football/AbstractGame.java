@@ -66,6 +66,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	private static final String INPUT_TAG = "GameInputStrategy";
 
+	protected ActionResolver actionResolver;
+
 	protected int xOffset;
 	protected int yOffset;
 	protected int drawnPitchWidth;
