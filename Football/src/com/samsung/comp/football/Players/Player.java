@@ -288,6 +288,22 @@ public class Player extends Rectangle implements Followable {
 		this.action = null;
 	}
 
+	public void undoLastAction() {
+		LinkedList<Action> actions = getActions();
+
+		if (actions.size() == 0) {
+			return;
+		}
+
+		if (actions.size() == 1) {
+			this.action = null;
+		}
+
+		if (actions.size() >= 2) {
+			actions.get(actions.size() - 2).setNextAction(null);
+		}
+	}
+
 	protected void resetPathIndex() {
 		positionInPath = 0;
 	}

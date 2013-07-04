@@ -179,7 +179,6 @@ public class Bar extends Rectangle {
 			game.playButtonPressed();
 
 		} else if (isCancelButtonShown() && cancelIconRectangle.contains(x, y)) {
-			// TODO (Gavin): Change this to be 'undo last action'
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().clearActions();
 			game.clearSelectedPlayer();
