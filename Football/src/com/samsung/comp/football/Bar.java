@@ -1,6 +1,7 @@
 package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,7 @@ public class Bar extends Rectangle {
 	private static final long serialVersionUID = 1L;
 
 	private Texture bar;
+	private Color barColor;
 	private Texture playIcon;
 	private Texture cancelIcon;
 	private Texture cancelIconPressed;
@@ -125,7 +127,16 @@ public class Bar extends Rectangle {
 	}
 
 	public void draw(SpriteBatch batch) {
+		Color tempColor = null;
+		if (barColor != null) {
+			tempColor = batch.getColor();
+			batch.setColor(barColor);
+		}
 		batch.draw(bar, x, y, this.getWidth(), this.getHeight());
+		if (tempColor != null) {
+			batch.setColor(tempColor);
+		}
+
 		batch.draw(playIcon, playIconRectangle.x, playIconRectangle.y,
 				playIconRectangle.width, playIconRectangle.height);
 
@@ -197,5 +208,9 @@ public class Bar extends Rectangle {
 
 	public void setCurrentPlayerIndicator(Texture texture) {
 		this.currentPlayerIndicator = texture;
+	}
+
+	public void setBarColor(Color color) {
+		this.barColor = color;
 	}
 }

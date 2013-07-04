@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
@@ -31,6 +32,8 @@ public class MultiplayerGame extends AbstractGame {
 		team2 = TeamColour.RED;
 
 		remainingMatchTime = 3 * 60;
+
+		bar.setBarColor(Color.BLUE);
 
 		beginInputStage();
 	}
@@ -151,11 +154,13 @@ public class MultiplayerGame extends AbstractGame {
 		if (currentTeam == TeamColour.BLUE) {
 			currentTeam = TeamColour.RED;
 			bar.setCurrentPlayerIndicator(redSelectTexture);
+			bar.setBarColor(Color.RED);
 		} else {
 			Gdx.app.log("Game", "Beginning execution");
 			elapsedRoundTime = 0;
 			this.gameState = GameState.EXECUTION;
 			bar.setPositionToUp();
+			bar.setBarColor(null);
 		}
 		selectedPlayer = null;
 		cursor.setHighlightedPlayer(null);
@@ -205,6 +210,7 @@ public class MultiplayerGame extends AbstractGame {
 				gameState = GameState.INPUT;
 				currentTeam = TeamColour.BLUE;
 				bar.setCurrentPlayerIndicator(blueSelectTexture);
+				bar.setBarColor(Color.BLUE);
 				beginInputStage();
 			}
 
