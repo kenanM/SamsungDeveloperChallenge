@@ -109,6 +109,9 @@ public class MultiplayerGame extends AbstractGame {
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
 
 		ball.resetBall();
+		currentTeam = TeamColour.BLUE;
+		bar.setCurrentPlayerIndicator(blueSelectTexture);
+		bar.setBarColor(Color.BLUE);
 
 		whistleBlow.play();
 	}
