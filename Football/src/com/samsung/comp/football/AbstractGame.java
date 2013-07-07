@@ -505,7 +505,8 @@ public abstract class AbstractGame implements ApplicationListener,
 					stats.getWidth(), stats.getHeight(), false, true);
 
 			for (int i = 1; i <= player.getStarsRunSpeed(); i++) {
-				batch.draw(statPoint1, VIRTUAL_SCREEN_WIDTH - 25 * 10
+				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
+						* 10
 						+ (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())),
 						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
@@ -514,7 +515,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsShootSpeed(); i++) {
-				batch.draw(statPoint1, VIRTUAL_SCREEN_WIDTH - 25 * 10
+				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
+						* 10
 						+ (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1.getHeight())),
 						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
@@ -523,7 +525,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsTackleSkill(); i++) {
-				batch.draw(statPoint1, VIRTUAL_SCREEN_WIDTH - 25 * 10
+				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
+						* 10
 						+ (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1.getHeight())),
 						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
@@ -532,7 +535,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsTacklePreventionSkill(); i++) {
-				batch.draw(statPoint1, VIRTUAL_SCREEN_WIDTH - 25 * 10
+				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
+						* 10
 						+ (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1.getHeight())),
 						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
@@ -541,7 +545,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsSavingSkill(); i++) {
-				batch.draw(statPoint1, VIRTUAL_SCREEN_WIDTH - 25 * 10
+				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
+						* 10
 						+ (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (1 * statPoint1.getHeight())),
 						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
@@ -551,6 +556,32 @@ public abstract class AbstractGame implements ApplicationListener,
 		} catch (NullPointerException e) {
 			return;
 		}
+	}
+
+	/**
+	 * Returns a stat point texture from an integer
+	 * 
+	 * @param statPoints
+	 *            the number of stat bars currently displayed
+	 * @return
+	 */
+	private Texture statPointImageFactory(int statPoints) {
+		int i = statPoints / 5;
+		switch (i) {
+		case (0):
+			return statPoint1;
+		case (1):
+			return statPoint2;
+		case (2):
+			return statPoint3;
+		case (3):
+			return statPoint4;
+		case (4):
+			return statPoint5;
+		default:
+			return statPoint1;
+		}
+
 	}
 
 	abstract protected void update();
