@@ -243,7 +243,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		endTexture = new Texture(Gdx.files.internal("endScreen.png"));
 		pitchTexture = new Texture(Gdx.files.internal("leftPitch.png"));
 		playTexture = new Texture(Gdx.files.internal("playIcon.png"));
-		starFull = new Texture(Gdx.files.internal("star.png"));
+		starFull = new Texture(Gdx.files.internal("statPoint.png"));
 		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
 
@@ -490,14 +490,15 @@ public abstract class AbstractGame implements ApplicationListener,
 	public void drawPlayerStats(SpriteBatch batch, Player player) {
 		try {
 
-			batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth(),
+			batch.draw(stats,
+					VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25 * 10,
 					(VIRTUAL_SCREEN_HEIGHT - (5 * starFull.getHeight())), 0, 0,
 					stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
 					stats.getWidth(), stats.getHeight(), false, true);
 
 			for (int i = 1; i <= player.getStarsRunSpeed(); i++) {
-				batch.draw(starFull,
-						VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+				batch.draw(starFull, VIRTUAL_SCREEN_WIDTH - 25 * 10
+						+ (i * starFull.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (5 * starFull.getHeight())),
 						0, 0, starFull.getWidth(), starFull.getHeight(), 1, 1,
 						0, 0, 0, starFull.getWidth(), starFull.getHeight(),
@@ -505,8 +506,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsShootSpeed(); i++) {
-				batch.draw(starFull,
-						VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+				batch.draw(starFull, VIRTUAL_SCREEN_WIDTH - 25 * 10
+						+ (i * starFull.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (4 * starFull.getHeight())),
 						0, 0, starFull.getWidth(), starFull.getHeight(), 1, 1,
 						0, 0, 0, starFull.getWidth(), starFull.getHeight(),
@@ -514,8 +515,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsTackleSkill(); i++) {
-				batch.draw(starFull,
-						VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+				batch.draw(starFull, VIRTUAL_SCREEN_WIDTH - 25 * 10
+						+ (i * starFull.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (3 * starFull.getHeight())),
 						0, 0, starFull.getWidth(), starFull.getHeight(), 1, 1,
 						0, 0, 0, starFull.getWidth(), starFull.getHeight(),
@@ -523,8 +524,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsTacklePreventionSkill(); i++) {
-				batch.draw(starFull,
-						VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+				batch.draw(starFull, VIRTUAL_SCREEN_WIDTH - 25 * 10
+						+ (i * starFull.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (2 * starFull.getHeight())),
 						0, 0, starFull.getWidth(), starFull.getHeight(), 1, 1,
 						0, 0, 0, starFull.getWidth(), starFull.getHeight(),
@@ -532,8 +533,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (int i = 1; i <= player.getStarsSavingSkill(); i++) {
-				batch.draw(starFull,
-						VIRTUAL_SCREEN_WIDTH - (i * starFull.getWidth()),
+				batch.draw(starFull, VIRTUAL_SCREEN_WIDTH - 25 * 10
+						+ (i * starFull.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (1 * starFull.getHeight())),
 						0, 0, starFull.getWidth(), starFull.getHeight(), 1, 1,
 						0, 0, 0, starFull.getWidth(), starFull.getHeight(),
