@@ -385,23 +385,23 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public int getStarsShootSpeed() {
-		return (int) shootSpeed / 200;
+		return (int) shootSpeed / 24;
 	}
 
 	public int getStarsRunSpeed() {
-		return (int) runSpeed / 50;
+		return (int) runSpeed / 10;
 	}
 
 	public int getStarsTackleSkill() {
-		return (int) tackleSkill / 20;
+		return (int) tackleSkill / 4;
 	}
 
 	public float getStarsSavingSkill() {
-		return savingSkill / 100;
+		return savingSkill / 22;
 	}
 
 	public int getStarsTacklePreventionSkill() {
-		return (int) tacklePreventionSkill / 20;
+		return (int) tacklePreventionSkill / 4;
 	}
 
 	public float getShootSpeed() {
