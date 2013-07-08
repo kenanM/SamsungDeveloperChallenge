@@ -56,7 +56,9 @@ public abstract class Player extends Rectangle implements
 	protected float tackleSkill = 100;
 	protected float tacklePreventionSkill = 40;
 	protected float savingSkill = 420;
-
+	
+	private boolean isPurchased = true;
+	
 	// TODO: Player shot accuracy?
 	// private float accuracy;
 	Vector2[] path;
@@ -372,6 +374,16 @@ public abstract class Player extends Rectangle implements
 
 	public float getSavingSkill() {
 		return savingSkill;
+	}
+	
+	public boolean isPurchased(){
+		//TODO: figure out player ownership
+		return isPurchased;
+	}
+	
+	public String getName() {
+		// TODO: Sort out player names
+		return "Gavin";
 	}
 
 	public void draw(SpriteBatch batch) {
