@@ -44,6 +44,22 @@ public class Utils {
 		return new Vector2((float) x, (float) y);
 	}
 
+	/**
+	 * Create a uniformly distributed random integer between aa and bb inclusive
+	 */
+	public static int randomInt(Random rng, int aa, int bb) {
+		int a = Math.min(aa, bb);
+		int b = Math.max(aa, bb);
+		if (rng == null) {
+			rng = new Random();
+			rng.setSeed(System.nanoTime());
+		}
+		int d = b - a + 1;
+		int x = rng.nextInt(d) + a;
+		return (x);
+	}
+
+	/** Create a uniformly distributed random float between a and b inclusive */
 	static public float randomFloat(Random rng, float a, float b) {
 		if (rng == null) {
 			rng = new Random();
