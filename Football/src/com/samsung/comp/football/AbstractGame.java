@@ -85,7 +85,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	public static Texture stats;
 	public static Texture goalMessage;
 
-	Sound whistleBlow;
+	protected Sound whistleBlow;
+	protected Sound crowdCheer;
 
 	public enum GameState {
 		INPUT, EXECUTION, PAUSED, FINISHED
@@ -213,6 +214,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void createSfx() {
 		whistleBlow = Gdx.audio.newSound(Gdx.files
 				.internal("sound/Whistle short 2.wav"));
+		crowdCheer = Gdx.audio.newSound(Gdx.files
+				.internal("sound/football crowd.wav"));
 	}
 
 	protected void createActions() {
@@ -655,8 +658,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (goalScored) {
 			beginInputStage();
 			goalScoredDrawTime = 3f;
-			// TODO: Sound: blow whistle
-			// TODO: Sound: crowd cheer
+			soundManager.play(crowdCheer);
 		}
 	}
 
