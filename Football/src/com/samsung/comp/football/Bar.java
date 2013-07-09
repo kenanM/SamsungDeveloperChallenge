@@ -17,11 +17,13 @@ public class Bar extends Rectangle {
 	private Texture playIcon;
 	private Texture cancelIcon;
 	private Texture cancelIconPressed;
+	private Texture undoIcon;
 	private Texture currentPlayerIndicator;
 	private String text;
 
 	private Rectangle playIconRectangle;
 	private Rectangle cancelIconRectangle;
+	private Rectangle undoIconRectangle;
 	private Rectangle currentPlayerRectangle;
 
 	public enum Position {
@@ -57,6 +59,7 @@ public class Bar extends Rectangle {
 	public void create(boolean topOfScreen) {
 		bar = new Texture(Gdx.files.internal("bar.png"));
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
+		undoIcon = new Texture(Gdx.files.internal("undoIcon.png"));
 		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
 		cancelIconPressed = new Texture(
 				Gdx.files.internal("cancelIconDepressed.png"));
@@ -78,6 +81,10 @@ public class Bar extends Rectangle {
 		cancelIconRectangle = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH
 				- this.getHeight() - xOffset, this.y, this.getHeight(),
 				this.getHeight());
+
+		undoIconRectangle = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH
+				- this.getHeight() - xOffset * 2 - this.getHeight(), this.y,
+				this.getHeight(), this.getHeight());
 
 		currentPlayerRectangle = new Rectangle(playIconRectangle.x
 				+ playIconRectangle.getWidth(), playIconRectangle.y,
@@ -153,6 +160,10 @@ public class Bar extends Rectangle {
 						cancelIconRectangle.height, 0, 0,
 						cancelIcon.getWidth(), cancelIcon.getHeight(), false,
 						true);
+				batch.draw(undoIcon, undoIconRectangle.x, undoIconRectangle.y,
+						undoIconRectangle.width, undoIconRectangle.height, 0,
+						0, undoIcon.getWidth(), undoIcon.getHeight(), false,
+						true);
 			}
 		}
 
@@ -192,6 +203,10 @@ public class Bar extends Rectangle {
 		} else if (isCancelButtonShown() && cancelIconRectangle.contains(x, y)) {
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().clearActions();
+			game.clearSelectedPlayer();
+		} else if (isCancelButtonShown() && undoIconRectangle.contains(x, y)) {
+			cancelActionsTimer = 0;
+			game.getSelectedPlayer().undoLastAction();
 			game.clearSelectedPlayer();
 		}
 	}
