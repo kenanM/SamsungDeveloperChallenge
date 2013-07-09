@@ -1347,8 +1347,13 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (bar != null && bar.contains(hoverPoint.x, hoverPoint.y)) {
 			Gdx.app.log("BAR", "hover eventVector: " + hoverPoint.toString()
 					+ " " + bar.toString());
+			isBallHighlighted = false;
+			cursor.setHighlightedPlayer(null);
+			cursor.setTexture(null);
+			return false;
 		}
 
+		// When almost out of range hover detects itself at top left
 		if (hoverPoint.x <= 1 && hoverPoint.y <= 1) {
 			isBallHighlighted = false;
 			cursor.setHighlightedPlayer(null);
