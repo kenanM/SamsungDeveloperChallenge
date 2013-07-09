@@ -125,7 +125,7 @@ public class Game extends AbstractGame {
 				380));
 		redPlayers.add(new Player(338, 384, TeamColour.RED, 540, 200, 80, 20,
 				380));
-		redPlayers.add(new Player(169, 320, TeamColour.RED, 550, 50, 100, 40,
+		redPlayers.add(new Player(169, 320, TeamColour.RED, 550, 100, 100, 40,
 				420));
 		redPlayers.add(new Player(507, 320, TeamColour.RED, 530, 150, 80, 40,
 				420));
@@ -133,10 +133,14 @@ public class Game extends AbstractGame {
 
 		bluePlayers = new LinkedList<Player>();
 
-		bluePlayers.add(new Player(338, 768, TeamColour.BLUE));
-		bluePlayers.add(new Player(338, 640, TeamColour.BLUE));
-		bluePlayers.add(new Player(507, 704, TeamColour.BLUE));
-		bluePlayers.add(new Player(169, 704, TeamColour.BLUE));
+		bluePlayers.add(new Player(338, 768, TeamColour.BLUE, 520, 150, 100,
+				20, 380));
+		bluePlayers.add(new Player(338, 640, TeamColour.BLUE, 540, 200, 80, 20,
+				380));
+		bluePlayers.add(new Player(507, 704, TeamColour.BLUE, 550, 100, 100,
+				40, 420));
+		bluePlayers.add(new Player(169, 704, TeamColour.BLUE, 530, 150, 80, 40,
+				420));
 		blueGoalie = new Goalie(338, 900, TeamColour.BLUE, this, 500);
 
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
