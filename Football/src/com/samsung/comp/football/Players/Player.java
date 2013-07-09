@@ -56,6 +56,8 @@ public class Player extends Rectangle implements Followable {
 	protected float tacklePreventionSkill = 40;
 	protected float savingSkill = 420;
 
+	private boolean isPurchased = true;
+
 	// TODO: Player shot accuracy?
 	// private float accuracy;
 	Vector2[] path;
@@ -422,6 +424,16 @@ public class Player extends Rectangle implements Followable {
 
 	public float getSavingSkill() {
 		return savingSkill;
+	}
+
+	public boolean isPurchased() {
+		// TODO: figure out player ownership
+		return isPurchased;
+	}
+
+	public String getName() {
+		// TODO: Sort out player names
+		return "Gavin";
 	}
 
 	public void draw(SpriteBatch batch) {

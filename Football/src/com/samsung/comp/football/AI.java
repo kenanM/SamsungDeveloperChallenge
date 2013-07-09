@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import android.util.Log;
@@ -18,7 +19,7 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 public class AI {
 
 	private static final String TAG = "AI";
-
+	private static final long HALF_A_SECOND = 100; // Two seconds in milliseconds
 	// Denotes different regions by splitting the pitch into thirds
 	static final double BLUE_GOAL_AREA_TOP = Game.VIRTUAL_SCREEN_HEIGHT * 0.66;
 	static final double BLUE_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT - 100;
@@ -39,6 +40,8 @@ public class AI {
 	private Vector2 targetGoal;
 	private Vector2 homeGoal;
 
+	private Date lastUpdate;
+
 	// TODO: Should construct AI with a teamColour, then use
 	// getPlayers(TeamColour colour) as appropriate
 	public AI(AbstractGame game) {
@@ -55,61 +58,69 @@ public class AI {
 			targetGoal = Game.RED_GOAL;
 			homeGoal = Game.BLUE_GOAL;
 		}
+		lastUpdate = new Date();
 	}
 
 	public void getComputerActions() {
-		Log.v(TAG, "getting computer actions");
-
-		List<Player> players = new ArrayList<Player>(game.getComputerPlayers());
-		sortPlayersByDistanceFromHomeGoal(players);
-
-		boolean controlBall = computerControlsBall();
-		boolean goalieHasBall = goalie.hasBall();
-
-		if (goalieHasBall) {
-			Player nearestToTheGoalie = playerNearestTheGoalie(players);
-			goalie.addAction(new Pass(ball, goalie, nearestToTheGoalie, goalie
-					.getFuturePosition()));
-			players.remove(nearestToTheGoalie);
-
-			for (Player player : players) {
-				moveToMidFieldPosition(player);
+		Date now = new Date();
+		if (now.getTime() - lastUpdate.getTime() > HALF_A_SECOND) {
+			Log.v(TAG, "getting computer actions");
+			lastUpdate = now;
+		
+			List<Player> players = new ArrayList<Player>(game.getComputerPlayers());
+			for(Player player: players){
+				player.clearActions();
 			}
-			return;
-		}
-
-		if (controlBall) {
-			Player ballOwner = ball.getOwner();
-			if (withinShootingRange(ballOwner)) {
-				shoot(ballOwner);
-				players.remove(ballOwner);
-			} else {
-				// If not within shooting range either pass or move
-				Player receiver = players.get(3);
-				if (receiver != ballOwner) {
-					players.remove(receiver);
-					ballOwner.addAction(new Pass(ball, ballOwner, receiver,
-							ballOwner.getFuturePosition()));
-				} else {
-					moveToOffensivePosition(ballOwner);
+			sortPlayersByDistanceFromHomeGoal(players);
+	
+			boolean controlBall = computerControlsBall();
+			boolean goalieHasBall = goalie.hasBall();
+	
+			if (goalieHasBall) {
+				Player nearestToTheGoalie = playerNearestTheGoalie(players);
+				goalie.addAction(new Pass(ball, goalie, nearestToTheGoalie, goalie
+						.getFuturePosition()));
+				players.remove(nearestToTheGoalie);
+	
+				for (Player player : players) {
+					moveToMidFieldPosition(player);
 				}
+				return;
 			}
-
-			moveToMidFieldPosition(players.get(0));
-			moveToOffensivePosition(players.get(1));
-			if (players.size() == 3) {
-				moveToOffensivePosition(players.get(2));
+	
+			if (controlBall) {
+				Player ballOwner = ball.getOwner();
+				if (withinShootingRange(ballOwner)) {
+					shoot(ballOwner);
+					players.remove(ballOwner);
+				} else {
+					// If not within shooting range either pass or move
+					Player receiver = players.get(3);
+					if (receiver != ballOwner) {
+						players.remove(receiver);
+						ballOwner.addAction(new Pass(ball, ballOwner, receiver,
+								ballOwner.getFuturePosition()));
+					} else {
+						moveToOffensivePosition(ballOwner);
+					}
+				}
+	
+				moveToMidFieldPosition(players.get(0));
+				moveToOffensivePosition(players.get(1));
+				if (players.size() == 3) {
+					moveToOffensivePosition(players.get(2));
+				}
+	
+			} else {
+				// We don't control the ball
+				Player playerNearestBall = playerNearestVector(players,
+						ball.getBallPosition());
+				players.remove(playerNearestBall);
+				moveToPosition(playerNearestBall, ball.getBallPosition());
+				moveTodDefensivePosition(players.get(0));
+				moveBetween(players.get(1), homeGoal, ball.getBallPosition());
+				moveToMidFieldPosition(players.get(2));
 			}
-
-		} else {
-			// We don't control the ball
-			Player playerNearestBall = playerNearestVector(players,
-					ball.getBallPosition());
-			players.remove(playerNearestBall);
-			moveToPosition(playerNearestBall, ball.getBallPosition());
-			moveTodDefensivePosition(players.get(0));
-			moveBetween(players.get(1), homeGoal, ball.getBallPosition());
-			moveToMidFieldPosition(players.get(2));
 		}
 	}
 

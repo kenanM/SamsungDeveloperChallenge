@@ -182,6 +182,7 @@ public class Game extends AbstractGame {
 			if (remainingMatchTime < 0) {
 				matchFinish();
 			}
+			ai.getComputerActions();
 		}
 	}
 
