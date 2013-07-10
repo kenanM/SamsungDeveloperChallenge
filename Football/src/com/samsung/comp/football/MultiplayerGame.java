@@ -11,6 +11,9 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class MultiplayerGame extends AbstractGame {
 
+	Color redColor = Color.RED;
+	Color blueColor = new Color(0.2f, 0.6f, 1f, 1f);
+
 	public MultiplayerGame(ActionResolver actionResolver) {
 		this.actionResolver = actionResolver;
 	}
@@ -33,7 +36,7 @@ public class MultiplayerGame extends AbstractGame {
 
 		remainingMatchTime = 3 * 60;
 
-		bar.setBarColor(Color.BLUE);
+		bar.setBarColor(blueColor);
 
 		beginInputStage();
 	}
@@ -111,8 +114,7 @@ public class MultiplayerGame extends AbstractGame {
 		ball.resetBall();
 		currentTeam = TeamColour.BLUE;
 		bar.setCurrentPlayerIndicator(blueSelectTexture);
-		bar.setBarColor(Color.BLUE);
-
+		bar.setBarColor(blueColor);
 		whistleBlow.play();
 	}
 
@@ -161,7 +163,7 @@ public class MultiplayerGame extends AbstractGame {
 		if (currentTeam == TeamColour.BLUE) {
 			currentTeam = TeamColour.RED;
 			bar.setCurrentPlayerIndicator(redSelectTexture);
-			bar.setBarColor(Color.RED);
+			bar.setBarColor(redColor);
 		} else {
 			Gdx.app.log("Game", "Beginning execution");
 			elapsedRoundTime = 0;
@@ -218,7 +220,7 @@ public class MultiplayerGame extends AbstractGame {
 				gameState = GameState.INPUT;
 				currentTeam = TeamColour.BLUE;
 				bar.setCurrentPlayerIndicator(blueSelectTexture);
-				bar.setBarColor(Color.BLUE);
+				bar.setBarColor(blueColor);
 				beginInputStage();
 			}
 
