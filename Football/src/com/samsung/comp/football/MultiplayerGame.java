@@ -197,6 +197,7 @@ public class MultiplayerGame extends AbstractGame {
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
 		bar.update(time);
+		blueSelectStateTime += time;
 
 		if (gameState == GameState.EXECUTION) {
 			elapsedRoundTime += time;
