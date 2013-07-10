@@ -207,7 +207,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		pointer = new Texture(Gdx.files.internal("pointerOrange.png"));
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
-		bar.setCurrentPlayerIndicator(blueSelectTexture);
 		cursor = new Cursor();
 	}
 
@@ -286,7 +285,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (repositionCameraOnUpdate) {
 			positionUIBarAtTop = !positionUIBarAtTop;
 			bar = new Bar(this, positionUIBarAtTop);
-			bar.setCurrentPlayerIndicator(blueSelectTexture);
 
 			if (positionUIBarAtTop) {
 				camera.position.set(VIRTUAL_SCREEN_WIDTH / 2,

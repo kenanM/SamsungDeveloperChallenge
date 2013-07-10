@@ -18,13 +18,11 @@ public class Bar extends Rectangle {
 	private Texture cancelIcon;
 	private Texture cancelIconPressed;
 	private Texture undoIcon;
-	private Texture currentPlayerIndicator;
 	private String text;
 
 	private Rectangle playIconRectangle;
 	private Rectangle cancelIconRectangle;
 	private Rectangle undoIconRectangle;
-	private Rectangle currentPlayerRectangle;
 
 	public enum Position {
 		UP, DOWN
@@ -85,11 +83,6 @@ public class Bar extends Rectangle {
 		undoIconRectangle = new Rectangle(Game.VIRTUAL_SCREEN_WIDTH
 				- this.getHeight() - xOffset * 2 - this.getHeight(), this.y,
 				this.getHeight(), this.getHeight());
-
-		currentPlayerRectangle = new Rectangle(playIconRectangle.x
-				+ playIconRectangle.getWidth(), playIconRectangle.y,
-				playIcon.getWidth(),
-				playIcon.getHeight());
 	}
 
 	public void update(Float time) {
@@ -176,15 +169,6 @@ public class Bar extends Rectangle {
 		if (game.getGameState() == GameState.EXECUTION) {
 			bmf.draw(batch, "Executing...", xOffset, this.y + 7);
 		}
-
-		if (game.getGameState() == GameState.INPUT) {
-			if (currentPlayerIndicator != null) {
-				batch.draw(currentPlayerIndicator, currentPlayerRectangle.x,
-						currentPlayerRectangle.y,
-						currentPlayerIndicator.getWidth(),
-						currentPlayerIndicator.getHeight());
-			}
-		}
 	}
 
 	//
@@ -219,10 +203,6 @@ public class Bar extends Rectangle {
 	private boolean isCancelButtonShown() {
 		return (game.getSelectedPlayer() != null && game.getSelectedPlayer()
 				.getAction() != null);
-	}
-
-	public void setCurrentPlayerIndicator(Texture texture) {
-		this.currentPlayerIndicator = texture;
 	}
 
 	public void setBarColor(Color color) {

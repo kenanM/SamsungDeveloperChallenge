@@ -113,7 +113,6 @@ public class MultiplayerGame extends AbstractGame {
 
 		ball.resetBall();
 		currentTeam = TeamColour.BLUE;
-		bar.setCurrentPlayerIndicator(blueSelectTexture);
 		bar.setBarColor(blueColor);
 		whistleBlow.play();
 	}
@@ -162,7 +161,6 @@ public class MultiplayerGame extends AbstractGame {
 	public void beginExecution() {
 		if (currentTeam == TeamColour.BLUE) {
 			currentTeam = TeamColour.RED;
-			bar.setCurrentPlayerIndicator(redSelectTexture);
 			bar.setBarColor(redColor);
 		} else {
 			Gdx.app.log("Game", "Beginning execution");
@@ -219,7 +217,6 @@ public class MultiplayerGame extends AbstractGame {
 			if (elapsedRoundTime >= ROUND_TIME) {
 				gameState = GameState.INPUT;
 				currentTeam = TeamColour.BLUE;
-				bar.setCurrentPlayerIndicator(blueSelectTexture);
 				bar.setBarColor(blueColor);
 				beginInputStage();
 			}
