@@ -397,24 +397,44 @@ public class Player extends Rectangle implements Followable {
 				HOVER_SIZE);
 	}
 
-	public int getStarsShootSpeed() {
-		return (int) shootSpeed / 24;
+	public int getShootSpeedBarCount() {
+		return (int) (shootSpeed / getShootSpeedBarValue());
 	}
 
-	public int getStarsRunSpeed() {
-		return (int) runSpeed / 10;
+	public int getRunSpeedBarCount() {
+		return (int) (runSpeed / getRunSpeedBarValue());
 	}
 
-	public int getStarsTackleSkill() {
-		return (int) tackleSkill / 4;
+	public int getTackleSkillBarCount() {
+		return (int) (tackleSkill / getTackleSkillBarValue());
 	}
 
-	public float getStarsSavingSkill() {
-		return savingSkill / 22;
+	public int getTacklePreventionSkillBarCount() {
+		return (int) (tacklePreventionSkill / getTacklePreventionBarValue());
 	}
 
-	public int getStarsTacklePreventionSkill() {
-		return (int) tacklePreventionSkill / 4;
+	public float getSavingSkillBarCount() {
+		return (int) (savingSkill / getSavingSkillBarValue());
+	}
+
+	public float getShootSpeedBarValue() {
+		return 24;
+	}
+
+	public float getRunSpeedBarValue() {
+		return 10;
+	}
+
+	public float getTackleSkillBarValue() {
+		return 4;
+	}
+
+	public float getTacklePreventionBarValue() {
+		return 4;
+	}
+
+	public float getSavingSkillBarValue() {
+		return 22;
 	}
 
 	public float getShootSpeed() {
@@ -435,6 +455,54 @@ public class Player extends Rectangle implements Followable {
 
 	public float getSavingSkill() {
 		return savingSkill;
+	}
+
+	public void setShootSpeed(float newShootSpeed) {
+		this.shootSpeed = newShootSpeed;
+	}
+
+	public void setRunSpeed(float newRunSpeed) {
+		this.runSpeed = newRunSpeed;
+	}
+
+	public void setTackleSkill(float newTackleSkill) {
+		this.tackleSkill = newTackleSkill;
+	}
+
+	public void setTacklePreventionSkill(float newTacklePreventionSkill) {
+		this.tacklePreventionSkill = newTacklePreventionSkill;
+	}
+
+	public void setSavingSkill(float newSavingSkill) {
+		this.savingSkill = newSavingSkill;
+	}
+
+	public void trimAllSkills() {
+		float minRunSpeed = 0;
+		float minShootSpeed = 0;
+		float minTackleSkill = 0;
+		float minTacklePreventionSkill = 0;
+		float minSavingSkill = 0;
+
+		float maxRunSpeed = 25 * getRunSpeedBarValue();
+		float maxShootSpeed = 25 * getShootSpeedBarValue();
+		float maxTackleSkill = 25 * getTackleSkillBarValue();
+		float maxTacklePreventionSkill = 25 * getTacklePreventionBarValue();
+		float maxSavingSkill = 25 * getSavingSkillBarValue();
+
+		this.runSpeed = Math.max(minRunSpeed, this.runSpeed);
+		this.shootSpeed = Math.max(minShootSpeed, this.shootSpeed);
+		this.tackleSkill = Math.max(minTackleSkill, this.tackleSkill);
+		this.tacklePreventionSkill = Math.max(minTacklePreventionSkill,
+				this.tacklePreventionSkill);
+		this.savingSkill = Math.max(minSavingSkill, this.savingSkill);
+
+		this.runSpeed = Math.min(maxRunSpeed, this.runSpeed);
+		this.shootSpeed = Math.min(maxShootSpeed, this.shootSpeed);
+		this.tackleSkill = Math.min(maxTackleSkill, this.tackleSkill);
+		this.tacklePreventionSkill = Math.min(maxTacklePreventionSkill,
+				this.tacklePreventionSkill);
+		this.savingSkill = Math.min(maxSavingSkill, this.savingSkill);
 	}
 
 	public boolean isPurchased() {

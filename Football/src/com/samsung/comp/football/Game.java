@@ -26,6 +26,7 @@ public class Game extends AbstractGame {
 		createRenderingObjects();
 
 		createNewPlayersAndBall();
+		randomiseStats(getAllPlayers());
 
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;

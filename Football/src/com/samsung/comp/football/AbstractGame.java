@@ -513,7 +513,7 @@ public abstract class AbstractGame implements ApplicationListener,
 					stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
 					stats.getWidth(), stats.getHeight(), false, true);
 
-			for (int i = 1; i <= player.getStarsRunSpeed(); i++) {
+			for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
 						* 10
 						+ (i * statPoint1.getWidth()),
@@ -523,7 +523,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						false, true);
 			}
 
-			for (int i = 1; i <= player.getStarsShootSpeed(); i++) {
+			for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
 						* 10
 						+ (i * statPoint1.getWidth()),
@@ -533,7 +533,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						false, true);
 			}
 
-			for (int i = 1; i <= player.getStarsTackleSkill(); i++) {
+			for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
 						* 10
 						+ (i * statPoint1.getWidth()),
@@ -543,7 +543,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						false, true);
 			}
 
-			for (int i = 1; i <= player.getStarsTacklePreventionSkill(); i++) {
+			for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
 						* 10
 						+ (i * statPoint1.getWidth()),
@@ -553,7 +553,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						false, true);
 			}
 
-			for (int i = 1; i <= player.getStarsSavingSkill(); i++) {
+			for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
 						* 10
 						+ (i * statPoint1.getWidth()),
@@ -590,7 +590,33 @@ public abstract class AbstractGame implements ApplicationListener,
 		default:
 			return statPoint1;
 		}
+	}
 
+	protected void randomiseStats(List<Player> players) {
+		int rn;
+		for (Player player : players) {
+			rn = Utils.randomInt(rng, -3, 3);
+			player.setRunSpeed(player.getRunSpeed() + rn
+					* player.getRunSpeedBarValue());
+
+			rn = Utils.randomInt(rng, -3, 3);
+			player.setShootSpeed(player.getShootSpeed() + rn
+					* player.getShootSpeedBarValue());
+
+			rn = Utils.randomInt(rng, -3, 3);
+			player.setTackleSkill(player.getTackleSkill() + rn
+					* player.getTackleSkillBarValue());
+
+			rn = Utils.randomInt(rng, -3, 3);
+			player.setTacklePreventionSkill(player.getTacklePreventionSkill()
+					+ rn * player.getTacklePreventionBarValue());
+
+			rn = Utils.randomInt(rng, -3, 3);
+			player.setSavingSkill(player.getSavingSkill() + rn
+					* player.getSavingSkillBarValue());
+
+			player.trimAllSkills();
+		}
 	}
 
 	abstract protected void update();
