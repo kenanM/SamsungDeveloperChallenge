@@ -537,9 +537,14 @@ public class Player extends Rectangle implements Followable {
 				translateHoverCoordinate(getPlayerY()));
 	}
 
-	public void drawSelect(SpriteBatch batch) {
+	public void drawSelect(SpriteBatch batch, float stateTime) {
+
+		// Converts the state time into a scale based on a cosine wave
+		double breathingSpeed = stateTime * 2.5;
+		double scaleDouble = (Math.cos(breathingSpeed) / 2) + 0.75;
+		float scale = (float) (scaleDouble);
 		batch.draw(new TextureRegion(selectTexture), x, y, PLAYER_SIZE / 2,
-				PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
+				PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE, scale, scale, 0);
 	}
 
 	public void dispose() {

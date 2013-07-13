@@ -159,6 +159,7 @@ public class Game extends AbstractGame {
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
 		bar.update(time);
+		selectTextureStateTime += time;
 
 		if (gameState == GameState.EXECUTION) {
 			elapsedRoundTime += time;

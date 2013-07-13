@@ -149,6 +149,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected Texture redSelectTexture;
 	protected Texture blueSelectTexture;
+	protected float selectTextureStateTime = 0f;
 
 	protected Texture pointer;
 
@@ -370,7 +371,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			if (selectedPlayer != null) {
-				selectedPlayer.drawSelect(batch);
+				selectedPlayer.drawSelect(batch, selectTextureStateTime);
 				drawTimeLinePoints(selectedPlayer);
 			}
 
@@ -1067,6 +1068,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	private void pressPlayer(Player pressedPlayer) {
 
 		if (selectedPlayer == null && isSelectable(pressedPlayer)) {
+			selectTextureStateTime = 0f;
 			selectedPlayer = pressedPlayer;
 			return;
 		} else if (selectedPlayer == pressedPlayer) {
