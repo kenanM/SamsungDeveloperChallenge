@@ -39,9 +39,6 @@ public class Player extends Rectangle implements Followable {
 	/** The dimensions of the run animation */
 	protected static final int NUMBER_OF_FRAMES = 10;
 
-	protected Texture selectedSpritesheet;
-	protected Animation selectedAnimation;
-
 	protected ActionFiredListener listener;
 
 	protected Texture hoverTexture;
@@ -71,7 +68,6 @@ public class Player extends Rectangle implements Followable {
 	private float timeSinceFailedTackle = Game.BALL_CHANGE_TIME;
 	private Ball ball;
 
-	// TODO: Optimise this. Move all asset instances into AbstractGame class.
 	public Player(float x, float y, TeamColour teamColour) {
 		this.x = translatePlayerCoordinate(x);
 		this.y = translatePlayerCoordinate(y);
@@ -98,13 +94,6 @@ public class Player extends Rectangle implements Followable {
 			this.walkAnimation = new Animation(0.10f,
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		}
-
-		this.selectedSpritesheet = new Texture(
-				Gdx.files.internal("selectIndicatorBlue.png"));
-		this.selectedAnimation = new Animation(0.125f,
-				Utils.createTextureRegion(
-				selectedSpritesheet, 10));
-
 		this.currentFrame = walkAnimation.getKeyFrame(0);
 
 		this.hoverRegion = new TextureRegion(hoverTexture, HOVER_SIZE,
@@ -548,23 +537,9 @@ public class Player extends Rectangle implements Followable {
 				translateHoverCoordinate(getPlayerY()));
 	}
 
-	public void drawSelect(SpriteBatch batch, float animationTime) {
-		// batch.draw(new TextureRegion(selectTexture), x, y, PLAYER_SIZE / 2,
-		// PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
-		
-		TextureRegion currentFrame = selectedAnimation.getKeyFrame(
-				animationTime, true);
-		TextureRegion currentFrameCropped = new TextureRegion(currentFrame, currentFrame.getRegionWidth() /2 - PLAYER_SIZE / 2, currentFrame.getRegionHeight() /2 - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
-		
-		batch.draw(currentFrameCropped,
-				getPlayerX() - currentFrameCropped.getRegionWidth() / 2,
-				getPlayerY() - currentFrameCropped.getRegionHeight() / 2,
-				currentFrameCropped.getRegionWidth() / 2,
-				currentFrameCropped.getRegionHeight() / 2, PLAYER_SIZE,
-				PLAYER_SIZE, 1.5f,
-				1.5f,
-				0);
-
+	public void drawSelect(SpriteBatch batch) {
+		batch.draw(new TextureRegion(selectTexture), x, y, PLAYER_SIZE / 2,
+				PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE, 1, 1, rotation, true);
 	}
 
 	public void dispose() {

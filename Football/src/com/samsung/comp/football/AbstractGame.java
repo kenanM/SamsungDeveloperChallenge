@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -151,10 +150,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture redSelectTexture;
 	protected Texture blueSelectTexture;
 
-	protected Texture blueSelectSpritesheet;
-	protected Animation blueSelectAnimation;
-	protected float blueSelectStateTime = 0f;
-
 	protected Texture pointer;
 
 	protected abstract void setStartingPositions(TeamColour centerTeam);
@@ -264,9 +259,6 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
-
-		blueSelectSpritesheet = new Texture(
-				Gdx.files.internal("selectIndicatorBlue.png"));
 
 	}
 
@@ -378,7 +370,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			if (selectedPlayer != null) {
-				selectedPlayer.drawSelect(batch, blueSelectStateTime);
+				selectedPlayer.drawSelect(batch);
 				drawTimeLinePoints(selectedPlayer);
 			}
 
