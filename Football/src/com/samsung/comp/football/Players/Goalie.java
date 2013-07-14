@@ -127,7 +127,7 @@ public class Goalie extends Player {
 
 	public void ballOwnerSet(Player newOwner) {
 		if (newOwner == this) {
-			game.onGoalieObtainsBall();
+			game.onGoalieObtainsBall(newOwner.getTeam());
 		}
 	}
 }

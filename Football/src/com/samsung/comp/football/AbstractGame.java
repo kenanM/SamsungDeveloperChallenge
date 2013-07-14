@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Action;
@@ -351,13 +352,18 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (gameState == GameState.INPUT) {
 
 			for (Player player : getPlayers(currentTeam)) {
-				drawActions(player.getAction(), batch,
-						(player == cursor.getHighlightedPlayer()|| player == selectedPlayer));
+				drawActions(
+						player.getAction(),
+						batch,
+						(player == cursor.getHighlightedPlayer() || player == selectedPlayer));
 			}
 
 			if (getGoalie(currentTeam) != null) {
-				drawActions(getGoalie(currentTeam).getAction(), batch,
-						(getGoalie(currentTeam) == cursor.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
+				drawActions(
+						getGoalie(currentTeam).getAction(),
+						batch,
+						(getGoalie(currentTeam) == cursor
+								.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
 			}
 
 			if (cursor.getHighlightedPlayer() != null) {
@@ -503,58 +509,53 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			batch.draw(stats,
 					VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25 * 10,
-					(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())), 0, 0,
-					stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
+					(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())), 0,
+					0, stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
 					stats.getWidth(), stats.getHeight(), false, true);
 
 			for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10
-						+ (i * statPoint1.getWidth()),
+						* 10 + (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
-						0, 0, 0, statPoint1.getWidth(), statPoint1.getHeight(),
-						false, true);
+						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
+						1, 0, 0, 0, statPoint1.getWidth(),
+						statPoint1.getHeight(), false, true);
 			}
 
 			for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10
-						+ (i * statPoint1.getWidth()),
+						* 10 + (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
-						0, 0, 0, statPoint1.getWidth(), statPoint1.getHeight(),
-						false, true);
+						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
+						1, 0, 0, 0, statPoint1.getWidth(),
+						statPoint1.getHeight(), false, true);
 			}
 
 			for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10
-						+ (i * statPoint1.getWidth()),
+						* 10 + (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
-						0, 0, 0, statPoint1.getWidth(), statPoint1.getHeight(),
-						false, true);
+						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
+						1, 0, 0, 0, statPoint1.getWidth(),
+						statPoint1.getHeight(), false, true);
 			}
 
 			for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10
-						+ (i * statPoint1.getWidth()),
+						* 10 + (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
-						0, 0, 0, statPoint1.getWidth(), statPoint1.getHeight(),
-						false, true);
+						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
+						1, 0, 0, 0, statPoint1.getWidth(),
+						statPoint1.getHeight(), false, true);
 			}
 
 			for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
 				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10
-						+ (i * statPoint1.getWidth()),
+						* 10 + (i * statPoint1.getWidth()),
 						(VIRTUAL_SCREEN_HEIGHT - (1 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1, 1,
-						0, 0, 0, statPoint1.getWidth(), statPoint1.getHeight(),
-						false, true);
+						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
+						1, 0, 0, 0, statPoint1.getWidth(),
+						statPoint1.getHeight(), false, true);
 			}
 		} catch (NullPointerException e) {
 			return;
@@ -966,13 +967,60 @@ public abstract class AbstractGame implements ApplicationListener,
 		textArea = new NullTextArea();
 	}
 
-	public void onGoalieObtainsBall() {
+	public void onGoalieObtainsBall(TeamColour teamColour) {
 		elapsedSetupTime = 0;
 		gameState = GameState.SETUP;
 		clearActions();
-		bluePlayers.get(0).addAction(
-				new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 2,
-						VIRTUAL_SCREEN_HEIGHT / 2), bluePlayers.get(0)));
+		moveAwayFromGoal(teamColour);
+	}
+
+	protected Circle getGoalAreaCircle(TeamColour teamColour) {
+
+		float circleRadius = 200;
+		if (teamColour == TeamColour.RED) {
+			return new Circle(RED_GOAL, circleRadius);
+		} else {
+			return new Circle(BLUE_GOAL, circleRadius);
+		}
+	}
+
+	protected Vector2 getGoalVector(TeamColour teamColour) {
+		if (teamColour == TeamColour.RED) {
+			return RED_GOAL;
+		} else if (teamColour == TeamColour.BLUE) {
+			return BLUE_GOAL;
+		}
+		return null;
+	}
+
+	/**
+	 * Adds actions to move all players other than the goalie away from the
+	 * parameterised goal.
+	 * 
+	 * @param teamColour
+	 *            The goal to move away from
+	 */
+	protected void moveAwayFromGoal(TeamColour teamColour) {
+		for (Player player : getAllPlayers()) {
+			if (player == getGoalie(teamColour)) {
+				continue;
+			} else {
+				if (getGoalAreaCircle(teamColour).contains(
+						player.getPlayerPosition())) {
+
+					Vector2 towardsGoal = Utils.getMoveVector(player
+							.getPlayerPosition(), getGoalVector(teamColour),
+							225 - (player.getPlayerPosition()
+									.dst(getGoalVector(teamColour))));
+					Vector2 awayFromGoal = new Vector2(-towardsGoal.x,
+							-towardsGoal.y);
+					awayFromGoal.add(player.getPlayerPosition());
+
+					player.addAction(new MoveToPosition(new Vector2(
+							awayFromGoal.x, awayFromGoal.y), player));
+				}
+			}
+		}
 	}
 
 	@Override
