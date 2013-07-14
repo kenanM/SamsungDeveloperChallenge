@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.football.Actions.Followable;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Player;
@@ -30,6 +33,8 @@ public class Ball extends Rectangle implements Followable {
 	private float deceleration = 50;
 	private float timeSinceTackle = Game.BALL_CHANGE_TIME;
 
+	private ArrayList<BallOwnerSetListener> listeners = new ArrayList<BallOwnerSetListener>();
+
 	public Ball(float ballX, float ballY) {
 		this.x = translateBallCoordinate(ballX);
 		this.y = translateBallCoordinate(ballY);
@@ -42,6 +47,14 @@ public class Ball extends Rectangle implements Followable {
 	@Override
 	public Vector2 getPosition() {
 		return getBallPosition();
+	}
+
+	public boolean addBallOwnerSetListener(BallOwnerSetListener listener) {
+		return listeners.add(listener);
+	}
+
+	public boolean removeBallOwnerSetListener(BallOwnerSetListener listener) {
+		return listeners.remove(listener);
 	}
 
 	public float getDeceleration() {
@@ -96,6 +109,9 @@ public class Ball extends Rectangle implements Followable {
 	public void setOwner(Player player) {
 		if (hasOwner()) {
 			removeOwner();
+		}
+		for (BallOwnerSetListener listener : listeners) {
+			listener.onBallOwnerSet(this, player);
 		}
 		this.owner = player;
 		player.setBall(this);

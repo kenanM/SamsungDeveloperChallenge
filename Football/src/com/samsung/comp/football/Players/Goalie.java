@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
@@ -65,6 +66,14 @@ public class Goalie extends Player {
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		}
 		this.currentFrame = walkAnimation.getKeyFrame(0);
+		
+		game.getBall().addBallOwnerSetListener(new BallOwnerSetListener() {
+			@Override
+			public void onBallOwnerSet(Ball ball, Player newOwner) {
+				ballOwnerSet(newOwner);
+			}
+		});
+
 	}
 
 	@Override
@@ -113,6 +122,12 @@ public class Goalie extends Player {
 			return unselectableRegion;
 		} else {
 			return super.getHighlightTexture();
+		}
+	}
+
+	public void ballOwnerSet(Player newOwner) {
+		if (newOwner == this) {
+			game.onGoalieObtainsBall();
 		}
 	}
 }

@@ -89,7 +89,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Sound crowdCheer;
 
 	public enum GameState {
-		INPUT, EXECUTION, PAUSED, FINISHED
+		INPUT, EXECUTION, SETUP, PAUSED, FINISHED
 	}
 
 	protected static Random rng;
@@ -111,6 +111,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	// TODO: Rename to elapsedRoundTime?
 	protected float elapsedRoundTime = 0;
+	protected float elapsedSetupTime = 0;
 	protected float goalScoredDrawTime = 0f;
 	protected int redScore = 0;
 	protected int blueScore = 0;
@@ -963,6 +964,15 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void textAreaButtonPressed() {
 		gameState = gameStateToGoIntoWhenBackButtonPressed;
 		textArea = new NullTextArea();
+	}
+
+	public void onGoalieObtainsBall() {
+		elapsedSetupTime = 0;
+		gameState = GameState.SETUP;
+		clearActions();
+		bluePlayers.get(0).addAction(
+				new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 2,
+						VIRTUAL_SCREEN_HEIGHT / 2), bluePlayers.get(0)));
 	}
 
 	@Override

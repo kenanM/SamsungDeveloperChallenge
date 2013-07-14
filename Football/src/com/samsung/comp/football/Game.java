@@ -161,10 +161,14 @@ public class Game extends AbstractGame {
 		bar.update(time);
 		selectTextureStateTime += time;
 
-		if (gameState == GameState.EXECUTION) {
-			elapsedRoundTime += time;
+		if (gameState == GameState.SETUP) {
+			elapsedSetupTime += time;
+			if (elapsedSetupTime >= 1.5) {
+				beginInputStage();
+			}
+		}
 
-			remainingMatchTime -= time;
+		if (gameState == GameState.EXECUTION || gameState == GameState.SETUP) {
 
 			for (Player player : getAllPlayers()) {
 				player.update(time);
@@ -175,9 +179,13 @@ public class Game extends AbstractGame {
 					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
 			tackleDetection(time);
 			goalScoredDetection();
+		}
+
+		if (gameState == GameState.EXECUTION) {
+			elapsedRoundTime += time;
+			remainingMatchTime -= time;
 
 			if (elapsedRoundTime >= ROUND_TIME) {
-				gameState = GameState.INPUT;
 				beginInputStage();
 			}
 
