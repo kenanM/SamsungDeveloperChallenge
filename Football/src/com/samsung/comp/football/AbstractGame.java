@@ -740,6 +740,12 @@ public abstract class AbstractGame implements ApplicationListener,
 		bar.setPositionToUp();
 	}
 
+	public void beginSetupPhase() {
+		elapsedSetupTime = 0;
+		gameState = GameState.SETUP;
+		clearActions();
+	}
+
 	public List<Player> getAllPlayers() {
 		List<Player> result = new LinkedList<Player>();
 		if (redPlayers != null) {
@@ -968,9 +974,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void onGoalieObtainsBall(TeamColour teamColour) {
-		elapsedSetupTime = 0;
-		gameState = GameState.SETUP;
-		clearActions();
+		beginSetupPhase();
 		moveAwayFromGoal(teamColour);
 	}
 

@@ -18,7 +18,6 @@ public class TutorialGame extends AbstractGame {
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 	private boolean shootCompleted = false;
 	private boolean queueCompleted = false;
-	private float setupTime = 0f;
 
 	public TutorialGame(ActionResolver actionResolver) {
 		this.actionResolver = actionResolver;
@@ -57,10 +56,8 @@ public class TutorialGame extends AbstractGame {
 
 		if (tutorialPhase == TutorialPhase.SHOOT) {
 			shootCompleted = true;
-			setupTime = 0f;
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			queueCompleted = true;
-			setupTime = 0f;
 		}
 	}
 
@@ -74,24 +71,21 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupPassPhase() {
+		beginSetupPhase();
 		Player p = new Player(0, 256, TeamColour.BLUE);
 		bluePlayers.add(p);
 
 		ball.setOwner(p);
 		p.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 2,
 				320), p));
-		p.executeAction();
-		p.clearActions();
 
 		Player p0 = bluePlayers.get(0);
 		p0.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 3,
 				750), p));
-		p0.executeAction();
-		p0.clearActions();
-		setupTime = 3f;
 	}
 
 	private void setupTacklePhase() {
+		beginSetupPhase();
 		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
 		redPlayers.add(p);
@@ -103,10 +97,10 @@ public class TutorialGame extends AbstractGame {
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
 		owner.executeAction();
 		owner.clearActions();
-		setupTime = 5f;
 	}
 
 	private void setupQueuePhase() {
+		beginSetupPhase();
 		Player p = redPlayers.get(1);
 
 		// p.addAction(new MoveToPosition(new Vector2(
@@ -123,11 +117,10 @@ public class TutorialGame extends AbstractGame {
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
 		owner.executeAction();
 		owner.clearActions();
-
-		setupTime = 3f;
 	}
 
 	private void setupGoaliePhase() {
+		beginSetupPhase();
 		redGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2, 0, TeamColour.RED,
 				this, 500);
 	}
@@ -140,7 +133,6 @@ public class TutorialGame extends AbstractGame {
 		clearActions();
 		bar.setPositionToDown();
 		
-		setupTime = 0f;
 		checkPhaseCompletion();
 		runPhaseSpecficActions();
 		displayTutorialMessage();
@@ -200,7 +192,6 @@ public class TutorialGame extends AbstractGame {
 			p1.executeAction();
 			p1.clearActions();
 			p.clearActions();
-			setupTime = 2f;
 
 			Arrow a1 = new Arrow(pointer);
 			Arrow a2 = new Arrow(pointer);
@@ -298,8 +289,8 @@ public class TutorialGame extends AbstractGame {
 					+ "If they are holding the ball, they must be ordered to pass or kick it before play can continue. \n\n"
 					+ "Goal keepers also have a better chance of stopping a fast moving ball than other players do.");
 		}
+		gameStateToGoIntoWhenBackButtonPressed = gameState;
 		gameState = GameState.PAUSED;
-		gameStateToGoIntoWhenBackButtonPressed = GameState.INPUT;
 	}
 
 	@Override
@@ -347,52 +338,39 @@ public class TutorialGame extends AbstractGame {
 		bar.update(time);
 		selectTextureStateTime += time;
 
-		if (gameState == GameState.EXECUTION) {
 
+		if (gameState == GameState.SETUP) {
+			elapsedSetupTime += time;
+			if (elapsedSetupTime >= 1.5) {
+				beginInputStage();
+			}
+		}
+
+		if (gameState == GameState.EXECUTION || gameState == GameState.SETUP) {
+
+			for (Player player : getAllPlayers()) {
+				player.update(time);
+			}
+
+			if (ball != null) {
+				ball.update(time);
+				ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+						VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+				tackleDetection(time);
+				goalScoredDetection();
+			}
+
+			for (Arrow arrow : arrows) {
+				arrow.update();
+			}
+		}
+
+		if (gameState == GameState.EXECUTION) {
 			elapsedRoundTime += time;
 			remainingMatchTime -= time;
 
-			for (Player player : getAllPlayers()) {
-				player.update(time);
-			}
-
-			if (ball != null) {
-				ball.update(time);
-				ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
-						VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-				tackleDetection(time);
-				goalScoredDetection();
-			}
-
-			for (Arrow arrow : arrows) {
-				arrow.update();
-			}
-
 			if (elapsedRoundTime >= ROUND_TIME) {
-				gameState = GameState.INPUT;
 				beginInputStage();
-			}
-
-		} else if (setupTime > 0) {
-			setupTime -= time;
-			for (Player player : getAllPlayers()) {
-				player.update(time);
-			}
-
-			if (ball != null) {
-				ball.update(time);
-				ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
-						VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-				tackleDetection(time);
-				goalScoredDetection();
-			}
-
-			for (Arrow arrow : arrows) {
-				arrow.update();
-			}
-
-			if (setupTime <= 0) {
-				clearActions();
 			}
 		}
 	}
