@@ -71,7 +71,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupPassPhase() {
-		beginSetupPhase();
+		beginSetupPhase(2f);
 		Player p = new Player(0, 256, TeamColour.BLUE);
 		bluePlayers.add(p);
 
@@ -85,7 +85,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupTacklePhase() {
-		beginSetupPhase();
+		beginSetupPhase(2f);
 		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
 		redPlayers.add(p);
@@ -100,7 +100,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupQueuePhase() {
-		beginSetupPhase();
+		beginSetupPhase(2f);
 		Player p = redPlayers.get(1);
 
 		// p.addAction(new MoveToPosition(new Vector2(
@@ -120,7 +120,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupGoaliePhase() {
-		beginSetupPhase();
+		beginSetupPhase(1.5f);
 		redGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2, 0, TeamColour.RED,
 				this, 500);
 	}
@@ -340,8 +340,8 @@ public class TutorialGame extends AbstractGame {
 
 
 		if (gameState == GameState.SETUP) {
-			elapsedSetupTime += time;
-			if (elapsedSetupTime >= 1.5) {
+			remainingSetupTime -= time;
+			if (remainingSetupTime <= 0) {
 				beginInputStage();
 			}
 		}

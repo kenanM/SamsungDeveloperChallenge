@@ -200,8 +200,8 @@ public class MultiplayerGame extends AbstractGame {
 		selectTextureStateTime += time;
 
 		if (gameState == GameState.SETUP) {
-			elapsedSetupTime += time;
-			if (elapsedSetupTime >= 1.5) {
+			remainingSetupTime -= time;
+			if (remainingSetupTime <= 0) {
 				beginInputStage();
 			}
 		}

@@ -110,9 +110,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Ball ball;
 	protected ArrayList<Arrow> arrows = new ArrayList<Arrow>();
 
-	// TODO: Rename to elapsedRoundTime?
 	protected float elapsedRoundTime = 0;
-	protected float elapsedSetupTime = 0;
+	protected float remainingSetupTime = 0;
 	protected float goalScoredDrawTime = 0f;
 	protected int redScore = 0;
 	protected int blueScore = 0;
@@ -740,8 +739,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		bar.setPositionToUp();
 	}
 
-	public void beginSetupPhase() {
-		elapsedSetupTime = 0;
+	public void beginSetupPhase(float setupTime) {
+		remainingSetupTime = setupTime;
 		gameState = GameState.SETUP;
 		clearActions();
 	}
@@ -974,7 +973,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void onGoalieObtainsBall(TeamColour teamColour) {
-		beginSetupPhase();
+		beginSetupPhase(1.5f);
 		moveAwayFromGoal(teamColour);
 	}
 
