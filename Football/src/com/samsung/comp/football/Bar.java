@@ -168,6 +168,8 @@ public class Bar extends Rectangle {
 
 		if (game.getGameState() == GameState.EXECUTION) {
 			bmf.draw(batch, "Executing...", xOffset, this.y + 7);
+		} else if (game.getGameState() == GameState.SETUP) {
+			bmf.draw(batch, "Setting up...", xOffset, this.y + 7);
 		}
 	}
 
