@@ -202,6 +202,8 @@ public class MultiplayerGame extends AbstractGame {
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
 			if (remainingSetupTime <= 0) {
+				currentTeam = TeamColour.BLUE;
+				bar.setBarColor(blueColor);
 				beginInputStage();
 			}
 		}
@@ -224,7 +226,6 @@ public class MultiplayerGame extends AbstractGame {
 			remainingMatchTime -= time;
 
 			if (elapsedRoundTime >= ROUND_TIME) {
-				gameState = GameState.INPUT;
 				currentTeam = TeamColour.BLUE;
 				bar.setBarColor(blueColor);
 				beginInputStage();
