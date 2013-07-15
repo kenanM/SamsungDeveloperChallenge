@@ -132,14 +132,12 @@ public class TutorialGame extends AbstractGame {
 		cursor.setHighlightedPlayer(null);
 		clearActions();
 		bar.setPositionToDown();
-		
-		checkPhaseCompletion();
-		runPhaseSpecficActions();
-		displayTutorialMessage();
 	}
 
 	private void runPhaseSpecficActions() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
+			beginInputStage();
+
 			arrows.add(new Arrow(pointer, bluePlayers.get(0).getPlayerX(),
 					bluePlayers.get(0).y));
 			Arrow a1 = new Arrow(pointer);
@@ -155,8 +153,9 @@ public class TutorialGame extends AbstractGame {
 			arrows.add(a3);
 			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
 			arrows.add(a);
-
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+			beginInputStage();
+
 			Arrow a1 = new Arrow(pointer);
 			a1.pointAt(bluePlayers.get(0).getPlayerX(), bluePlayers.get(0).y);
 			
@@ -165,6 +164,8 @@ public class TutorialGame extends AbstractGame {
 			arrows.add(a1);
 			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
+			beginInputStage();
+
 			Arrow a1 = new Arrow(pointer);
 			a1.pointAt(ball.getBallX(), ball.y);
 			
@@ -175,6 +176,8 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			
 		} else if (tutorialPhase == TutorialPhase.MARK) {
+			beginSetupPhase(5f);
+
 			Player p = redPlayers.get(0);
 			Player p1 = redPlayers.get(1);
 
@@ -184,14 +187,10 @@ public class TutorialGame extends AbstractGame {
 			p.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
-			p.executeAction();
 
 			p1.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
-			p1.executeAction();
-			p1.clearActions();
-			p.clearActions();
 
 			Arrow a1 = new Arrow(pointer);
 			Arrow a2 = new Arrow(pointer);
@@ -201,9 +200,9 @@ public class TutorialGame extends AbstractGame {
 			arrows.add(a2);
 
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-
+			beginInputStage();
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
-
+			beginInputStage();
 		}
 	}
 
@@ -370,7 +369,9 @@ public class TutorialGame extends AbstractGame {
 			remainingMatchTime -= time;
 
 			if (elapsedRoundTime >= ROUND_TIME) {
-				beginInputStage();
+				checkPhaseCompletion();
+				runPhaseSpecficActions();
+				displayTutorialMessage();
 			}
 		}
 	}
