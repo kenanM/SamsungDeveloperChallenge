@@ -39,6 +39,16 @@ public class Game extends AbstractGame {
 	}
 
 	@Override
+	protected void onGoalScored(TeamColour goalAreaColour) {
+		setStartingPositions(goalAreaColour);
+
+		beginInputStage();
+		goalScoredDrawTime = 3f;
+		soundManager.play(crowdCheer);
+
+		whistleBlow.play();
+	}
+
 	protected void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
@@ -109,8 +119,6 @@ public class Game extends AbstractGame {
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
 
 		ball.resetBall();
-
-		whistleBlow.play();
 	}
 
 	private void createNewPlayersAndBall() {

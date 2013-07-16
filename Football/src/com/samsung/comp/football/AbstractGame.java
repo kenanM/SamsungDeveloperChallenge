@@ -154,7 +154,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected Texture pointer;
 
-	protected abstract void setStartingPositions(TeamColour centerTeam);
+	protected abstract void onGoalScored(TeamColour scoringTeam);
 
 	@Override
 	public void create() {
@@ -669,7 +669,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			} else {
 				blueScore++;
 				goalScored = true;
-				setStartingPositions(TeamColour.RED);
+				onGoalScored(TeamColour.RED);
+
 			}
 		} else if (BLUE_GOAL_AREA.contains(ball)) {
 			if (ball.hasOwner() && ball.getOwner() == blueGoalie) {
@@ -677,14 +678,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			} else {
 				redScore++;
 				goalScored = true;
-				setStartingPositions(TeamColour.BLUE);
+				onGoalScored(TeamColour.BLUE);
 			}
-		}
-
-		if (goalScored) {
-			beginInputStage();
-			goalScoredDrawTime = 3f;
-			soundManager.play(crowdCheer);
 		}
 	}
 

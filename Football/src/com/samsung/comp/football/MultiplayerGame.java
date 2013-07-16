@@ -42,6 +42,20 @@ public class MultiplayerGame extends AbstractGame {
 	}
 
 	@Override
+	protected void onGoalScored(TeamColour goalAreaColour) {
+		setStartingPositions(goalAreaColour);
+
+		currentTeam = TeamColour.BLUE;
+		bar.setBarColor(blueColor);
+
+		beginInputStage();
+		goalScoredDrawTime = 3f;
+		soundManager.play(crowdCheer);
+
+		whistleBlow.play();
+
+	}
+
 	protected void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
@@ -112,9 +126,6 @@ public class MultiplayerGame extends AbstractGame {
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
 
 		ball.resetBall();
-		currentTeam = TeamColour.BLUE;
-		bar.setBarColor(blueColor);
-		whistleBlow.play();
 	}
 
 	private void createNewPlayersAndBall() {

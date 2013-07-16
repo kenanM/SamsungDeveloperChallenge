@@ -16,7 +16,6 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
-	private boolean shootCompleted = false;
 	private boolean queueCompleted = false;
 
 	public TutorialGame(ActionResolver actionResolver) {
@@ -45,19 +44,30 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	@Override
-	protected void setStartingPositions(TeamColour centerTeam) {
+	protected void onGoalScored(TeamColour centerTeam) {
 
 		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
 
 		ball.resetBall();
 
+		checkPhaseCompletion();
+		runPhaseSpecficActions();
+		displayTutorialMessage();
+
+		goalScoredDrawTime = 3f;
+		soundManager.play(crowdCheer);
+
 		whistleBlow.play();
 
 		if (tutorialPhase == TutorialPhase.SHOOT) {
-			shootCompleted = true;
+			tutorialPhase = TutorialPhase.PASS;
+			setupPassPhase();
+			displayTutorialMessage();
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-			queueCompleted = true;
+			tutorialPhase = TutorialPhase.GOALIE;
+			setupGoaliePhase();
+			displayTutorialMessage();
 		}
 	}
 
@@ -218,10 +228,7 @@ public class TutorialGame extends AbstractGame {
 				tutorialPhase = TutorialPhase.SHOOT;
 			}
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-			if (shootCompleted) {
-				tutorialPhase = TutorialPhase.PASS;
-				setupPassPhase();
-			}
+
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
@@ -235,10 +242,7 @@ public class TutorialGame extends AbstractGame {
 				}
 			}
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-			if (queueCompleted) {
-				tutorialPhase = TutorialPhase.GOALIE;
-				setupGoaliePhase();
-			}
+
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 
 		}
