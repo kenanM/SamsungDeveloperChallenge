@@ -269,6 +269,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
+		Gdx.input.setCatchMenuKey(true);
 	}
 
 	@Override
@@ -928,6 +929,10 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
+	public void menuButtonPressed() {
+		actionResolver.openGuideBook();
+	}
+
 	public void backButtonPressed() {
 		Gdx.app.log("GameState", "Back button pressed");
 		if (gameState == GameState.FINISHED) {
@@ -1202,8 +1207,12 @@ public abstract class AbstractGame implements ApplicationListener,
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.BACK) {
 			backButtonPressed();
+			return true;
+		} else if (keycode == Keys.MENU) {
+			menuButtonPressed();
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
