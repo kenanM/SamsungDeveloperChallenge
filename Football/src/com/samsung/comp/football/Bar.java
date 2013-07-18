@@ -94,7 +94,7 @@ public class Bar extends Rectangle {
 			if (position == Position.UP && playIconRectangle.y > upYValue) {
 				playIconRectangle.y = playIconRectangle.y - velocity * time;
 			} else if (position == Position.DOWN
-					&& playIconRectangle.y < -playIcon.getHeight()) {
+					&& playIconRectangle.y < this.y) {
 				playIconRectangle.y = playIconRectangle.y + velocity * time;
 			}
 
@@ -110,7 +110,7 @@ public class Bar extends Rectangle {
 			if (position == Position.UP && playIconRectangle.y < upYValue) {
 				playIconRectangle.y = playIconRectangle.y + velocity * time;
 			} else if (position == Position.DOWN
-					&& playIconRectangle.y > -playIcon.getHeight()) {
+					&& playIconRectangle.y > this.y) {
 				playIconRectangle.y = playIconRectangle.y - velocity * time;
 			}
 
