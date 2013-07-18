@@ -14,6 +14,15 @@ public class Game extends AbstractGame {
 		this.actionResolver = actionResolver;
 	}
 
+	public Game(ActionResolver actionResolver, float matchTime,
+			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
+		this.actionResolver = actionResolver;
+		this.remainingMatchTime = matchTime;
+		this.roundTime = roundTime;
+		this.positionUIBarAtTop = statusBarAtTop;
+		this.scoreLimit = scoreLimit;
+	}
+
 	@Override
 	public void create() {
 
@@ -33,7 +42,8 @@ public class Game extends AbstractGame {
 
 		ai = new AI(this);
 
-		remainingMatchTime = 3 * 60;
+		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
+				: remainingMatchTime;
 
 		beginInputStage();
 	}
@@ -193,7 +203,7 @@ public class Game extends AbstractGame {
 			elapsedRoundTime += time;
 			remainingMatchTime -= time;
 
-			if (elapsedRoundTime >= ROUND_TIME) {
+			if (elapsedRoundTime >= roundTime) {
 				beginInputStage();
 			}
 

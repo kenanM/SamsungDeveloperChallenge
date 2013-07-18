@@ -16,7 +16,6 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
-	private boolean queueCompleted = false;
 
 	public TutorialGame(ActionResolver actionResolver) {
 		this.actionResolver = actionResolver;
@@ -38,7 +37,7 @@ public class TutorialGame extends AbstractGame {
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
 
-		remainingMatchTime = ROUND_TIME;
+		remainingMatchTime = roundTime;
 
 		beginInputStage();
 	}
@@ -307,7 +306,7 @@ public class TutorialGame extends AbstractGame {
 
 	@Override
 	public void beginExecution() {
-		remainingMatchTime = ROUND_TIME;
+		remainingMatchTime = roundTime;
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
 		bar.setPositionToUp();
@@ -372,7 +371,7 @@ public class TutorialGame extends AbstractGame {
 			elapsedRoundTime += time;
 			remainingMatchTime -= time;
 
-			if (elapsedRoundTime >= ROUND_TIME) {
+			if (elapsedRoundTime >= roundTime) {
 				checkPhaseCompletion();
 				runPhaseSpecficActions();
 				displayTutorialMessage();

@@ -18,6 +18,15 @@ public class MultiplayerGame extends AbstractGame {
 		this.actionResolver = actionResolver;
 	}
 
+	public MultiplayerGame(ActionResolver actionResolver, float matchTime,
+			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
+		this.actionResolver = actionResolver;
+		this.remainingMatchTime = matchTime;
+		this.roundTime = roundTime;
+		this.positionUIBarAtTop = statusBarAtTop;
+		this.scoreLimit = scoreLimit;
+	}
+
 	@Override
 	public void create() {
 
@@ -34,7 +43,8 @@ public class MultiplayerGame extends AbstractGame {
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
 
-		remainingMatchTime = 3 * 60;
+		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
+				: remainingMatchTime;
 
 		bar.setBarColor(blueColor);
 
@@ -236,7 +246,7 @@ public class MultiplayerGame extends AbstractGame {
 			elapsedRoundTime += time;
 			remainingMatchTime -= time;
 
-			if (elapsedRoundTime >= ROUND_TIME) {
+			if (elapsedRoundTime >= roundTime) {
 				currentTeam = TeamColour.BLUE;
 				bar.setBarColor(blueColor);
 				beginInputStage();

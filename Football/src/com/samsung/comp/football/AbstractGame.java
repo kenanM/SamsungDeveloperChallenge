@@ -44,7 +44,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected int result;
 
 	// TODO: Remove these and other hard coded values
-	public static final float ROUND_TIME = 5;
 	public static final float BALL_CHANGE_TIME = 1f;
 	public static final float BALL_PASS_TIME = 0.5f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
@@ -97,7 +96,9 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected GameState gameState = GameState.EXECUTION;
 	// TODO: This needs to go. Replace with separate pause / not paused enum.
 	protected GameState gameStateToGoIntoWhenBackButtonPressed = GameState.PAUSED;
+	protected float roundTime = 5;
 	protected float remainingMatchTime;
+	protected byte scoreLimit = 0;
 	protected SpriteBatch batch;
 	protected ShapeRenderer shapeRenderer;
 	protected BitmapFont bmf;
@@ -170,7 +171,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
 
-		remainingMatchTime = 3 * 60;
+		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
+				: remainingMatchTime;
 
 		beginInputStage();
 
