@@ -118,7 +118,7 @@ public class MainApplication extends Activity {
 			return true;
 		case R.id.statusBarBottom:
 			item.setChecked(!item.isChecked());
-			statusBarAtTop = item.isChecked();
+			statusBarAtTop = !item.isChecked();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
