@@ -21,6 +21,11 @@ public class MainApplication extends Activity {
 	Button howToPlay;
 	Button aboutUs;
 
+	boolean statusBarAtTop = false;
+	float roundTime = 5f;
+	float matchTime = 3 * 60;
+	byte scoreLimit = -1;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,8 +54,14 @@ public class MainApplication extends Activity {
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(MainApplication.this,
-						GameActivity.class));
+				Intent gameIntent = new Intent(MainApplication.this,
+						GameActivity.class);
+				gameIntent.putExtra("Round_Time", roundTime);
+				gameIntent.putExtra("Match_Time", matchTime);
+				gameIntent.putExtra("Score_Limit", scoreLimit);
+				gameIntent.putExtra("Status_Bar_Top", statusBarAtTop);
+
+				startActivity(gameIntent);
 			}
 		});
 
@@ -58,8 +69,14 @@ public class MainApplication extends Activity {
 		startMultiplayerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(MainApplication.this,
-						MultiplayerGameActivity.class));
+				Intent multiplayerGameIntent = new Intent(MainApplication.this,
+						MultiplayerGameActivity.class);
+				multiplayerGameIntent.putExtra("Round_Time", roundTime);
+				multiplayerGameIntent.putExtra("Match_Time", matchTime);
+				multiplayerGameIntent.putExtra("Score_Limit", scoreLimit);
+				multiplayerGameIntent.putExtra("Status_Bar_Top", statusBarAtTop);
+
+				startActivity(multiplayerGameIntent);
 			}
 		});
 
@@ -97,9 +114,11 @@ public class MainApplication extends Activity {
 		switch (item.getItemId()) {
 		case R.id.statusBarTop:
 			item.setChecked(!item.isChecked());
+			statusBarAtTop = item.isChecked();
 			return true;
 		case R.id.statusBarBottom:
 			item.setChecked(!item.isChecked());
+			statusBarAtTop = item.isChecked();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

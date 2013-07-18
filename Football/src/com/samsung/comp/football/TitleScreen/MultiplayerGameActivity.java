@@ -18,18 +18,31 @@ public class MultiplayerGameActivity extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-		cfg.useGL20 = true;
+		cfg.useGL20 = false;
 		cfg.useAccelerometer = false;
 		cfg.useCompass = false;
-		boolean useGL2 = false;
-		AbstractGame game = new MultiplayerGame(new ActionResolverAndroid(this));
+
+		AbstractGame game;
+
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null) {
+			float roundTime = bundle.getFloat("Round_Time");
+			float matchTime = bundle.getFloat("Match_Time");
+			byte scoreLimit = bundle.getByte("Score_Limit");
+			boolean statusBarAtTop = bundle.getBoolean("Status_Bar_Top");
+			game = new MultiplayerGame(new ActionResolverAndroid(this),
+					matchTime,
+					roundTime, statusBarAtTop, scoreLimit);
+		} else {
+			game = new MultiplayerGame(new ActionResolverAndroid(this));
+		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		SoundManager soundManager = new SoundManager(audioManager);
 
 		game.setSoundManager(soundManager);
-		View gameView = initializeForView(game, useGL2);
+		View gameView = initializeForView(game, cfg);
 		SPenEventLibrary spen = new SPenEventLibrary();
 		spen.setSPenHoverListener(gameView, game);
 		setContentView(gameView);
