@@ -353,6 +353,14 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (gameState == GameState.INPUT) {
 
+			if (cursor.getHighlightedPlayer() != null) {
+				drawPlayerStats(batch, cursor.getHighlightedPlayer());
+			} else {
+				if (selectedPlayer != null) {
+					drawPlayerStats(batch, selectedPlayer);
+				}
+			}
+
 			for (Player player : getPlayers(currentTeam)) {
 				drawActions(
 						player.getAction(),
@@ -366,14 +374,6 @@ public abstract class AbstractGame implements ApplicationListener,
 						batch,
 						(getGoalie(currentTeam) == cursor
 								.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
-			}
-
-			if (cursor.getHighlightedPlayer() != null) {
-				drawPlayerStats(batch, cursor.getHighlightedPlayer());
-			} else {
-				if (selectedPlayer != null) {
-					drawPlayerStats(batch, selectedPlayer);
-				}
 			}
 
 			if (cursor.getHighlightedPlayer() != null) {
