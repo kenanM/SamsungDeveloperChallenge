@@ -60,7 +60,7 @@ public class Kick extends Action {
 			return nextAction.getFuturePosition(time, initialPosition, speed,
 					0, returnNulls);
 		} else {
-			return initialPosition;
+			return returnNulls ? null : initialPosition;
 		}
 	}
 
