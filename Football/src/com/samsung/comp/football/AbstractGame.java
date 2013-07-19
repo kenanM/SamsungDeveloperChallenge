@@ -1340,7 +1340,9 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
-		if (getStatsRectangle(positionStatsAtTop).contains(point.x, point.y)) {
+		if (getStatsRectangle(positionStatsAtTop) != null
+				&& getStatsRectangle(positionStatsAtTop).contains(point.x,
+						point.y)) {
 			positionStatsAtTop = !positionStatsAtTop;
 		}
 
@@ -1433,7 +1435,9 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
-		if (getStatsRectangle(positionStatsAtTop).contains(point.x, point.y)) {
+		if (getStatsRectangle(positionStatsAtTop) != null
+				&& getStatsRectangle(positionStatsAtTop).contains(point.x,
+						point.y)) {
 			positionStatsAtTop = !positionStatsAtTop;
 		}
 
@@ -1572,8 +1576,9 @@ public abstract class AbstractGame implements ApplicationListener,
 			return false;
 		}
 
-		if (getStatsRectangle(positionStatsAtTop).contains(hoverPoint.x,
-				hoverPoint.y)) {
+		if (getStatsRectangle(positionStatsAtTop) != null
+				&& getStatsRectangle(positionStatsAtTop).contains(hoverPoint.x,
+						hoverPoint.y)) {
 			positionStatsAtTop = !positionStatsAtTop;
 		}
 
