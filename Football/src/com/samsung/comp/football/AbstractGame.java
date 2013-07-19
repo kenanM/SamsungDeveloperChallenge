@@ -1335,6 +1335,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		return false;
 	}
 
+	/**
+	 * @warning Changing variables accessed by other methods can cause it to
+	 *          have an out of date variable.
+	 * 
+	 * @warning2 The input processor can and will run before the libgdx life
+	 *           cycle. Hence any textures or other variables initialised at
+	 *           this stage will not be ready.
+	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
@@ -1371,6 +1379,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		return true;
 	}
 
+	/**
+	 * @warning Changing variables accessed by other methods can cause it to
+	 *          have an out of date variable.
+	 * 
+	 * @warning2 The input processor can and will run before the libgdx life
+	 *           cycle. Hence any textures or other variables initialised at
+	 *           this stage will not be ready.
+	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
@@ -1430,6 +1446,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		return true;
 	}
 
+	/**
+	 * @warning Changing variables accessed by other methods can cause it to
+	 *          have an out of date variable.
+	 * 
+	 * @warning2 The input processor can and will run before the libgdx life
+	 *           cycle. Hence any textures or other variables initialised at
+	 *           this stage will not be ready.
+	 */
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 
@@ -1554,6 +1578,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		return false;
 	}
 
+	/**
+	 * @warning Changing variables accessed by other methods can cause it to
+	 *          have an out of date variable.
+	 * 
+	 * @warning2 The input processor can and will run before the libgdx life
+	 *           cycle. Hence any textures or other variables initialised at
+	 *           this stage will not be ready.
+	 */
 	@Override
 	public boolean onHover(View arg0, MotionEvent event) {
 		Vector2 hoverPoint = translateInputToField(new Vector2(event.getX(),
