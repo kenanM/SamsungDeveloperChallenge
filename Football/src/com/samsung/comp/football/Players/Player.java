@@ -242,16 +242,16 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	/**
-	 * Used for line time indicators
+	 * Used for line time indicators and ghost player indicators
 	 * 
 	 * @param time
 	 *            time in seconds
 	 * @return the position the player will be at after time seconds
 	 */
-	public Vector2 getFuturePosition(float time) {
+	public Vector2 getFuturePosition(float time, boolean returnNulls) {
 		if (action != null) {
 			Vector2 futurePosition = action.getFuturePosition(time,
-					getPlayerPosition(), runSpeed, positionInPath, true);
+					getPlayerPosition(), runSpeed, positionInPath, returnNulls);
 			return futurePosition;
 		} else {
 			return null;
@@ -797,9 +797,9 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public Vector2[] getTimeLinePoints() {
-		return new Vector2[] { getFuturePosition(1), getFuturePosition(2),
-				getFuturePosition(3), getFuturePosition(4),
-				getFuturePosition(5) };
+		return new Vector2[] { getFuturePosition(1, true),
+				getFuturePosition(2, true), getFuturePosition(3, true),
+				getFuturePosition(4, true), getFuturePosition(5, true) };
 	}
 
 }

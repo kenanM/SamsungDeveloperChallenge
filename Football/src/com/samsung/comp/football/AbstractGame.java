@@ -449,7 +449,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void drawGhost(Player player, float futureTime) {
-		Vector2 futurePos = player.getFuturePosition(futureTime);
+		Vector2 futurePos = player.getFuturePosition(futureTime, false);
 		if (futurePos != null) {
 			batch.draw(ghostTexture, futurePos.x - ghostTexture.getWidth() / 2,
 					futurePos.y - ghostTexture.getHeight() / 2,
