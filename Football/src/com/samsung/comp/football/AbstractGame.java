@@ -126,6 +126,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected AI ai;
 	protected TextArea textArea;
 	public Bar bar;
+	protected boolean positionStatsAtTop = false;
 	protected boolean positionUIBarAtTop = false;
 	private boolean repositionCameraOnUpdate = false;
 
@@ -515,56 +516,112 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	public void drawPlayerStats(SpriteBatch batch, Player player) {
 		try {
+			if (positionStatsAtTop) {
+				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
+						* 10, 0, 0, 0, stats.getWidth(), stats.getHeight(), 1,
+						1, 0, 0, 0, stats.getWidth(), stats.getHeight(), false,
+						true);
 
-			batch.draw(stats,
-					VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25 * 10,
-					(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())), 0,
-					0, stats.getWidth(), stats.getHeight(), 1, 1, 0, 0, 0,
-					stats.getWidth(), stats.getHeight(), false, true);
+				for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(0 * statPoint1.getHeight()), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(),
+							statPoint1.getHeight(), false, true);
+				}
 
-			for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
-				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10 + (i * statPoint1.getWidth()),
+				for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(1 * statPoint1.getHeight()), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(),
+							statPoint1.getHeight(), false, true);
+				}
+
+				for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(2 * statPoint1.getHeight()), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(),
+							statPoint1.getHeight(), false, true);
+				}
+
+				for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(3 * statPoint1.getHeight()), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(),
+							statPoint1.getHeight(), false, true);
+				}
+
+				for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(4 * statPoint1.getHeight()), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(),
+							statPoint1.getHeight(), false, true);
+				}
+			} else {
+				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
+						* 10,
 						(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
-						1, 0, 0, 0, statPoint1.getWidth(),
-						statPoint1.getHeight(), false, true);
-			}
+						0, 0, stats.getWidth(), stats.getHeight(), 1, 1, 0, 0,
+						0, stats.getWidth(), stats.getHeight(), false, true);
 
-			for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
-				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10 + (i * statPoint1.getWidth()),
-						(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
-						1, 0, 0, 0, statPoint1.getWidth(),
-						statPoint1.getHeight(), false, true);
-			}
+				for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1
+									.getHeight())), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(), statPoint1
+									.getHeight(), false, true);
+				}
 
-			for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
-				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10 + (i * statPoint1.getWidth()),
-						(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
-						1, 0, 0, 0, statPoint1.getWidth(),
-						statPoint1.getHeight(), false, true);
-			}
+				for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1
+									.getHeight())), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(), statPoint1
+									.getHeight(), false, true);
+				}
 
-			for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
-				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10 + (i * statPoint1.getWidth()),
-						(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
-						1, 0, 0, 0, statPoint1.getWidth(),
-						statPoint1.getHeight(), false, true);
-			}
+				for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1
+									.getHeight())), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(), statPoint1
+									.getHeight(), false, true);
+				}
 
-			for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
-				batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH - 25
-						* 10 + (i * statPoint1.getWidth()),
-						(VIRTUAL_SCREEN_HEIGHT - (1 * statPoint1.getHeight())),
-						0, 0, statPoint1.getWidth(), statPoint1.getHeight(), 1,
-						1, 0, 0, 0, statPoint1.getWidth(),
-						statPoint1.getHeight(), false, true);
+				for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1
+									.getHeight())), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(), statPoint1
+									.getHeight(), false, true);
+				}
+
+				for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
+					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
+							- 25 * 10 + (i * statPoint1.getWidth()),
+							(VIRTUAL_SCREEN_HEIGHT - (1 * statPoint1
+									.getHeight())), 0, 0,
+							statPoint1.getWidth(), statPoint1.getHeight(), 1,
+							1, 0, 0, 0, statPoint1.getWidth(), statPoint1
+									.getHeight(), false, true);
+				}
 			}
 		} catch (NullPointerException e) {
 			return;
@@ -886,6 +943,22 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		return new Vector2((float) vx, (float) vy);
+	}
+
+	protected Rectangle getStatsRectangle(boolean isAtTopPosition) {
+		float pointWidth = 10;
+		float pointCount = 25;
+
+		if (isAtTopPosition) {
+			return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
+					- pointCount * pointWidth, 0, stats.getWidth() + pointWidth
+					* pointCount, stats.getHeight());
+		} else {
+			return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
+					- pointCount * pointWidth, VIRTUAL_SCREEN_HEIGHT
+					- stats.getHeight(), stats.getWidth() + pointWidth
+					* pointCount, stats.getHeight());
+		}
 	}
 
 	@Override
@@ -1243,6 +1316,10 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
+		if (getStatsRectangle(positionStatsAtTop).contains(point.x, point.y)) {
+			positionStatsAtTop = !positionStatsAtTop;
+		}
+
 		if (getGameState() == GameState.PAUSED) {
 			textArea.onPress(point.x, point.y);
 			return true;
@@ -1331,6 +1408,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
+
+		if (getStatsRectangle(positionStatsAtTop).contains(point.x, point.y)) {
+			positionStatsAtTop = !positionStatsAtTop;
+		}
 
 		if (getGameState() == GameState.INPUT) {
 			if (!bar.contains(point.x, point.y)) {
@@ -1465,6 +1546,11 @@ public abstract class AbstractGame implements ApplicationListener,
 			cursor.setHighlightedPlayer(null);
 			cursor.setTexture(null);
 			return false;
+		}
+
+		if (getStatsRectangle(positionStatsAtTop).contains(hoverPoint.x,
+				hoverPoint.y)) {
+			positionStatsAtTop = !positionStatsAtTop;
 		}
 
 		if (getGameState() == GameState.INPUT) {
