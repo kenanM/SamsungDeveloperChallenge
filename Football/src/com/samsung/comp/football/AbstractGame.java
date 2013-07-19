@@ -154,6 +154,9 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture blueSelectTexture;
 	protected float selectTextureStateTime = 0f;
 
+	protected Texture ghostTexture;
+	protected float ghostStateTime = 0f;
+
 	protected Texture pointer;
 
 	protected abstract void onGoalScored(TeamColour scoringTeam);
@@ -208,6 +211,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
+		ghostTexture = new Texture(Gdx.files.internal("ghost.png"));
 	}
 
 	protected void createIteractiveObjects() {
@@ -354,8 +358,11 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (gameState == GameState.INPUT) {
 
-			if (cursor.getHighlightedPlayer() != null) {
-				drawPlayerStats(batch, cursor.getHighlightedPlayer());
+			Player highlightedPlayer = cursor.getHighlightedPlayer();
+
+			if (highlightedPlayer != null) {
+				drawPlayerStats(batch, highlightedPlayer);
+
 			} else {
 				if (selectedPlayer != null) {
 					drawPlayerStats(batch, selectedPlayer);
@@ -366,26 +373,27 @@ public abstract class AbstractGame implements ApplicationListener,
 				drawActions(
 						player.getAction(),
 						batch,
-						(player == cursor.getHighlightedPlayer() || player == selectedPlayer));
+						(player == highlightedPlayer || player == selectedPlayer));
 			}
 
 			if (getGoalie(currentTeam) != null) {
 				drawActions(
 						getGoalie(currentTeam).getAction(),
 						batch,
-						(getGoalie(currentTeam) == cursor
-								.getHighlightedPlayer() || getGoalie(currentTeam) == selectedPlayer));
+						(getGoalie(currentTeam) == highlightedPlayer || getGoalie(currentTeam) == selectedPlayer));
 			}
 
-			if (cursor.getHighlightedPlayer() != null) {
-				if (isSelectable(cursor.getHighlightedPlayer())) {
-					drawTimeLinePoints(cursor.getHighlightedPlayer());
+			if (highlightedPlayer != null) {
+				if (isSelectable(highlightedPlayer)) {
+					drawTimeLinePoints(highlightedPlayer);
+					drawGhost(highlightedPlayer, ghostStateTime);
 				}
 			}
 
 			if (selectedPlayer != null) {
 				selectedPlayer.drawSelect(batch, selectTextureStateTime);
 				drawTimeLinePoints(selectedPlayer);
+				drawGhost(selectedPlayer, ghostStateTime);
 			}
 
 			for (Arrow arrow : arrows) {
@@ -437,6 +445,18 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 		} catch (NullPointerException e) {
 			return;
+		}
+	}
+
+	public void drawGhost(Player player, float futureTime) {
+		Vector2 futurePos = player.getFuturePosition(futureTime);
+		if (futurePos != null) {
+			batch.draw(ghostTexture, futurePos.x - ghostTexture.getWidth() / 2,
+					futurePos.y - ghostTexture.getHeight() / 2,
+					ghostTexture.getWidth() / 2, ghostTexture.getHeight() / 2,
+					ghostTexture.getWidth(), ghostTexture.getHeight(), 0.5f,
+					0.5f, 0, 0, 0, ghostTexture.getWidth(),
+					ghostTexture.getHeight(), false, false);
 		}
 	}
 
@@ -948,16 +968,19 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Rectangle getStatsRectangle(boolean isAtTopPosition) {
 		float pointWidth = 10;
 		float pointCount = 25;
-
-		if (isAtTopPosition) {
-			return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
-					- pointCount * pointWidth, 0, stats.getWidth() + pointWidth
-					* pointCount, stats.getHeight());
-		} else {
-			return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
-					- pointCount * pointWidth, VIRTUAL_SCREEN_HEIGHT
-					- stats.getHeight(), stats.getWidth() + pointWidth
-					* pointCount, stats.getHeight());
+		try {
+			if (isAtTopPosition) {
+				return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
+						- pointCount * pointWidth, 0, stats.getWidth()
+						+ pointWidth * pointCount, stats.getHeight());
+			} else {
+				return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
+						- pointCount * pointWidth, VIRTUAL_SCREEN_HEIGHT
+						- stats.getHeight(), stats.getWidth() + pointWidth
+						* pointCount, stats.getHeight());
+			}
+		} catch (NullPointerException e) {
+			return null;
 		}
 	}
 
@@ -985,6 +1008,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		whistleBlow.dispose();
 		batch.dispose();
 		shapeRenderer.dispose();
+		ghostTexture.dispose();
 	}
 
 	@Override

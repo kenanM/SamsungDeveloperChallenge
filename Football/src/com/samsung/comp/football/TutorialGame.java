@@ -339,7 +339,7 @@ public class TutorialGame extends AbstractGame {
 
 		bar.update(time);
 		selectTextureStateTime += time;
-
+		ghostStateTime = (ghostStateTime + time) % 5;
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
