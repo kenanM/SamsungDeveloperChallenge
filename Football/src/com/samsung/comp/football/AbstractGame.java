@@ -98,7 +98,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected GameState gameStateToGoIntoWhenBackButtonPressed = GameState.PAUSED;
 	protected float roundTime = 5;
 	protected float remainingMatchTime;
-	protected byte scoreLimit = 0;
+	protected byte scoreLimit = -1;
 	protected SpriteBatch batch;
 	protected ShapeRenderer shapeRenderer;
 	protected BitmapFont bmf;
@@ -690,6 +690,10 @@ public abstract class AbstractGame implements ApplicationListener,
 				goalScored = true;
 				onGoalScored(TeamColour.BLUE);
 			}
+		}
+
+		if (redScore == scoreLimit || blueScore == scoreLimit) {
+			matchFinish();
 		}
 	}
 
