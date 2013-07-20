@@ -18,6 +18,7 @@ public class Bar extends Rectangle {
 	private Texture cancelIcon;
 	private Texture cancelIconPressed;
 	private Texture undoIcon;
+	private Texture undoIconPressed;
 	private String text;
 
 	private Rectangle playIconRectangle;
@@ -58,9 +59,8 @@ public class Bar extends Rectangle {
 		bar = new Texture(Gdx.files.internal("bar.png"));
 		playIcon = new Texture(Gdx.files.internal("playIcon.png"));
 		undoIcon = new Texture(Gdx.files.internal("undoIcon.png"));
+		undoIconPressed = new Texture(Gdx.files.internal("undoIconDown.png"));
 		cancelIcon = new Texture(Gdx.files.internal("cancelIcon.png"));
-		cancelIconPressed = new Texture(
-				Gdx.files.internal("cancelIconDepressed.png"));
 
 		positionedAtTop = topOfScreen;
 
@@ -140,24 +140,22 @@ public class Bar extends Rectangle {
 		batch.draw(playIcon, playIconRectangle.x, playIconRectangle.y,
 				playIconRectangle.width, playIconRectangle.height);
 
-		if (isCancelButtonShown()) {
-			if (cancelActionsTimer < 1) {
-				batch.draw(cancelIconPressed, cancelIconRectangle.x,
-						cancelIconRectangle.y, cancelIconRectangle.width,
-						cancelIconRectangle.height, 0, 0,
-						cancelIcon.getWidth(), cancelIcon.getHeight(), false,
-						true);
+		if (selectedPlayerHasActions()) {
+			if (cancelActionsTimer < 0.35) {
+				batch.draw(undoIconPressed, undoIconRectangle.x,
+						undoIconRectangle.y, cancelIconRectangle.width,
+						cancelIconRectangle.height, 0, 0, undoIcon.getWidth(),
+						undoIcon.getHeight(), false, true);
 			} else {
-				batch.draw(cancelIcon, cancelIconRectangle.x,
-						cancelIconRectangle.y, cancelIconRectangle.width,
-						cancelIconRectangle.height, 0, 0,
-						cancelIcon.getWidth(), cancelIcon.getHeight(), false,
-						true);
 				batch.draw(undoIcon, undoIconRectangle.x, undoIconRectangle.y,
 						undoIconRectangle.width, undoIconRectangle.height, 0,
 						0, undoIcon.getWidth(), undoIcon.getHeight(), false,
 						true);
 			}
+			batch.draw(cancelIcon, cancelIconRectangle.x,
+					cancelIconRectangle.y, cancelIconRectangle.width,
+					cancelIconRectangle.height, 0, 0, cancelIcon.getWidth(),
+					cancelIcon.getHeight(), false, true);
 		}
 
 		if (textCountdownTimer > 2) {
@@ -186,14 +184,15 @@ public class Bar extends Rectangle {
 		if (playIconRectangle.contains(x, y)) {
 			game.playButtonPressed();
 
-		} else if (isCancelButtonShown() && cancelIconRectangle.contains(x, y)) {
+		} else if (selectedPlayerHasActions() && cancelIconRectangle.contains(x, y)) {
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().clearActions();
 			game.clearSelectedPlayer();
-		} else if (isCancelButtonShown() && undoIconRectangle.contains(x, y)) {
+		} else if (selectedPlayerHasActions()
+				&& undoIconRectangle.contains(x, y)
+				&& cancelActionsTimer > 0.35) {
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().undoLastAction();
-			game.clearSelectedPlayer();
 		}
 	}
 
@@ -202,7 +201,7 @@ public class Bar extends Rectangle {
 		textCountdownTimer = 0;
 	}
 
-	private boolean isCancelButtonShown() {
+	private boolean selectedPlayerHasActions() {
 		return (game.getSelectedPlayer() != null && game.getSelectedPlayer()
 				.getAction() != null);
 	}
