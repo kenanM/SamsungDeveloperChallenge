@@ -188,24 +188,23 @@ public class Game extends AbstractGame {
 		}
 
 		if (gameState == GameState.EXECUTION || gameState == GameState.SETUP) {
-
 			for (Player player : getAllPlayers()) {
 				player.update(time);
 			}
-
-			ball.update(time);
-			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
-					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-			tackleDetection(time);
-			goalScoredDetection();
 		}
 
 		if (gameState == GameState.EXECUTION) {
 			elapsedRoundTime += time;
 			remainingMatchTime -= time;
 
+			ball.update(time);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+			tackleDetection(time);
+			goalScoredDetection();
+
 			if (elapsedRoundTime >= roundTime) {
-				beginInputStage();
+				beginSetupPhase(0.7f);
 			}
 
 			if (remainingMatchTime < 0) {

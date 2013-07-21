@@ -93,7 +93,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected static Random rng;
-	protected GameState gameState = GameState.EXECUTION;
+	protected GameState gameState = GameState.INPUT;
 	// TODO: This needs to go. Replace with separate pause / not paused enum.
 	protected GameState gameStateToGoIntoWhenBackButtonPressed = GameState.PAUSED;
 	protected float roundTime = 5;
