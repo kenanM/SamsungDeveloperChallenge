@@ -38,6 +38,8 @@ public class TutorialGame extends AbstractGame {
 		team2 = TeamColour.RED;
 
 		remainingMatchTime = roundTime;
+
+		controlsActive = true;
 	}
 
 	@Override

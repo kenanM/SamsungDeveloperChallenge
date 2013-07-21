@@ -45,6 +45,8 @@ public class Game extends AbstractGame {
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
 
+		controlsActive = true;
+
 		beginInputStage();
 	}
 

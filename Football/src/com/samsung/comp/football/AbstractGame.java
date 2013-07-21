@@ -103,6 +103,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected ShapeRenderer shapeRenderer;
 	protected BitmapFont bmf;
 	protected OrthographicCamera camera;
+	protected boolean controlsActive = false;
 
 	protected List<Player> redPlayers = new LinkedList<Player>();
 	protected List<Player> bluePlayers = new LinkedList<Player>();
@@ -177,6 +178,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
+
+		controlsActive = true;
 
 		beginInputStage();
 
@@ -1346,6 +1349,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+		if (!controlsActive) {
+			return false;
+		}
+
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getStatsRectangle(positionStatsAtTop) != null
@@ -1389,6 +1396,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+		if (!controlsActive) {
+			return false;
+		}
 
 		cursor.setHighlightedPlayer(null);
 		isBallHighlighted = false;
@@ -1456,6 +1467,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	 */
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+		if (!controlsActive) {
+			return false;
+		}
 
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
@@ -1564,6 +1579,11 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
+
+		if (!controlsActive) {
+			return false;
+		}
+
 		Vector2 hoverPoint = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getGameState() == GameState.INPUT) {
@@ -1588,6 +1608,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	 */
 	@Override
 	public boolean onHover(View arg0, MotionEvent event) {
+		if (!controlsActive) {
+			return false;
+		}
+
 		Vector2 hoverPoint = translateInputToField(new Vector2(event.getX(),
 				event.getY()));
 

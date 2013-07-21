@@ -48,6 +48,8 @@ public class MultiplayerGame extends AbstractGame {
 
 		bar.setBarColor(blueColor);
 
+		controlsActive = true;
+
 		beginInputStage();
 	}
 
