@@ -226,6 +226,20 @@ public class MultiplayerGame extends AbstractGame {
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
 			pushPlayers();
+			if (ball.hasOwner()) {
+				ball.update(time);
+				ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+						VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
+			}
+
+			for (Player player : getAllPlayers()) {
+				if (player == blueGoalie || player == redGoalie) {
+					continue;
+				} else {
+					player.update(time);
+				}
+			}
+
 			if (remainingSetupTime <= 0) {
 				currentTeam = TeamColour.BLUE;
 				bar.setBarColor(blueColor);
@@ -233,7 +247,10 @@ public class MultiplayerGame extends AbstractGame {
 			}
 		}
 
-		if (gameState == GameState.EXECUTION || gameState == GameState.SETUP) {
+		if (gameState == GameState.EXECUTION) {
+			elapsedRoundTime += time;
+			remainingMatchTime -= time;
+
 			for (Player player : getAllPlayers()) {
 				player.update(time);
 			}
@@ -241,12 +258,6 @@ public class MultiplayerGame extends AbstractGame {
 			ball.update(time);
 			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
 					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-		}
-
-		if (gameState == GameState.EXECUTION) {
-			elapsedRoundTime += time;
-			remainingMatchTime -= time;
-
 			goalScoredDetection();
 			tackleDetection(time);
 
