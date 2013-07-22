@@ -777,6 +777,27 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
+	/**
+	 * Moves any 2 players colliding with each other away from each other
+	 */
+	protected void pushPlayers() {
+		for (Player player1 : getAllPlayers()) {
+			for (Player player2 : getAllPlayers()) {
+				if (player1 == player2) {
+					continue;
+				}
+				if (player1.overlaps(player2)) {
+					Vector2 towardsP2 = Utils.getMoveVector(
+							player1.getPlayerPosition(),
+							player2.getPlayerPosition(), 3);
+					player1.setAction(
+							new MoveToPosition(player1.getPlayerPosition()
+									.cpy().sub(towardsP2), player1), 0);
+				}
+			}
+		}
+	}
+
 	protected void matchFinish() {
 
 		gameState = GameState.FINISHED;

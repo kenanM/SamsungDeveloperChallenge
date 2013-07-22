@@ -225,6 +225,7 @@ public class MultiplayerGame extends AbstractGame {
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
+			pushPlayers();
 			if (remainingSetupTime <= 0) {
 				currentTeam = TeamColour.BLUE;
 				bar.setBarColor(blueColor);
@@ -236,17 +237,18 @@ public class MultiplayerGame extends AbstractGame {
 			for (Player player : getAllPlayers()) {
 				player.update(time);
 			}
+
+			ball.update(time);
+			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
+					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
 		}
 
 		if (gameState == GameState.EXECUTION) {
 			elapsedRoundTime += time;
 			remainingMatchTime -= time;
 
-			ball.update(time);
-			ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
-					VIRTUAL_SCREEN_HEIGHT, BOUNCE_ELASTICITY);
-			tackleDetection(time);
 			goalScoredDetection();
+			tackleDetection(time);
 
 			if (elapsedRoundTime >= roundTime) {
 				beginSetupPhase(0.7f);
