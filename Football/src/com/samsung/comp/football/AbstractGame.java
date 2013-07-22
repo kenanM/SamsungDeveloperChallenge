@@ -778,9 +778,14 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	/**
-	 * Moves any 2 players colliding with each other away from each other
+	 * Moves any group of intersecting players away from each other.
+	 * 
+	 * @return Returns true if it has assigned any actions to separate the
+	 *         players. Otherwise returns false.
 	 */
-	protected void pushPlayers() {
+	protected boolean separatePlayers() {
+		boolean separated = false;
+
 		// for each player
 		for (Player player1 : getAllPlayers()) {
 			List<Player> overlappingPlayers = new ArrayList<Player>();
@@ -791,6 +796,7 @@ public abstract class AbstractGame implements ApplicationListener,
 					continue;
 				} else if (player1.overlaps(player2)) {
 					overlappingPlayers.add(player2);
+					separated = true;
 				}
 			}
 
@@ -811,6 +817,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			player1.setAction(new MoveToPosition(player1.getPlayerPosition()
 					.cpy().sub(towardsCentre), player1), 0);
 		}
+		return separated;
 	}
 
 	protected void matchFinish() {
