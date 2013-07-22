@@ -780,6 +780,9 @@ public abstract class AbstractGame implements ApplicationListener,
 	/**
 	 * Moves any group of intersecting players away from each other.
 	 * 
+	 * @warning This algorithm can cause players to move far from their position
+	 *          overtime if enough players are clumped together.
+	 * 
 	 * @return Returns true if it has assigned any actions to separate the
 	 *         players. Otherwise returns false.
 	 */
