@@ -781,20 +781,35 @@ public abstract class AbstractGame implements ApplicationListener,
 	 * Moves any 2 players colliding with each other away from each other
 	 */
 	protected void pushPlayers() {
+		// for each player
 		for (Player player1 : getAllPlayers()) {
+			List<Player> overlappingPlayers = new ArrayList<Player>();
+
+			// add any overlapping players to list
 			for (Player player2 : getAllPlayers()) {
 				if (player1 == player2) {
 					continue;
-				}
-				if (player1.overlaps(player2)) {
-					Vector2 towardsP2 = Utils.getMoveVector(
-							player1.getPlayerPosition(),
-							player2.getPlayerPosition(), 3);
-					player1.setAction(
-							new MoveToPosition(player1.getPlayerPosition()
-									.cpy().sub(towardsP2), player1), 0);
+				} else if (player1.overlaps(player2)) {
+					overlappingPlayers.add(player2);
 				}
 			}
+
+			// calculate the centre point of the players
+			Vector2 vectorSum = new Vector2(player1.getPlayerPosition());
+			for (Player overlapPlayer : overlappingPlayers) {
+				vectorSum.x += overlapPlayer.x;
+				vectorSum.y += overlapPlayer.y;
+			}
+			Vector2 vectorAverage = new Vector2(vectorSum.x
+					/ (overlappingPlayers.size() + 1), vectorSum.y
+					/ (overlappingPlayers.size() + 1));
+
+			// move away from the centre point
+			Vector2 towardsCentre = Utils.getMoveVector(
+					player1.getPlayerPosition(), vectorAverage, 3);
+
+			player1.setAction(new MoveToPosition(player1.getPlayerPosition()
+					.cpy().sub(towardsCentre), player1), 0);
 		}
 	}
 
