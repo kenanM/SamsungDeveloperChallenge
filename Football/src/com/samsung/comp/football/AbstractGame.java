@@ -828,22 +828,27 @@ public abstract class AbstractGame implements ApplicationListener,
 				}
 			}
 
-			// calculate the centre point of the players
-			Vector2 vectorSum = new Vector2(player1.getPlayerPosition());
-			for (Player overlapPlayer : overlappingPlayers) {
-				vectorSum.x += overlapPlayer.x;
-				vectorSum.y += overlapPlayer.y;
+			if (overlappingPlayers.size() == 0) {
+				continue;
+			} else {
+				// calculate the centre point of the players
+				Vector2 vectorSum = new Vector2(player1.getPlayerPosition());
+				for (Player overlapPlayer : overlappingPlayers) {
+					vectorSum.x += overlapPlayer.x;
+					vectorSum.y += overlapPlayer.y;
+				}
+				Vector2 vectorAverage = new Vector2(vectorSum.x
+						/ (overlappingPlayers.size() + 1), vectorSum.y
+						/ (overlappingPlayers.size() + 1));
+
+				// move away from the centre point
+				Vector2 towardsCentre = Utils.getMoveVector(
+						player1.getPlayerPosition(), vectorAverage, 3);
+
+				player1.setAction(
+						new MoveToPosition(player1.getPlayerPosition().cpy()
+								.sub(towardsCentre), player1), 0);
 			}
-			Vector2 vectorAverage = new Vector2(vectorSum.x
-					/ (overlappingPlayers.size() + 1), vectorSum.y
-					/ (overlappingPlayers.size() + 1));
-
-			// move away from the centre point
-			Vector2 towardsCentre = Utils.getMoveVector(
-					player1.getPlayerPosition(), vectorAverage, 3);
-
-			player1.setAction(new MoveToPosition(player1.getPlayerPosition()
-					.cpy().sub(towardsCentre), player1), 0);
 		}
 		return separated;
 	}
