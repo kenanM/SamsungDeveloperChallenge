@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Ball;
+import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
 public class Pass extends Action {
@@ -87,6 +88,19 @@ public class Pass extends Action {
 					0, returnNulls);
 		} else {
 			return returnNulls ? null : initialPosition;
+		}
+	}
+
+	@Override
+	public PlayerPositionData getFuturePositionData(float time,
+			Vector2 initialPosition, float speed, int positionInPath,
+			boolean returnNulls) {
+		if (nextAction != null) {
+			return nextAction.getFuturePositionData(time, initialPosition,
+					speed, 0, returnNulls);
+		} else {
+			return returnNulls ? null : new PlayerPositionData(initialPosition,
+					-1);
 		}
 	}
 

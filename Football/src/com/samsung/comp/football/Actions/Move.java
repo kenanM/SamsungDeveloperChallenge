@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
 public class Move extends Action {
@@ -122,6 +123,7 @@ public class Move extends Action {
 	@Override
 	public Vector2 getFuturePosition(float time, Vector2 initialPosition,
 			float speed, int positionInPath, boolean returnNulls) {
+
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 		Vector2 position = initialPosition;
@@ -154,6 +156,56 @@ public class Move extends Action {
 			}
 		}
 		return position;
+	}
+
+	@Override
+	public PlayerPositionData getFuturePositionData(float time,
+			Vector2 initialPosition, float speed, int positionInPath,
+			boolean returnNulls) {
+		float distance = speed * time;
+		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
+		Vector2 position = initialPosition;
+		Vector2 oldPosition = position.cpy();
+		float rotation = 0;
+
+		while (distance > 0 && path != null && path.length > 0
+				&& positionInPath < path.length) {
+
+			Vector2 target = path[positionInPath];
+			if (position.dst(target) < distance) {
+				distance -= position.dst(target);
+				oldPosition = position.cpy();
+				position.set(target);
+				positionInPath++;
+				rotation = Utils.getMoveVector(oldPosition, target, distance)
+						.angle();
+
+				// if reached end of path
+				if (positionInPath != 0 && positionInPath == path.length) {
+					if (nextAction != null) {
+						float remainingTime = distance / speed;
+						return nextAction.getFuturePositionData(remainingTime,
+								position, speed, 0, returnNulls);
+					} else {
+						return returnNulls ? null : new PlayerPositionData(
+								position, rotation);
+					}
+				}
+			} else {
+				// Move towards the next position (which is out of reach).
+				Vector2 movement = Utils.getMoveVector(position, target,
+						distance);
+				position.add(movement);
+				rotation = movement.angle();
+				break;
+			}
+
+			// if (oldPosition.dst(position) > 0) {
+			// this.stateTime += time;
+			// this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+		}
+
+		return new PlayerPositionData(position, rotation);
 	}
 
 }

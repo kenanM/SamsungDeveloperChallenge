@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
+import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Followable;
 import com.samsung.comp.football.Actions.Kick;
@@ -242,7 +243,7 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	/**
-	 * Used for line time indicators and ghost player indicators
+	 * Used for line time indicators and ghost player indicators (no rotation)
 	 * 
 	 * @param time
 	 *            time in seconds
@@ -276,6 +277,27 @@ public class Player extends Rectangle implements Followable {
 			return futurePosition;
 		} else {
 			return getPlayerPosition();
+		}
+	}
+
+	/**
+	 * Used for ghost player indicators (with rotation)
+	 * 
+	 * @param time
+	 *            time in seconds
+	 * @param returnNulls
+	 *            if set to true then will return a null if the player can reach
+	 *            the end of their path in the time given.
+	 * @return the position the player will be at after time seconds
+	 */
+	public PlayerPositionData getFuturePositionData(float time,
+			boolean returnNulls) {
+		if (action != null) {
+			PlayerPositionData ppd = action.getFuturePositionData(time,
+					getPlayerPosition(), runSpeed, positionInPath, false);
+			return ppd;
+		} else {
+			return new PlayerPositionData(getPlayerPosition(), rotation);
 		}
 	}
 

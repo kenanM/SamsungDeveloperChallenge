@@ -18,8 +18,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -155,7 +157,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture blueSelectTexture;
 	protected float selectTextureStateTime = 0f;
 
-	protected Texture ghostTexture;
+	protected Texture ghostSpriteSheet;
+	Animation ghostRunAnimation;
 	protected float ghostStateTime = 0f;
 
 	protected Texture pointer;
@@ -214,7 +217,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
-		ghostTexture = new Texture(Gdx.files.internal("ghost.png"));
 	}
 
 	protected void createIteractiveObjects() {
@@ -272,6 +274,9 @@ public abstract class AbstractGame implements ApplicationListener,
 		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
 
+		ghostSpriteSheet = new Texture(Gdx.files.internal("shadowPlayer.png"));
+		ghostRunAnimation = new Animation(0.10f, Utils.createTextureRegion(
+				ghostSpriteSheet, 10));
 	}
 
 	protected void createLibGdxItems() {
@@ -280,6 +285,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setCatchMenuKey(true);
+	}
+
+	public TextureRegion getGhostFrame(float time) {
+		TextureRegion region = ghostRunAnimation.getKeyFrame(time, true);
+		TextureRegion frame = new TextureRegion(region,
+				region.getRegionWidth() / 2 - 64 / 2,
+				region.getRegionHeight() / 2 - 64 / 2, 64, 64);
+		return frame;
 	}
 
 	@Override
@@ -452,14 +465,26 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void drawGhost(Player player, float futureTime) {
-		Vector2 futurePos = player.getFuturePosition(futureTime, false);
+		PlayerPositionData ppd = player
+				.getFuturePositionData(futureTime, false);
+		Vector2 futurePos = ppd.position;
+		float rotation = ppd.rotation;
 		if (futurePos != null) {
-			batch.draw(ghostTexture, futurePos.x - ghostTexture.getWidth() / 2,
-					futurePos.y - ghostTexture.getHeight() / 2,
-					ghostTexture.getWidth() / 2, ghostTexture.getHeight() / 2,
-					ghostTexture.getWidth(), ghostTexture.getHeight(), 0.5f,
-					0.5f, 0, 0, 0, ghostTexture.getWidth(),
-					ghostTexture.getHeight(), false, false);
+			// batch.draw(ghostTexture, futurePos.x - ghostTexture.getWidth() /
+			// 2,
+			// futurePos.y - ghostTexture.getHeight() / 2,
+			// ghostTexture.getWidth() / 2, ghostTexture.getHeight() / 2,
+			// ghostTexture.getWidth(), ghostTexture.getHeight(), 0.5f,
+			// 0.5f, rotation, 0, 0, ghostTexture.getWidth(),
+			// ghostTexture.getHeight(), false, false);
+
+			TextureRegion ghostFrame = getGhostFrame(futureTime);
+			batch.draw(ghostFrame, futurePos.x - ghostFrame.getRegionWidth()
+					/ 2, futurePos.y - ghostFrame.getRegionHeight() / 2,
+					ghostFrame.getRegionWidth() / 2,
+					ghostFrame.getRegionHeight() / 2,
+					ghostFrame.getRegionWidth(), ghostFrame.getRegionHeight(),
+					1, 1, rotation, true);
 		}
 	}
 
@@ -1057,7 +1082,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		whistleBlow.dispose();
 		batch.dispose();
 		shapeRenderer.dispose();
-		ghostTexture.dispose();
+		ghostSpriteSheet.dispose();
 	}
 
 	@Override
