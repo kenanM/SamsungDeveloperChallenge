@@ -200,7 +200,7 @@ public class Move extends Action {
 				break;
 			}
 
-			// if (oldPosition.dst(position) > 0) {
+			// if (initialPosition.dst(position) > 0) {
 			// this.stateTime += time;
 			// this.currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		}
