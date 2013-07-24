@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp"
+        android:background="@drawable/tutorial_btn"
         android:height="60dp"
-        android:text="@string/start_tutorial"
         android:textSize="35dp" />
 
     <Button
@@ -24,8 +24,8 @@
         android:layout_alignRight="@+id/startTutorialGame"
         android:layout_below="@+id/startTutorialGame"
         android:layout_marginTop="15dp"
+        android:background="@drawable/start_game_btn"
         android:height="60dp"
-        android:text="@string/start_game"
         android:textSize="35dp" />
 
     <Button
@@ -36,8 +36,8 @@
         android:layout_alignRight="@+id/startGame"
         android:layout_below="@+id/startGame"
         android:layout_marginTop="15dp"
+        android:background="@drawable/multiplayer_btn"
         android:height="60dp"
-        android:text="@string/start_multiplayer"
         android:textSize="35dp" />
 
     <Button
@@ -48,8 +48,8 @@
         android:layout_alignRight="@+id/startMultiplayerGame"
         android:layout_below="@+id/startMultiplayerGame"
         android:layout_marginTop="15dp"
+        android:background="@drawable/guidebook_btn"
         android:height="60dp"
-        android:text="@string/how_to_play"
         android:textSize="35dp" />
 
     <Button
@@ -60,8 +60,8 @@
         android:layout_alignRight="@+id/howToPlay"
         android:layout_below="@+id/howToPlay"
         android:layout_marginTop="15dp"
+        android:background="@drawable/about_us_btn"
         android:height="60dp"
-        android:text="@string/about_us"
         android:textSize="35dp" />
 
 </RelativeLayout>
