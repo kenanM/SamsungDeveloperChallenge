@@ -358,7 +358,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		// draw the background pitch
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
-				VIRTUAL_SCREEN_HEIGHT, false, false);
+				VIRTUAL_SCREEN_HEIGHT, false, true);
 
 		bar.draw(batch);
 
