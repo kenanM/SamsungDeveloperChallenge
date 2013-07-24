@@ -834,8 +834,8 @@ public abstract class AbstractGame implements ApplicationListener,
 				// calculate the centre point of the players
 				Vector2 vectorSum = new Vector2(player1.getPlayerPosition());
 				for (Player overlapPlayer : overlappingPlayers) {
-					vectorSum.x += overlapPlayer.x;
-					vectorSum.y += overlapPlayer.y;
+					vectorSum.x += overlapPlayer.getPlayerX();
+					vectorSum.y += overlapPlayer.getPlayerY();
 				}
 				Vector2 vectorAverage = new Vector2(vectorSum.x
 						/ (overlappingPlayers.size() + 1), vectorSum.y
