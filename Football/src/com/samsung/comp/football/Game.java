@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
@@ -41,6 +42,13 @@ public class Game extends AbstractGame {
 		team2 = TeamColour.RED;
 
 		ai = new AI(this);
+		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
+
+			@Override
+			public void onBallOwnerSet(Ball ball, Player newOwner) {
+				ai.getComputerActions();
+			}
+		});
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
@@ -174,6 +182,12 @@ public class Game extends AbstractGame {
 	}
 
 	@Override
+	public void beginExecution() {
+		super.beginExecution();
+		ai.getComputerActions();
+	};
+
+	@Override
 	protected void update() {
 		float time = Gdx.graphics.getDeltaTime();
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
@@ -225,7 +239,6 @@ public class Game extends AbstractGame {
 			if (remainingMatchTime < 0) {
 				matchFinish();
 			}
-			ai.getComputerActions();
 		}
 	}
 
