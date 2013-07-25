@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Kick;
+import com.samsung.comp.football.Actions.Mark;
+import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
@@ -214,6 +216,15 @@ public class AI {
 
 	private void shoot(Player player) {
 		player.addAction(new Kick(ball, targetGoal, player.getFuturePosition()));
+	}
+
+	private void followBall(Player player) {
+		player.addAction(new MarkBall(player.getPlayerPosition(), ball));
+	}
+
+	private void followPlayer(Player player, Player targetPlayer) {
+		player.addAction(new Mark(player.getPlayerPosition(), targetPlayer,
+				ball));
 	}
 
 	/** Generate a random number between two values */
