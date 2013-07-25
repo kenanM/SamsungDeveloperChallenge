@@ -766,6 +766,10 @@ public abstract class AbstractGame implements ApplicationListener,
 				- ball.getOwner().getTacklePreventionSkill();
 		float rn = Utils.randomFloat(rng, 0, 100);
 		if (rn < tackleChance) {
+			float rotation = 0;
+			rotation = Utils.getMoveVector(ball.getOwner().getPlayerPosition(),
+					player.getPlayerPosition(), 5).angle();
+			player.setRotation(rotation);
 			ball.setOwner(player);
 			ball.clearTimeSinceTackle();
 		} else {

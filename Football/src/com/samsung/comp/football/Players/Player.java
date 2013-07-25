@@ -736,8 +736,10 @@ public class Player extends Rectangle implements Followable {
 				distance -= position.dst(target);
 				position.set(target);
 				positionInPath++;
-				rotation = Utils.getMoveVector(oldPosition, target, distance)
-						.angle();
+				if (position.dst(target) != 0) {
+					rotation = Utils.getMoveVector(oldPosition, target,
+							distance).angle();
+				}
 				if (positionInPath == path.length) {
 					path = new Vector2[] {};
 					resetPathIndex();
@@ -799,11 +801,11 @@ public class Player extends Rectangle implements Followable {
 
 	public Rectangle getTackleHitbox() {
 		return new Rectangle(getPlayerPosition().x - 12,
-				getPlayerPosition().y - 12, 24, 24);
+				getPlayerPosition().y - 12, 46, 46);
 	}
 
 	public void setRotation(float value) {
-		rotation = value;
+		rotation = value % 360;
 	}
 
 	private void restrictToField() {
