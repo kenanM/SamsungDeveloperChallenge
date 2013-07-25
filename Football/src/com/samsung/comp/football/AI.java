@@ -7,6 +7,8 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
@@ -40,6 +42,10 @@ public class AI {
 	private Vector2 targetGoal;
 	private Vector2 homeGoal;
 
+	private List<Player> players;
+	private List<Player> opponents;
+	TeamColour opponentColour;
+
 	// TODO: Should construct AI with a teamColour, then use
 	// getPlayers(TeamColour colour) as appropriate
 	public AI(AbstractGame game) {
@@ -56,11 +62,327 @@ public class AI {
 			targetGoal = Game.RED_GOAL;
 			homeGoal = Game.BLUE_GOAL;
 		}
+		players = new ArrayList<Player>(game.getPlayers(teamColour));
+
+		opponentColour = (teamColour == TeamColour.RED) ? TeamColour.BLUE
+				: TeamColour.RED;
+		opponents = new ArrayList<Player>(game.getPlayers(opponentColour));
 	}
 
 	public void getComputerActions() {
 		Log.v(TAG, "getting computer actions");
 
+		// kenanGetActions();
+		gavinGetActions();
+	}
+
+	private void gavinGetActions() {
+
+		for (Player player : players) {
+			player.clearActions();
+		}
+		List<Player> playersWithoutActions = new ArrayList<Player>(players);
+		sortPlayersByDistanceFromHomeGoal(playersWithoutActions);
+
+		boolean controlBall = computerControlsBall();
+		boolean opponentControlsBall = opponentControlsBall();
+		boolean goalieHasBall = goalie.hasBall();
+		boolean ballInOpponentHalf = isBallInOpponentHalf();
+		boolean ballInDefensiveArea = getDefensiveArea().contains(
+				ball.getBallX(), ball.getBallY());
+		boolean ballInMidFieldArea = getMidFieldArea().contains(
+				ball.getBallX(), ball.getBallY());
+		boolean ballInOffensiveArea = getOffensiveArea().contains(
+				ball.getBallX(), ball.getBallY());
+
+		if (goalieHasBall) {
+			Player nearestToTheGoalie = playerNearestTheGoalie(players);
+			goalie.addAction(new Pass(ball, goalie, nearestToTheGoalie, goalie
+					.getFuturePosition()));
+
+			for (Player player : players) {
+				moveToMidFieldPosition(player);
+			}
+			return;
+		}
+
+		if (controlBall) {
+			Player ballOwner = ball.getOwner();
+			if (withinShootingRange(ballOwner)) {
+				shoot(ballOwner);
+			} else {
+				// If not within shooting range either pass or move
+				float passChance = 35;
+				if (countPlayersInfront(ballOwner, opponentColour, 100) > 0) {
+					passChance += 35;
+				}
+				if (ballInDefensiveArea) {
+					passChance += 20;
+				}
+				if (ballInOffensiveArea) {
+					if (countPlayersInfront(ballOwner, opponentColour, 100) == 0) {
+						passChance = 0;
+					}
+				}
+
+				float rn = Utils.randomFloat(null, 0, 100);
+
+				if (passChance > rn) {
+					// get the furthest forward player who isn't the ballOwner
+					Player receiver = (playersWithoutActions
+							.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
+							.get(playersWithoutActions.size() - 1)
+							: playersWithoutActions.get(playersWithoutActions
+							.size() - 2);
+					moveToOffensivePosition(receiver);
+					ballOwner.addAction(new Pass(ball, ballOwner, receiver,
+							ballOwner.getFuturePosition()));
+					moveToOffensivePosition(ballOwner);
+					playersWithoutActions.remove(receiver);
+					playersWithoutActions.remove(ballOwner);
+
+				} else {
+					moveToOffensivePosition(ballOwner);
+					playersWithoutActions.remove(ballOwner);
+				}
+			}
+
+			// Give remaining players actions
+			for (Player player : playersWithoutActions) {
+				if (Utils.randomFloat(null, 0, 1) > 0.5) {
+					moveToMidFieldPosition(player);
+				} else {
+					moveToOffensivePosition(player);
+				}
+			}
+		} else {
+			// We don't have the ball
+			if (ballInDefensiveArea || ballInMidFieldArea) {
+				// Play defence:
+				// Player nearest ball marks owner or follows ball
+				// Mark any opponents in defensive area
+				// Move remaining players back to defence or mid
+
+				Player playerNearestBall = playerNearestVector(
+						playersWithoutActions, ball.getBallPosition());
+
+				if (opponentControlsBall) {
+					followPlayer(playerNearestBall, ball.getOwner());
+					playersWithoutActions.remove(playerNearestBall);
+				} else {
+					followBall(playerNearestBall);
+					playersWithoutActions.remove(playerNearestBall);
+				}
+
+				List<Player> opponentsCloseToHomeGoal = new ArrayList<Player>();
+
+				for (Player opponent : opponents) {
+					if (getDefensiveArea().contains(opponent.getPlayerX(),
+							opponent.getPlayerY())) {
+						opponentsCloseToHomeGoal.add(opponent);
+					}
+				}
+
+				for (Player opponent : opponentsCloseToHomeGoal) {
+					Player closestPlayer = playerNearestVector(
+							playersWithoutActions, opponent.getPlayerPosition());
+					followPlayer(closestPlayer, opponent);
+					playersWithoutActions.remove(closestPlayer);
+				}
+
+				// Give remaining players actions
+				for (Player player : playersWithoutActions) {
+					float defencePositionChance = 66;
+					float rn = Utils.randomFloat(null, 0, 100);
+					if (defencePositionChance > rn) {
+						moveTodDefensivePosition(player);
+					} else {
+						moveToMidFieldPosition(player);
+					}
+				}
+			} else {
+
+				if (opponentControlsBall) {
+					// Follow ball owner
+					// Mark opponents in mid or in our defence
+					// Move remaining players back
+					
+					Player playerNearestBall = playerNearestVector(playersWithoutActions, ball.getBallPosition());
+					followPlayer(playerNearestBall, ball.getOwner());
+					playersWithoutActions.remove(playerNearestBall);
+								
+					// Create list of opponents in mid or our defence
+					List<Player> opponentsInMidFieldOrHomeGoal = new ArrayList<Player>();
+					for (Player opponent : opponents) {
+						if (getDefensiveArea().contains(opponent.getPlayerX(),
+								opponent.getPlayerY())
+								|| getMidFieldArea().contains(
+										opponent.getPlayerX(),
+										opponent.getPlayerY())) {
+							opponentsInMidFieldOrHomeGoal.add(opponent);
+						}
+					}
+					
+					// Create list of our players in mid or defence
+					List<Player> playersInMidFieldOrDefence = new ArrayList<Player>();
+					for (Player player : playersWithoutActions) {
+						if (getDefensiveArea().contains(player.getPlayerX(),
+								player.getPlayerY())
+								|| getMidFieldArea().contains(
+										player.getPlayerX(),
+										player.getPlayerY())) {
+							playersInMidFieldOrDefence.add(player);
+						}
+					}
+
+					// Mark closest opponents in mid or our defence
+					sortPlayersByDistanceFromHomeGoal(opponentsInMidFieldOrHomeGoal);
+					for (Player player : playersInMidFieldOrDefence) {
+						if (opponentsInMidFieldOrHomeGoal.size() == 0) {
+							// no players left to mark
+							break;
+						}
+						Player closestOpponent = playerNearestVector(opponentsInMidFieldOrHomeGoal, player.getPlayerPosition());
+						followPlayer(player, closestOpponent);
+						opponentsInMidFieldOrHomeGoal.remove(closestOpponent);
+						playersWithoutActions.remove(player);
+					}
+		
+					for (Player player : playersWithoutActions) {
+						// Move backward
+						if(getOffensiveArea().contains(player.getPlayerX(), player.getPlayerY())) {
+							moveToMidFieldPosition(player);
+						} else {
+							moveTodDefensivePosition(player);
+						}
+					}
+					
+				} else {
+					// Collect ball and go offensive:
+					// Nearest player follows ball
+					// Move players in offense move away from any other players
+					// Move remaining players forward
+
+					Player playerNearestBall = playerNearestVector(playersWithoutActions, ball.getBallPosition());
+					followBall(playerNearestBall);
+					playersWithoutActions.remove(playerNearestBall);
+					
+					List<Player> playersInOffensiveArea = new ArrayList<Player>(
+							playersWithoutActions);
+
+					// Move players in offense move away from any other players
+					for (Player player : playersInOffensiveArea) {
+						if (countPlayersAround(player, opponentColour, 150) > 0) {
+							moveToOffensivePosition(player);
+							playersWithoutActions.remove(player);
+						}
+					}
+					
+					// Move remaining players forward
+					for (Player player : playersWithoutActions) {
+						if (getDefensiveArea().contains(player.getPlayerX(),
+								player.getPlayerY())) {
+							moveToMidFieldPosition(player);
+						} else {
+							moveToOffensivePosition(player);
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * Counts the number of players both closer to the goal and in the proximity
+	 * of a player.
+	 * 
+	 * @param player
+	 *            The player
+	 * @param teamColourToCount
+	 *            The team to count
+	 * @param proximity
+	 *            The proximity a player has to be within to be counted
+	 * @return
+	 */
+	private int countPlayersInfront(Player player,
+			TeamColour teamColourToCount, float proximity) {
+		TeamColour playerColour = player.getTeam();
+		Vector2 playerPosition = player.getPlayerPosition();
+		Vector2 playerTargetGoal = (playerColour == teamColour) ? targetGoal
+				: homeGoal;
+
+		int playerCount = 0;
+		Circle proximityCircle = new Circle(playerPosition, proximity);
+
+		for (Player otherPlayer : game.getPlayers(teamColourToCount)) {
+			float playerDistanceFromGoal = playerTargetGoal.dst(player
+					.getPlayerPosition());
+			float otherPlayerDistanceFromGoal = playerTargetGoal
+					.dst(otherPlayer.getPlayerPosition());
+			if (proximityCircle.contains(otherPlayer.getPlayerPosition())
+					&& playerDistanceFromGoal > otherPlayerDistanceFromGoal) {
+				playerCount++;
+			}
+		}
+
+		return playerCount;
+	}
+
+	/**
+	 * Counts the number of players in the proximity of a player.
+	 * 
+	 * @param player
+	 *            The player
+	 * @param teamColourToCount
+	 *            The team to count
+	 * @param proximity
+	 *            The proximity a player has to be within to be counted
+	 * @return
+	 */
+	private int countPlayersAround(Player player, TeamColour teamColourToCount,
+			float proximity) {
+		TeamColour playerColour = player.getTeam();
+		Vector2 playerPosition = player.getPlayerPosition();
+
+		int playerCount = 0;
+		Circle proximityCircle = new Circle(playerPosition, proximity);
+
+		for (Player otherPlayer : game.getPlayers(teamColourToCount)) {
+			if (proximityCircle.contains(otherPlayer.getPlayerPosition())) {
+				playerCount++;
+			}
+		}
+
+		return playerCount;
+	}
+
+	/**
+	 * Returns a list of all players around another player
+	 * 
+	 * @param player
+	 *            The centre player
+	 * @param proximity
+	 *            The proximity another player has to be to be in the list
+	 * @return A list of players within proximity of the player.
+	 */
+
+	private ArrayList<Player> playersAround(Player player, float proximity) {
+		Vector2 playerPosition = player.getPlayerPosition();
+
+		ArrayList<Player> players = new ArrayList<Player>();
+		Circle proximityCircle = new Circle(playerPosition, proximity);
+
+		for (Player otherPlayer : game.getAllPlayers()) {
+			if (proximityCircle.contains(otherPlayer.getPlayerPosition())) {
+				players.add(otherPlayer);
+			}
+		}
+
+		return players;
+	}
+
+	private void kenanGetActions() {
 		List<Player> players = new ArrayList<Player>(game.getComputerPlayers());
 		for (Player player : players) {
 			player.clearActions();
@@ -110,13 +432,12 @@ public class AI {
 			Player playerNearestBall = playerNearestVector(players,
 					ball.getBallPosition());
 			players.remove(playerNearestBall);
-			moveToPosition(playerNearestBall, ball.getBallPosition());
+			followBall(playerNearestBall);
 			moveTodDefensivePosition(players.get(0));
 			moveBetween(players.get(1), homeGoal, ball.getBallPosition());
 			moveToMidFieldPosition(players.get(2));
 		}
 	}
-
 
 	private void sortPlayersByDistanceFromHomeGoal(List<Player> list) {
 		Collections.sort(list, new PlayerComparator(homeGoal));
@@ -157,9 +478,45 @@ public class AI {
 		return minPlayer;
 	}
 
-	/** Checks whether the ball is in the computer players side of the court */
+
 	private boolean computerControlsBall() {
 		return (ball.hasOwner() && ball.getOwner().getTeam() == teamColour);
+	}
+
+	private boolean opponentControlsBall() {
+		return (ball.hasOwner() && ball.getOwner().getTeam() != teamColour);
+	}
+
+	/** Checks whether the ball is in the computer players side of the court */
+	private boolean isBallInOpponentHalf() {
+		return ball.getBallPosition().dst(targetGoal) < ball.getPosition().dst(
+				homeGoal);
+
+	}
+
+	private Rectangle getDefensiveArea() {
+		if (teamColour == TeamColour.RED) {
+			return new Rectangle(0, (float) RED_GOAL_AREA_TOP,
+					Game.VIRTUAL_SCREEN_WIDTH, Game.VIRTUAL_SCREEN_HEIGHT / 3);
+		} else {
+			return new Rectangle(0, (float) BLUE_GOAL_AREA_TOP,
+					Game.VIRTUAL_SCREEN_WIDTH, Game.VIRTUAL_SCREEN_HEIGHT / 3);
+		}
+	}
+
+	private Rectangle getMidFieldArea() {
+		return new Rectangle(0, (float) RED_GOAL_AREA_BOTTOM,
+				Game.VIRTUAL_SCREEN_WIDTH, Game.VIRTUAL_SCREEN_HEIGHT / 3);
+	}
+
+	private Rectangle getOffensiveArea() {
+		if (teamColour == TeamColour.RED) {
+			return new Rectangle(0, (float) BLUE_GOAL_AREA_TOP,
+					Game.VIRTUAL_SCREEN_WIDTH, Game.VIRTUAL_SCREEN_HEIGHT / 3);
+		} else {
+			return new Rectangle(0, (float) RED_GOAL_AREA_TOP,
+					Game.VIRTUAL_SCREEN_WIDTH, Game.VIRTUAL_SCREEN_HEIGHT / 3);
+		}
 	}
 
 	private void moveTodDefensivePosition(Player player) {
