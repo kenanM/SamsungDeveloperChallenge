@@ -110,11 +110,13 @@ public class Ball extends Rectangle implements Followable {
 		if (hasOwner()) {
 			removeOwner();
 		}
+
+		this.owner = player;
+		player.setBall(this);
+
 		for (BallOwnerSetListener listener : listeners) {
 			listener.onBallOwnerSet(this, player);
 		}
-		this.owner = player;
-		player.setBall(this);
 	}
 
 	public void removeOwner() {
