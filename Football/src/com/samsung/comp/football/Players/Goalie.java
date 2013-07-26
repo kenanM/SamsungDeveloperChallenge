@@ -92,7 +92,7 @@ public class Goalie extends Player {
 				// If the ball is within a defensive distance of the goal move
 				// towards it
 				this.path = new Vector2[] { ball.getBallPosition() };
-			} else if (ballDistanceFromGoal <= Game.PLAYING_AREA_HEIGHT / 2) {
+			} else if (ballDistanceFromGoal <= Game.PLAYING_AREA_HEIGHT) {
 				// If the ball is in my half of the playing field move in
 				// between it and the goal
 				Vector2 distanceVector = Utils.getMoveVector(goal,
