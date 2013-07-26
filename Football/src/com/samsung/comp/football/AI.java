@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -128,12 +129,12 @@ public class AI {
 				float rn = Utils.randomFloat(null, 0, 100);
 
 				if (passChance > rn) {
-					// get the furthest forward player who isn't the ballOwner
+					// get the farthest forward player who isn't the ballOwner
 					Player receiver = (playersWithoutActions
 							.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
 							.get(playersWithoutActions.size() - 1)
 							: playersWithoutActions.get(playersWithoutActions
-							.size() - 2);
+									.size() - 2);
 					moveToOffensivePosition(receiver);
 					ballOwner.addAction(new Pass(ball, ballOwner, receiver,
 							ballOwner.getFuturePosition()));
@@ -160,15 +161,17 @@ public class AI {
 			if (ballInDefensiveArea || ballInMidFieldArea) {
 				// Play defence:
 				// Player nearest ball marks owner or follows ball
-				// Mark any opponents in defensive area
+				// Mark any remaining opponents in defensive area
 				// Move remaining players back to defence or mid
 
+				// Follow ball owner or ball
 				Player playerNearestBall = playerNearestVector(
 						playersWithoutActions, ball.getBallPosition());
 
 				if (opponentControlsBall) {
 					followPlayer(playerNearestBall, ball.getOwner());
 					playersWithoutActions.remove(playerNearestBall);
+
 				} else {
 					followBall(playerNearestBall);
 					playersWithoutActions.remove(playerNearestBall);
@@ -184,6 +187,13 @@ public class AI {
 				}
 
 				for (Player opponent : opponentsCloseToHomeGoal) {
+					if (playersWithoutActions.size() == 0) {
+						break;
+					}
+					if (opponent == ball.getOwner()) {
+						// ball owner may already be marked
+						continue;
+					}
 					Player closestPlayer = playerNearestVector(
 							playersWithoutActions, opponent.getPlayerPosition());
 					followPlayer(closestPlayer, opponent);
@@ -206,11 +216,13 @@ public class AI {
 					// Follow ball owner
 					// Mark opponents in mid or in our defence
 					// Move remaining players back
-					
-					Player playerNearestBall = playerNearestVector(playersWithoutActions, ball.getBallPosition());
+
+					// Follow ball owner
+					Player playerNearestBall = playerNearestVector(
+							playersWithoutActions, ball.getBallPosition());
 					followPlayer(playerNearestBall, ball.getOwner());
 					playersWithoutActions.remove(playerNearestBall);
-								
+
 					// Create list of opponents in mid or our defence
 					List<Player> opponentsInMidFieldOrHomeGoal = new ArrayList<Player>();
 					for (Player opponent : opponents) {
@@ -222,7 +234,7 @@ public class AI {
 							opponentsInMidFieldOrHomeGoal.add(opponent);
 						}
 					}
-					
+
 					// Create list of our players in mid or defence
 					List<Player> playersInMidFieldOrDefence = new ArrayList<Player>();
 					for (Player player : playersWithoutActions) {
@@ -242,31 +254,36 @@ public class AI {
 							// no players left to mark
 							break;
 						}
-						Player closestOpponent = playerNearestVector(opponentsInMidFieldOrHomeGoal, player.getPlayerPosition());
+						Player closestOpponent = playerNearestVector(
+								opponentsInMidFieldOrHomeGoal,
+								player.getPlayerPosition());
 						followPlayer(player, closestOpponent);
 						opponentsInMidFieldOrHomeGoal.remove(closestOpponent);
 						playersWithoutActions.remove(player);
 					}
-		
+
 					for (Player player : playersWithoutActions) {
 						// Move backward
-						if(getOffensiveArea().contains(player.getPlayerX(), player.getPlayerY())) {
+						if (getOffensiveArea().contains(player.getPlayerX(),
+								player.getPlayerY())) {
 							moveToMidFieldPosition(player);
 						} else {
 							moveTodDefensivePosition(player);
 						}
 					}
-					
+
 				} else {
 					// Collect ball and go offensive:
 					// Nearest player follows ball
 					// Move players in offense move away from any other players
 					// Move remaining players forward
 
-					Player playerNearestBall = playerNearestVector(playersWithoutActions, ball.getBallPosition());
+					// Follow ball
+					Player playerNearestBall = playerNearestVector(
+							playersWithoutActions, ball.getBallPosition());
 					followBall(playerNearestBall);
 					playersWithoutActions.remove(playerNearestBall);
-					
+
 					List<Player> playersInOffensiveArea = new ArrayList<Player>(
 							playersWithoutActions);
 
@@ -277,7 +294,7 @@ public class AI {
 							playersWithoutActions.remove(player);
 						}
 					}
-					
+
 					// Move remaining players forward
 					for (Player player : playersWithoutActions) {
 						if (getDefensiveArea().contains(player.getPlayerX(),
@@ -478,7 +495,6 @@ public class AI {
 		return minPlayer;
 	}
 
-
 	private boolean computerControlsBall() {
 		return (ball.hasOwner() && ball.getOwner().getTeam() == teamColour);
 	}
@@ -572,8 +588,16 @@ public class AI {
 	}
 
 	private void followPlayer(Player player, Player targetPlayer) {
-		player.addAction(new Mark(player.getPlayerPosition(), targetPlayer,
-				ball));
+		try {
+			player.addAction(new Mark(player.getPlayerPosition(), targetPlayer,
+					ball));
+		} catch (NullPointerException e) {
+			boolean playerNull = player == null;
+			boolean targetPlayerNull = targetPlayer == null;
+			Gdx.app.error(TAG, "player null: " + Boolean.toString(playerNull)
+					+ " & target null: " + Boolean.toString(targetPlayerNull));
+			throw new NullPointerException();
+		}
 	}
 
 	/** Generate a random number between two values */
