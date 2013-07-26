@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
+import com.samsung.comp.events.MovementCompletedListener;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.PlayerPositionData;
@@ -69,6 +70,8 @@ public class Player extends Rectangle implements Followable {
 	private float timeSinceFailedTackle = Game.BALL_CHANGE_TIME;
 	private Ball ball;
 
+	private List<MovementCompletedListener> moveCompleteListeners = new ArrayList<MovementCompletedListener>();
+
 	public Player(float x, float y, TeamColour teamColour) {
 		this.x = translatePlayerCoordinate(x);
 		this.y = translatePlayerCoordinate(y);
@@ -124,6 +127,16 @@ public class Player extends Rectangle implements Followable {
 
 	public void clearListener() {
 		this.listener = null;
+	}
+
+	public boolean addMovementCompletedListener(
+			MovementCompletedListener listener) {
+		return this.moveCompleteListeners.add(listener);
+	}
+
+	public boolean removeMovementCompletedListener(
+			MovementCompletedListener listener) {
+		return this.moveCompleteListeners.remove(listener);
 	}
 
 	public static void create(Texture texture) {
@@ -745,6 +758,10 @@ public class Player extends Rectangle implements Followable {
 					resetPathIndex();
 					if (action instanceof Move
 							|| action instanceof MoveToPosition) {
+						for (MovementCompletedListener listener : moveCompleteListeners) {
+							listener.onMovementCompleted(this,
+									action.getNextAction());
+						}
 						executeNextAction();
 					}
 					break;

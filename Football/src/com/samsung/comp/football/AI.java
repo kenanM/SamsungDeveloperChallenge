@@ -112,20 +112,8 @@ public class AI {
 			if (withinShootingRange(ballOwner)) {
 				shoot(ballOwner);
 			} else {
-				// If not within shooting range either pass or move
-				float passChance = 35;
-				if (countPlayersInfront(ballOwner, opponentColour, 100) > 0) {
-					passChance += 35;
-				}
-				if (ballInDefensiveArea) {
-					passChance += 20;
-				}
-				if (ballInOffensiveArea) {
-					if (countPlayersInfront(ballOwner, opponentColour, 100) == 0) {
-						passChance = 0;
-					}
-				}
-
+				float passChance = calculatePassChance(ballOwner,
+						ballInDefensiveArea, ballInOffensiveArea);
 				float rn = Utils.randomFloat(null, 0, 100);
 
 				if (passChance > rn) {
@@ -264,12 +252,7 @@ public class AI {
 
 					for (Player player : playersWithoutActions) {
 						// Move backward
-						if (getOffensiveArea().contains(player.getPlayerX(),
-								player.getPlayerY())) {
-							moveToMidFieldPosition(player);
-						} else {
-							moveTodDefensivePosition(player);
-						}
+						moveBackward(player);
 					}
 
 				} else {
@@ -297,17 +280,117 @@ public class AI {
 
 					// Move remaining players forward
 					for (Player player : playersWithoutActions) {
-						if (getDefensiveArea().contains(player.getPlayerX(),
-								player.getPlayerY())) {
-							moveToMidFieldPosition(player);
-						} else {
-							moveToOffensivePosition(player);
-						}
+						moveForward(player);
 					}
 
 				}
 			}
 		}
+	}
+
+	/**
+	 * Adds AI actions to a single player
+	 * 
+	 * @param player
+	 *            The player to add actions to
+	 */
+	public void getActions(Player player) {
+
+		boolean controlBall = computerControlsBall();
+		boolean opponentControlsBall = opponentControlsBall();
+		boolean playerControlsBall = ball.getOwner() == player;
+		boolean goalieHasBall = goalie.hasBall();
+		boolean ballInOpponentHalf = isBallInOpponentHalf();
+		boolean ballInDefensiveArea = getDefensiveArea().contains(
+				ball.getBallX(), ball.getBallY());
+		boolean ballInMidFieldArea = getMidFieldArea().contains(
+				ball.getBallX(), ball.getBallY());
+		boolean ballInOffensiveArea = getOffensiveArea().contains(
+				ball.getBallX(), ball.getBallY());
+
+		if (playerControlsBall) {
+
+			if (withinShootingRange(player)) {
+				shoot(player);
+			} else {
+				// If not within shooting range either pass or move
+				float passChance = calculatePassChance(player,
+						ballInDefensiveArea, ballInOffensiveArea);
+				float rn = Utils.randomFloat(null, 0, 100);
+
+				if (passChance > rn) {
+					// get the farthest forward player who isn't the ballOwner
+					List<Player> sortedPlayerList = new ArrayList<Player>(
+							players);
+					sortPlayersByDistanceFromHomeGoal(sortedPlayerList);
+					Player reciever = sortedPlayerList.get(sortedPlayerList
+							.size() - 1);
+					reciever = (player == reciever) ? sortedPlayerList
+							.get(sortedPlayerList.size() - 2) : reciever;
+					passToPlayer(player, reciever);
+
+				} else {
+					moveForward(player);
+				}
+			}
+
+		} else if (computerControlsBall()) {
+			// Move forward
+			moveForward(player);
+		} else if (opponentControlsBall) {
+			moveBackward(player);
+		} else {
+			// No one has ball
+			moveToMidFieldPosition(player);
+		}
+
+	}
+
+	/**
+	 * Moves a player from defence into midfield, or into offence.
+	 * 
+	 * @param player
+	 *            The player to move
+	 */
+	protected void moveForward(Player player) {
+		if (getDefensiveArea().contains(player.getPlayerX(),
+				player.getPlayerY())) {
+			moveToMidFieldPosition(player);
+		} else {
+			moveToOffensivePosition(player);
+		}
+	}
+
+	/**
+	 * Moves a player from offence into midfield, or into defence.
+	 * 
+	 * @param player
+	 *            The player to move
+	 */
+	protected void moveBackward(Player player) {
+		if (getOffensiveArea().contains(player.getPlayerX(),
+				player.getPlayerY())) {
+			moveToMidFieldPosition(player);
+		} else {
+			moveTodDefensivePosition(player);
+		}
+	}
+
+	protected float calculatePassChance(Player player,
+			boolean ballInDefensiveArea, boolean ballInOffensiveArea) {
+		float passChance = 35;
+		if (countPlayersInfront(player, opponentColour, 100) > 0) {
+			passChance += 35;
+		}
+		if (ballInDefensiveArea) {
+			passChance += 20;
+		}
+		if (ballInOffensiveArea) {
+			if (countPlayersInfront(player, opponentColour, 100) == 0) {
+				passChance = 0;
+			}
+		}
+		return passChance;
 	}
 
 	/**
@@ -456,6 +539,12 @@ public class AI {
 		}
 	}
 
+	/**
+	 * Sorts a list of players by distance from their own goal, closest first.
+	 * 
+	 * @param list
+	 *            The list of players to sort
+	 */
 	private void sortPlayersByDistanceFromHomeGoal(List<Player> list) {
 		Collections.sort(list, new PlayerComparator(homeGoal));
 	}
@@ -598,6 +687,11 @@ public class AI {
 					+ " & target null: " + Boolean.toString(targetPlayerNull));
 			throw new NullPointerException();
 		}
+	}
+
+	private void passToPlayer(Player player, Player targetPlayer) {
+		player.addAction(new Pass(ball, player, targetPlayer, player
+				.getBallPosition()));
 	}
 
 	/** Generate a random number between two values */

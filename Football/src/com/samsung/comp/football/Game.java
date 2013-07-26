@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.samsung.comp.events.BallOwnerSetListener;
+import com.samsung.comp.events.MovementCompletedListener;
+import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
@@ -42,6 +44,8 @@ public class Game extends AbstractGame {
 		team2 = TeamColour.RED;
 
 		ai = new AI(this);
+		createMovementCompletedListeners(team2);
+
 		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
 
 			@Override
@@ -179,6 +183,18 @@ public class Game extends AbstractGame {
 		}
 
 		soundManager.play(whistleBlow);
+	}
+
+	private void createMovementCompletedListeners(TeamColour teamColour) {
+		for (Player player : getPlayers(teamColour)) {
+			player.addMovementCompletedListener(new MovementCompletedListener() {
+
+				@Override
+				public void onMovementCompleted(Player player, Action nextAction) {
+					ai.getActions(player);
+				}
+			});
+		}
 	}
 
 	@Override
