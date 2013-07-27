@@ -50,7 +50,9 @@ public class Game extends AbstractGame {
 
 			@Override
 			public void onBallOwnerSet(Ball ball, Player newOwner) {
-				ai.getComputerActions();
+				if (gameState == GameState.EXECUTION) {
+					ai.getComputerActions();
+				}
 			}
 		});
 
