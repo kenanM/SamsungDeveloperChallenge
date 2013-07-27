@@ -80,7 +80,7 @@ public class AI {
 	private void gavinGetActions() {
 
 		for (Player player : players) {
-			player.clearActions();
+			player.reset();
 		}
 		List<Player> playersWithoutActions = new ArrayList<Player>(players);
 		sortPlayersByDistanceFromHomeGoal(playersWithoutActions);

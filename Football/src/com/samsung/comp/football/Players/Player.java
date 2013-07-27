@@ -318,6 +318,11 @@ public class Player extends Rectangle implements Followable {
 		return positionInPath;
 	}
 
+	/**
+	 * 
+	 * @warning This will not clear the player's path nor reset it's position in
+	 *          path. Use reset to do this.
+	 */
 	public void clearActions() {
 		if (this.action != null) {
 			this.action.clearSubsequentActions();
