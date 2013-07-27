@@ -116,22 +116,28 @@ public class AI {
 						ballInDefensiveArea, ballInOffensiveArea);
 				float rn = Utils.randomFloat(null, 0, 100);
 
+				Player receiver = (playersWithoutActions
+						.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
+						.get(playersWithoutActions.size() - 1)
+						: playersWithoutActions.get(playersWithoutActions
+								.size() - 2);
+
+				if (receiver.getTimeSinceKick() < Game.BALL_PASS_TIME) {
+					passChance = 0;
+				}
+
 				if (passChance > rn) {
 					// get the farthest forward player who isn't the ballOwner
-					Player receiver = (playersWithoutActions
-							.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
-							.get(playersWithoutActions.size() - 1)
-							: playersWithoutActions.get(playersWithoutActions
-									.size() - 2);
-					moveToOffensivePosition(receiver);
+
+					moveForward(receiver);
 					ballOwner.addAction(new Pass(ball, ballOwner, receiver,
 							ballOwner.getFuturePosition()));
-					moveToOffensivePosition(ballOwner);
+					moveForward(ballOwner);
 					playersWithoutActions.remove(receiver);
 					playersWithoutActions.remove(ballOwner);
 
 				} else {
-					moveToOffensivePosition(ballOwner);
+					moveForward(ballOwner);
 					playersWithoutActions.remove(ballOwner);
 				}
 			}
