@@ -199,8 +199,8 @@ public class Ball extends Rectangle implements Followable {
 		Vector2 start = new Vector2(x, y);
 		if (hasOwner()) {
 			Vector2 ballVector = owner.getBallPosition();
-			this.x = ballVector.x;
-			this.y = ballVector.y;
+			this.x = translateBallCoordinate(ballVector.x);
+			this.y = translateBallCoordinate(ballVector.y);
 		} else {
 			this.x = (this.x + ((velocity.x) * time));
 			this.y = (this.y + ((velocity.y) * time));
