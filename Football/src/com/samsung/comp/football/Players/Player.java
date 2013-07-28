@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
@@ -821,9 +822,8 @@ public class Player extends Rectangle implements Followable {
 		return false;
 	}
 
-	public Rectangle getTackleHitbox() {
-		return new Rectangle(getPlayerPosition().x - 12,
-				getPlayerPosition().y - 12, 46, 46);
+	public Circle getTackleHitbox() {
+		return new Circle(getPlayerPosition(), 23);
 	}
 
 	public void setRotation(float value) {

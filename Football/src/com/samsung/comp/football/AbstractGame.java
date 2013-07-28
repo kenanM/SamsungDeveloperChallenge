@@ -733,7 +733,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void tackleDetection(float time) {
 		for (Player player : getAllPlayers()) {
 
-			if (player.getTackleHitbox().overlaps(ball)
+			if (player.getTackleHitbox().contains(ball.getBallPosition())
 					&& ball.getOwner() != player
 					&& !(ball.getOwner() instanceof Goalie)
 					&& ball.getTimeSinceTackle() > BALL_CHANGE_TIME
