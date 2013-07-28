@@ -46,8 +46,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected int result;
 
 	// TODO: Remove these and other hard coded values
-	public static final float BALL_CHANGE_TIME = 1f;
-	public static final float BALL_PASS_TIME = 0.5f;
+	public static final float RECLAIM_BALL_TIME = 1f;
+	public static final float TACKLE_IMMUNITY_TIME = 0.75f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
 	public static final float INPUT_EPSILON_VALUE = 32;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
@@ -733,15 +733,16 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void tackleDetection(float time) {
 		for (Player player : getAllPlayers()) {
 
+			// Cannot tackle if recently kicked ball or failed a tackle
 			if (player.getTackleHitbox().contains(ball.getBallPosition())
 					&& ball.getOwner() != player
 					&& !(ball.getOwner() instanceof Goalie)
-					&& ball.getTimeSinceTackle() > BALL_CHANGE_TIME
-					&& player.getTimeSinceKick() > BALL_PASS_TIME
-					&& player.getTimeFailedTackle() > BALL_CHANGE_TIME) {
+					&& player.getCannotTackleTime() <= 0) {
 
+				// Cannot tackle the owner if they recently obtained the ball
 				if (ball.hasOwner()) {
-					if (ball.getOwner().getTeam() != player.getTeam()) {
+					if (ball.getOwner().getTeam() != player.getTeam()
+							&& ball.getOwner().getTackleImmunityTime() <= 0) {
 						performTackle(player);
 					}
 				} else {
@@ -753,8 +754,7 @@ public abstract class AbstractGame implements ApplicationListener,
 					} else {
 						// failed to collect ball
 						player.setNoticationTime(.75f);
-						player.setTimeSinceKick(0);
-						player.setTimeSinceFailedTackle(0);
+						player.setCannotTackleTime(RECLAIM_BALL_TIME);
 					}
 				}
 			}
@@ -771,12 +771,10 @@ public abstract class AbstractGame implements ApplicationListener,
 					player.getPlayerPosition(), 5).angle();
 			player.setRotation(rotation);
 			ball.setOwner(player);
-			ball.clearTimeSinceTackle();
 		} else {
 			// failed the tackle
 			player.setNoticationTime(.75f);
-			player.setTimeSinceKick(.75f);
-			player.setTimeSinceFailedTackle(0);
+			player.setCannotTackleTime(TACKLE_IMMUNITY_TIME);
 		}
 	}
 

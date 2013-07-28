@@ -67,8 +67,8 @@ public class Player extends Rectangle implements Followable {
 	int positionInPath = 0;
 	float rotation;
 	protected Action action;
-	private float timeSinceKick = Game.BALL_PASS_TIME;
-	private float timeSinceFailedTackle = Game.BALL_CHANGE_TIME;
+	private float cannotTackleTime = 0;
+	private float tackleImmunityTime = 0;
 	private Ball ball;
 
 	private List<MovementCompletedListener> moveCompleteListeners = new ArrayList<MovementCompletedListener>();
@@ -148,20 +148,20 @@ public class Player extends Rectangle implements Followable {
 		return PLAYER_SIZE;
 	}
 
-	public void setTimeSinceKick(float time) {
-		timeSinceKick = time;
+	public void setCannotTackleTime(float time) {
+		cannotTackleTime = time;
 	}
 
-	public float getTimeSinceKick() {
-		return timeSinceKick;
+	public float getCannotTackleTime() {
+		return cannotTackleTime;
 	}
 
-	public void setTimeSinceFailedTackle(float time) {
-		timeSinceFailedTackle = time;
+	public void setTackleImmunityTime(float time) {
+		tackleImmunityTime = time;
 	}
 
-	public float getTimeFailedTackle() {
-		return timeSinceFailedTackle;
+	public float getTackleImmunityTime() {
+		return tackleImmunityTime;
 	}
 
 	public void setNoticationTime(float time) {
@@ -605,8 +605,6 @@ public class Player extends Rectangle implements Followable {
 					target, shootSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			ball.resetTimeSinceTackle();
-			timeSinceKick = 0;
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -631,8 +629,6 @@ public class Player extends Rectangle implements Followable {
 					target, (float) lowestSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			ball.resetTimeSinceTackle();
-			timeSinceKick = 0;
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -701,8 +697,6 @@ public class Player extends Rectangle implements Followable {
 
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			ball.resetTimeSinceTackle();
-			timeSinceKick = 0;
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -727,8 +721,8 @@ public class Player extends Rectangle implements Followable {
 		Vector2 position = moveAlongPath(time);
 		executeAction();
 
-		timeSinceKick = timeSinceKick + time;
-		timeSinceFailedTackle = timeSinceFailedTackle + time;
+		cannotTackleTime -= (cannotTackleTime > 0) ? time : 0;
+		tackleImmunityTime -= (tackleImmunityTime > 0) ? time : 0;
 		notificationTime -= (notificationTime > 0) ? time : 0;
 
 		this.x = Player.translatePlayerCoordinate(position.x);

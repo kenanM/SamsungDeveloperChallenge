@@ -122,10 +122,6 @@ public class AI {
 						: playersWithoutActions.get(playersWithoutActions
 								.size() - 2);
 
-				if (receiver.getTimeSinceKick() < Game.BALL_PASS_TIME) {
-					passChance = 0;
-				}
-
 				if (passChance > rn) {
 					// get the farthest forward player who isn't the ballOwner
 

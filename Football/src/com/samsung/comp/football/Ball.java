@@ -31,7 +31,6 @@ public class Ball extends Rectangle implements Followable {
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
 	private float deceleration = 50;
-	private float timeSinceTackle = Game.BALL_CHANGE_TIME;
 
 	private ArrayList<BallOwnerSetListener> listeners = new ArrayList<BallOwnerSetListener>();
 
@@ -111,6 +110,7 @@ public class Ball extends Rectangle implements Followable {
 			removeOwner();
 		}
 
+		player.setTackleImmunityTime(0.75f);
 		this.owner = player;
 		player.setBall(this);
 
@@ -132,20 +132,8 @@ public class Ball extends Rectangle implements Followable {
 		return owner != null;
 	}
 
-	public float getTimeSinceTackle() {
-		return timeSinceTackle;
-	}
-
 	public float getSpeed() {
 		return Vector2.Zero.dst(velocity);
-	}
-
-	public void clearTimeSinceTackle() {
-		this.timeSinceTackle = 0;
-	}
-
-	public void resetTimeSinceTackle() {
-		this.timeSinceTackle = Game.BALL_CHANGE_TIME;
 	}
 
 	public void resetBall() {
@@ -208,7 +196,6 @@ public class Ball extends Rectangle implements Followable {
 
 	public void update(float time) {
 
-		timeSinceTackle = timeSinceTackle + time;
 		Vector2 start = new Vector2(x, y);
 		if (hasOwner()) {
 			Vector2 ballVector = owner.getBallPosition();
