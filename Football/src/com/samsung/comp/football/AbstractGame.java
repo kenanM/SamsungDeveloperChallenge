@@ -824,7 +824,12 @@ public abstract class AbstractGame implements ApplicationListener,
 			for (Player player2 : getAllPlayers()) {
 				if (player1 == player2) {
 					continue;
-				} else if (player1.overlaps(player2)) {
+				}
+
+				Circle playerCollisionCircle = new Circle(
+						player1.getPlayerPosition(), 64);
+				if (playerCollisionCircle
+						.contains(player2.getPlayerPosition())) {
 					overlappingPlayers.add(player2);
 					separated = true;
 				}
@@ -1241,7 +1246,9 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			for (int i = 0; i < pointsList.size(); i++) {
 				playerVector = pointsList.get(i);
-				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
+				Circle inputDetectionCircle = new Circle(playerVector,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(point)) {
 					// We are biased to selectable players, return them before
 					// an unselectable one.
 					if (isSelectable(player)) {
