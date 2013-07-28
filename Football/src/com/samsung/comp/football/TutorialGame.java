@@ -349,6 +349,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
+			separatePlayers();
 			if (remainingSetupTime <= 0) {
 				beginInputStage();
 			}
@@ -358,6 +359,8 @@ public class TutorialGame extends AbstractGame {
 
 			for (Player player : getAllPlayers()) {
 				player.update(time);
+				player.restrictToArea(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
+						Game.VIRTUAL_SCREEN_HEIGHT);
 			}
 
 			if (ball != null) {

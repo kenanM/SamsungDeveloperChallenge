@@ -237,6 +237,8 @@ public class MultiplayerGame extends AbstractGame {
 					continue;
 				} else {
 					player.update(time);
+					player.restrictToArea(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
+							Game.VIRTUAL_SCREEN_HEIGHT);
 				}
 			}
 
@@ -253,6 +255,8 @@ public class MultiplayerGame extends AbstractGame {
 
 			for (Player player : getAllPlayers()) {
 				player.update(time);
+				player.restrictToArea(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
+						Game.VIRTUAL_SCREEN_HEIGHT);
 			}
 
 			ball.update(time);

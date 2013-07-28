@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
 import com.samsung.comp.events.MovementCompletedListener;
 import com.samsung.comp.football.Ball;
-import com.samsung.comp.football.Game;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Followable;
@@ -824,16 +823,20 @@ public class Player extends Rectangle implements Followable {
 		rotation = value % 360;
 	}
 
-	private void restrictToField() {
-		this.x = this.x > (Game.VIRTUAL_SCREEN_WIDTH - PLAYER_SIZE) ? Game.VIRTUAL_SCREEN_WIDTH
-				- PLAYER_SIZE
+	/**
+	 * When called, will reposition the player if it's position point exceeds
+	 * the rectangle formed by the corners minX, minY, maxX and maxY.
+	 */
+	public void restrictToArea(float minX, float minY, float maxX, float maxY) {
+		this.x = (this.getPlayerX() < minX) ? translatePlayerCoordinate(minX)
 				: this.x;
-		this.y = this.y > (Game.VIRTUAL_SCREEN_HEIGHT - PLAYER_SIZE) ? Game.VIRTUAL_SCREEN_HEIGHT
-				- PLAYER_SIZE
+		this.y = (this.getPlayerY() < minY) ? translatePlayerCoordinate(minY)
 				: this.y;
 
-		this.x = this.x < (0 + PLAYER_SIZE) ? 0 + PLAYER_SIZE : this.x;
-		this.y = this.y < (0 + PLAYER_SIZE) ? 0 + PLAYER_SIZE : this.y;
+		this.x = (this.getPlayerX() > maxX) ? translatePlayerCoordinate(maxX)
+				: this.x;
+		this.y = (this.getPlayerY() > maxY) ? translatePlayerCoordinate(maxY)
+				: this.y;
 	}
 
 	public Vector2[] getTimeLinePoints() {
