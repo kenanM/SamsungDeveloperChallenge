@@ -16,6 +16,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
+	private int guideBookPage = 0;
 
 	public TutorialGame(ActionResolver actionResolver) {
 		this.actionResolver = actionResolver;
@@ -385,6 +386,11 @@ public class TutorialGame extends AbstractGame {
 				displayTutorialMessage();
 			}
 		}
+	}
+
+	@Override
+	public void menuButtonPressed() {
+		actionResolver.openGuideBook(guideBookPage);
 	}
 
 

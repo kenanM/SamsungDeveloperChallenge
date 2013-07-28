@@ -47,6 +47,12 @@ public class InstructionsActivity extends Activity {
 				R.anim.flipin_reverse);
 		animFlipOutBackward = AnimationUtils.loadAnimation(this,
 				R.anim.flipout_reverse);
+
+		if (getIntent().getExtras() != null) {
+			Bundle b = getIntent().getExtras();
+			int page = b.getInt("page", 0);
+			viewFlipper.setDisplayedChild(page);
+		}
 	}
 
 	@Override

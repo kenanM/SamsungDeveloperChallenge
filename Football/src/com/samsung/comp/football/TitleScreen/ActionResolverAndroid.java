@@ -20,4 +20,11 @@ public class ActionResolverAndroid implements ActionResolver {
 		appContext.startActivity(new Intent(appContext,
 				InstructionsActivity.class));
 	}
+
+	@Override
+	public void openGuideBook(int page) {
+		Intent intent = new Intent(appContext, InstructionsActivity.class);
+		intent.putExtra("page", page);
+		appContext.startActivity(intent);
+	}
 }
