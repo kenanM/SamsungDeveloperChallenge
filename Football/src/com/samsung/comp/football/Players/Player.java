@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
 import com.samsung.comp.events.MovementCompletedListener;
 import com.samsung.comp.football.Ball;
+import com.samsung.comp.football.Game;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Followable;
@@ -68,6 +69,7 @@ public class Player extends Rectangle implements Followable {
 	protected Action action;
 	private float cannotTackleTime = 0;
 	private float tackleImmunityTime = 0;
+	private float cannotCollectBallTime = 0;
 	private Ball ball;
 
 	private List<MovementCompletedListener> moveCompleteListeners = new ArrayList<MovementCompletedListener>();
@@ -161,6 +163,14 @@ public class Player extends Rectangle implements Followable {
 
 	public float getTackleImmunityTime() {
 		return tackleImmunityTime;
+	}
+
+	public void setCannotCollectBallTime(float time) {
+		cannotCollectBallTime = time;
+	}
+
+	public float getCannotCollectBallTime() {
+		return cannotCollectBallTime;
 	}
 
 	public void setNoticationTime(float time) {
@@ -604,6 +614,10 @@ public class Player extends Rectangle implements Followable {
 					target, shootSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
+			
+			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
+			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
+			
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -613,7 +627,7 @@ public class Player extends Rectangle implements Followable {
 
 	public void shortKick(Ball ball, Vector2 target) {
 		if (hasBall()) {
-
+			
 			Vector2 movementVector = new Vector2(target.x
 					- ball.getBallPosition().x, target.y
 					- ball.getBallPosition().y);
@@ -628,6 +642,10 @@ public class Player extends Rectangle implements Followable {
 					target, (float) lowestSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
+			
+			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
+			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
+			
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -696,6 +714,10 @@ public class Player extends Rectangle implements Followable {
 
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
+			
+			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
+			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
+			
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -721,6 +743,7 @@ public class Player extends Rectangle implements Followable {
 		executeAction();
 
 		cannotTackleTime -= (cannotTackleTime > 0) ? time : 0;
+		cannotCollectBallTime -= (cannotCollectBallTime > 0) ? time : 0;
 		tackleImmunityTime -= (tackleImmunityTime > 0) ? time : 0;
 		notificationTime -= (notificationTime > 0) ? time : 0;
 

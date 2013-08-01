@@ -110,7 +110,6 @@ public class Ball extends Rectangle implements Followable {
 			removeOwner();
 		}
 
-		player.setTackleImmunityTime(0.75f);
 		this.owner = player;
 		player.setBall(this);
 

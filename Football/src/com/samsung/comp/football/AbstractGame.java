@@ -46,7 +46,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected int result;
 
 	// TODO: Remove these and other hard coded values
-	public static final float RECLAIM_BALL_TIME = 1f;
+	public static final float RECLAIM_BALL_TIME = 0.75f;
+	public static final float CANNOT_TACKLE_TIME = 1f;
 	public static final float TACKLE_IMMUNITY_TIME = 0.75f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
 	public static final float INPUT_EPSILON_VALUE = 32;
@@ -733,32 +734,51 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void tackleDetection(float time) {
 		for (Player player : getAllPlayers()) {
 
-			// Cannot tackle if recently kicked ball or failed a tackle
+			// Check for overlap with ball, and owner isn't goalie or self
 			if (player.getTackleHitbox().contains(ball.getBallPosition())
 					&& ball.getOwner() != player
-					&& !(ball.getOwner() instanceof Goalie)
-					&& player.getCannotTackleTime() <= 0) {
+					&& !(ball.getOwner() instanceof Goalie)) {
 
-				// Cannot tackle the owner if they recently obtained the ball
+				// Check if ball is owned
 				if (ball.hasOwner()) {
-					if (ball.getOwner().getTeam() != player.getTeam()
-							&& ball.getOwner().getTackleImmunityTime() <= 0) {
+					// Check for a possible tackle
+					if (isTacklePossible(player)) {
 						performTackle(player);
 					}
-				} else {
+				} else if (player.getCannotCollectBallTime() <= 0) {
+					// Cannot collect the ball if they recently kicked it (for
+					// passing through self)
 					float delta = ball.getSpeed() - player.getSavingSkill();
 					float rn = Utils.randomFloat(rng, 0, 100);
 
 					if (rn > delta) {
+						// Clear collection restriction to allow quick repass
+						for (Player p : getAllPlayers()) {
+							p.setCannotCollectBallTime(0);
+						}
 						ball.setOwner(player);
 					} else {
 						// failed to collect ball
 						player.setNoticationTime(.75f);
-						player.setCannotTackleTime(RECLAIM_BALL_TIME);
+						player.setCannotCollectBallTime(RECLAIM_BALL_TIME);
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Cannot tackle the owner if owner recently obtained the ball. Cannot
+	 * tackle if the challenger recently failed or kicked the ball.
+	 * 
+	 * @param challenger
+	 *            The player initiating the tackle
+	 * @return
+	 */
+	protected boolean isTacklePossible(Player challenger) {
+		return ball.getOwner().getTeam() != challenger.getTeam()
+				&& ball.getOwner().getTackleImmunityTime() <= 0
+				&& challenger.getCannotTackleTime() <= 0;
 	}
 
 	protected void performTackle(Player player) {
