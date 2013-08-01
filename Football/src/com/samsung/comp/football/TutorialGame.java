@@ -314,7 +314,7 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			textArea.setText("Nice. Now we've put a ball onto the upper half of the pitch. \n\n"
 					+ "Tap on your player to select them, then tap the ball.\n\n"
-					+ "Your player will run straight towards the ball to collect it.\n\n"
+					+ "Your player will run straight towards the ball to collect it, even if it's moving.\n\n"
 					+ "Don't forget to hit the play button when you're ready.");
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 			textArea.setText("Now that you have the ball, tap on your player to select them again, then tap on the pitch to shoot. \n\n"
@@ -322,16 +322,18 @@ public class TutorialGame extends AbstractGame {
 					+ "Shoot the ball into either goal.");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			textArea.setText("Now our second player has turned up with the ball. Lets pass the ball back. \n\n"
-					+ "Select the new player then tap on the other to give an order to pass to them. \n\n");
+					+ "Select the new player then tap on the other to give an order to pass to them. \n\n"
+					+ "Tip: If you order the receiver to move, the other player will pass ahead of their path for you. \n\n");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			textArea.setText("Marking opponents: \n\n"
 					+ "Select your player, then select a red player to mark them. \n\n"
 					+ "They'll follow them until they get the ball. \n\n"
-					+ "Mark both of these players and get the ball back.");
+					+ "Mark both of these players and get the ball back. \n\n"
+					+ "Tip: If you queue up another action, they will perform it once they have the ball");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			textArea.setText("You can give multiple actions to any player to plan out better strategies and maneuvers. \n\n"
-					+ "You can continue a path from any of your previous actions, and "
-					+ "continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
+					+ "You can continue a path from any of your previous actions. \n\n"
+					+ "Continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
 					+ "Try tackling the red player and scoring a goal straight away.");
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			textArea.setText("The goal keeper acts differently than your other players. \n\n"
