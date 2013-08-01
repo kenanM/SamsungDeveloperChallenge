@@ -96,7 +96,7 @@ public class TutorialGame extends AbstractGame {
 				750), p));
 	}
 
-	private void setupTacklePhase(float setupTime) {
+	private void setupMarkTacklePhase(float setupTime) {
 		beginSetupPhase(setupTime);
 		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
@@ -149,9 +149,11 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	/**
-	 * Used to setup the phase every time after the initial setup
+	 * Used to setup the current phase every time after the initial setup
+	 * 
+	 * @return Returns true if there is any setting up to perform.
 	 */
-	private void runSubsequentPhaseSetup() {
+	private boolean runSubsequentPhaseSetup() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
 
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
@@ -159,8 +161,9 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 
 		} else if (tutorialPhase == TutorialPhase.PASS) {
-			
+
 		} else if (tutorialPhase == TutorialPhase.MARK) {
+			beginSetupPhase(5f);
 
 			Player p = redPlayers.get(0);
 			Player p1 = redPlayers.get(1);
@@ -175,15 +178,21 @@ public class TutorialGame extends AbstractGame {
 			p1.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
+			return true;
 
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 
 		}
+		return false;
 	}
 
 	// TODO: refactor to use state objects.
+	/**
+	 * Checks completion of current phase and performs the initial setup of the
+	 * subsequent phase.
+	 */
 	private void checkPhaseCompletion() {
 		boolean phaseCompleted = false;
 		if (tutorialPhase == TutorialPhase.MOVE) {
@@ -202,7 +211,7 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
-				setupTacklePhase(5f);
+				setupMarkTacklePhase(2f);
 				phaseCompleted = true;
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
@@ -222,8 +231,9 @@ public class TutorialGame extends AbstractGame {
 		displayArrows();
 
 		if (!phaseCompleted) {
-			runSubsequentPhaseSetup();
-			beginInputStage();
+			if (!runSubsequentPhaseSetup()) {
+				beginInputStage();
+			}
 		}
 	}
 
@@ -364,7 +374,7 @@ public class TutorialGame extends AbstractGame {
 
 			p1.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
+							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p1));
 		}
 
 	}
@@ -378,7 +388,6 @@ public class TutorialGame extends AbstractGame {
 		bar.update(time);
 		selectTextureStateTime += time;
 		ghostStateTime = (ghostStateTime + time) % 5;
-
 
 		for (Arrow arrow : arrows) {
 			arrow.update();
@@ -423,7 +432,6 @@ public class TutorialGame extends AbstractGame {
 	public void menuButtonPressed() {
 		actionResolver.openGuideBook(guideBookPage);
 	}
-
 
 	@Override
 	public void dispose() {
