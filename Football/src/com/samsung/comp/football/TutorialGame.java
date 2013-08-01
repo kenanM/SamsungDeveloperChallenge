@@ -34,6 +34,8 @@ public class TutorialGame extends AbstractGame {
 		createRenderingObjects();
 
 		setupMovePhase();
+		displayArrows();
+		beginInputStage();
 
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
@@ -44,7 +46,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	@Override
-	protected void onGoalScored(TeamColour centerTeam) {
+	protected void onGoalScored(TeamColour goalAreaColour) {
 
 		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
@@ -62,17 +64,17 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			tutorialPhase = TutorialPhase.GOALIE;
 			setupGoaliePhase(1.5f);
+		} else {
+			beginInputStage();
 		}
 
-		displayTutorialMessage();
+		displayArrows();
 	}
 
 	private void setupMovePhase() {
 		Player p = new Player(338, VIRTUAL_SCREEN_HEIGHT / 3, TeamColour.BLUE);
 		bluePlayers.add(p);
 		beginInputStage();
-		displayTutorialMessage();
-		runPhaseSpecficActions();
 	}
 
 	private void setupFollowBallPhase() {
@@ -99,14 +101,16 @@ public class TutorialGame extends AbstractGame {
 		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
 		redPlayers.add(p);
+		p.addAction(new MoveToPosition(new Vector2(
+				VIRTUAL_SCREEN_WIDTH * 1 / 3, VIRTUAL_SCREEN_HEIGHT * 2 / 3), p));
 
 		Player p1 = new Player(VIRTUAL_SCREEN_WIDTH * 2 / 3, 0, TeamColour.RED);
 		redPlayers.add(p1);
+		p1.addAction(new MoveToPosition(new Vector2(
+				VIRTUAL_SCREEN_WIDTH * 2 / 3, VIRTUAL_SCREEN_HEIGHT * 1 / 3), p));
 
 		Player owner = ball.getOwner();
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
-		owner.executeAction();
-		owner.clearActions();
 	}
 
 	private void setupQueuePhase(float setupTime) {
@@ -125,8 +129,6 @@ public class TutorialGame extends AbstractGame {
 
 		Player owner = ball.getOwner();
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
-		owner.executeAction();
-		owner.clearActions();
 	}
 
 	private void setupGoaliePhase(float setupTime) {
@@ -143,45 +145,19 @@ public class TutorialGame extends AbstractGame {
 		clearActions();
 		bar.setPositionToDown();
 
-		runPhaseSpecficActions();
+		displayTutorialMessage();
 	}
 
-	private void runPhaseSpecficActions() {
+	/**
+	 * Used to setup the phase every time after the initial setup
+	 */
+	private void runSubsequentPhaseSetup() {
 		if (tutorialPhase == TutorialPhase.MOVE) {
 
-			arrows.add(new Arrow(pointer, bluePlayers.get(0).getPlayerX(),
-					bluePlayers.get(0).y));
-			Arrow a1 = new Arrow(pointer);
-			Arrow a2 = new Arrow(pointer);
-			Arrow a3 = new Arrow(pointer);
-			a1.pointAt(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
-			a2.pointAt(VIRTUAL_SCREEN_WIDTH / 2 + a2.getWidth(),
-					VIRTUAL_SCREEN_HEIGHT / 2);
-			a3.pointAt(VIRTUAL_SCREEN_WIDTH / 2 - a3.getWidth(),
-					VIRTUAL_SCREEN_HEIGHT / 2);
-			arrows.add(a1);
-			arrows.add(a2);
-			arrows.add(a3);
-			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
-			arrows.add(a);
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 
-			Arrow a1 = new Arrow(pointer);
-			a1.pointAt(bluePlayers.get(0).getPlayerX(), bluePlayers.get(0).y);
-			
-			Arrow a2 = new Arrow(pointer);
-			a2.pointAt(ball.getBallX(), ball.y);
-			arrows.add(a1);
-			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 
-			Arrow a1 = new Arrow(pointer);
-			a1.pointAt(ball.getBallX(), ball.y);
-			
-			Arrow a2 = new Arrow(pointer);
-			a2.pointAt(Game.RED_GOAL.x, Game.RED_GOAL.y);
-			arrows.add(a1);
-			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			
 		} else if (tutorialPhase == TutorialPhase.MARK) {
@@ -200,13 +176,6 @@ public class TutorialGame extends AbstractGame {
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
 
-			Arrow a1 = new Arrow(pointer);
-			Arrow a2 = new Arrow(pointer);
-			a1.follow(p);
-			a2.follow(p1);
-			arrows.add(a1);
-			arrows.add(a2);
-
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
@@ -214,7 +183,7 @@ public class TutorialGame extends AbstractGame {
 		}
 	}
 
-	// If these get complex then refactor to use state objects.
+	// TODO: refactor to use state objects.
 	private void checkPhaseCompletion() {
 		boolean phaseCompleted = false;
 		if (tutorialPhase == TutorialPhase.MOVE) {
@@ -250,9 +219,71 @@ public class TutorialGame extends AbstractGame {
 
 		}
 
+		displayArrows();
+
 		if (!phaseCompleted) {
+			runSubsequentPhaseSetup();
 			beginInputStage();
 		}
+	}
+
+	protected void displayArrows() {
+
+		if (tutorialPhase == TutorialPhase.MOVE) {
+			arrows.add(new Arrow(pointer, bluePlayers.get(0).getPlayerX(),
+					bluePlayers.get(0).y));
+			Arrow a1 = new Arrow(pointer);
+			Arrow a2 = new Arrow(pointer);
+			Arrow a3 = new Arrow(pointer);
+			a1.pointAt(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
+			a2.pointAt(VIRTUAL_SCREEN_WIDTH / 2 + a2.getWidth(),
+					VIRTUAL_SCREEN_HEIGHT / 2);
+			a3.pointAt(VIRTUAL_SCREEN_WIDTH / 2 - a3.getWidth(),
+					VIRTUAL_SCREEN_HEIGHT / 2);
+			arrows.add(a1);
+			arrows.add(a2);
+			arrows.add(a3);
+			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
+			arrows.add(a);
+
+		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
+
+			Arrow a1 = new Arrow(pointer);
+			a1.pointAt(bluePlayers.get(0).getPlayerX(), bluePlayers.get(0).y);
+
+			Arrow a2 = new Arrow(pointer);
+			a2.pointAt(ball.getBallX(), ball.y);
+			arrows.add(a1);
+			arrows.add(a2);
+		} else if (tutorialPhase == TutorialPhase.SHOOT) {
+
+			Arrow a1 = new Arrow(pointer);
+			a1.pointAt(ball.getBallX(), ball.y);
+
+			Arrow a2 = new Arrow(pointer);
+			a2.pointAt(Game.RED_GOAL.x, Game.RED_GOAL.y);
+			arrows.add(a1);
+			arrows.add(a2);
+		} else if (tutorialPhase == TutorialPhase.PASS) {
+
+		} else if (tutorialPhase == TutorialPhase.MARK) {
+
+			Player p = redPlayers.get(0);
+			Player p1 = redPlayers.get(1);
+
+			Arrow a1 = new Arrow(pointer);
+			Arrow a2 = new Arrow(pointer);
+			a1.follow(p);
+			a2.follow(p1);
+			arrows.add(a1);
+			arrows.add(a2);
+
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+
+		} else if (tutorialPhase == TutorialPhase.GOALIE) {
+
+		}
+
 	}
 
 	protected void displayTutorialMessage() {
@@ -319,7 +350,7 @@ public class TutorialGame extends AbstractGame {
 		bar.setPositionToUp();
 		arrows.clear();
 
-		// Really should do something about these checks now being everywhere
+		// Really should use be using state objects
 		if (tutorialPhase == TutorialPhase.MARK) {
 			Player p = redPlayers.get(0);
 			Player p1 = redPlayers.get(1);
@@ -348,6 +379,11 @@ public class TutorialGame extends AbstractGame {
 		selectTextureStateTime += time;
 		ghostStateTime = (ghostStateTime + time) % 5;
 
+
+		for (Arrow arrow : arrows) {
+			arrow.update();
+		}
+
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
 			separatePlayers();
@@ -371,10 +407,6 @@ public class TutorialGame extends AbstractGame {
 				tackleDetection(time);
 				goalScoredDetection();
 			}
-
-			for (Arrow arrow : arrows) {
-				arrow.update();
-			}
 		}
 
 		if (gameState == GameState.EXECUTION) {
@@ -383,7 +415,6 @@ public class TutorialGame extends AbstractGame {
 
 			if (elapsedRoundTime >= roundTime) {
 				checkPhaseCompletion();
-				displayTutorialMessage();
 			}
 		}
 	}
