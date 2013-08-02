@@ -35,10 +35,12 @@ public class Cursor {
 	}
 
 	public void draw(SpriteBatch batch) {
+		Player highlightedPlayer = this.highlightedPlayer;
 		if (highlightedPlayer != null) {
-			getHighlightedPlayer().drawHighlight(batch);
+			highlightedPlayer.drawHighlight(batch);
 		}
 
+		Texture texture = this.texture;
 		if (texture != null) {
 			batch.draw(this.texture, location.x - texture.getWidth() / 2,
 					location.y - texture.getHeight() / 2,
