@@ -3,8 +3,10 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ButtonPressListener;
+import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
+import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
@@ -345,6 +347,14 @@ public class TutorialGame extends AbstractGame {
 		gameState = GameState.PAUSED;
 	}
 
+	/** Instruct the player to move to a random spot within a given area */
+	private Vector2 randomVector2(float x, float y, float width,
+			float height) {
+		float rx = Utils.randomFloat(null, x, x + width);
+		float ry = Utils.randomFloat(null, y, y + width);
+		return new Vector2(rx, ry);
+	}
+
 	@Override
 	public void playButtonPressed() {
 		if (gameState == GameState.PAUSED) {
@@ -374,9 +384,14 @@ public class TutorialGame extends AbstractGame {
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
 
-			p1.addAction(new MoveToPosition(
-					new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-							VIRTUAL_SCREEN_HEIGHT * 5 / 6), p1));
+			// p1.addAction(new MoveToPosition(
+			// new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
+			// VIRTUAL_SCREEN_HEIGHT * 5 / 6), p1));
+
+			p1.addAction(new Move(new Vector2[] {
+					p1.getPlayerPosition(),
+					randomVector2(40, 100, Game.VIRTUAL_SCREEN_WIDTH - 2 * 40,
+							Game.VIRTUAL_SCREEN_HEIGHT - 2 * 100) }));
 		}
 
 	}
