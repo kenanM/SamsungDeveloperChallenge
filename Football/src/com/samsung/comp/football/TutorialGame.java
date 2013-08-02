@@ -66,6 +66,9 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			tutorialPhase = TutorialPhase.GOALIE;
 			setupGoaliePhase(1.5f);
+		} else if (tutorialPhase == TutorialPhase.GOALIE) {
+			tutorialPhase = TutorialPhase.GOALIE;
+			Gdx.app.exit();
 		} else {
 			beginInputStage();
 		}
@@ -127,7 +130,6 @@ public class TutorialGame extends AbstractGame {
 		p.addAction(new MoveToPosition(new Vector2(
 				(VIRTUAL_SCREEN_WIDTH * 2 / 3) - 50,
 				VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
-		p.executeAction();
 
 		Player owner = ball.getOwner();
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
@@ -341,7 +343,8 @@ public class TutorialGame extends AbstractGame {
 			textArea.setText("The goal keeper acts differently than your other players. \n\n"
 					+ "It moves automatically, and you can give them instructions only when they have the ball. \n\n"
 					+ "If they are holding the ball, they must be ordered to pass or kick it before play can continue. \n\n"
-					+ "Goal keepers also have a better chance of stopping a fast moving ball than other players do.");
+					+ "Goal keepers also have a better chance of stopping a fast moving ball than other players do and cannot be tackled. \n\n"
+					+ "Score a goal to complete the tutorial.");
 		}
 		gameStateToGoIntoWhenBackButtonPressed = gameState;
 		gameState = GameState.PAUSED;
