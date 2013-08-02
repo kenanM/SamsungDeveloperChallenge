@@ -376,13 +376,15 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (gameState == GameState.INPUT) {
 
 			Player highlightedPlayer = cursor.getHighlightedPlayer();
+			Player selPlayer = this.selectedPlayer;
 
 			if (highlightedPlayer != null) {
 				drawPlayerStats(batch, highlightedPlayer);
 
 			} else {
-				if (selectedPlayer != null) {
-					drawPlayerStats(batch, selectedPlayer);
+
+				if (selPlayer != null) {
+					drawPlayerStats(batch, selPlayer);
 				}
 			}
 
@@ -390,14 +392,14 @@ public abstract class AbstractGame implements ApplicationListener,
 				drawActions(
 						player.getAction(),
 						batch,
-						(player == highlightedPlayer || player == selectedPlayer));
+						(player == highlightedPlayer || player == selPlayer));
 			}
 
 			if (getGoalie(currentTeam) != null) {
 				drawActions(
 						getGoalie(currentTeam).getAction(),
 						batch,
-						(getGoalie(currentTeam) == highlightedPlayer || getGoalie(currentTeam) == selectedPlayer));
+						(getGoalie(currentTeam) == highlightedPlayer || getGoalie(currentTeam) == selPlayer));
 			}
 
 			if (highlightedPlayer != null) {
@@ -407,10 +409,10 @@ public abstract class AbstractGame implements ApplicationListener,
 				}
 			}
 
-			if (selectedPlayer != null) {
-				selectedPlayer.drawSelect(batch, selectTextureStateTime);
-				drawTimeLinePoints(selectedPlayer);
-				drawGhost(selectedPlayer, ghostStateTime);
+			if (selPlayer != null) {
+				selPlayer.drawSelect(batch, selectTextureStateTime);
+				drawTimeLinePoints(selPlayer);
+				drawGhost(selPlayer, ghostStateTime);
 			}
 
 			for (Arrow arrow : arrows) {
