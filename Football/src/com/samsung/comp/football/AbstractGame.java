@@ -825,16 +825,63 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	/**
-	 * Moves any group of intersecting players away from each other.
+	 * Adds actions to move all players except the goalie either away from each
+	 * other, or if a goal keeper has the ball, away from that goal.
 	 * 
-	 * @warning This algorithm can cause players to move far from their position
-	 *          overtime if enough players are clumped together.
+	 * @param teamColour
+	 *            The goal to move away from
+	 */
+	protected void setupPlayerPositioning() {
+		Player goalieWithBall = ball.getOwner() instanceof Goalie ? ball
+				.getOwner() : null;
+		TeamColour goalieColour = goalieWithBall != null ? goalieWithBall
+				.getTeam() : null;
+
+		for (Player player : getAllPlayers()) {
+			if (player == getGoalie(goalieColour)) {
+				continue;
+			} else {
+				if (goalieColour != null
+						&& getGoalAreaCircle(goalieColour).contains(
+								player.getPlayerPosition())) {
+					moveAwayFromGoal(player, goalieColour);
+				} else {
+					separatePlayer(player);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Adds an action to move the player away from the parameterised goal.
+	 * 
+	 * @param player
+	 *            The player to move
+	 * 
+	 * @param teamColour
+	 *            The goal to move away from
+	 */
+
+	protected void moveAwayFromGoal(Player player, TeamColour teamColour) {
+		Vector2 towardsGoal = Utils.getMoveVector(player.getPlayerPosition(),
+				getGoalVector(teamColour), 225 - (player.getPlayerPosition()
+						.dst(getGoalVector(teamColour))));
+		Vector2 awayFromGoal = new Vector2(-towardsGoal.x, -towardsGoal.y);
+		awayFromGoal.add(player.getPlayerPosition());
+
+		player.addAction(new MoveToPosition(new Vector2(awayFromGoal.x,
+				awayFromGoal.y), player));
+	}
+
+	/**
+	 * Moves any group of intersecting players away from each other.
+	 * Depreciated.
+	 * 
 	 * 
 	 * @return Returns true if it has assigned any actions to separate the
 	 *         players. Otherwise returns false.
 	 */
-	protected boolean separatePlayers() {
-		boolean separated = false;
+	private void separatePlayers() {
 
 		// for each player
 		for (Player player1 : getAllPlayers()) {
@@ -851,7 +898,6 @@ public abstract class AbstractGame implements ApplicationListener,
 				if (playerCollisionCircle
 						.contains(player2.getPlayerPosition())) {
 					overlappingPlayers.add(player2);
-					separated = true;
 				}
 			}
 
@@ -877,7 +923,46 @@ public abstract class AbstractGame implements ApplicationListener,
 								.sub(towardsCentre), player1), 0);
 			}
 		}
-		return separated;
+	}
+
+	private boolean separatePlayer(Player player) {
+
+		List<Player> overlappingPlayers = new ArrayList<Player>();
+		// add any overlapping players to list
+		for (Player player2 : getAllPlayers()) {
+			if (player == player2) {
+				continue;
+			}
+
+			Circle playerCollisionCircle = new Circle(
+					player.getPlayerPosition(), 64);
+			if (playerCollisionCircle.contains(player2.getPlayerPosition())) {
+				overlappingPlayers.add(player2);
+			}
+		}
+
+		if (overlappingPlayers.size() == 0) {
+			return false;
+		} else {
+			// calculate the centre point of the players
+			Vector2 vectorSum = new Vector2(player.getPlayerPosition());
+			for (Player overlapPlayer : overlappingPlayers) {
+				vectorSum.x += overlapPlayer.getPlayerX();
+				vectorSum.y += overlapPlayer.getPlayerY();
+			}
+			Vector2 vectorAverage = new Vector2(vectorSum.x
+					/ (overlappingPlayers.size() + 1), vectorSum.y
+					/ (overlappingPlayers.size() + 1));
+
+			// move away from the centre point
+			Vector2 towardsCentre = Utils.getMoveVector(
+					player.getPlayerPosition(), vectorAverage, 3);
+
+			player.setAction(new MoveToPosition(player.getPlayerPosition()
+					.cpy().sub(towardsCentre), player), 0);
+
+			return true;
+		}
 	}
 
 	protected void matchFinish() {
@@ -1189,8 +1274,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void onGoalieObtainsBall(TeamColour teamColour) {
-		beginSetupPhase(1.5f);
-		moveAwayFromGoal(teamColour);
+		beginSetupPhase(2.5f);
 	}
 
 	protected Circle getGoalAreaCircle(TeamColour teamColour) {
@@ -1210,36 +1294,6 @@ public abstract class AbstractGame implements ApplicationListener,
 			return BLUE_GOAL;
 		}
 		return null;
-	}
-
-	/**
-	 * Adds actions to move all players other than the goalie away from the
-	 * parameterised goal.
-	 * 
-	 * @param teamColour
-	 *            The goal to move away from
-	 */
-	protected void moveAwayFromGoal(TeamColour teamColour) {
-		for (Player player : getAllPlayers()) {
-			if (player == getGoalie(teamColour)) {
-				continue;
-			} else {
-				if (getGoalAreaCircle(teamColour).contains(
-						player.getPlayerPosition())) {
-
-					Vector2 towardsGoal = Utils.getMoveVector(player
-							.getPlayerPosition(), getGoalVector(teamColour),
-							225 - (player.getPlayerPosition()
-									.dst(getGoalVector(teamColour))));
-					Vector2 awayFromGoal = new Vector2(-towardsGoal.x,
-							-towardsGoal.y);
-					awayFromGoal.add(player.getPlayerPosition());
-
-					player.addAction(new MoveToPosition(new Vector2(
-							awayFromGoal.x, awayFromGoal.y), player));
-				}
-			}
-		}
 	}
 
 	@Override

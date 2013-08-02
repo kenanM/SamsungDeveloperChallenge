@@ -216,7 +216,7 @@ public class Game extends AbstractGame {
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
-			separatePlayers();
+			setupPlayerPositioning();
 			if (ball.hasOwner()) {
 				ball.update(time);
 				ball.ballBounceDetection(VIRTUAL_SCREEN_WIDTH,
