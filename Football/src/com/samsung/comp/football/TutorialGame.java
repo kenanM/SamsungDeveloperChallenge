@@ -415,6 +415,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
+			giveBackBall();
 			setupPlayerPositioning();
 			if (remainingSetupTime <= 0) {
 				beginInputStage();
@@ -445,6 +446,15 @@ public class TutorialGame extends AbstractGame {
 			if (elapsedRoundTime >= roundTime) {
 				checkPhaseCompletion();
 			}
+		}
+	}
+
+	private void giveBackBall() {
+		Player goalie = redGoalie;
+		Player ballOwner = ball != null ? ball.getOwner() : null;
+		if (goalie != null && goalie == ball.getOwner()) {
+			goalie.addAction(new Pass(ball, goalie, bluePlayers.get(0), goalie
+					.getPlayerPosition()));
 		}
 	}
 
