@@ -193,7 +193,9 @@ public class Game extends AbstractGame {
 
 				@Override
 				public void onMovementCompleted(Player player, Action nextAction) {
-					ai.getActions(player);
+					if (gameState == GameState.EXECUTION) {
+						ai.getActions(player);
+					}
 				}
 			});
 		}
