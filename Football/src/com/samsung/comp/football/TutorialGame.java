@@ -1,5 +1,8 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ButtonPressListener;
@@ -526,9 +529,15 @@ public class TutorialGame extends AbstractGame {
 
 	private void giveBackBall() {
 		Player goalie = redGoalie;
-		Player ballOwner = ball != null ? ball.getOwner() : null;
 		if (goalie != null && goalie == ball.getOwner()) {
-			goalie.addAction(new Pass(ball, goalie, bluePlayers.get(0), goalie
+
+			Player ballOwner = ball != null ? ball.getOwner() : null;
+			List<Player> players = new ArrayList(getPlayers(TeamColour.RED));
+			players.addAll(getPlayers(TeamColour.BLUE));
+			Player receiver = players.get(Utils.randomInt(null, 0,
+					players.size() - 1));
+
+			goalie.addAction(new Pass(ball, goalie, receiver, goalie
 					.getPlayerPosition()));
 		}
 	}
