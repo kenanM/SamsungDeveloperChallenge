@@ -164,6 +164,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected Texture pointer;
 	protected Texture pathArrow;
+	protected Texture pushIndicator;
 
 	protected abstract void onGoalScored(TeamColour scoringTeam);
 
@@ -217,6 +218,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void createUI() {
 		pointer = new Texture(Gdx.files.internal("pointerOrange.png"));
 		pathArrow = new Texture(Gdx.files.internal("arrowPath.png"));
+		pushIndicator = new Texture(
+				Gdx.files.internal("pushIndicatorOrange.png"));
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
@@ -985,6 +988,19 @@ public abstract class AbstractGame implements ApplicationListener,
 		} else {
 			result = -1;
 		}
+	}
+
+	protected Vector2 arrowTipFactory(Texture texture) {
+		if (texture == pathArrow) {
+			return new Vector2(100, 195);
+		}
+		if (texture == pushIndicator) {
+			return new Vector2(25, 80);
+		}
+		if (texture == pointer) {
+			return new Vector2(19, 86);
+		}
+		return new Vector2(0, 0);
 	}
 
 	public GameState getGameState() {

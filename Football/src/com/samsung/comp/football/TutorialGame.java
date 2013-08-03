@@ -244,47 +244,85 @@ public class TutorialGame extends AbstractGame {
 	protected void displayArrows() {
 
 		if (tutorialPhase == TutorialPhase.MOVE) {
+
 			Player bluePlayer = bluePlayers.get(0);
-
-			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
-			arrows.add(a);
-
 			Arrow a1 = new Arrow(pathArrow);
 			a1.setTip(24, 24);
 			a1.pointAt(bluePlayer.getPlayerX(), bluePlayer.getPlayerY());
 			arrows.add(a1);
 
+			Arrow push = new Arrow(pushIndicator, 25 + 32,
+					VIRTUAL_SCREEN_HEIGHT, arrowTipFactory(pushIndicator));
+			arrows.add(push);
+
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 
-			Arrow a1 = new Arrow(pointer);
-			a1.pointAt(bluePlayers.get(0).getPlayerX(), bluePlayers.get(0).y);
+			Arrow push = new Arrow(pushIndicator, bluePlayers.get(0)
+					.getPlayerX(), bluePlayers.get(0).getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			Arrow push2 = new Arrow(pushIndicator, ball.getBallX(), ball.y,
+					arrowTipFactory(pushIndicator));
+			arrows.add(push);
+			arrows.add(push2);
 
-			Arrow a2 = new Arrow(pointer);
-			a2.pointAt(ball.getBallX(), ball.y);
-			arrows.add(a1);
-			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 
-			Arrow a1 = new Arrow(pointer);
-			a1.pointAt(ball.getBallX(), ball.y);
+			Arrow push = new Arrow(pushIndicator, ball.getBallX(), ball.y,
+					arrowTipFactory(pushIndicator));
+			Arrow push2 = new Arrow(pushIndicator,
+					Game.VIRTUAL_SCREEN_WIDTH / 2,
+					Game.RED_GOAL_AREA.getHeight(),
+					arrowTipFactory(pushIndicator));
 
-			Arrow a2 = new Arrow(pointer);
-			a2.pointAt(Game.RED_GOAL.x, Game.RED_GOAL.y);
-			arrows.add(a1);
-			arrows.add(a2);
+			push.follow(ball);
+			arrows.add(push);
+			arrows.add(push2);
 		} else if (tutorialPhase == TutorialPhase.PASS) {
+			Player p1 = bluePlayers.get(0);
+			Player p2 = bluePlayers.get(1);
+			
+			Arrow push = new Arrow(pushIndicator, p1.getPlayerX(),
+					p1.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			Arrow push2 = new Arrow(pushIndicator, p2.getPlayerX(),
+					p2.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			
+			push.follow(p1);
+			push2.follow(p2);
+
+			arrows.add(push);
+			arrows.add(push2);
 
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 
-			Player p = redPlayers.get(0);
-			Player p1 = redPlayers.get(1);
+			Player rp = redPlayers.get(0);
+			Player rp1 = redPlayers.get(1);
 
-			Arrow a1 = new Arrow(pointer);
-			Arrow a2 = new Arrow(pointer);
-			a1.follow(p);
-			a2.follow(p1);
-			arrows.add(a1);
-			arrows.add(a2);
+			Player bp = bluePlayers.get(0);
+			Player bp1 = bluePlayers.get(1);
+			
+			Arrow bluePush1 = new Arrow(pushIndicator, bp.getPlayerX(), bp.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			
+			Arrow bluePush2 = new Arrow(pushIndicator, bp1.getPlayerX(), bp1.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			
+			Arrow redPush1 = new Arrow(pushIndicator, rp.getPlayerX(), rp.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+
+			Arrow redPush2 = new Arrow(pushIndicator, rp1.getPlayerX(), rp1.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+
+			bluePush1.follow(bp);
+			bluePush2.follow(bp1);
+			redPush1.follow(rp);
+			redPush2.follow(rp1);
+
+			arrows.add(bluePush1);
+			arrows.add(bluePush2);
+			arrows.add(redPush1);
+			arrows.add(redPush2);
 
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
