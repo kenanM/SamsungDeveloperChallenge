@@ -407,7 +407,7 @@ public class TutorialGame extends AbstractGame {
 
 		bar.update(time);
 		selectTextureStateTime += time;
-		ghostStateTime = (ghostStateTime + time) % 5;
+		ghostStateTime = (ghostStateTime + time) % roundTime;
 
 		for (Arrow arrow : arrows) {
 			arrow.update();
