@@ -1,25 +1,26 @@
 package com.samsung.comp.football;
 
-import java.util.LinkedList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.samsung.comp.football.Actions.Utils;
-import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.football.data.PlayerDataSource;
 
 public class MultiplayerGame extends AbstractGame {
 
 	Color redColor = Color.RED;
 	Color blueColor = new Color(0.2f, 0.6f, 1f, 1f);
-
-	public MultiplayerGame(ActionResolver actionResolver) {
+	PlayerDataSource playerDatabase;
+	
+	public MultiplayerGame(PlayerDataSource playerDatabase, ActionResolver actionResolver) {
+		this.playerDatabase = playerDatabase;
 		this.actionResolver = actionResolver;
 	}
 
-	public MultiplayerGame(ActionResolver actionResolver, float matchTime,
+	public MultiplayerGame(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
 			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
+		this.playerDatabase = playerDatabase;
 		this.actionResolver = actionResolver;
 		this.remainingMatchTime = matchTime;
 		this.roundTime = roundTime;
@@ -146,31 +147,23 @@ public class MultiplayerGame extends AbstractGame {
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
-		// create the players
-		redPlayers = new LinkedList<Player>();
+		redPlayers = playerDatabase.getPlayers(1);
+		for (Player player : redPlayers) {
+			player.initialize(TeamColour.RED);
+		}
+		redGoalie = playerDatabase.getGoalie(1);
+		redGoalie.initialize(TeamColour.RED);
 
-		redPlayers.add(new Player(338, 256, TeamColour.RED, 520, 150, 100, 20,
-				380));
-		redPlayers.add(new Player(338, 384, TeamColour.RED, 540, 200, 80, 20,
-				380));
-		redPlayers.add(new Player(169, 320, TeamColour.RED, 550, 100, 100, 40,
-				420));
-		redPlayers.add(new Player(507, 320, TeamColour.RED, 530, 150, 80, 40,
-				420));
-		redGoalie = new Goalie(338, 124, TeamColour.RED, this, 500);
+		bluePlayers = playerDatabase.getPlayers(1);
+		for (Player player : bluePlayers) {
+			player.initialize(TeamColour.BLUE);
+		}
 
-		bluePlayers = new LinkedList<Player>();
+		blueGoalie = playerDatabase.getGoalie(1);
+		blueGoalie.initialize(TeamColour.BLUE);
 
-		bluePlayers.add(new Player(338, 768, TeamColour.BLUE, 520, 150, 100,
-				20, 380));
-		bluePlayers.add(new Player(338, 640, TeamColour.BLUE, 540, 200, 80, 20,
-				380));
-		bluePlayers.add(new Player(507, 704, TeamColour.BLUE, 550, 100, 100,
-				40, 420));
-		bluePlayers.add(new Player(169, 704, TeamColour.BLUE, 530, 150, 80, 40,
-				420));
-		blueGoalie = new Goalie(338, 900, TeamColour.BLUE, this, 500);
-
+		playerDatabase.close();
+		
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
 		} else {

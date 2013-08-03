@@ -12,6 +12,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.samsung.comp.football.R;
+import com.samsung.comp.football.data.PlayerDataSource;
+import com.samsung.comp.football.data.PlayerDatabaseHelper;
 
 public class MainApplication extends Activity {
 
@@ -74,7 +76,8 @@ public class MainApplication extends Activity {
 				multiplayerGameIntent.putExtra("Round_Time", roundTime);
 				multiplayerGameIntent.putExtra("Match_Time", matchTime);
 				multiplayerGameIntent.putExtra("Score_Limit", scoreLimit);
-				multiplayerGameIntent.putExtra("Status_Bar_Top", statusBarAtTop);
+				multiplayerGameIntent
+						.putExtra("Status_Bar_Top", statusBarAtTop);
 
 				startActivity(multiplayerGameIntent);
 			}
