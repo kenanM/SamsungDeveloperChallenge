@@ -662,6 +662,8 @@ public class Player extends Rectangle implements Followable {
 		this.path = new Vector2[] { markPosition };
 
 		if (hasBall()) {
+			rotation = Utils.getMoveVector(target.getPlayerPosition(),
+					getPlayerPosition(), 5).angle();
 			executeNextAction();
 			path = null;
 		}
