@@ -442,7 +442,7 @@ public class TutorialGame extends AbstractGame {
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
 			giveBackBall();
-			// setupPlayerPositioning();
+			setupPlayerPositioning();
 			if (remainingSetupTime <= 0) {
 				beginInputStage();
 			}

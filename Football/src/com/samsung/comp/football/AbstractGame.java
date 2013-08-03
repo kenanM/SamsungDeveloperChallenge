@@ -965,8 +965,10 @@ public abstract class AbstractGame implements ApplicationListener,
 			Vector2 towardsCentre = Utils.getMoveVector(
 					player.getPlayerPosition(), vectorAverage, 3);
 
-			player.setAction(new MoveToPosition(player.getPlayerPosition()
-					.cpy().sub(towardsCentre), player), 0);
+			if (player.getAction() == null) {
+				player.addAction(new MoveToPosition(player.getPlayerPosition()
+						.cpy().sub(towardsCentre), player));
+			}
 
 			return true;
 		}
