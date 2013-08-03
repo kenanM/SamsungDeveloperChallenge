@@ -133,6 +133,9 @@ public class TutorialGame extends AbstractGame {
 		beginSetupPhase(setupTime);
 		redGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2, 0, TeamColour.RED,
 				this, 500);
+		blueGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2,
+				VIRTUAL_SCREEN_HEIGHT,
+				TeamColour.BLUE, this, 500);
 	}
 
 	@Override
