@@ -244,21 +244,15 @@ public class TutorialGame extends AbstractGame {
 	protected void displayArrows() {
 
 		if (tutorialPhase == TutorialPhase.MOVE) {
-			arrows.add(new Arrow(pointer, bluePlayers.get(0).getPlayerX(),
-					bluePlayers.get(0).y));
-			Arrow a1 = new Arrow(pointer);
-			Arrow a2 = new Arrow(pointer);
-			Arrow a3 = new Arrow(pointer);
-			a1.pointAt(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
-			a2.pointAt(VIRTUAL_SCREEN_WIDTH / 2 + a2.getWidth(),
-					VIRTUAL_SCREEN_HEIGHT / 2);
-			a3.pointAt(VIRTUAL_SCREEN_WIDTH / 2 - a3.getWidth(),
-					VIRTUAL_SCREEN_HEIGHT / 2);
-			arrows.add(a1);
-			arrows.add(a2);
-			arrows.add(a3);
+			Player bluePlayer = bluePlayers.get(0);
+
 			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
 			arrows.add(a);
+
+			Arrow a1 = new Arrow(pathArrow);
+			a1.setTip(24, 24);
+			a1.pointAt(bluePlayer.getPlayerX(), bluePlayer.getPlayerY());
+			arrows.add(a1);
 
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 

@@ -25,6 +25,14 @@ public class Arrow extends Rectangle {
 		pointAt(x, y);
 	}
 
+	public void setTip(float x, float y) {
+		setTip(new Vector2(x, y));
+	}
+
+	public void setTip(Vector2 tip) {
+		this.tip = tip;
+	}
+
 	public void follow(Followable followable) {
 		this.followable = followable;
 	}

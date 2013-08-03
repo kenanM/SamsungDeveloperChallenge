@@ -163,6 +163,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected float ghostStateTime = 0f;
 
 	protected Texture pointer;
+	protected Texture pathArrow;
 
 	protected abstract void onGoalScored(TeamColour scoringTeam);
 
@@ -215,6 +216,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected void createUI() {
 		pointer = new Texture(Gdx.files.internal("pointerOrange.png"));
+		pathArrow = new Texture(Gdx.files.internal("arrowPath.png"));
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
