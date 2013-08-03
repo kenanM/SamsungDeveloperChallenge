@@ -221,7 +221,7 @@ public class MultiplayerGame extends AbstractGame {
 
 		bar.update(time);
 		selectTextureStateTime += time;
-		ghostStateTime = (ghostStateTime + time) % 5;
+		ghostStateTime = (ghostStateTime + time) % roundTime;
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
@@ -266,7 +266,7 @@ public class MultiplayerGame extends AbstractGame {
 			tackleDetection(time);
 
 			if (elapsedRoundTime >= roundTime) {
-				beginSetupPhase(0.7f);
+				beginSetupPhase(1.5f);
 			}
 
 			if (remainingMatchTime < 0) {
