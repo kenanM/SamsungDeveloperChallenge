@@ -367,7 +367,7 @@ public class TutorialGame extends AbstractGame {
 			textArea.setText("You can give multiple actions to any player to plan out better strategies and maneuvers. \n\n"
 					+ "You can continue a path from any of your previous actions. \n\n"
 					+ "Continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
-					+ "Try tackling the red player and scoring a goal straight away.");
+					+ "Try tackling the red player, then moving away from them and scoring a goal.");
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			textArea.setText("The goal keeper acts differently than your other players. \n\n"
 					+ "It moves automatically, and you can give them instructions only when they have the ball. \n\n"
@@ -379,11 +379,11 @@ public class TutorialGame extends AbstractGame {
 		gameState = GameState.PAUSED;
 	}
 
-	/** Instruct the player to move to a random spot within a given area */
+	/** Returns a random vector within a given area */
 	private Vector2 randomVector2(float x, float y, float width,
 			float height) {
 		float rx = Utils.randomFloat(null, x, x + width);
-		float ry = Utils.randomFloat(null, y, y + width);
+		float ry = Utils.randomFloat(null, y, y + height);
 		return new Vector2(rx, ry);
 	}
 
@@ -415,17 +415,63 @@ public class TutorialGame extends AbstractGame {
 			p.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
-
-			// p1.addAction(new MoveToPosition(
-			// new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-			// VIRTUAL_SCREEN_HEIGHT * 5 / 6), p1));
-
 			p1.addAction(new Move(new Vector2[] {
 					p1.getPlayerPosition(),
 					randomVector2(40, 100, Game.VIRTUAL_SCREEN_WIDTH - 2 * 40,
 							Game.VIRTUAL_SCREEN_HEIGHT - 2 * 100) }));
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+			// Order red players to move through 3 random points close to itself
+
+			Player p = redPlayers.get(0);
+			Player p1 = redPlayers.get(1);
+
+			Vector2 randomMidfield1;
+			Vector2 randomMidfield2;
+			Vector2 randomMidfield3;
+
+			randomMidfield1 = randomVector2(p.getPlayerX() - 100,
+					p.getPlayerY() - 100, 200, 200);
+
+			randomMidfield2 = randomVector2(p.getPlayerX() - 100,
+					p.getPlayerY() - 100, 200, 200);
+
+			randomMidfield3 = randomVector2(p.getPlayerX() - 100,
+					p.getPlayerY() - 100, 200, 200);
+
+			restrictToField(randomMidfield1);
+			restrictToField(randomMidfield2);
+			restrictToField(randomMidfield3);
+
+			p.addAction(new Move(new Vector2[] { randomMidfield1,
+					randomMidfield2, randomMidfield3 }));
+
+			randomMidfield1 = randomVector2(p1.getPlayerX() - 100,
+					p1.getPlayerY() - 100, 200, 200);
+
+			randomMidfield2 = randomVector2(p1.getPlayerX() - 100,
+					p1.getPlayerY() - 100, 200, 200);
+
+			randomMidfield3 = randomVector2(p1.getPlayerX() - 100,
+					p1.getPlayerY() - 100, 200, 200);
+
+			restrictToField(randomMidfield1);
+			restrictToField(randomMidfield2);
+			restrictToField(randomMidfield3);
+
+			p1.addAction(new Move(new Vector2[] { randomMidfield1,
+					randomMidfield2, randomMidfield3 }));
+
 		}
 
+	}
+
+	protected void restrictToField(Vector2 vector) {
+		vector.x = (vector.x > Game.VIRTUAL_SCREEN_WIDTH) ? Game.VIRTUAL_SCREEN_WIDTH
+				: vector.x;
+		vector.x = (vector.x < 0) ? Game.VIRTUAL_SCREEN_WIDTH : vector.x;
+		vector.y = (vector.y > Game.VIRTUAL_SCREEN_HEIGHT) ? Game.VIRTUAL_SCREEN_HEIGHT
+				: vector.y;
+		vector.y = (vector.y < 0) ? Game.VIRTUAL_SCREEN_HEIGHT : vector.y;
 	}
 
 	@Override
