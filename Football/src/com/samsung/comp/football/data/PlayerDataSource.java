@@ -1,12 +1,11 @@
 package com.samsung.comp.football.data;
 
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.PLAYER_TABLE_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.ID_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.PLAYER_NAME_COLUMN_NAME;
 import static com.samsung.comp.football.data.PlayerDatabaseHelper.*;
-
+import static com.samsung.comp.football.data.PlayerDatabaseHelper.TEAM_ID_COLUMN_NAME;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 
@@ -26,11 +25,14 @@ public class PlayerDataSource {
 			PLAYER_NAME_COLUMN_NAME, PURCHASED_COLUMN_NAME,
 			SHOOT_SPEED_COLUMN_NAME, RUN_SPEED_COLUMN_NAME,
 			TACKLE_SKILL_COLUMN_NAME, TACKLE_PREVENTION_SKILL_COLUMN_NAME,
-			SAVING_SKILL_COLUMN_NAME };
+			SAVING_SKILL_COLUMN_NAME, TEAM_ID_COLUMN_NAME };
 
 	public PlayerDataSource(Context context) {
+		Log.v("db", "Instantiating playerDataSource");
 		helper = new PlayerDatabaseHelper(context);
+		Log.v("db", "Instantiated playerDataSource");
 		open();
+		Log.v("db", "opened at line 35");
 	}
 
 	public void open() throws SQLException {
@@ -41,43 +43,31 @@ public class PlayerDataSource {
 		helper.close();
 	}
 
-	public void addPlayers(List<Player> players) {
-		for (Player player : players) {
-			addPlayer(player);
+	public List<Player> getTeam(int teamID){
+		Cursor cursor = database.query(PLAYER_TABLE_NAME, allColumns, "TEAM_ID_COLUMN_NAME ="+teamID,null, null, null, null);
+		cursor.moveToFirst();
+		LinkedList<Player> result = new LinkedList<Player>();
+		while(cursor.isAfterLast() == false){
+			result.add(cursorToPlayer(cursor));
 		}
+		return result;
 	}
-
-	private void addPlayer(Player player) {
-		Log.v(PlayerDataSource.class.toString(),
-				"adding player: " + player.toString());
-		ContentValues values = new ContentValues();
-		values.put(PLAYER_NAME_COLUMN_NAME, player.getName());
-		values.put(PURCHASED_COLUMN_NAME, player.isPurchased() ? 1 : 0);
-		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeed());
-		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeed());
-		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkill());
-		values.put(TACKLE_PREVENTION_SKILL_COLUMN_NAME,
-				player.getTacklePreventionSkill());
-		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkill());
-
-		database.insert(PLAYER_TABLE_NAME, null, values);
-	}
-
-	/** Returns a cursor of a select all statement */
-	public Cursor getCursor() {
-		return database.query(PLAYER_TABLE_NAME, allColumns, null, null, null,
-				null, null);
+	public Goalie getGoalie(int teamID){
+		Cursor cursor = database.query(PLAYER_TABLE_NAME, allColumns, null,new String[]{TEAM_ID_COLUMN_NAME + "=" + teamID, GOALIE_COLUMN_NAME + "=1"}, null, null, null);
+		cursor.moveToFirst();
+		return (Goalie) cursorToPlayer(cursor);
 	}
 
 	/**
 	 * Extract a Player object from a cursor pointing at a row in the player
 	 * table
 	 */
-	public static Player cursorToBook(Cursor cursor) {
+	public static Player cursorToPlayer(Cursor cursor) {
+		int id = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
 		String name = cursor.getString(cursor
 				.getColumnIndex(PLAYER_NAME_COLUMN_NAME));
 		boolean purchased = (cursor.getInt(cursor
-				.getColumnIndex(PURCHASED_COLUMN_NAME)) != 0);
+				.getColumnIndex(PURCHASED_COLUMN_NAME)) > 0);
 		float shootSpeed = cursor.getFloat(cursor
 				.getColumnIndex(SHOOT_SPEED_COLUMN_NAME));
 		float runSpeed = cursor.getFloat(cursor
@@ -88,8 +78,15 @@ public class PlayerDataSource {
 				.getColumnIndex(TACKLE_PREVENTION_SKILL_COLUMN_NAME));
 		float savingSkill = cursor.getFloat(cursor
 				.getColumnIndex(SAVING_SKILL_COLUMN_NAME));
-
-		return new Player(0, 0, null, shootSpeed,
-				runSpeed, tackleSkill, tacklePrevention, savingSkill);
+		int teamId = cursor.getInt(cursor.getColumnIndex(TEAM_ID_COLUMN_NAME));
+		boolean goalie = cursor.getInt(cursor.getColumnIndex(GOALIE_COLUMN_NAME)) > 0;
+		
+		if(goalie){
+			return new Goalie(id, name, purchased, shootSpeed, runSpeed,
+				tackleSkill, tacklePrevention, savingSkill, teamId);
+		} else{
+			return new Player(id, name, purchased, shootSpeed, runSpeed,
+				tackleSkill, tacklePrevention, savingSkill, teamId);
+		}
 	}
 }

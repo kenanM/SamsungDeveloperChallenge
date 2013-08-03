@@ -20,10 +20,18 @@ public class Goalie extends Player {
 	protected Vector2 goal;
 	protected Vector2 middle;
 	protected static final float DEFENSIVE_DISTANCE_FROM_GOAL = 150;
-	private final Texture unselectableHoverTexture;
-	private final TextureRegion unselectableRegion;
+	private Texture unselectableHoverTexture;
+	private TextureRegion unselectableRegion;
 
 	private AbstractGame game;
+
+	/* This is the constructor to call when creating from a database */
+	public Goalie(int id, String name, boolean purchased, float shootSpeed,
+			float runSpeed, float tackleSkill, float tacklePreventionSkill,
+			float savingSkill, int teamID) {
+		super(id, name, purchased, shootSpeed, runSpeed, tackleSkill,
+				tacklePreventionSkill, savingSkill, teamID);
+	}
 
 	public Goalie(float playerX, float playerY, TeamColour teamColour,
 			AbstractGame game, float saving) {
@@ -38,7 +46,7 @@ public class Goalie extends Player {
 
 		if (teamColour == TeamColour.BLUE) {
 			this.goal = Game.BLUE_GOAL;
-			this.TEAM = TeamColour.BLUE;
+			this.team = TeamColour.BLUE;
 			this.rotation = 270;
 			this.middle = Game.BLUE_GOAL.cpy().sub(0,
 					DEFENSIVE_DISTANCE_FROM_GOAL);
@@ -52,7 +60,7 @@ public class Goalie extends Player {
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		} else {
 			this.goal = Game.RED_GOAL;
-			this.TEAM = TeamColour.RED;
+			this.team = TeamColour.RED;
 			this.rotation = 90;
 			this.middle = Game.RED_GOAL.cpy().add(0,
 					DEFENSIVE_DISTANCE_FROM_GOAL);
@@ -66,7 +74,7 @@ public class Goalie extends Player {
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		}
 		this.currentFrame = walkAnimation.getKeyFrame(0);
-		
+
 		game.getBall().addBallOwnerSetListener(new BallOwnerSetListener() {
 			@Override
 			public void onBallOwnerSet(Ball ball, Player newOwner) {
@@ -130,4 +138,10 @@ public class Goalie extends Player {
 			game.onGoalieObtainsBall(newOwner.getTeam());
 		}
 	}
+
+	@Override
+	public boolean isGoalie() {
+		return true;
+	}
+
 }

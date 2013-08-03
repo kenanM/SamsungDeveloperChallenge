@@ -33,7 +33,7 @@ public class GameActivity extends AndroidApplication {
 			game = new Game(new ActionResolverAndroid(this), matchTime,
 					roundTime, statusBarAtTop, scoreLimit);
 		} else {
-			game = new Game(new ActionResolverAndroid(this));
+			game = new Game(this, new ActionResolverAndroid(this));
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);

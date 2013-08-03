@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -42,7 +43,9 @@ import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public abstract class AbstractGame implements ApplicationListener,
 		InputProcessor, SPenHoverListener {
-
+	
+	protected Context context;
+	
 	protected int result;
 
 	// TODO: Remove these and other hard coded values

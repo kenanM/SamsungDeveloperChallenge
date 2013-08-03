@@ -51,18 +51,18 @@ public class Player extends Rectangle implements Followable {
 	protected static Texture notificationTexture;
 	private float notificationTime = 0f;
 
-	protected TeamColour TEAM;
+	protected TeamColour team;
 
+	private int id;
+	private String name;
+	private boolean purchased;
 	protected float shootSpeed = 550;
 	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
 	protected float tacklePreventionSkill = 40;
 	protected float savingSkill = 420;
+	private int teamID;
 
-	private boolean isPurchased = true;
-
-	// TODO: Player shot accuracy?
-	// private float accuracy;
 	Vector2[] path;
 	int positionInPath = 0;
 	float rotation;
@@ -74,12 +74,27 @@ public class Player extends Rectangle implements Followable {
 
 	private List<MovementCompletedListener> moveCompleteListeners = new ArrayList<MovementCompletedListener>();
 
+	/* This is the constructor to call when creating from a database */
+	public Player(int id, String name, boolean purchased, float shootSpeed,
+			float runSpeed, float tackleSkill, float tacklePreventionSkill, float savingSkill,
+			int teamID) {
+		this.id = id;
+		this.name = name;
+		this.purchased = purchased;
+		this.shootSpeed = shootSpeed;
+		this.runSpeed = runSpeed;
+		this.tackleSkill = tackleSkill;
+		this.tacklePreventionSkill = tacklePreventionSkill;
+		this.savingSkill = savingSkill;
+		this.teamID = teamID;
+	}
+
 	public Player(float x, float y, TeamColour teamColour) {
 		this.x = translatePlayerCoordinate(x);
 		this.y = translatePlayerCoordinate(y);
 		this.width = PLAYER_SIZE;
 		this.height = PLAYER_SIZE;
-		this.TEAM = teamColour;
+		this.team = teamColour;
 
 		if (teamColour == TeamColour.RED) {
 			this.rotation = 90;
@@ -90,7 +105,7 @@ public class Player extends Rectangle implements Followable {
 			this.walkAnimation = new Animation(0.10f,
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		} else {
-			this.TEAM = TeamColour.BLUE;
+			this.team = TeamColour.BLUE;
 			this.rotation = 270;
 			this.hoverTexture = new Texture(
 					Gdx.files.internal("blue hover.png"));
@@ -107,7 +122,8 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public Player(float x, float y, TeamColour teamColour, float shoot,
-			float run, float tackle, float tackleStop, float savingSkill) {
+			float run, float tackle, float tackleStop, float savingSkill,
+			int teamID) {
 
 		this(x, y, teamColour);
 
@@ -116,11 +132,17 @@ public class Player extends Rectangle implements Followable {
 		this.tackleSkill = tackle;
 		this.tacklePreventionSkill = tackleStop;
 		this.savingSkill = savingSkill;
+		this.teamID = teamID;
 	}
 
 	@Override
 	public Vector2 getPosition() {
 		return getPlayerPosition();
+	}
+	
+	public void setPosition(int x, int y){
+		this.x = translatePlayerCoordinate(x);
+		this.y = translatePlayerCoordinate(y);
 	}
 
 	public void setListener(ActionFiredListener listener) {
@@ -376,7 +398,11 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public TeamColour getTeam() {
-		return TEAM;
+		return team;
+	}
+	
+	public void setTeam(TeamColour team){
+		this.team = team;
 	}
 
 	public float getPlayerX() {
@@ -496,6 +522,10 @@ public class Player extends Rectangle implements Followable {
 		return savingSkill;
 	}
 
+	public boolean isGoalie() {
+		return false;
+	}
+
 	public void setShootSpeed(float newShootSpeed) {
 		this.shootSpeed = newShootSpeed;
 	}
@@ -545,13 +575,19 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public boolean isPurchased() {
-		// TODO: figure out player ownership
-		return isPurchased;
+		return purchased;
 	}
 
 	public String getName() {
-		// TODO: Sort out player names
-		return "Gavin";
+		return name;
+	}
+
+	public int getTeamID() {
+		return teamID;
+	}
+
+	public int getID() {
+		return id;
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -614,10 +650,10 @@ public class Player extends Rectangle implements Followable {
 					target, shootSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			
+
 			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
 			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
-			
+
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -627,7 +663,7 @@ public class Player extends Rectangle implements Followable {
 
 	public void shortKick(Ball ball, Vector2 target) {
 		if (hasBall()) {
-			
+
 			Vector2 movementVector = new Vector2(target.x
 					- ball.getBallPosition().x, target.y
 					- ball.getBallPosition().y);
@@ -642,10 +678,10 @@ public class Player extends Rectangle implements Followable {
 					target, (float) lowestSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			
+
 			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
 			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
-			
+
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -714,10 +750,10 @@ public class Player extends Rectangle implements Followable {
 
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			
+
 			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
 			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
-			
+
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {

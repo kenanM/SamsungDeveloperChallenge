@@ -8,6 +8,7 @@ import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.football.data.PlayerDataSource;
 
 public class MultiplayerGame extends AbstractGame {
 
@@ -147,29 +148,33 @@ public class MultiplayerGame extends AbstractGame {
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
 		// create the players
-		redPlayers = new LinkedList<Player>();
+		PlayerDataSource database = new PlayerDataSource(context);
+		
+		redPlayers = database.getTeam(0);
+		redPlayers.get(0).setPosition(338, 256);
+		redPlayers.get(0).setPosition(338, 384);
+		redPlayers.get(0).setPosition(169, 320);
+		redPlayers.get(0).setPosition(507, 320);
+		for (Player player: redPlayers){
+			player.setTeam(TeamColour.RED);
+		}
+		redGoalie = database.getGoalie(0);
+		redGoalie.setPosition(338, 124);
+		redGoalie.setTeam(TeamColour.RED);
+		
 
-		redPlayers.add(new Player(338, 256, TeamColour.RED, 520, 150, 100, 20,
-				380));
-		redPlayers.add(new Player(338, 384, TeamColour.RED, 540, 200, 80, 20,
-				380));
-		redPlayers.add(new Player(169, 320, TeamColour.RED, 550, 100, 100, 40,
-				420));
-		redPlayers.add(new Player(507, 320, TeamColour.RED, 530, 150, 80, 40,
-				420));
-		redGoalie = new Goalie(338, 124, TeamColour.RED, this, 500);
-
-		bluePlayers = new LinkedList<Player>();
-
-		bluePlayers.add(new Player(338, 768, TeamColour.BLUE, 520, 150, 100,
-				20, 380));
-		bluePlayers.add(new Player(338, 640, TeamColour.BLUE, 540, 200, 80, 20,
-				380));
-		bluePlayers.add(new Player(507, 704, TeamColour.BLUE, 550, 100, 100,
-				40, 420));
-		bluePlayers.add(new Player(169, 704, TeamColour.BLUE, 530, 150, 80, 40,
-				420));
-		blueGoalie = new Goalie(338, 900, TeamColour.BLUE, this, 500);
+		bluePlayers = database.getTeam(0);
+		redPlayers.get(0).setPosition(338, 768);
+		redPlayers.get(0).setPosition(338, 640);
+		redPlayers.get(0).setPosition(169, 704);
+		redPlayers.get(0).setPosition(507, 704);
+		for (Player player: redPlayers){
+			player.setTeam(TeamColour.BLUE);
+		}
+		
+		blueGoalie = database.getGoalie(0);
+		blueGoalie.setPosition(338, 900);
+		blueGoalie.setTeam(TeamColour.RED);
 
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
