@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ButtonPressListener;
+import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
@@ -101,8 +102,8 @@ public class TutorialGame extends AbstractGame {
 				650), p));
 	}
 
-	private void setupMarkTacklePhase(float setupTime) {
-		beginSetupPhase(setupTime);
+	private void setupMarkTacklePhase() {
+		beginSetupPhase(2f);
 		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
 		redPlayers.add(p);
@@ -118,12 +119,14 @@ public class TutorialGame extends AbstractGame {
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
 	}
 
-	private void setupQueuePhase(float setupTime) {
-		beginSetupPhase(setupTime);
-		Player p = redPlayers.get(1);
+	private void setupQueuePhase() {
+		beginSetupPhase(3f);
+		Player p = redPlayers.get(0);
+		Player ballOwner = ball.getOwner();
 
-		Player owner = ball.getOwner();
-		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
+		p.addAction(new MarkBall(p.getPlayerPosition(), ball));
+		ballOwner.addAction(new Pass(ball, ballOwner, p, ballOwner
+				.getPlayerPosition()));
 	}
 
 	private void setupGoaliePhase(float setupTime) {
@@ -206,14 +209,14 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
-				setupMarkTacklePhase(2f);
+				setupMarkTacklePhase();
 				phaseCompleted = true;
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			if (ball.hasOwner()) {
 				if (ball.getOwner().getTeam() == team1) {
 					tutorialPhase = TutorialPhase.QUEUEING;
-					setupQueuePhase(1.5f);
+					setupQueuePhase();
 					phaseCompleted = true;
 				}
 			}
@@ -439,7 +442,7 @@ public class TutorialGame extends AbstractGame {
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
 			giveBackBall();
-			setupPlayerPositioning();
+			// setupPlayerPositioning();
 			if (remainingSetupTime <= 0) {
 				beginInputStage();
 			}
