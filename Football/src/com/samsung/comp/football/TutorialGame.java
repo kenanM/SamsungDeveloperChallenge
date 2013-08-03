@@ -62,7 +62,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (tutorialPhase == TutorialPhase.SHOOT) {
 			tutorialPhase = TutorialPhase.PASS;
-			setupPassPhase(2f);
+			setupPassPhase();
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			tutorialPhase = TutorialPhase.GOALIE;
 			setupGoaliePhase(1.5f);
@@ -87,8 +87,8 @@ public class TutorialGame extends AbstractGame {
 		beginInputStage();
 	}
 
-	private void setupPassPhase(float setupTime) {
-		beginSetupPhase(setupTime);
+	private void setupPassPhase() {
+		beginSetupPhase(4f);
 		Player p = new Player(0, 256, TeamColour.BLUE);
 		bluePlayers.add(p);
 
@@ -121,15 +121,6 @@ public class TutorialGame extends AbstractGame {
 	private void setupQueuePhase(float setupTime) {
 		beginSetupPhase(setupTime);
 		Player p = redPlayers.get(1);
-
-		// p.addAction(new MoveToPosition(new Vector2(
-		// VIRTUAL_SCREEN_WIDTH * 2 / 3, VIRTUAL_SCREEN_HEIGHT * 2 / 3), p));
-		p.addAction(new MoveToPosition(new Vector2(
-				(VIRTUAL_SCREEN_WIDTH * 2 / 3), VIRTUAL_SCREEN_HEIGHT * 5 / 6),
-				p));
-		p.addAction(new MoveToPosition(new Vector2(
-				(VIRTUAL_SCREEN_WIDTH * 2 / 3) - 50,
-				VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
 
 		Player owner = ball.getOwner();
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
