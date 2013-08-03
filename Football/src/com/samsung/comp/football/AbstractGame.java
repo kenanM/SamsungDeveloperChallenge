@@ -796,6 +796,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			float rotation = 0;
 			rotation = Utils.getMoveVector(ball.getOwner().getPlayerPosition(),
 					player.getPlayerPosition(), 5).angle();
+			player.setTackleImmunityTime(TACKLE_IMMUNITY_TIME);
 			player.setRotation(rotation);
 			ball.setOwner(player);
 		} else {
