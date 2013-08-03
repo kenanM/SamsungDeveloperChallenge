@@ -97,8 +97,8 @@ public class TutorialGame extends AbstractGame {
 				320), p));
 
 		Player p0 = bluePlayers.get(0);
-		p0.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 3,
-				750), p));
+		p0.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 6,
+				650), p));
 	}
 
 	private void setupMarkTacklePhase(float setupTime) {
