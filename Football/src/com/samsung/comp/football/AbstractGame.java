@@ -159,9 +159,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected float selectTextureStateTime = 0f;
 
 	protected Texture ghostSpriteSheet;
-	Animation ghostRunAnimation;
+	protected Animation ghostRunAnimation;
 	protected float ghostStateTime = 0f;
-
+	protected TextureRegion ghostFrame;
+	
 	protected Texture pointer;
 	protected Texture pathArrow;
 	protected Texture pushIndicator;
@@ -473,20 +474,23 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void drawGhost(Player player, float futureTime) {
-		PlayerPositionData ppd = player
+		PlayerPositionData ghostsPosition = player
 				.getFuturePositionData(futureTime, false);
-		Vector2 futurePos = ppd.position;
-		float rotation = ppd.rotation;
-		if (futurePos != null) {
-			// batch.draw(ghostTexture, futurePos.x - ghostTexture.getWidth() /
-			// 2,
-			// futurePos.y - ghostTexture.getHeight() / 2,
-			// ghostTexture.getWidth() / 2, ghostTexture.getHeight() / 2,
-			// ghostTexture.getWidth(), ghostTexture.getHeight(), 0.5f,
-			// 0.5f, rotation, 0, 0, ghostTexture.getWidth(),
-			// ghostTexture.getHeight(), false, false);
+		Vector2 ghostPos = ghostsPosition.position;
 
-			TextureRegion ghostFrame = getGhostFrame(futureTime);
+		// If the ghost is at the same position as the player, don't render
+		if (player.getPosition().epsilonEquals(ghostPos, 0))
+			return;
+
+		float rotation = ghostsPosition.rotation;
+		if (ghostPos != null) {
+			PlayerPositionData ghostsNextPosition = player
+					.getFuturePositionData(futureTime + 0.1f, false);
+			Vector2 futurePos = ghostsNextPosition.position;
+			//Only update the ghost animation if it has actually moved
+			if (!futurePos.epsilonEquals(ghostPos, 0) || ghostFrame == null) {
+				ghostFrame = getGhostFrame(futureTime);
+			}
 			batch.draw(ghostFrame, futurePos.x - ghostFrame.getRegionWidth()
 					/ 2, futurePos.y - ghostFrame.getRegionHeight() / 2,
 					ghostFrame.getRegionWidth() / 2,
