@@ -152,7 +152,7 @@ public class MultiplayerGame extends AbstractGame {
 			player.initialize(TeamColour.RED);
 		}
 		redGoalie = playerDatabase.getGoalie(1);
-		redGoalie.initialize(TeamColour.RED);
+		redGoalie.initialize(this, TeamColour.RED);
 
 		bluePlayers = playerDatabase.getPlayers(1);
 		for (Player player : bluePlayers) {
@@ -160,7 +160,7 @@ public class MultiplayerGame extends AbstractGame {
 		}
 
 		blueGoalie = playerDatabase.getGoalie(1);
-		blueGoalie.initialize(TeamColour.BLUE);
+		blueGoalie.initialize(this, TeamColour.BLUE);
 
 		playerDatabase.close();
 		
