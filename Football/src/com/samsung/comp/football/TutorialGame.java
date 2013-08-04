@@ -1,8 +1,12 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ButtonPressListener;
+import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
 import com.samsung.comp.football.Actions.Pass;
@@ -62,7 +66,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (tutorialPhase == TutorialPhase.SHOOT) {
 			tutorialPhase = TutorialPhase.PASS;
-			setupPassPhase(2f);
+			setupPassPhase();
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			tutorialPhase = TutorialPhase.GOALIE;
 			setupGoaliePhase(1.5f);
@@ -87,8 +91,8 @@ public class TutorialGame extends AbstractGame {
 		beginInputStage();
 	}
 
-	private void setupPassPhase(float setupTime) {
-		beginSetupPhase(setupTime);
+	private void setupPassPhase() {
+		beginSetupPhase(4f);
 		Player p = new Player(0, 256, TeamColour.BLUE);
 		bluePlayers.add(p);
 
@@ -97,12 +101,12 @@ public class TutorialGame extends AbstractGame {
 				320), p));
 
 		Player p0 = bluePlayers.get(0);
-		p0.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 3,
-				750), p));
+		p0.addAction(new MoveToPosition(new Vector2(VIRTUAL_SCREEN_WIDTH / 6,
+				650), p));
 	}
 
-	private void setupMarkTacklePhase(float setupTime) {
-		beginSetupPhase(setupTime);
+	private void setupMarkTacklePhase() {
+		beginSetupPhase(2f);
 		Player p = new Player(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 				VIRTUAL_SCREEN_HEIGHT, TeamColour.RED);
 		redPlayers.add(p);
@@ -118,27 +122,23 @@ public class TutorialGame extends AbstractGame {
 		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
 	}
 
-	private void setupQueuePhase(float setupTime) {
-		beginSetupPhase(setupTime);
-		Player p = redPlayers.get(1);
+	private void setupQueuePhase() {
+		beginSetupPhase(3f);
+		Player p = redPlayers.get(0);
+		Player ballOwner = ball.getOwner();
 
-		// p.addAction(new MoveToPosition(new Vector2(
-		// VIRTUAL_SCREEN_WIDTH * 2 / 3, VIRTUAL_SCREEN_HEIGHT * 2 / 3), p));
-		p.addAction(new MoveToPosition(new Vector2(
-				(VIRTUAL_SCREEN_WIDTH * 2 / 3), VIRTUAL_SCREEN_HEIGHT * 5 / 6),
-				p));
-		p.addAction(new MoveToPosition(new Vector2(
-				(VIRTUAL_SCREEN_WIDTH * 2 / 3) - 50,
-				VIRTUAL_SCREEN_HEIGHT * 5 / 6), p));
-
-		Player owner = ball.getOwner();
-		owner.addAction(new Pass(ball, owner, p, owner.getPlayerPosition()));
+		p.addAction(new MarkBall(p.getPlayerPosition(), ball));
+		ballOwner.addAction(new Pass(ball, ballOwner, p, ballOwner
+				.getPlayerPosition()));
 	}
 
 	private void setupGoaliePhase(float setupTime) {
 		beginSetupPhase(setupTime);
 		redGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2, 0, TeamColour.RED,
 				this, 500);
+		blueGoalie = new Goalie(VIRTUAL_SCREEN_WIDTH / 2,
+				VIRTUAL_SCREEN_HEIGHT,
+				TeamColour.BLUE, this, 500);
 	}
 
 	@Override
@@ -215,14 +215,14 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.PASS) {
 			if (bluePlayers.get(0).hasBall()) {
 				tutorialPhase = TutorialPhase.MARK;
-				setupMarkTacklePhase(2f);
+				setupMarkTacklePhase();
 				phaseCompleted = true;
 			}
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 			if (ball.hasOwner()) {
 				if (ball.getOwner().getTeam() == team1) {
 					tutorialPhase = TutorialPhase.QUEUEING;
-					setupQueuePhase(1.5f);
+					setupQueuePhase();
 					phaseCompleted = true;
 				}
 			}
@@ -244,53 +244,85 @@ public class TutorialGame extends AbstractGame {
 	protected void displayArrows() {
 
 		if (tutorialPhase == TutorialPhase.MOVE) {
-			arrows.add(new Arrow(pointer, bluePlayers.get(0).getPlayerX(),
-					bluePlayers.get(0).y));
-			Arrow a1 = new Arrow(pointer);
-			Arrow a2 = new Arrow(pointer);
-			Arrow a3 = new Arrow(pointer);
-			a1.pointAt(VIRTUAL_SCREEN_WIDTH / 2, VIRTUAL_SCREEN_HEIGHT / 2);
-			a2.pointAt(VIRTUAL_SCREEN_WIDTH / 2 + a2.getWidth(),
-					VIRTUAL_SCREEN_HEIGHT / 2);
-			a3.pointAt(VIRTUAL_SCREEN_WIDTH / 2 - a3.getWidth(),
-					VIRTUAL_SCREEN_HEIGHT / 2);
+
+			Player bluePlayer = bluePlayers.get(0);
+			Arrow a1 = new Arrow(pathArrow);
+			a1.setTip(24, 24);
+			a1.pointAt(bluePlayer.getPlayerX(), bluePlayer.getPlayerY());
 			arrows.add(a1);
-			arrows.add(a2);
-			arrows.add(a3);
-			Arrow a = new Arrow(pointer, 25 + 32, VIRTUAL_SCREEN_HEIGHT);
-			arrows.add(a);
+
+			Arrow push = new Arrow(pushIndicator, 25 + 32,
+					VIRTUAL_SCREEN_HEIGHT, arrowTipFactory(pushIndicator));
+			arrows.add(push);
 
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 
-			Arrow a1 = new Arrow(pointer);
-			a1.pointAt(bluePlayers.get(0).getPlayerX(), bluePlayers.get(0).y);
+			Arrow push = new Arrow(pushIndicator, bluePlayers.get(0)
+					.getPlayerX(), bluePlayers.get(0).getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			Arrow push2 = new Arrow(pushIndicator, ball.getBallX(), ball.y,
+					arrowTipFactory(pushIndicator));
+			arrows.add(push);
+			arrows.add(push2);
 
-			Arrow a2 = new Arrow(pointer);
-			a2.pointAt(ball.getBallX(), ball.y);
-			arrows.add(a1);
-			arrows.add(a2);
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
 
-			Arrow a1 = new Arrow(pointer);
-			a1.pointAt(ball.getBallX(), ball.y);
+			Arrow push = new Arrow(pushIndicator, ball.getBallX(), ball.y,
+					arrowTipFactory(pushIndicator));
+			Arrow push2 = new Arrow(pushIndicator,
+					Game.VIRTUAL_SCREEN_WIDTH / 2,
+					Game.RED_GOAL_AREA.getHeight(),
+					arrowTipFactory(pushIndicator));
 
-			Arrow a2 = new Arrow(pointer);
-			a2.pointAt(Game.RED_GOAL.x, Game.RED_GOAL.y);
-			arrows.add(a1);
-			arrows.add(a2);
+			push.follow(ball);
+			arrows.add(push);
+			arrows.add(push2);
 		} else if (tutorialPhase == TutorialPhase.PASS) {
+			Player p1 = bluePlayers.get(0);
+			Player p2 = bluePlayers.get(1);
+			
+			Arrow push = new Arrow(pushIndicator, p1.getPlayerX(),
+					p1.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			Arrow push2 = new Arrow(pushIndicator, p2.getPlayerX(),
+					p2.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			
+			push.follow(p1);
+			push2.follow(p2);
+
+			arrows.add(push);
+			arrows.add(push2);
 
 		} else if (tutorialPhase == TutorialPhase.MARK) {
 
-			Player p = redPlayers.get(0);
-			Player p1 = redPlayers.get(1);
+			Player rp = redPlayers.get(0);
+			Player rp1 = redPlayers.get(1);
 
-			Arrow a1 = new Arrow(pointer);
-			Arrow a2 = new Arrow(pointer);
-			a1.follow(p);
-			a2.follow(p1);
-			arrows.add(a1);
-			arrows.add(a2);
+			Player bp = bluePlayers.get(0);
+			Player bp1 = bluePlayers.get(1);
+			
+			Arrow bluePush1 = new Arrow(pushIndicator, bp.getPlayerX(), bp.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			
+			Arrow bluePush2 = new Arrow(pushIndicator, bp1.getPlayerX(), bp1.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+			
+			Arrow redPush1 = new Arrow(pushIndicator, rp.getPlayerX(), rp.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+
+			Arrow redPush2 = new Arrow(pushIndicator, rp1.getPlayerX(), rp1.getPlayerY(),
+					arrowTipFactory(pushIndicator));
+
+			bluePush1.follow(bp);
+			bluePush2.follow(bp1);
+			redPush1.follow(rp);
+			redPush2.follow(rp1);
+
+			arrows.add(bluePush1);
+			arrows.add(bluePush2);
+			arrows.add(redPush1);
+			arrows.add(redPush2);
 
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
@@ -338,7 +370,7 @@ public class TutorialGame extends AbstractGame {
 			textArea.setText("You can give multiple actions to any player to plan out better strategies and maneuvers. \n\n"
 					+ "You can continue a path from any of your previous actions. \n\n"
 					+ "Continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
-					+ "Try tackling the red player and scoring a goal straight away.");
+					+ "Try tackling the red player, then moving away from them and scoring a goal.");
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			textArea.setText("The goal keeper acts differently than your other players. \n\n"
 					+ "It moves automatically, and you can give them instructions only when they have the ball. \n\n"
@@ -350,11 +382,11 @@ public class TutorialGame extends AbstractGame {
 		gameState = GameState.PAUSED;
 	}
 
-	/** Instruct the player to move to a random spot within a given area */
+	/** Returns a random vector within a given area */
 	private Vector2 randomVector2(float x, float y, float width,
 			float height) {
 		float rx = Utils.randomFloat(null, x, x + width);
-		float ry = Utils.randomFloat(null, y, y + width);
+		float ry = Utils.randomFloat(null, y, y + height);
 		return new Vector2(rx, ry);
 	}
 
@@ -386,17 +418,63 @@ public class TutorialGame extends AbstractGame {
 			p.addAction(new MoveToPosition(
 					new Vector2(VIRTUAL_SCREEN_WIDTH * 1 / 3,
 							VIRTUAL_SCREEN_HEIGHT * 1 / 6), p));
-
-			// p1.addAction(new MoveToPosition(
-			// new Vector2(VIRTUAL_SCREEN_WIDTH * 2 / 3,
-			// VIRTUAL_SCREEN_HEIGHT * 5 / 6), p1));
-
 			p1.addAction(new Move(new Vector2[] {
 					p1.getPlayerPosition(),
 					randomVector2(40, 100, Game.VIRTUAL_SCREEN_WIDTH - 2 * 40,
 							Game.VIRTUAL_SCREEN_HEIGHT - 2 * 100) }));
+		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+			// Order red players to move through 3 random points close to itself
+
+			Player p = redPlayers.get(0);
+			Player p1 = redPlayers.get(1);
+
+			Vector2 randomMidfield1;
+			Vector2 randomMidfield2;
+			Vector2 randomMidfield3;
+
+			randomMidfield1 = randomVector2(p.getPlayerX() - 100,
+					p.getPlayerY() - 100, 200, 200);
+
+			randomMidfield2 = randomVector2(p.getPlayerX() - 100,
+					p.getPlayerY() - 100, 200, 200);
+
+			randomMidfield3 = randomVector2(p.getPlayerX() - 100,
+					p.getPlayerY() - 100, 200, 200);
+
+			restrictToField(randomMidfield1);
+			restrictToField(randomMidfield2);
+			restrictToField(randomMidfield3);
+
+			p.addAction(new Move(new Vector2[] { randomMidfield1,
+					randomMidfield2, randomMidfield3 }));
+
+			randomMidfield1 = randomVector2(p1.getPlayerX() - 100,
+					p1.getPlayerY() - 100, 200, 200);
+
+			randomMidfield2 = randomVector2(p1.getPlayerX() - 100,
+					p1.getPlayerY() - 100, 200, 200);
+
+			randomMidfield3 = randomVector2(p1.getPlayerX() - 100,
+					p1.getPlayerY() - 100, 200, 200);
+
+			restrictToField(randomMidfield1);
+			restrictToField(randomMidfield2);
+			restrictToField(randomMidfield3);
+
+			p1.addAction(new Move(new Vector2[] { randomMidfield1,
+					randomMidfield2, randomMidfield3 }));
+
 		}
 
+	}
+
+	protected void restrictToField(Vector2 vector) {
+		vector.x = (vector.x > Game.VIRTUAL_SCREEN_WIDTH) ? Game.VIRTUAL_SCREEN_WIDTH
+				: vector.x;
+		vector.x = (vector.x < 0) ? Game.VIRTUAL_SCREEN_WIDTH : vector.x;
+		vector.y = (vector.y > Game.VIRTUAL_SCREEN_HEIGHT) ? Game.VIRTUAL_SCREEN_HEIGHT
+				: vector.y;
+		vector.y = (vector.y < 0) ? Game.VIRTUAL_SCREEN_HEIGHT : vector.y;
 	}
 
 	@Override
@@ -407,7 +485,7 @@ public class TutorialGame extends AbstractGame {
 
 		bar.update(time);
 		selectTextureStateTime += time;
-		ghostStateTime = (ghostStateTime + time) % 5;
+		ghostStateTime = (ghostStateTime + time) % roundTime;
 
 		for (Arrow arrow : arrows) {
 			arrow.update();
@@ -415,6 +493,7 @@ public class TutorialGame extends AbstractGame {
 
 		if (gameState == GameState.SETUP) {
 			remainingSetupTime -= time;
+			giveBackBall();
 			setupPlayerPositioning();
 			if (remainingSetupTime <= 0) {
 				beginInputStage();
@@ -445,6 +524,21 @@ public class TutorialGame extends AbstractGame {
 			if (elapsedRoundTime >= roundTime) {
 				checkPhaseCompletion();
 			}
+		}
+	}
+
+	private void giveBackBall() {
+		Player goalie = redGoalie;
+		if (goalie != null && goalie == ball.getOwner()) {
+
+			Player ballOwner = ball != null ? ball.getOwner() : null;
+			List<Player> players = new ArrayList(getPlayers(TeamColour.RED));
+			players.addAll(getPlayers(TeamColour.BLUE));
+			Player receiver = players.get(Utils.randomInt(null, 0,
+					players.size() - 1));
+
+			goalie.addAction(new Pass(ball, goalie, receiver, goalie
+					.getPlayerPosition()));
 		}
 	}
 

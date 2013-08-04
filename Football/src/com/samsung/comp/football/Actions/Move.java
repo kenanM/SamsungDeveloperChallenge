@@ -165,7 +165,6 @@ public class Move extends Action {
 		float distance = speed * time;
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 		Vector2 position = initialPosition;
-		Vector2 oldPosition = position.cpy();
 		float rotation = 0;
 
 		while (distance > 0 && path != null && path.length > 0
@@ -174,11 +173,10 @@ public class Move extends Action {
 			Vector2 target = path[positionInPath];
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
-				oldPosition = position.cpy();
+				rotation = Utils.getMoveVector(position, target, distance)
+						.angle();
 				position.set(target);
 				positionInPath++;
-				rotation = Utils.getMoveVector(oldPosition, target, distance)
-						.angle();
 
 				// if reached end of path
 				if (positionInPath != 0 && positionInPath == path.length) {

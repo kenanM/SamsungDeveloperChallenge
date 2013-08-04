@@ -8,10 +8,20 @@ import com.samsung.comp.football.Actions.Followable;
 
 public class Arrow extends Rectangle {
 	protected Texture texture;
-	protected float arrowX;
-	protected float arrowY;
 	protected Vector2 tip;
 	protected Followable followable;
+
+	/**
+	 * Constructs an arrow assuming the tip is at the same point as the the
+	 * default pointer (arrowOrange, (19, height)).
+	 * 
+	 * @param texture
+	 *            the texture to use
+	 * @param x
+	 *            the x coordinate to point at
+	 * @param y
+	 *            the y coordinate to point at
+	 */
 
 	public Arrow(Texture texture) {
 		this.width = texture.getWidth();
@@ -20,9 +30,22 @@ public class Arrow extends Rectangle {
 		this.tip = new Vector2(19, texture.getHeight());
 	}
 
-	public Arrow(Texture texture, float x, float y) {
+	public Arrow(Texture texture, float x, float y, Vector2 tip) {
 		this(texture);
+		this.tip = tip;
 		pointAt(x, y);
+	}
+
+	public Arrow(Texture texture, float x, float y, float tipX, float tipY) {
+		this(texture, x, y, new Vector2(tipX, tipY));
+	}
+
+	public void setTip(float x, float y) {
+		setTip(new Vector2(x, y));
+	}
+
+	public void setTip(Vector2 tip) {
+		this.tip = tip;
 	}
 
 	public void follow(Followable followable) {
@@ -39,15 +62,13 @@ public class Arrow extends Rectangle {
 	}
 
 	public void pointAt(float x, float y) {
-		arrowX = x;
-		arrowY = y;
 		this.x = x - tip.x;
 		this.y = y - tip.y;
 	}
 
 	public void update() {
 		if (followable != null) {
-			pointAt(followable.getPosition().x, followable.getPosition().y - 32);
+			pointAt(followable.getPosition().x, followable.getPosition().y);
 		}
 	}
 

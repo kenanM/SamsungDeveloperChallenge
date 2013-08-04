@@ -115,10 +115,10 @@ public class Mark extends Action {
 
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
-				position.set(target);
-				positionInPath++;
 				rotation = Utils.getMoveVector(oldPosition, target, distance)
 						.angle();
+				position.set(target);
+				positionInPath++;
 
 				// if reached end of path
 				if (positionInPath != 0) {
