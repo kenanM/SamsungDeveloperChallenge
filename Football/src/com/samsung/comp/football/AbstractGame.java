@@ -1398,6 +1398,101 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	/**
+	 * Finds the player closest to a point.
+	 * 
+	 * @param point
+	 * @param specificTeamToSearch
+	 *            If null, searches through every player. Otherwise searches the
+	 *            goalie and players of a specified team.
+	 * @return
+	 */
+	protected Player findClosestPlayer(Vector2 point,
+			TeamColour specificTeamToSearch) {
+
+		ArrayList<Player> playersList = new ArrayList<Player>();
+		if (specificTeamToSearch == null) {
+			playersList.addAll(getAllPlayers());
+		} else {
+			playersList.addAll(getPlayers(specificTeamToSearch));
+			playersList.add(getGoalie(specificTeamToSearch));
+		}
+
+		Player closestPlayer = null;
+		Vector2 playerVector;
+		float shortestFoundDistance = Float.MAX_VALUE;
+		for (Player player : playersList) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				Circle inputDetectionCircle = new Circle(point,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(playerVector)) {
+					if (point.dst(playerVector) < shortestFoundDistance) {
+						closestPlayer = player;
+						shortestFoundDistance = point.dst(playerVector);
+					}
+				}
+			}
+		}
+		return closestPlayer;
+	}
+
+	/**
+	 * Finds the index of the action nearest a point for a particular player.
+	 * 
+	 * @param point
+	 * @param player
+	 * @return
+	 */
+	protected int findPlayerIndex(Vector2 point, Player player) {
+
+		List<Vector2> pointsList = player.getPositionList();
+		Collections.reverse(pointsList);
+
+		for (int i = 0; i < pointsList.size(); i++) {
+			Circle inputDetectionCircle = new Circle(point, INPUT_EPSILON_VALUE);
+			if (inputDetectionCircle.contains(pointsList.get(i))) {
+				return pointsList.size() - 1 - i;
+			}
+		}
+		return 0;
+	}
+
+	protected int findClosestPlayerIndex(Vector2 point,
+			TeamColour specificTeamToSearch) {
+
+		ArrayList<Player> playersList = new ArrayList<Player>();
+		if (specificTeamToSearch == null) {
+			playersList.addAll(getAllPlayers());
+		} else {
+			playersList.addAll(getPlayers(specificTeamToSearch));
+			playersList.add(getGoalie(specificTeamToSearch));
+		}
+
+		int index = 0;
+		Vector2 playerVector;
+		float shortestDistanceFound = Float.MAX_VALUE;
+		for (Player player : playersList) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				Circle inputDetectionCircle = new Circle(point,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(playerVector)) {
+					if (point.dst(playerVector) < shortestDistanceFound) {
+						index = pointsList.size() - 1 - i;
+					}
+				}
+			}
+		}
+		return index;
+	}
+
+	/**
 	 * Finds if the ball overlaps or is near a point.
 	 * 
 	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
