@@ -771,12 +771,12 @@ public class Player extends Rectangle implements Followable {
 			Vector2 target = path[positionInPath];
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
-				position.set(target);
-				positionInPath++;
 				if (position.dst(target) != 0) {
 					rotation = Utils.getMoveVector(oldPosition, target,
 							distance).angle();
 				}
+				position.set(target);
+				positionInPath++;
 				if (positionInPath == path.length) {
 					path = new Vector2[] {};
 					resetPathIndex();
