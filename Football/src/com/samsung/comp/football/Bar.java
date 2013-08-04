@@ -1,10 +1,13 @@
 package com.samsung.comp.football;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.samsung.comp.football.AbstractGame.GameState;
 
@@ -16,7 +19,6 @@ public class Bar extends Rectangle {
 	private Color barColor;
 	private Texture playIcon;
 	private Texture cancelIcon;
-	private Texture cancelIconPressed;
 	private Texture undoIcon;
 	private Texture undoIconPressed;
 	private String text;
@@ -31,7 +33,7 @@ public class Bar extends Rectangle {
 
 	private float upYValue;
 	/** The distance between a button and a border */
-	private int xOffset = 25;
+	private int xOffset = 7;
 	private int velocity = 150;
 	// private float playIconMoveDistance = 2 * playIcon.getHeight();
 
@@ -39,6 +41,7 @@ public class Bar extends Rectangle {
 	private Position position = Position.DOWN;
 
 	private final AbstractGame game;
+
 	private BitmapFont bmf;
 
 	private float cancelActionsTimer = 0;
@@ -50,8 +53,10 @@ public class Bar extends Rectangle {
 
 	public Bar(AbstractGame game, boolean topOfScreen) {
 		this.game = game;
-		bmf = new BitmapFont(true);
-		bmf.scale(.35f);
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
+				Gdx.files.internal("fonts/absender1.ttf"));
+		bmf = generator.generateFont(35);
+		bmf.setScale(1, -1);
 		create(topOfScreen);
 	}
 
@@ -64,8 +69,7 @@ public class Bar extends Rectangle {
 
 		positionedAtTop = topOfScreen;
 
-		this.y = positionedAtTop ? -64
-				: Game.VIRTUAL_SCREEN_HEIGHT;
+		this.y = positionedAtTop ? -64 : Game.VIRTUAL_SCREEN_HEIGHT;
 		this.x = 0;
 
 		this.height = 64;
@@ -160,18 +164,29 @@ public class Bar extends Rectangle {
 
 		if (textCountdownTimer > 2) {
 			text = "Red: " + game.getRedScore() + " Blue: "
-					+ game.getBlueScore() + "      " + game.getRemainingTime();
+					+ game.getBlueScore() + "    " + game.getRemainingTime();
 		}
-		bmf.draw(batch, text, playIcon.getWidth() + (xOffset * 4), this.y + 7);
 
 		if (game.getGameState() == GameState.EXECUTION) {
-			bmf.draw(batch, "Executing...", xOffset, this.y + 7);
+			bmf.draw(batch, "Executing... " + text, xOffset, this.y + 22);
 		} else if (game.getGameState() == GameState.SETUP) {
-			bmf.draw(batch, "Setting up...", xOffset, this.y + 7);
+			bmf.draw(batch, "Setting up... " + text, xOffset, this.y + 22);
+		} else if (game.getGameState() == GameState.INPUT) {
+			if(selectedPlayerHasActions()){
+				bmf.setScale(0.9f, -1);
+			} else {
+				bmf.setScale(1,-1);
+			}
+			
+			Log.v("bar", "Bar width = " + bmf.getBounds(text).width);
+				
+			
+			
+			int leftOffset = playIcon.getWidth();
+			bmf.draw(batch, text, leftOffset, this.y + 22);
 		}
 	}
 
-	//
 	public void setPositionToUp() {
 		position = Position.UP;
 	}
@@ -184,7 +199,8 @@ public class Bar extends Rectangle {
 		if (playIconRectangle.contains(x, y)) {
 			game.playButtonPressed();
 
-		} else if (selectedPlayerHasActions() && cancelIconRectangle.contains(x, y)) {
+		} else if (selectedPlayerHasActions()
+				&& cancelIconRectangle.contains(x, y)) {
 			cancelActionsTimer = 0;
 			game.getSelectedPlayer().clearActions();
 			game.clearSelectedPlayer();
