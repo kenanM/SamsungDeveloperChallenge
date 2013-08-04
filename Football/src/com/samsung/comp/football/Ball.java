@@ -30,7 +30,7 @@ public class Ball extends Rectangle implements Followable {
 
 	private Player owner;
 	private Vector2 velocity = new Vector2(0, 0);
-	private float deceleration = 50;
+	private float deceleration = 125;
 
 	private ArrayList<BallOwnerSetListener> listeners = new ArrayList<BallOwnerSetListener>();
 
