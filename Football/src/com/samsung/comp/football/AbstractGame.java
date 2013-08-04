@@ -1818,6 +1818,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 					int index = findPlayerIndex(startVector);
 					if (index != 0) {
+						// Assigning a later action.
 						Action lastMovement = null;
 
 						List<Action> actions = startPlayer.getActions();
@@ -1829,23 +1830,33 @@ public abstract class AbstractGame implements ApplicationListener,
 							}
 						}
 
+						float rotation;
 						if (lastMovement instanceof Mark
 								|| lastMovement instanceof MarkBall) {
+							// Assigning a Follow
 							lineInProgress.clear();
 							lineInProgress.add(startVector);
 							lineInProgress.add(endVector);
+							rotation = new Vector2(endVector.x - startVector.x,
+									endVector.y - startVector.y).angle();
+						} else {
+							// Assigning a move
+							Vector2 differentPoint = Utils
+									.getLastDifferentPoint(lineInProgress);
+							rotation = new Vector2(endVector.x
+									- differentPoint.x, endVector.y
+									- differentPoint.y).angle();
 						}
-						float rotation = new Vector2(endVector.x
-								- startVector.x, endVector.y - startVector.y)
-								.angle();
 						cursor.setRotation(rotation + 45 + 90);
 
-					} else if (lineInProgress.size() >= 5) {
-						Vector2 nearEndPoint = lineInProgress
-								.get(lineInProgress.size() - 5);
+					} else {
+						// Assigning first action
+						Vector2 differentPoint = Utils
+								.getLastDifferentPoint(lineInProgress);
 						float rotation = new Vector2(endVector.x
-								- nearEndPoint.x, endVector.y - nearEndPoint.y)
-								.angle();
+								- differentPoint.x, endVector.y
+								- differentPoint.y).angle();
+
 						cursor.setRotation(rotation + 45 + 90);
 					}
 					return true;

@@ -1,5 +1,6 @@
 package com.samsung.comp.football.Actions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -65,6 +66,54 @@ public class Utils {
 			total += points.get(i).dst(points.get(i + 1));
 		}
 		return total;
+	}
+
+	/**
+	 * Returns the last point in the list that does not equal the final point.
+	 * 
+	 * @param points
+	 *            The list of points
+	 * @return Either returns the latest point that isn't equal to the last one,
+	 *         or returns the last point in the list.
+	 */
+	public static Vector2 getLastDifferentPoint(ArrayList<Vector2> points) {
+		if (points.size() <= 0) {
+			throw new ArrayIndexOutOfBoundsException("List is empty.");
+		}
+
+		Vector2 last = points.get(points.size() - 1);
+		for (int i = points.size() - 1; i >= 0; i--) {
+			Vector2 point = points.get(i);
+			if (!point.equals(last)) {
+				return point;
+			}
+		}
+
+		return last;
+	}
+
+	/**
+	 * Returns the last point in the list that does not equal the final point.
+	 * 
+	 * @param points
+	 *            The list of points
+	 * @return Either returns the latest point that isn't equal to the last one,
+	 *         or returns the last point in the list.
+	 */
+	public static Vector2 getLastDifferentPoint(Vector2[] points) {
+		if (points.length <= 0) {
+			throw new ArrayIndexOutOfBoundsException("List is empty.");
+		}
+
+		Vector2 last = points[points.length - 1];
+		for (int i = points.length - 1; i >= 0; i--) {
+			Vector2 point = points[i];
+			if (!point.equals(last)) {
+				return point;
+			}
+		}
+
+		return last;
 	}
 
 	/**
