@@ -33,6 +33,7 @@ import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
+import com.samsung.comp.football.Actions.MovementAction;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
@@ -1817,8 +1818,19 @@ public abstract class AbstractGame implements ApplicationListener,
 
 					int index = findPlayerIndex(startVector);
 					if (index != 0) {
-						if (startPlayer.getAction(index) instanceof Mark
-								|| startPlayer.getAction(index) instanceof MarkBall) {
+						Action lastMovement = null;
+
+						List<Action> actions = startPlayer.getActions();
+						for (int i = index - 1; i >= 0; i--) {
+							Action action = actions.get(i);
+							if (action instanceof MovementAction) {
+								lastMovement = action;
+								break;
+							}
+						}
+
+						if (lastMovement instanceof Mark
+								|| lastMovement instanceof MarkBall) {
 							lineInProgress.clear();
 							lineInProgress.add(startVector);
 							lineInProgress.add(endVector);
@@ -1827,6 +1839,7 @@ public abstract class AbstractGame implements ApplicationListener,
 								- startVector.x, endVector.y - startVector.y)
 								.angle();
 						cursor.setRotation(rotation + 45 + 90);
+
 					} else if (lineInProgress.size() >= 5) {
 						Vector2 nearEndPoint = lineInProgress
 								.get(lineInProgress.size() - 5);

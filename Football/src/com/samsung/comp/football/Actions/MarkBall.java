@@ -8,7 +8,7 @@ import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
-public class MarkBall extends Action {
+public class MarkBall extends Action implements MovementAction {
 	private Vector2 startPoint;
 	private Ball ball;
 	private static Texture markTexture;

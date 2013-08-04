@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
-public class Move extends Action {
+public class Move extends Action implements MovementAction {
 
 	private final Vector2[] path;
 	private static Texture TEXTURE;
