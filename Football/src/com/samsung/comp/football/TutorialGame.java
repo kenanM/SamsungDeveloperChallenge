@@ -369,7 +369,7 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 			textArea.setText("You can give multiple actions to any player to plan out better strategies and maneuvers. \n\n"
 					+ "You can continue a path from any of your previous actions. \n"
-					+ "You can also select a player by tapping one of their later locations \n\n"
+					+ "You can also select a player by tapping one of their later locations. \n\n"
 					+ "Continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
 					+ "Try tackling the red player, then moving away from them and scoring a goal.");
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
