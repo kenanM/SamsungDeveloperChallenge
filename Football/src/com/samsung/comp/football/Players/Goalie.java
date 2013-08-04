@@ -12,6 +12,7 @@ import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Utils;
+import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class Goalie extends Player {
 
@@ -37,16 +38,22 @@ public class Goalie extends Player {
 			AbstractGame game, float saving) {
 		super(playerX, playerY, teamColour);
 	}
-	
-	public void initialize(AbstractGame game, TeamColour teamColour){
+
+	@Override
+	public void initialize(TeamColour teamColour) {
+		throw new UnsupportedOperationException(
+				"Goalie classes should be initialized using with an instanceo of the game class");
+	}
+
+	public void initialize(AbstractGame game, TeamColour teamColour) {
 		super.initialize(teamColour);
-		
+
 		this.game = game;
 		unselectableHoverTexture = new Texture(
 				Gdx.files.internal("unselectableHover.png"));
 		unselectableRegion = new TextureRegion(unselectableHoverTexture, 13,
 				13, 64, 64);
-		
+
 		if (teamColour == TeamColour.BLUE) {
 			this.goal = Game.BLUE_GOAL;
 			this.middle = Game.BLUE_GOAL.cpy().sub(0,
