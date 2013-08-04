@@ -10,6 +10,7 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.MultiplayerGame;
 import com.samsung.comp.football.SoundManager;
+import com.samsung.comp.football.data.PlayerDataSource;
 import com.samsung.spen.lib.input.SPenEventLibrary;
 
 public class MultiplayerGameActivity extends AndroidApplication {
@@ -30,11 +31,11 @@ public class MultiplayerGameActivity extends AndroidApplication {
 			float matchTime = bundle.getFloat("Match_Time");
 			byte scoreLimit = bundle.getByte("Score_Limit");
 			boolean statusBarAtTop = bundle.getBoolean("Status_Bar_Top");
-			game = new MultiplayerGame(new ActionResolverAndroid(this),
+			game = new MultiplayerGame(new PlayerDataSource(this), new ActionResolverAndroid(this),
 					matchTime,
 					roundTime, statusBarAtTop, scoreLimit);
 		} else {
-			game = new MultiplayerGame(new ActionResolverAndroid(this));
+			game = new MultiplayerGame(new PlayerDataSource(this), new ActionResolverAndroid(this));
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
