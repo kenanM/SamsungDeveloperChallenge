@@ -1378,7 +1378,9 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			for (int i = 0; i < pointsList.size(); i++) {
 				playerVector = pointsList.get(i);
-				if (playerVector.epsilonEquals(point, INPUT_EPSILON_VALUE)) {
+				Circle inputDetectionCircle = new Circle(playerVector,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(point)) {
 					// We are biased to selectable players, return them before
 					// an unselectable one.
 					if (isSelectable(player)) {
@@ -1401,8 +1403,9 @@ public abstract class AbstractGame implements ApplicationListener,
 			return false;
 		}
 
-		return (getBall().getBallPosition().epsilonEquals(point,
-				INPUT_EPSILON_VALUE)) ? true : false;
+		Circle inputDetectionCircle = new Circle(ball.getBallPosition(),
+				INPUT_EPSILON_VALUE);
+		return inputDetectionCircle.contains(point);
 	}
 
 	protected boolean isSelectable(Player player) {
