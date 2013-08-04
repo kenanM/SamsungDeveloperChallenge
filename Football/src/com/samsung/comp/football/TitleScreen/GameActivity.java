@@ -22,7 +22,7 @@ public class GameActivity extends AndroidApplication {
 		cfg.useGL20 = false;
 		cfg.useAccelerometer = false;
 		cfg.useCompass = false;
-		
+
 		AbstractGame game;
 
 		Bundle bundle = getIntent().getExtras();
@@ -31,10 +31,12 @@ public class GameActivity extends AndroidApplication {
 			float matchTime = bundle.getFloat("Match_Time");
 			byte scoreLimit = bundle.getByte("Score_Limit");
 			boolean statusBarAtTop = bundle.getBoolean("Status_Bar_Top");
-			game = new Game(new PlayerDataSource(this), new ActionResolverAndroid(this), matchTime,
-					roundTime, statusBarAtTop, scoreLimit);
+			game = new Game(new PlayerDataSource(this),
+					new ActionResolverAndroid(this), matchTime, roundTime,
+					statusBarAtTop, scoreLimit);
 		} else {
-			game = new Game(new PlayerDataSource(this), new ActionResolverAndroid(this));
+			throw new UnsupportedOperationException(
+					"Game activity must be instantiated using an intent that looks like the one above");
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);

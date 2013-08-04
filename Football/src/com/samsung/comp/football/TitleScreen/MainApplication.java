@@ -1,7 +1,9 @@
 package com.samsung.comp.football.TitleScreen;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -12,8 +14,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.samsung.comp.football.R;
-import com.samsung.comp.football.data.PlayerDataSource;
-import com.samsung.comp.football.data.PlayerDatabaseHelper;
 
 public class MainApplication extends Activity {
 
@@ -59,11 +59,10 @@ public class MainApplication extends Activity {
 				Intent gameIntent = new Intent(MainApplication.this,
 						GameActivity.class);
 				gameIntent.putExtra("Round_Time", roundTime);
-				gameIntent.putExtra("Match_Time", matchTime);
 				gameIntent.putExtra("Score_Limit", scoreLimit);
 				gameIntent.putExtra("Status_Bar_Top", statusBarAtTop);
 
-				startActivity(gameIntent);
+				showDialog(MainApplication.this, gameIntent).show();
 			}
 		});
 
@@ -74,12 +73,11 @@ public class MainApplication extends Activity {
 				Intent multiplayerGameIntent = new Intent(MainApplication.this,
 						MultiplayerGameActivity.class);
 				multiplayerGameIntent.putExtra("Round_Time", roundTime);
-				multiplayerGameIntent.putExtra("Match_Time", matchTime);
 				multiplayerGameIntent.putExtra("Score_Limit", scoreLimit);
 				multiplayerGameIntent
 						.putExtra("Status_Bar_Top", statusBarAtTop);
 
-				startActivity(multiplayerGameIntent);
+				showDialog(MainApplication.this, multiplayerGameIntent).show();
 			}
 		});
 
@@ -132,5 +130,23 @@ public class MainApplication extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// This is called every time the menu button is pressed.
 		return super.onPrepareOptionsMenu(menu);
+	}
+
+	private AlertDialog showDialog(Context context, final Intent intent) {
+		CharSequence[] options = { "One Minute", "Two Minutes", "Three Minutes" };
+		final float[] values = { 60f, 120f, 180f};
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("How long would you like to play for?")
+				.setSingleChoiceItems(options, -1,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int choice) {
+								intent.putExtra("Match_Time", values[choice]);
+								dialog.dismiss();
+								startActivity(intent);
+							}
+						});
+		return builder.create();
 	}
 }

@@ -183,9 +183,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
 
-		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
-				: remainingMatchTime;
-
 		controlsActive = true;
 
 		beginInputStage();
