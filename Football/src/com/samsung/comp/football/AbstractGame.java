@@ -1815,7 +1815,19 @@ public abstract class AbstractGame implements ApplicationListener,
 
 					cursor.setTexture(moveSprite);
 
-					if (lineInProgress.size() >= 5) {
+					int index = findPlayerIndex(startVector);
+					if (index != 0) {
+						if (startPlayer.getAction(index) instanceof Mark
+								|| startPlayer.getAction(index) instanceof MarkBall) {
+							lineInProgress.clear();
+							lineInProgress.add(startVector);
+							lineInProgress.add(endVector);
+						}
+						float rotation = new Vector2(endVector.x
+								- startVector.x, endVector.y - startVector.y)
+								.angle();
+						cursor.setRotation(rotation + 45 + 90);
+					} else if (lineInProgress.size() >= 5) {
 						Vector2 nearEndPoint = lineInProgress
 								.get(lineInProgress.size() - 5);
 						float rotation = new Vector2(endVector.x
