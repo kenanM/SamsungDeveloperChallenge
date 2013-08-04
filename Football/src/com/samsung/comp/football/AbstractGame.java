@@ -1617,7 +1617,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (canPass) {
 			selectedPlayer.addAction(new Pass(ball, selectedPlayer, start,
-					selectedPlayer.getFuturePosition()));
+					selectedPlayer.getFuturePosition(),
+					findPlayerIndex(startVector)));
 			selectedPlayer = null;
 			lineInProgress.clear();
 			cursor.setTexture(null);

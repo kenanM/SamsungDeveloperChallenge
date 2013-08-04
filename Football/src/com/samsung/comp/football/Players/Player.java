@@ -240,6 +240,24 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	/**
+	 * Gets the position of the player if they complete index number of actions
+	 * 
+	 * @param index
+	 *            The number of actions
+	 * @return The expected position of the player. If index is larger than the
+	 *         amount of actions the player has this method will return the last
+	 *         position.
+	 */
+	public Vector2 getPlayerPosition(int index) {
+		List<Vector2> positions = getPositionList();
+		if (index > positions.size() - 1) {
+			return positions.get(positions.size() - 1);
+		} else {
+			return positions.get(index);
+		}
+	}
+
+	/**
 	 * Used for player selection
 	 * 
 	 * @return The player's current position and all of the locations that each
@@ -614,10 +632,10 @@ public class Player extends Rectangle implements Followable {
 					target, shootSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			
+
 			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
 			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
-			
+
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -627,7 +645,7 @@ public class Player extends Rectangle implements Followable {
 
 	public void shortKick(Ball ball, Vector2 target) {
 		if (hasBall()) {
-			
+
 			Vector2 movementVector = new Vector2(target.x
 					- ball.getBallPosition().x, target.y
 					- ball.getBallPosition().y);
@@ -642,10 +660,10 @@ public class Player extends Rectangle implements Followable {
 					target, (float) lowestSpeed);
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			
+
 			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
 			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
-			
+
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
@@ -716,10 +734,10 @@ public class Player extends Rectangle implements Followable {
 
 			ball.move(ballVelocity);
 			rotation = ballVelocity.angle();
-			
+
 			setCannotCollectBallTime(Game.RECLAIM_BALL_TIME);
 			setCannotTackleTime(Game.CANNOT_TACKLE_TIME);
-			
+
 			ball.removeOwner();
 		}
 		if (action.getNextAction() != null) {
