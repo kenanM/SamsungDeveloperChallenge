@@ -582,7 +582,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						1, 0, 0, 0, stats.getWidth(), stats.getHeight(), false,
 						true);
 
-				for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
+				for (int i = 0; i < player.getRunSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(0 * statPoint1.getHeight()), 0, 0,
@@ -591,7 +591,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							statPoint1.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
+				for (int i = 0; i < player.getShootSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(1 * statPoint1.getHeight()), 0, 0,
@@ -600,7 +600,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							statPoint1.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
+				for (int i = 0; i < player.getTackleSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(2 * statPoint1.getHeight()), 0, 0,
@@ -609,7 +609,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							statPoint1.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
+				for (int i = 0; i < player.getTacklePreventionSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(3 * statPoint1.getHeight()), 0, 0,
@@ -618,7 +618,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							statPoint1.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
+				for (int i = 0; i < player.getSavingSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(4 * statPoint1.getHeight()), 0, 0,
@@ -633,7 +633,7 @@ public abstract class AbstractGame implements ApplicationListener,
 						0, 0, stats.getWidth(), stats.getHeight(), 1, 1, 0, 0,
 						0, stats.getWidth(), stats.getHeight(), false, true);
 
-				for (int i = 1; i <= player.getRunSpeedBarCount(); i++) {
+				for (int i = 0; i < player.getRunSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1
@@ -643,7 +643,7 @@ public abstract class AbstractGame implements ApplicationListener,
 									.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getShootSpeedBarCount(); i++) {
+				for (int i = 0; i < player.getShootSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1
@@ -653,7 +653,7 @@ public abstract class AbstractGame implements ApplicationListener,
 									.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getTackleSkillBarCount(); i++) {
+				for (int i = 0; i < player.getTackleSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1
@@ -663,7 +663,7 @@ public abstract class AbstractGame implements ApplicationListener,
 									.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getTacklePreventionSkillBarCount(); i++) {
+				for (int i = 0; i < player.getTacklePreventionSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1
@@ -673,7 +673,7 @@ public abstract class AbstractGame implements ApplicationListener,
 									.getHeight(), false, true);
 				}
 
-				for (int i = 1; i <= player.getSavingSkillBarCount(); i++) {
+				for (int i = 0; i < player.getSavingSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (1 * statPoint1
@@ -1287,7 +1287,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		Player playersGoalie = getGoalie(currentTeam);
 		if (playersGoalie != null) {
 			if (playersGoalie.hasBall()) {
-				if (!playersGoalie.kicksBall()) {
+				if (!playersGoalie.kicksBall(roundTime)) {
 					getBar().setText("Goalie cannot hold onto the ball");
 					Gdx.app.log("Game", "Goalie needs to kick the ball");
 					return;
