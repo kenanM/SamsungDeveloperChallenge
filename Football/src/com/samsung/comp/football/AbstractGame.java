@@ -1607,42 +1607,132 @@ public abstract class AbstractGame implements ApplicationListener,
 		boolean startAtBall = findBall(startVector);
 		boolean finishedAtBall = findBall(endVector);
 
-		// Note to self: the orderings here are very important
-		if (start == null && finish == null) {
-			Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
-			if (startAtBall && finishedAtBall && selectedPlayer != null) {
-				Gdx.app.log(INPUT_TAG, "You marked the ball");
-				pressBall();
-			} else {
-				pressPoint(endVector);
-			}
+		boolean canShoot = canShoot(start);
+		boolean canPass = canPass(start, finish);
+		boolean canMark = canMark(start, finish);
+		boolean canMarkBall = canMarkBall(startVector, endVector);
+		boolean canSelectPlayer = canSelectPlayer(start, finish);
+		boolean canMove = canMove(start, finish);
 
-		} else if (startAtBall && finishedAtBall && selectedPlayer != null) {
-			Gdx.app.log(INPUT_TAG, "You marked the ball");
-			pressBall();
+		if (canPass) {
+			selectedPlayer.addAction(new Pass(ball, selectedPlayer, start,
+					selectedPlayer.getFuturePosition()));
+			selectedPlayer = null;
+			lineInProgress.clear();
+			cursor.setTexture(null);
+			return true;
+		}
 
-		} else if (start == null) {
-			Gdx.app.log(INPUT_TAG,
-					"You drew a line starting from a null position");
+		if (canMarkBall) {
+			selectedPlayer.addAction(new MarkBall(selectedPlayer
+					.getFuturePosition(), ball));
+			selectedPlayer = null;
+			lineInProgress.clear();
+			cursor.setTexture(null);
+			return true;
+		}
 
-		} else if (start == finish) {
-			Gdx.app.log(INPUT_TAG, "You selected a player");
-			pressPlayer(start);
-		} else if (!isSelectable(start)) {
-			Gdx.app.log(INPUT_TAG,
-					"Your line started from an unselectable player");
-		} else if (isSelectable(start)) {
-			Gdx.app.log(INPUT_TAG, "You drew a line from a player");
-			int index = findPlayerIndex(lineInProgress.get(0));
-			Gdx.app.log(INPUT_TAG,
-					"You drew a line from a player " + String.valueOf(index));
-			assignMoveTo(start, index);
+		if (canMark) {
+			selectedPlayer.addAction(new Mark(selectedPlayer
+					.getFuturePosition(), start, ball));
+			selectedPlayer = null;
+			lineInProgress.clear();
+			cursor.setTexture(null);
+			return true;
+		}
+
+		if (canShoot) {
+			selectedPlayer.addAction(new Kick(ball, endVector, selectedPlayer
+					.getFuturePosition()));
+			selectedPlayer = null;
+			lineInProgress.clear();
+			cursor.setTexture(null);
+			return true;
+		}
+
+		if (canSelectPlayer) {
+			selectedPlayer = selectedPlayer == null ? start : null;
+			selectTextureStateTime = 0f;
+			lineInProgress.clear();
+			cursor.setTexture(null);
+			return true;
+		}
+
+		if (canMove) {
+			assignMoveTo(start, findPlayerIndex(startVector));
+			lineInProgress.clear();
+			cursor.setTexture(null);
+			return true;
+		}
+
+		if (!canSelectPlayer) {
 
 		}
+
+		// Old algorithm
+		// if (start == null && finish == null) {
+		// Gdx.app.log(INPUT_TAG, "You pressed: " + startVector.toString());
+		// if (startAtBall && finishedAtBall && selectedPlayer != null) {
+		// Gdx.app.log(INPUT_TAG, "You marked the ball");
+		// pressBall();
+		// } else {
+		// pressPoint(endVector);
+		// }
+		//
+		// } else if (startAtBall && finishedAtBall && selectedPlayer != null) {
+		// Gdx.app.log(INPUT_TAG, "You marked the ball");
+		// pressBall();
+		//
+		// } else if (start == null) {
+		// Gdx.app.log(INPUT_TAG,
+		// "You drew a line starting from a null position");
+		//
+		// } else if (start == finish) {
+		// Gdx.app.log(INPUT_TAG, "You selected a player");
+		// pressPlayer(start);
+		// } else if (!isSelectable(start)) {
+		// Gdx.app.log(INPUT_TAG,
+		// "Your line started from an unselectable player");
+		// } else if (isSelectable(start)) {
+		// Gdx.app.log(INPUT_TAG, "You drew a line from a player");
+		// int index = findPlayerIndex(lineInProgress.get(0));
+		// Gdx.app.log(INPUT_TAG,
+		// "You drew a line from a player " + String.valueOf(index));
+		// assignMoveTo(start, index);
+		//
+		// }
 
 		lineInProgress.clear();
 		cursor.setTexture(null);
 		return true;
+	}
+
+	private boolean canSelectPlayer(Player start, Player finish) {
+		return start != null && start == finish && isSelectable(start);
+	}
+
+	private boolean canMove(Player start, Player finish) {
+		return start != null && finish != start && isSelectable(start);
+	}
+
+	private boolean canShoot(Player start) {
+		return start == null && selectedPlayer != null;
+	}
+
+	private boolean canPass(Player start, Player finish) {
+		return start != null && start == finish && selectedPlayer != null
+				&& start.getTeam() == getCurrentTeamColour()
+				&& start != selectedPlayer;
+	}
+
+	private boolean canMark(Player start, Player finish) {
+		return start != null && start == finish && selectedPlayer != null
+				&& start.getTeam() != getCurrentTeamColour()
+				&& !(start instanceof Goalie) && start != selectedPlayer;
+	}
+
+	private boolean canMarkBall(Vector2 start, Vector2 finish) {
+		return findBall(start) && findBall(finish) && selectedPlayer != null;
 	}
 
 	/**
@@ -1687,79 +1777,135 @@ public abstract class AbstractGame implements ApplicationListener,
 
 				boolean startAtBall = findBall(startVector);
 				boolean endAtBall = findBall(endVector);
-				boolean tapBall = (startAtBall && endAtBall);
-				boolean tapPlayer = (startPlayer == endPlayer);
+				
 
-				if (selectedPlayer == null) {
-					if (startPlayer == null) {
-						// Does nothing
-						cursor.setTexture(null);
-						return true;
-					} else if (tapPlayer) {
-						// Select player
-						cursor.setTexture(null);
-						return true;
-					} else {
-						// Move player
-						cursor.setTexture(moveSprite);
+				boolean canShoot = canShoot(startPlayer);
+				boolean canPass = canPass(startPlayer, endPlayer);
+				boolean canMark = canMark(startPlayer, endPlayer);
+				boolean canMarkBall = canMarkBall(startVector, endVector);
+				boolean canSelectPlayer = canSelectPlayer(startPlayer,
+						endPlayer);
+				boolean canMove = canMove(startPlayer, endPlayer);
 
-						if (lineInProgress.size() >= 5) {
-							Vector2 nearEndPoint = lineInProgress
-									.get(lineInProgress.size() - 5);
-							float rotation = new Vector2(endVector.x
-									- nearEndPoint.x, endVector.y
-									- nearEndPoint.y).angle();
-							cursor.setRotation(rotation + 45 + 90);
-						}
-
-						return true;
-					}
-				} else {
-					if (tapBall) {
-						// Mark ball action
-						cursor.setTexture(markBallSprite);
-						return true;
-					}
-					if (startPlayer == null) {
-						// Kick action
-						cursor.setTexture(kickSprite);
-						return true;
-					} else if (tapPlayer) {
-						if (startPlayer.getTeam() == getCurrentTeamColour()) {
-							if (startPlayer == selectedPlayer) {
-								// Deselect player
-								cursor.setTexture(null);
-								return true;
-							} else {
-								// Pass action
-								cursor.setTexture(passSprite);
-								return true;
-							}
-						} else {
-							// Mark player action
-							if (endPlayer instanceof Goalie) {
-								cursor.setTexture(unselectableSprite);
-							} else {
-								cursor.setTexture(markSprite);
-							}
-							return true;
-						}
-					} else {
-						// Move player
-						cursor.setTexture(moveSprite);
-
-						if (lineInProgress.size() >= 5) {
-							Vector2 nearEndPoint = lineInProgress
-									.get(lineInProgress.size() - 5);
-							float rotation = new Vector2(endVector.x
-									- nearEndPoint.x, endVector.y
-									- nearEndPoint.y).angle();
-							cursor.setRotation(rotation + 45 + 90);
-						}
-
-						return true;
-					}
+				if (canPass) {
+					cursor.setTexture(passSprite);
+					return true;
 				}
+
+				if (canMarkBall) {
+					cursor.setTexture(markBallSprite);
+					return true;
+				}
+
+				if (canMark) {
+					cursor.setTexture(markSprite);
+					return true;
+				}
+
+				if (canShoot) {
+					cursor.setTexture(kickSprite);
+					return true;
+				}
+
+				if (canSelectPlayer) {
+					cursor.setTexture(null);
+				}
+
+				if (canMove) {
+
+					cursor.setTexture(moveSprite);
+
+					if (lineInProgress.size() >= 5) {
+						Vector2 nearEndPoint = lineInProgress
+								.get(lineInProgress.size() - 5);
+						float rotation = new Vector2(endVector.x
+								- nearEndPoint.x, endVector.y - nearEndPoint.y)
+								.angle();
+						cursor.setRotation(rotation + 45 + 90);
+					}
+					return true;
+				}
+				
+				if (!canSelectPlayer && startPlayer != null) {
+					cursor.setTexture(unselectableSprite);
+					return true;
+				}
+				
+
+				// Old algorithm
+//				boolean tapBall = (startAtBall && endAtBall);
+//				boolean tapPlayer = (startPlayer == endPlayer);
+//
+//				if (selectedPlayer == null) {
+//					if (startPlayer == null) {
+//						// Does nothing
+//						cursor.setTexture(null);
+//						return true;
+//					} else if (tapPlayer) {
+//						// Select player
+//						cursor.setTexture(null);
+//						return true;
+//					} else {
+//						// Move player
+//						cursor.setTexture(moveSprite);
+//
+//						if (lineInProgress.size() >= 5) {
+//							Vector2 nearEndPoint = lineInProgress
+//									.get(lineInProgress.size() - 5);
+//							float rotation = new Vector2(endVector.x
+//									- nearEndPoint.x, endVector.y
+//									- nearEndPoint.y).angle();
+//							cursor.setRotation(rotation + 45 + 90);
+//						}
+//
+//						return true;
+//					}
+//				} else {
+//					if (tapBall) {
+//						// Mark ball action
+//						cursor.setTexture(markBallSprite);
+//						return true;
+//					}
+//					if (startPlayer == null) {
+//						// Kick action
+//						cursor.setTexture(kickSprite);
+//						return true;
+//					} else if (tapPlayer) {
+//						if (startPlayer.getTeam() == getCurrentTeamColour()) {
+//							if (startPlayer == selectedPlayer) {
+//								// Deselect player
+//								cursor.setTexture(null);
+//								return true;
+//							} else {
+//								// Pass action
+//								cursor.setTexture(passSprite);
+//								return true;
+//							}
+//						} else {
+//							// Mark player action
+//							if (endPlayer instanceof Goalie) {
+//								cursor.setTexture(unselectableSprite);
+//							} else {
+//								cursor.setTexture(markSprite);
+//							}
+//							return true;
+//						}
+//					} else {
+//						// Move player
+//						cursor.setTexture(moveSprite);
+//
+//						if (lineInProgress.size() >= 5) {
+//							Vector2 nearEndPoint = lineInProgress
+//									.get(lineInProgress.size() - 5);
+//							float rotation = new Vector2(endVector.x
+//									- nearEndPoint.x, endVector.y
+//									- nearEndPoint.y).angle();
+//							cursor.setRotation(rotation + 45 + 90);
+//						}
+//
+//						return true;
+//					}
+//				}
 			}
 		}
 		return true;
@@ -1834,37 +1980,71 @@ public abstract class AbstractGame implements ApplicationListener,
 				cursor.setLocation(hoverPoint.x, hoverPoint.y);
 				cursor.setHighlightedPlayer(hoverPlayer);
 
-				if (selectedPlayer != null) {
-					if (isBallHighlighted) {
-						// Mark ball action
-						cursor.setTexture(markBallSprite);
-						return true;
-					} else if (hoverPlayer == null) {
-						// Kick action
-						cursor.setTexture(kickSprite);
-						return true;
-					} else if (hoverPlayer.getTeam() == getCurrentTeamColour()) {
-						if (hoverPlayer == selectedPlayer) {
-							// Deselect player
-							cursor.setTexture(null);
-							return true;
-						} else {
-							// Pass action
-							cursor.setTexture(passSprite);
-							return true;
-						}
-					} else {
-						// Mark player action
-						if (hoverPlayer instanceof Goalie) {
-							cursor.setTexture(unselectableSprite);
-						} else {
-							cursor.setTexture(markSprite);
-						}
-						return true;
-					}
+				boolean canShoot = canShoot(hoverPlayer);
+				boolean canPass = canPass(hoverPlayer, hoverPlayer);
+				boolean canMark = canMark(hoverPlayer, hoverPlayer);
+				boolean canMarkBall = canMarkBall(hoverPoint, hoverPoint);
+				boolean canSelectPlayer = canSelectPlayer(hoverPlayer,
+						hoverPlayer);
+
+				if (canPass) {
+					cursor.setTexture(passSprite);
+					return true;
 				}
+
+				if (canMarkBall) {
+					cursor.setTexture(markBallSprite);
+					return true;
+				}
+
+				if (canMark) {
+					cursor.setTexture(markSprite);
+					return true;
+				}
+
+				if (canShoot) {
+					cursor.setTexture(kickSprite);
+					return true;
+				}
+
+				if (!canSelectPlayer && hoverPlayer != null) {
+
+				}
+
+				// Old algorithmn
+				// if (selectedPlayer != null) {
+				// if (isBallHighlighted) {
+				// // Mark ball action
+				// cursor.setTexture(markBallSprite);
+				// return true;
+				// } else if (hoverPlayer == null) {
+				// // Kick action
+				// cursor.setTexture(kickSprite);
+				// return true;
+				// } else if (hoverPlayer.getTeam() == getCurrentTeamColour()) {
+				// if (hoverPlayer == selectedPlayer) {
+				// // Deselect player
+				// cursor.setTexture(null);
+				// return true;
+				// } else {
+				// // Pass action
+				// cursor.setTexture(passSprite);
+				// return true;
+				// }
+				// } else {
+				// // Mark player action
+				// if (hoverPlayer instanceof Goalie) {
+				// cursor.setTexture(unselectableSprite);
+				// } else {
+				// cursor.setTexture(markSprite);
+				// }
+				// return true;
+				// }
+				// }
+
 			}
 		}
+		cursor.setTexture(null);
 		return true;
 	}
 
