@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
-public class MoveToPosition extends Action {
+public class MoveToPosition extends Action implements MovementAction {
 
 	private Followable startPoint;
 	private final Vector2 point;

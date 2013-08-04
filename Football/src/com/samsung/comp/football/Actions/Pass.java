@@ -12,6 +12,7 @@ public class Pass extends Action {
 
 	private Ball ball;
 	private Player target;
+	private int targetIndex = 0;
 	private Player kicker;
 	private Vector2 kickStartLocation;
 	private static Texture passIcon;
@@ -23,6 +24,12 @@ public class Pass extends Action {
 		this.kicker = kicker;
 		this.target = target;
 		this.kickStartLocation = kickStartLocation;
+	}
+
+	public Pass(Ball ball, Player kicker, Player target,
+			Vector2 kickStartLocation, int index) {
+		this(ball, kicker, target, kickStartLocation);
+		this.targetIndex = index;
 	}
 
 	public static void create(Texture texture, Texture highlighted) {
@@ -37,13 +44,14 @@ public class Pass extends Action {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		Vector2 fullLineVector = new Vector2(target.getPlayerPosition().x
-				- kickStartLocation.x, target.getPlayerPosition().y
+		Vector2 fullLineVector = new Vector2(
+				target.getPlayerPosition(targetIndex).x - kickStartLocation.x,
+				target.getPlayerPosition(targetIndex).y
 				- kickStartLocation.y);
 		float fullLineDistance = fullLineVector.dst(Vector2.Zero);
 
 		Vector2 partialLineVector = Utils.getMoveVector(kickStartLocation,
-				target.getPlayerPosition(), 32);
+				target.getPlayerPosition(targetIndex), 32);
 		float partialLineDistance = partialLineVector.dst(Vector2.Zero);
 		float distanceTravelled = 0f;
 
@@ -69,13 +77,18 @@ public class Pass extends Action {
 	@Override
 	public void draw(SpriteBatch batch, boolean highlighted) {
 		if (highlighted) {
-			batch.draw(highlightedTexture, target.getPlayerPosition().x
-					- passIcon.getWidth() / 2, target.getPlayerPosition().y
+			batch.draw(
+					highlightedTexture,
+					target.getPlayerPosition(targetIndex).x
+							- passIcon.getWidth() / 2,
+					target.getPlayerPosition(targetIndex).y
 					- passIcon.getHeight() / 2);
 		} else {
 			batch.draw(passIcon,
-					target.getPlayerPosition().x - passIcon.getWidth() / 2,
-					target.getPlayerPosition().y - passIcon.getHeight() / 2);
+					target.getPlayerPosition(targetIndex).x
+							- passIcon.getWidth() / 2,
+					target.getPlayerPosition(targetIndex).y
+							- passIcon.getHeight() / 2);
 		}
 		super.draw(batch, highlighted);
 	}

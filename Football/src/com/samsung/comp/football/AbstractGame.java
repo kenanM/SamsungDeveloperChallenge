@@ -33,6 +33,7 @@ import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.MarkBall;
 import com.samsung.comp.football.Actions.Move;
 import com.samsung.comp.football.Actions.MoveToPosition;
+import com.samsung.comp.football.Actions.MovementAction;
 import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
@@ -1394,6 +1395,101 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	/**
+	 * Finds the player closest to a point.
+	 * 
+	 * @param point
+	 * @param specificTeamToSearch
+	 *            If null, searches through every player. Otherwise searches the
+	 *            goalie and players of a specified team.
+	 * @return
+	 */
+	protected Player findClosestPlayer(Vector2 point,
+			TeamColour specificTeamToSearch) {
+
+		ArrayList<Player> playersList = new ArrayList<Player>();
+		if (specificTeamToSearch == null) {
+			playersList.addAll(getAllPlayers());
+		} else {
+			playersList.addAll(getPlayers(specificTeamToSearch));
+			playersList.add(getGoalie(specificTeamToSearch));
+		}
+
+		Player closestPlayer = null;
+		Vector2 playerVector;
+		float shortestFoundDistance = Float.MAX_VALUE;
+		for (Player player : playersList) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				Circle inputDetectionCircle = new Circle(point,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(playerVector)) {
+					if (point.dst(playerVector) < shortestFoundDistance) {
+						closestPlayer = player;
+						shortestFoundDistance = point.dst(playerVector);
+					}
+				}
+			}
+		}
+		return closestPlayer;
+	}
+
+	/**
+	 * Finds the index of the action nearest a point for a particular player.
+	 * 
+	 * @param point
+	 * @param player
+	 * @return
+	 */
+	protected int findPlayerIndex(Vector2 point, Player player) {
+
+		List<Vector2> pointsList = player.getPositionList();
+		Collections.reverse(pointsList);
+
+		for (int i = 0; i < pointsList.size(); i++) {
+			Circle inputDetectionCircle = new Circle(point, INPUT_EPSILON_VALUE);
+			if (inputDetectionCircle.contains(pointsList.get(i))) {
+				return pointsList.size() - 1 - i;
+			}
+		}
+		return 0;
+	}
+
+	protected int findClosestPlayerIndex(Vector2 point,
+			TeamColour specificTeamToSearch) {
+
+		ArrayList<Player> playersList = new ArrayList<Player>();
+		if (specificTeamToSearch == null) {
+			playersList.addAll(getAllPlayers());
+		} else {
+			playersList.addAll(getPlayers(specificTeamToSearch));
+			playersList.add(getGoalie(specificTeamToSearch));
+		}
+
+		int index = 0;
+		Vector2 playerVector;
+		float shortestDistanceFound = Float.MAX_VALUE;
+		for (Player player : playersList) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				Circle inputDetectionCircle = new Circle(point,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(playerVector)) {
+					if (point.dst(playerVector) < shortestDistanceFound) {
+						index = pointsList.size() - 1 - i;
+					}
+				}
+			}
+		}
+		return index;
+	}
+
+	/**
 	 * Finds if the ball overlaps or is near a point.
 	 * 
 	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
@@ -1617,7 +1713,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (canPass) {
 			selectedPlayer.addAction(new Pass(ball, selectedPlayer, start,
-					selectedPlayer.getFuturePosition()));
+					selectedPlayer.getFuturePosition(),
+					findPlayerIndex(startVector)));
 			selectedPlayer = null;
 			lineInProgress.clear();
 			cursor.setTexture(null);
@@ -1816,12 +1913,47 @@ public abstract class AbstractGame implements ApplicationListener,
 
 					cursor.setTexture(moveSprite);
 
-					if (lineInProgress.size() >= 5) {
-						Vector2 nearEndPoint = lineInProgress
-								.get(lineInProgress.size() - 5);
+					int index = findPlayerIndex(startVector);
+					if (index != 0) {
+						// Assigning a later action.
+						Action lastMovement = null;
+
+						List<Action> actions = startPlayer.getActions();
+						for (int i = index - 1; i >= 0; i--) {
+							Action action = actions.get(i);
+							if (action instanceof MovementAction) {
+								lastMovement = action;
+								break;
+							}
+						}
+
+						float rotation;
+						if (lastMovement instanceof Mark
+								|| lastMovement instanceof MarkBall) {
+							// Assigning a Follow
+							lineInProgress.clear();
+							lineInProgress.add(startVector);
+							lineInProgress.add(endVector);
+							rotation = new Vector2(endVector.x - startVector.x,
+									endVector.y - startVector.y).angle();
+						} else {
+							// Assigning a move
+							Vector2 differentPoint = Utils
+									.getLastDifferentPoint(lineInProgress);
+							rotation = new Vector2(endVector.x
+									- differentPoint.x, endVector.y
+									- differentPoint.y).angle();
+						}
+						cursor.setRotation(rotation + 45 + 90);
+
+					} else {
+						// Assigning first action
+						Vector2 differentPoint = Utils
+								.getLastDifferentPoint(lineInProgress);
 						float rotation = new Vector2(endVector.x
-								- nearEndPoint.x, endVector.y - nearEndPoint.y)
-								.angle();
+								- differentPoint.x, endVector.y
+								- differentPoint.y).angle();
+
 						cursor.setRotation(rotation + 45 + 90);
 					}
 					return true;

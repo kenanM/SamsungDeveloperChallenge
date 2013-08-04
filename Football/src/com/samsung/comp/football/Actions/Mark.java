@@ -8,7 +8,7 @@ import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
-public class Mark extends Action {
+public class Mark extends Action implements MovementAction {
 
 	private Player target;
 	private Ball ball;

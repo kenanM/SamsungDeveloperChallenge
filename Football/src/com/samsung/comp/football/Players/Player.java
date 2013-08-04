@@ -254,6 +254,24 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	/**
+	 * Gets the position of the player if they complete index number of actions
+	 * 
+	 * @param index
+	 *            The number of actions
+	 * @return The expected position of the player. If index is larger than the
+	 *         amount of actions the player has this method will return the last
+	 *         position.
+	 */
+	public Vector2 getPlayerPosition(int index) {
+		List<Vector2> positions = getPositionList();
+		if (index > positions.size() - 1) {
+			return positions.get(positions.size() - 1);
+		} else {
+			return positions.get(index);
+		}
+	}
+
+	/**
 	 * Used for player selection
 	 * 
 	 * @return The player's current position and all of the locations that each

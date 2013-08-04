@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.PlayerPositionData;
 import com.samsung.comp.football.Players.Player;
 
-public class Move extends Action {
+public class Move extends Action implements MovementAction {
 
 	private final Vector2[] path;
 	private static Texture TEXTURE;
@@ -64,13 +64,12 @@ public class Move extends Action {
 	public void draw(SpriteBatch batch, boolean highlighted) {
 
 		// Arbitrary number to ensure points aren't the same
-		if (path != null && path.length > 5) {
 
-			Vector2 firstPoint = path[path.length - 5];
+		Vector2 firstPoint = Utils.getLastDifferentPoint(path);
 			Vector2 secondPoint = path[path.length - 1];
 
-			float rotation = Utils.getMoveVector(firstPoint, secondPoint, 10)
-					.angle();
+		float rotation = new Vector2(secondPoint.x - firstPoint.x,
+				secondPoint.y - firstPoint.y).angle();
 
 			if (highlighted) {
 				batch.draw(highlightedTexture, secondPoint.x
@@ -91,7 +90,7 @@ public class Move extends Action {
 						rotation + 45 + 90, 0, 0, TEXTURE.getWidth(),
 						TEXTURE.getHeight(), false, true);
 			}
-		}
+
 		super.draw(batch, highlighted);
 	}
 
