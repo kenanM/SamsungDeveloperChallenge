@@ -1283,7 +1283,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		Player playersGoalie = getGoalie(currentTeam);
 		if (playersGoalie != null) {
 			if (playersGoalie.hasBall()) {
-				if (!playersGoalie.kicksBall()) {
+				if (!playersGoalie.kicksBall(roundTime)) {
 					getBar().setText("Goalie cannot hold onto the ball");
 					Gdx.app.log("Game", "Goalie needs to kick the ball");
 					return;

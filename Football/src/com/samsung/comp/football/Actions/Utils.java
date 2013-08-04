@@ -1,5 +1,6 @@
 package com.samsung.comp.football.Actions;
 
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -42,6 +43,28 @@ public class Utils {
 		double x = Math.cos(angleRadians) * hypotenuse;
 
 		return new Vector2((float) x, (float) y);
+	}
+
+	public static float sumOfDistances(Vector2[] points) {
+		if(points.length < 2) {
+			return 0;
+		}
+		float total  = 0;
+		for (int i=0; i<points.length-2; i++) {
+			total += points[i].dst(points[i + 1]);
+		}
+		return total;
+	}
+	
+	public static float sumOfDistances(List<Vector2> points) {
+		if(points.size() < 2) {
+			return 0;
+		}
+		float total  = 0;
+		for (int i = 0; i < points.size() - 2; i++) {
+			total += points.get(i).dst(points.get(i + 1));
+		}
+		return total;
 	}
 
 	/**

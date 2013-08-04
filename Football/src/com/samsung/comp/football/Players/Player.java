@@ -828,13 +828,29 @@ public class Player extends Rectangle implements Followable {
 		return temp;
 	}
 
-	public boolean kicksBall() {
+	public boolean kicksBall(float roundTime) {
 		List<Action> actions = getActions();
 		Gdx.app.log("Player", "found: " + actions.size() + " actions");
+		List<Action> previousActions = new ArrayList<Action>();
 		for (Action action : actions) {
 			if (action instanceof Kick || action instanceof Pass) {
-				return true;
+
+				float maxRunDistance = runSpeed * roundTime;
+				ArrayList<Vector2> pathBeforeKick = new ArrayList<Vector2>();
+
+				for (Action previousAction : previousActions) {
+					if (previousAction instanceof Move) {
+						Move movement = (Move) previousAction;
+						for (Vector2 vector : movement.getPath()) {
+							pathBeforeKick.add(vector);
+						}
+					}
+				}
+
+				float distanceBeforeKick = Utils.sumOfDistances(pathBeforeKick);
+				return distanceBeforeKick < maxRunDistance;
 			}
+			previousActions.add(action);
 		}
 		Gdx.app.log("Player", "player doesn't kick ball.. returning false");
 		return false;
