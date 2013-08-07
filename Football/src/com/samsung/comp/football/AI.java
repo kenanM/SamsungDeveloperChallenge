@@ -73,11 +73,10 @@ public class AI {
 	public void getComputerActions() {
 		Log.v(TAG, "getting computer actions");
 
-		// kenanGetActions();
-		gavinGetActions();
+		getActionsV2();
 	}
 
-	private void gavinGetActions() {
+	private void getActionsV2() {
 
 		for (Player player : players) {
 			player.reset();
@@ -484,7 +483,7 @@ public class AI {
 		return players;
 	}
 
-	private void kenanGetActions() {
+	private void getActionsV1() {
 		List<Player> players = new ArrayList<Player>(game.getComputerPlayers());
 		for (Player player : players) {
 			player.clearActions();
