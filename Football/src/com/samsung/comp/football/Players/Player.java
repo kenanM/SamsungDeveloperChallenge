@@ -59,7 +59,6 @@ public class Player extends Rectangle implements Followable {
 	protected float shootSpeed = 550;
 	protected float runSpeed = 150;
 	protected float tackleSkill = 100;
-	protected float tacklePreventionSkill = 40;
 	protected float savingSkill = 420;
 	private int teamID = 0;
 
@@ -76,15 +75,13 @@ public class Player extends Rectangle implements Followable {
 
 	/* This is the constructor to call when creating from a database */
 	public Player(int id, String name, boolean purchased, float shootSpeed,
-			float runSpeed, float tackleSkill, float tacklePreventionSkill,
-			float savingSkill, int teamID) {
+			float runSpeed, float tackleSkill, float savingSkill, int teamID) {
 		this.id = id;
 		this.name = name;
 		this.purchased = purchased;
 		this.shootSpeed = shootSpeed;
 		this.runSpeed = runSpeed;
 		this.tackleSkill = tackleSkill;
-		this.tacklePreventionSkill = tacklePreventionSkill;
 		this.savingSkill = savingSkill;
 		this.teamID = teamID;
 	}
@@ -480,10 +477,6 @@ public class Player extends Rectangle implements Followable {
 		return (int) (tackleSkill / getTackleSkillBarValue());
 	}
 
-	public int getTacklePreventionSkillBarCount() {
-		return (int) (tacklePreventionSkill / getTacklePreventionBarValue());
-	}
-
 	public float getSavingSkillBarCount() {
 		return (int) (savingSkill / getSavingSkillBarValue());
 	}
@@ -520,10 +513,6 @@ public class Player extends Rectangle implements Followable {
 		return tackleSkill;
 	}
 
-	public float getTacklePreventionSkill() {
-		return tacklePreventionSkill;
-	}
-
 	public float getSavingSkill() {
 		return savingSkill;
 	}
@@ -542,10 +531,6 @@ public class Player extends Rectangle implements Followable {
 
 	public void setTackleSkill(float newTackleSkill) {
 		this.tackleSkill = newTackleSkill;
-	}
-
-	public void setTacklePreventionSkill(float newTacklePreventionSkill) {
-		this.tacklePreventionSkill = newTacklePreventionSkill;
 	}
 
 	public void setSavingSkill(float newSavingSkill) {
@@ -568,15 +553,11 @@ public class Player extends Rectangle implements Followable {
 		this.runSpeed = Math.max(minRunSpeed, this.runSpeed);
 		this.shootSpeed = Math.max(minShootSpeed, this.shootSpeed);
 		this.tackleSkill = Math.max(minTackleSkill, this.tackleSkill);
-		this.tacklePreventionSkill = Math.max(minTacklePreventionSkill,
-				this.tacklePreventionSkill);
 		this.savingSkill = Math.max(minSavingSkill, this.savingSkill);
 
 		this.runSpeed = Math.min(maxRunSpeed, this.runSpeed);
 		this.shootSpeed = Math.min(maxShootSpeed, this.shootSpeed);
 		this.tackleSkill = Math.min(maxTackleSkill, this.tackleSkill);
-		this.tacklePreventionSkill = Math.min(maxTacklePreventionSkill,
-				this.tacklePreventionSkill);
 		this.savingSkill = Math.min(maxSavingSkill, this.savingSkill);
 	}
 

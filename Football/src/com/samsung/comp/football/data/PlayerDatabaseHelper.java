@@ -1,25 +1,13 @@
 package com.samsung.comp.football.data;
 
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.ID_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.PLAYER_NAME_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.PLAYER_TABLE_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.PURCHASED_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.RUN_SPEED_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.SAVING_SKILL_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.SHOOT_SPEED_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.TACKLE_PREVENTION_SKILL_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.TACKLE_SKILL_COLUMN_NAME;
-import static com.samsung.comp.football.data.PlayerDatabaseHelper.TEAM_ID_COLUMN_NAME;
-
-import com.samsung.comp.football.Players.Goalie;
-import com.samsung.comp.football.Players.Player;
-import com.samsung.comp.football.Players.Player.TeamColour;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.samsung.comp.football.Players.Goalie;
+import com.samsung.comp.football.Players.Player;
 
 /**
  * This class creates and updates the players database and is heavily inspired
@@ -74,16 +62,11 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 	private void addDefaultPlayers(SQLiteDatabase database) {
 
 		Player[] players = {
-				new Player(1, "Steve", true, 520.0f, 150.0f, 100.0f, 20.0f,
-						420.0f, 1),
-				new Player(2, "Alex", true, 540.0f, 200.0f, 80.0f, 20.0f,
-						380.0f, 1),
-				new Player(3, "Thomas", true, 550.0f, 100.0f, 100.0f, 40.0f,
-						420.0f, 1),
-				new Player(4, "Samuel", true, 530.0f, 150.0f, 80.0f, 40.0f,
-						420.0f, 1),
-				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 20.0f,
-						500.0f, 1) };
+				new Player(1, "Steve", true, 520.0f, 150.0f, 100.0f, 420.0f, 1),
+				new Player(2, "Alex", true, 540.0f, 200.0f, 80.0f, 380.0f, 1),
+				new Player(3, "Thomas", true, 550.0f, 100.0f, 100.0f, 420.0f, 1),
+				new Player(4, "Samuel", true, 530.0f, 150.0f, 80.0f, 420.0f, 1),
+				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 1) };
 		for (Player player : players) {
 			insertPlayer(database, player);
 		}
@@ -98,8 +81,6 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeed());
 		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeed());
 		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkill());
-		values.put(TACKLE_PREVENTION_SKILL_COLUMN_NAME,
-				player.getTacklePreventionSkill());
 		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkill());
 		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
 		int isGoalie = player.isGoalie() ? 1 : 0;

@@ -12,7 +12,6 @@ import com.samsung.comp.football.AbstractGame;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.Actions.Utils;
-import com.samsung.comp.football.Players.Player.TeamColour;
 
 public class Goalie extends Player {
 
@@ -28,10 +27,9 @@ public class Goalie extends Player {
 
 	/* This is the constructor to call when creating from a database */
 	public Goalie(int id, String name, boolean purchased, float shootSpeed,
-			float runSpeed, float tackleSkill, float tacklePreventionSkill,
-			float savingSkill, int teamID) {
+			float runSpeed, float tackleSkill, float savingSkill, int teamID) {
 		super(id, name, purchased, shootSpeed, runSpeed, tackleSkill,
-				tacklePreventionSkill, savingSkill, teamID);
+				savingSkill, teamID);
 	}
 
 	public Goalie(float playerX, float playerY, TeamColour teamColour,

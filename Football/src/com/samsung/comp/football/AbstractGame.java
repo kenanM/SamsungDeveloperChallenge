@@ -610,7 +610,7 @@ public abstract class AbstractGame implements ApplicationListener,
 							statPoint1.getHeight(), false, true);
 				}
 
-				for (int i = 0; i < player.getTacklePreventionSkillBarCount(); i++) {
+				for (int i = 0; i < player.getSavingSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(3 * statPoint1.getHeight()), 0, 0,
@@ -618,33 +618,14 @@ public abstract class AbstractGame implements ApplicationListener,
 							1, 0, 0, 0, statPoint1.getWidth(),
 							statPoint1.getHeight(), false, true);
 				}
-
-				for (int i = 0; i < player.getSavingSkillBarCount(); i++) {
-					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
-							- 25 * 10 + (i * statPoint1.getWidth()),
-							(4 * statPoint1.getHeight()), 0, 0,
-							statPoint1.getWidth(), statPoint1.getHeight(), 1,
-							1, 0, 0, 0, statPoint1.getWidth(),
-							statPoint1.getHeight(), false, true);
-				}
 			} else {
 				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
 						* 10,
-						(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1.getHeight())),
+						(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1.getHeight())),
 						0, 0, stats.getWidth(), stats.getHeight(), 1, 1, 0, 0,
 						0, stats.getWidth(), stats.getHeight(), false, true);
 
 				for (int i = 0; i < player.getRunSpeedBarCount(); i++) {
-					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
-							- 25 * 10 + (i * statPoint1.getWidth()),
-							(VIRTUAL_SCREEN_HEIGHT - (5 * statPoint1
-									.getHeight())), 0, 0,
-							statPoint1.getWidth(), statPoint1.getHeight(), 1,
-							1, 0, 0, 0, statPoint1.getWidth(), statPoint1
-									.getHeight(), false, true);
-				}
-
-				for (int i = 0; i < player.getShootSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1
@@ -654,7 +635,7 @@ public abstract class AbstractGame implements ApplicationListener,
 									.getHeight(), false, true);
 				}
 
-				for (int i = 0; i < player.getTackleSkillBarCount(); i++) {
+				for (int i = 0; i < player.getShootSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1
@@ -664,7 +645,7 @@ public abstract class AbstractGame implements ApplicationListener,
 									.getHeight(), false, true);
 				}
 
-				for (int i = 0; i < player.getTacklePreventionSkillBarCount(); i++) {
+				for (int i = 0; i < player.getTackleSkillBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
 							- 25 * 10 + (i * statPoint1.getWidth()),
 							(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1
@@ -730,10 +711,6 @@ public abstract class AbstractGame implements ApplicationListener,
 					* player.getTackleSkillBarValue());
 
 			rn = Utils.randomInt(rng, -3, 3);
-			player.setTacklePreventionSkill(player.getTacklePreventionSkill()
-					+ rn * player.getTacklePreventionBarValue());
-
-			rn = Utils.randomInt(rng, -3, 3);
 			player.setSavingSkill(player.getSavingSkill() + rn
 					* player.getSavingSkillBarValue());
 
@@ -794,8 +771,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void performTackle(Player player) {
-		float tackleChance = player.getTackleSkill()
-				- ball.getOwner().getTacklePreventionSkill();
+		float tackleChance = player.getTackleSkill();
 		float rn = Utils.randomFloat(rng, 0, 100);
 		if (rn < tackleChance) {
 			float rotation = 0;

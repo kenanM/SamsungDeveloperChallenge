@@ -98,10 +98,10 @@ public class PlayerDataSource {
 
 		if (goalie) {
 			return new Goalie(id, name, purchased, shootSpeed, runSpeed,
-					tackleSkill, tacklePrevention, savingSkill, teamId);
+					tackleSkill, savingSkill, teamId);
 		} else {
 			return new Player(id, name, purchased, shootSpeed, runSpeed,
-					tackleSkill, tacklePrevention, savingSkill, teamId);
+					tackleSkill, savingSkill, teamId);
 		}
 	}
 }
