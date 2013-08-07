@@ -13,11 +13,6 @@ public class MultiplayerGame extends AbstractGame {
 	Color blueColor = new Color(0.2f, 0.6f, 1f, 1f);
 	PlayerDataSource playerDatabase;
 	
-	public MultiplayerGame(PlayerDataSource playerDatabase, ActionResolver actionResolver) {
-		this.playerDatabase = playerDatabase;
-		this.actionResolver = actionResolver;
-	}
-
 	public MultiplayerGame(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
 			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
 		this.playerDatabase = playerDatabase;

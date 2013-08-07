@@ -13,11 +13,6 @@ public class Game extends AbstractGame {
 
 	PlayerDataSource playerDatabase;
 	
-	public Game(PlayerDataSource playerDatabase, ActionResolver actionResolver) {
-		this.actionResolver = actionResolver;
-		this.playerDatabase = playerDatabase;
-	}
-
 	public Game(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
 			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
 		this.playerDatabase = playerDatabase;
@@ -58,9 +53,6 @@ public class Game extends AbstractGame {
 				}
 			}
 		});
-
-		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
-				: remainingMatchTime;
 
 		controlsActive = true;
 
