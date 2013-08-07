@@ -121,7 +121,7 @@ public class MarkBall extends Action implements MovementAction {
 								position, speed, 0, returnNulls);
 					} else {
 						return returnNulls ? null : new PlayerPositionData(
-								position, -1);
+								position, rotation);
 					}
 				}
 			} else {

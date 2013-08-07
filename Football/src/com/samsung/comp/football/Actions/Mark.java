@@ -68,7 +68,7 @@ public class Mark extends Action implements MovementAction {
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 
 		Vector2 position = initialPosition;
-		Vector2 target = this.target.getPlayerPosition();
+		Vector2 target = this.target.getMarkPosition(ball);
 
 		while (distance > 0 && positionInPath == 0) {
 
@@ -107,15 +107,14 @@ public class Mark extends Action implements MovementAction {
 		positionInPath = (positionInPath < 0) ? 0 : positionInPath;
 
 		Vector2 position = initialPosition;
-		Vector2 oldPosition = position.cpy();
-		Vector2 target = this.target.getPlayerPosition();
+		Vector2 target = this.target.getMarkPosition(ball);
 		float rotation = 0;
 
 		while (distance > 0 && positionInPath == 0) {
 
 			if (position.dst(target) < distance) {
 				distance -= position.dst(target);
-				rotation = Utils.getMoveVector(oldPosition, target, distance)
+				rotation = Utils.getMoveVector(position, target, distance)
 						.angle();
 				position.set(target);
 				positionInPath++;
@@ -128,7 +127,10 @@ public class Mark extends Action implements MovementAction {
 								position, speed, 0, returnNulls);
 					} else {
 						return returnNulls ? null : new PlayerPositionData(
-								position, -1);
+								position, Utils.getMoveVector(
+										this.target.getPlayerPosition(),
+										ball.getBallPosition(), distance)
+										.angle());
 					}
 				}
 			} else {

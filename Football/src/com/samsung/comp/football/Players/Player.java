@@ -451,6 +451,12 @@ public class Player extends Rectangle implements Followable {
 				Utils.getMoveVector(getPlayerPosition(), rotation, 25));
 	}
 
+	public Vector2 getMarkPosition(Ball ball) {
+		return getPlayerPosition().add(
+				Utils.getMoveVector(getPlayerPosition(),
+						ball.getBallPosition(), 32));
+	}
+
 	public TextureRegion getTexture() {
 		return currentFrame;
 	}
