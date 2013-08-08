@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ActionFiredListener;
 import com.samsung.comp.events.MovementCompletedListener;
+import com.samsung.comp.events.OpponentEntersProximityListener;
 import com.samsung.comp.football.Ball;
 import com.samsung.comp.football.Game;
 import com.samsung.comp.football.PlayerPositionData;
@@ -72,6 +73,8 @@ public class Player extends Rectangle implements Followable {
 	private Ball ball;
 
 	private List<MovementCompletedListener> moveCompleteListeners = new ArrayList<MovementCompletedListener>();
+	private List<OpponentEntersProximityListener> opponentEntersProximityListeners = new ArrayList<OpponentEntersProximityListener>();
+	private List<Player> opponentsCurrentlyInProximity = new ArrayList<Player>();
 
 	/* This is the constructor to call when creating from a database */
 	public Player(int id, String name, boolean purchased, float shootSpeed,
@@ -913,6 +916,31 @@ public class Player extends Rectangle implements Followable {
 		return new Vector2[] { getFuturePosition(1, true),
 				getFuturePosition(2, true), getFuturePosition(3, true),
 				getFuturePosition(4, true), getFuturePosition(5, true) };
+	}
+
+	public void checkForNewOpponentsInProximity(float proximity,
+			List<Player> opponents) {
+		Circle proximityCircle = new Circle(getPlayerPosition(), proximity);
+
+		// Remove any opponents no longer in the vicinity
+		for (Player opponent : opponentsCurrentlyInProximity) {
+			if (!proximityCircle.contains(opponent.getPlayerPosition())) {
+				opponentsCurrentlyInProximity.remove(opponent);
+			}
+		}
+
+		// Check the proximity for any opponents in the list
+		for (Player opponent : opponents) {
+			if (proximityCircle.contains(opponent.getPlayerPosition())) {
+				if (!opponentsCurrentlyInProximity.contains(opponent)) {
+					opponentsCurrentlyInProximity.add(opponent);
+
+					for (OpponentEntersProximityListener listener : opponentEntersProximityListeners) {
+						listener.onOpponentEntersProximity(this, opponent);
+					}
+				}
+			}
+		}
 	}
 
 }
