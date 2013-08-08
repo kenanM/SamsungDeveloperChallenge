@@ -120,7 +120,8 @@ public class Goalie extends Player {
 
 	@Override
 	public TextureRegion getHighlightTexture() {
-		if (!hasBall() && game.getCurrentTeamColour() == getTeam()) {
+		if (!hasBall() && game.getCurrentTeamColour() == getTeam()
+				&& game.getSelectedPlayer() == null) {
 			return unselectableRegion;
 		} else {
 			return super.getHighlightTexture();
