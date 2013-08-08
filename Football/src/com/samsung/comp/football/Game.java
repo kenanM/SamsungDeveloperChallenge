@@ -41,7 +41,7 @@ public class Game extends AbstractGame {
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
 
-		ai = new AI(this);
+		ai = new AI(this, team2);
 		createMovementCompletedListeners(team2);
 
 		ball.addBallOwnerSetListener(new BallOwnerSetListener() {

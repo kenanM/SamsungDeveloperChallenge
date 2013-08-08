@@ -47,26 +47,21 @@ public class AI {
 	private List<Player> opponents;
 	TeamColour opponentColour;
 
-	// TODO: Should construct AI with a teamColour, then use
-	// getPlayers(TeamColour colour) as appropriate
-	public AI(AbstractGame game) {
-		// Decide whether the AI or the Game should carry out the
-		// "if(teamColour == TeamColour.RED)" logic
+	public AI(AbstractGame game, TeamColour teamColour) {
 		this.game = game;
-		this.teamColour = game.getComputerColour();
-		this.goalie = game.getComputerGoalie();
+		this.teamColour = teamColour;
+		this.goalie = game.getGoalie(teamColour);
 		this.ball = game.getBall();
 		if (teamColour == TeamColour.RED) {
 			targetGoal = Game.BLUE_GOAL;
 			homeGoal = Game.RED_GOAL;
+			opponentColour = TeamColour.BLUE;
 		} else {
 			targetGoal = Game.RED_GOAL;
 			homeGoal = Game.BLUE_GOAL;
+			opponentColour = TeamColour.RED;
 		}
 		players = new ArrayList<Player>(game.getPlayers(teamColour));
-
-		opponentColour = (teamColour == TeamColour.RED) ? TeamColour.BLUE
-				: TeamColour.RED;
 		opponents = new ArrayList<Player>(game.getPlayers(opponentColour));
 	}
 
@@ -481,63 +476,6 @@ public class AI {
 		}
 
 		return players;
-	}
-
-	private void getActionsV1() {
-		List<Player> players = new ArrayList<Player>(game.getComputerPlayers());
-		for (Player player : players) {
-			player.clearActions();
-		}
-		sortPlayersByDistanceFromHomeGoal(players);
-
-		boolean controlBall = computerControlsBall();
-		boolean goalieHasBall = goalie.hasBall();
-
-		if (goalieHasBall) {
-			Player nearestToTheGoalie = playerNearestTheGoalie(players);
-			goalie.addAction(new Pass(ball, goalie, nearestToTheGoalie, goalie
-					.getFuturePosition()));
-			players.remove(nearestToTheGoalie);
-
-			for (Player player : players) {
-				moveToMidFieldPosition(player);
-			}
-			return;
-		}
-
-		if (controlBall) {
-			Player ballOwner = ball.getOwner();
-			if (withinShootingRange(ballOwner)) {
-				shoot(ballOwner);
-				players.remove(ballOwner);
-			} else {
-				// If not within shooting range either pass or move
-				Player receiver = players.get(3);
-				if (receiver != ballOwner) {
-					players.remove(receiver);
-					ballOwner.addAction(new Pass(ball, ballOwner, receiver,
-							ballOwner.getFuturePosition()));
-				} else {
-					moveToOffensivePosition(ballOwner);
-				}
-			}
-
-			moveToMidFieldPosition(players.get(0));
-			moveToOffensivePosition(players.get(1));
-			if (players.size() == 3) {
-				moveToOffensivePosition(players.get(2));
-			}
-
-		} else {
-			// We don't control the ball
-			Player playerNearestBall = playerNearestVector(players,
-					ball.getBallPosition());
-			players.remove(playerNearestBall);
-			followBall(playerNearestBall);
-			moveTodDefensivePosition(players.get(0));
-			moveBetween(players.get(1), homeGoal, ball.getBallPosition());
-			moveToMidFieldPosition(players.get(2));
-		}
 	}
 
 	/**
