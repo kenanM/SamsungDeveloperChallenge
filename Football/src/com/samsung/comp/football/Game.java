@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.Gdx;
 import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.events.MovementCompletedListener;
+import com.samsung.comp.events.OpponentEntersProximityListener;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Player;
@@ -43,6 +44,7 @@ public class Game extends AbstractGame {
 
 		ai = new AI(this, team2);
 		createMovementCompletedListeners(team2);
+		createOpponentEntersProximityListeners(team2);
 
 		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
 
@@ -188,6 +190,24 @@ public class Game extends AbstractGame {
 		}
 	}
 
+	private void createOpponentEntersProximityListeners(TeamColour teamColour) {
+		for (Player aiPlayer : getPlayers(teamColour)) {
+			aiPlayer.addOpponentEntersProximityListener(new OpponentEntersProximityListener() {
+
+				@Override
+				public void onOpponentEntersProximity(Player player,
+						Player opponent) {
+					if (gameState == GameState.EXECUTION
+							&& player == ball.getOwner()) {
+						Gdx.app.log("Game",
+								"Opponent in proximity. Getting new actions.");
+						ai.getActions(player);
+					}
+				}
+			});
+		}
+	}
+
 	@Override
 	public void beginExecution() {
 		super.beginExecution();
@@ -235,6 +255,7 @@ public class Game extends AbstractGame {
 				player.update(time);
 				player.restrictToArea(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
 						Game.VIRTUAL_SCREEN_HEIGHT);
+				player.checkForNewOpponentsInProximity(100, getPlayers(team1));
 			}
 
 			ball.update(time);

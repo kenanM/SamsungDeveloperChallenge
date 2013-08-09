@@ -155,6 +155,16 @@ public class Player extends Rectangle implements Followable {
 		return this.moveCompleteListeners.remove(listener);
 	}
 
+	public boolean addOpponentEntersProximityListener(
+			OpponentEntersProximityListener listener) {
+		return this.opponentEntersProximityListeners.add(listener);
+	}
+
+	public boolean removeOpponentEntersProximityListener(
+			OpponentEntersProximityListener listener) {
+		return this.opponentEntersProximityListeners.remove(listener);
+	}
+
 	public static void create(Texture texture) {
 		notificationTexture = texture;
 	}
@@ -923,7 +933,9 @@ public class Player extends Rectangle implements Followable {
 		Circle proximityCircle = new Circle(getPlayerPosition(), proximity);
 
 		// Remove any opponents no longer in the vicinity
-		for (Player opponent : opponentsCurrentlyInProximity) {
+		List<Player> proximityOpponentsCopy = new ArrayList<Player>(
+				opponentsCurrentlyInProximity);
+		for (Player opponent : proximityOpponentsCopy) {
 			if (!proximityCircle.contains(opponent.getPlayerPosition())) {
 				opponentsCurrentlyInProximity.remove(opponent);
 			}
@@ -931,12 +943,14 @@ public class Player extends Rectangle implements Followable {
 
 		// Check the proximity for any opponents in the list
 		for (Player opponent : opponents) {
-			if (proximityCircle.contains(opponent.getPlayerPosition())) {
-				if (!opponentsCurrentlyInProximity.contains(opponent)) {
+			if (proximityCircle.contains(opponent.getPlayerPosition())
+					&& !opponentsCurrentlyInProximity.contains(opponent)) {
+				{
 					opponentsCurrentlyInProximity.add(opponent);
 
 					for (OpponentEntersProximityListener listener : opponentEntersProximityListeners) {
 						listener.onOpponentEntersProximity(this, opponent);
+						Gdx.app.log("Player", "Opponent in proximity");
 					}
 				}
 			}
