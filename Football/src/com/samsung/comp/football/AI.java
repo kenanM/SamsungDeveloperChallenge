@@ -29,8 +29,7 @@ public class AI {
 	static final double RED_GOAL_AREA_TOP = 100;
 	static final double RED_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT * 0.33;
 
-	// Distance between any generated targets X values and the edge of the pitch
-	private final float buffer = 40;
+	private Player receiver = null;
 
 	// The distance from which the AI will attempt a shot
 	private static final float SHOOTING_RANGE = 250;
@@ -92,8 +91,7 @@ public class AI {
 
 		if (goalieHasBall) {
 			Player nearestToTheGoalie = playerNearestTheGoalie(players);
-			goalie.addAction(new Pass(ball, goalie, nearestToTheGoalie, goalie
-					.getFuturePosition()));
+			passToPlayer(goalie, nearestToTheGoalie);
 
 			for (Player player : players) {
 				moveToMidFieldPosition(player);
@@ -110,7 +108,7 @@ public class AI {
 						ballInDefensiveArea, ballInOffensiveArea);
 				float rn = Utils.randomFloat(null, 0, 100);
 
-				Player receiver = (playersWithoutActions
+				Player target = (playersWithoutActions
 						.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
 						.get(playersWithoutActions.size() - 1)
 						: playersWithoutActions.get(playersWithoutActions
@@ -119,11 +117,10 @@ public class AI {
 				if (passChance > rn) {
 					// get the farthest forward player who isn't the ballOwner
 
-					moveForward(receiver);
-					ballOwner.addAction(new Pass(ball, ballOwner, receiver,
-							ballOwner.getFuturePosition()));
+					moveForward(target);
+					passToPlayer(ballOwner, target);
 					moveForward(ballOwner);
-					playersWithoutActions.remove(receiver);
+					playersWithoutActions.remove(target);
 					playersWithoutActions.remove(ballOwner);
 
 				} else {
@@ -337,7 +334,13 @@ public class AI {
 			moveBackward(player);
 		} else {
 			// No one has ball
-			moveToMidFieldPosition(player);
+			if (receiver == player) {
+				// If player is receiving a pass then collect the ball.
+				player.addAction(new MarkBall(player.getPlayerPosition(), ball));
+			} else {
+				moveToMidFieldPosition(player);
+			}
+
 		}
 
 	}
@@ -631,6 +634,7 @@ public class AI {
 	private void passToPlayer(Player player, Player targetPlayer) {
 		player.addAction(new Pass(ball, player, targetPlayer, player
 				.getBallPosition()));
+		receiver = targetPlayer;
 	}
 
 	/** Generate a random number between two values */
