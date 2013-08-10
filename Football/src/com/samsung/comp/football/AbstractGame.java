@@ -49,7 +49,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	// TODO: Remove these and other hard coded values
 	public static final float RECLAIM_BALL_TIME = 0.75f;
 	public static final float CANNOT_TACKLE_TIME = 1f;
-	public static final float TACKLE_IMMUNITY_TIME = 0.75f;
+	public static final float TACKLE_IMMUNITY_TIME = 0.65f;
 	public static final float BOUNCE_ELASTICITY = 0.5f;
 	public static final float INPUT_EPSILON_VALUE = 32;
 	public static final int VIRTUAL_SCREEN_WIDTH = 676;
