@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
 import com.samsung.comp.football.Actions.MarkBall;
@@ -63,6 +64,19 @@ public class AI {
 		}
 		players = new ArrayList<Player>(game.getPlayers(teamColour));
 		opponents = new ArrayList<Player>(game.getPlayers(opponentColour));
+
+		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
+
+			@Override
+			public void onBallOwnerSet(Ball ball, Player newOwner) {
+				// Null the receiver when they lose the ball or if it gets
+				// intercepted
+				if (newOwner != receiver) {
+					receiver = null;
+				}
+
+			}
+		});
 	}
 
 	public void getComputerActions() {
