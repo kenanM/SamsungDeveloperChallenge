@@ -407,10 +407,31 @@ public class AI {
 			Gdx.app.log(TAG,
 					"Calculating pass chance, lowered due to just receiving ball.");
 		}
+
+		// Considered separately due to shooting chance
 		if (ballInOffensiveArea) {
+			passChance = 0;
+
+			List<Player> playersInOffence = playersInArea(getOffensiveArea(),
+					players);
+			playersInOffence.remove(player);
+			List<Player> opponentsInDefence = playersInArea(getOffensiveArea(),
+					opponents);
+
 			if (countPlayersInfront(player, opponentColour, 100) == 0) {
-				passChance = 0;
+				passChance -= 20;
 			}
+
+			if (playersInOffence.size() > opponentsInDefence.size()) {
+				passChance += 80;
+			}
+
+			if (target == receiver) {
+				passChance = 0;
+				Gdx.app.log(TAG,
+						"Calculating pass chance, zero due to just receiving ball. May shoot.");
+			}
+
 		}
 		return passChance;
 	}
@@ -502,6 +523,28 @@ public class AI {
 		}
 
 		return players;
+	}
+
+	/**
+	 * Returns a list of the players in an area from a given list of players.
+	 * 
+	 * @param area
+	 *            The rectangular area to search in.
+	 * @param players
+	 *            The list of players to search for.
+	 * @return A list of players inside the rectangular area.
+	 */
+	private ArrayList<Player> playersInArea(Rectangle area, List<Player> players) {
+
+		ArrayList<Player> playersInsideArea = new ArrayList<Player>();
+
+		for (Player player : game.getAllPlayers()) {
+			if (area.contains(player.getPlayerX(), player.getPlayerY())) {
+				playersInsideArea.add(player);
+			}
+		}
+
+		return playersInsideArea;
 	}
 
 	/**
