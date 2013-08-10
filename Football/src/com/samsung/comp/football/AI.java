@@ -29,6 +29,7 @@ public class AI {
 	static final double RED_GOAL_AREA_TOP = 100;
 	static final double RED_GOAL_AREA_BOTTOM = Game.VIRTUAL_SCREEN_HEIGHT * 0.33;
 
+	// Used to reduce the chance of passing straight back
 	private Player receiver = null;
 
 	// The distance from which the AI will attempt a shot
@@ -104,15 +105,16 @@ public class AI {
 			if (withinShootingRange(ballOwner)) {
 				shoot(ballOwner);
 			} else {
-				float passChance = calculatePassChance(ballOwner,
-						ballInDefensiveArea, ballInOffensiveArea);
-				float rn = Utils.randomFloat(null, 0, 100);
 
 				Player target = (playersWithoutActions
 						.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
 						.get(playersWithoutActions.size() - 1)
 						: playersWithoutActions.get(playersWithoutActions
 								.size() - 2);
+
+				float passChance = calculatePassChance(ballOwner, target,
+						ballInDefensiveArea, ballInOffensiveArea);
+				float rn = Utils.randomFloat(null, 0, 100);
 
 				if (passChance > rn) {
 					// get the farthest forward player who isn't the ballOwner
@@ -307,17 +309,18 @@ public class AI {
 				shoot(player);
 			} else {
 				// If not within shooting range either pass or move
-				float passChance = calculatePassChance(player,
+
+				// get the farthest forward player who isn't the ballOwner
+				List<Player> sortedPlayerList = new ArrayList<Player>(players);
+				sortPlayersByDistanceFromHomeGoal(sortedPlayerList);
+				Player reciever = sortedPlayerList
+						.get(sortedPlayerList.size() - 1);
+				float passChance = calculatePassChance(player, reciever,
 						ballInDefensiveArea, ballInOffensiveArea);
 				float rn = Utils.randomFloat(null, 0, 100);
 
 				if (passChance > rn) {
-					// get the farthest forward player who isn't the ballOwner
-					List<Player> sortedPlayerList = new ArrayList<Player>(
-							players);
-					sortPlayersByDistanceFromHomeGoal(sortedPlayerList);
-					Player reciever = sortedPlayerList.get(sortedPlayerList
-							.size() - 1);
+
 					reciever = (player == reciever) ? sortedPlayerList
 							.get(sortedPlayerList.size() - 2) : reciever;
 					passToPlayer(player, reciever);
@@ -376,7 +379,7 @@ public class AI {
 		}
 	}
 
-	protected float calculatePassChance(Player player,
+	protected float calculatePassChance(Player player, Player target,
 			boolean ballInDefensiveArea, boolean ballInOffensiveArea) {
 		float passChance = 35;
 		if (countPlayersInfront(player, opponentColour, 100) > 0) {
@@ -384,6 +387,11 @@ public class AI {
 		}
 		if (ballInDefensiveArea) {
 			passChance += 20;
+		}
+		if (target == receiver) {
+			passChance -= 35;
+			Gdx.app.log(TAG,
+					"Calculating pass chance, lowered due to just receiving ball.");
 		}
 		if (ballInOffensiveArea) {
 			if (countPlayersInfront(player, opponentColour, 100) == 0) {
