@@ -116,29 +116,31 @@ public class AI {
 
 		if (controlBall) {
 			Player ballOwner = ball.getOwner();
-			if (withinShootingRange(ballOwner)) {
-				shoot(ballOwner);
+
+			Player target = (playersWithoutActions.get(playersWithoutActions
+					.size() - 1) != ballOwner) ? playersWithoutActions
+					.get(playersWithoutActions.size() - 1)
+					: playersWithoutActions
+							.get(playersWithoutActions.size() - 2);
+
+			Gdx.app.log(TAG, "Calculating pass chance from getActions()");
+			float passChance = calculatePassChance(ballOwner, target,
+					ballInDefensiveArea, ballInOffensiveArea);
+			float rn = Utils.randomFloat(null, 0, 100);
+
+			if (passChance > rn) {
+				// get the farthest forward player who isn't the ballOwner
+
+				moveForward(target);
+				passToPlayer(ballOwner, target);
+				moveForward(ballOwner);
+				playersWithoutActions.remove(target);
+				playersWithoutActions.remove(ballOwner);
+
 			} else {
-
-				Player target = (playersWithoutActions
-						.get(playersWithoutActions.size() - 1) != ballOwner) ? playersWithoutActions
-						.get(playersWithoutActions.size() - 1)
-						: playersWithoutActions.get(playersWithoutActions
-								.size() - 2);
-
-				float passChance = calculatePassChance(ballOwner, target,
-						ballInDefensiveArea, ballInOffensiveArea);
-				float rn = Utils.randomFloat(null, 0, 100);
-
-				if (passChance > rn) {
-					// get the farthest forward player who isn't the ballOwner
-
-					moveForward(target);
-					passToPlayer(ballOwner, target);
-					moveForward(ballOwner);
-					playersWithoutActions.remove(target);
-					playersWithoutActions.remove(ballOwner);
-
+				if (withinShootingRange(ballOwner)
+						|| (ballOwner == this.receiver && ballInOffensiveArea)) {
+					shoot(ballOwner);
 				} else {
 					moveForward(ballOwner);
 					playersWithoutActions.remove(ballOwner);
@@ -153,6 +155,7 @@ public class AI {
 					moveToOffensivePosition(player);
 				}
 			}
+
 		} else {
 			// We don't have the ball
 			if (ballInDefensiveArea || ballInMidFieldArea) {
@@ -208,11 +211,11 @@ public class AI {
 					}
 				}
 			} else {
-
+				// Ball is still in offense
 				if (opponentControlsBall) {
 					// Follow ball owner
 					// Mark opponents in mid or in our defence
-					// Move remaining players back
+					// Move remaining players forward
 
 					// Follow ball owner
 					Player playerNearestBall = playerNearestVector(
@@ -260,8 +263,8 @@ public class AI {
 					}
 
 					for (Player player : playersWithoutActions) {
-						// Move backward
-						moveBackward(player);
+						// Move forward
+						moveForward(player);
 					}
 
 				} else {
@@ -319,36 +322,89 @@ public class AI {
 
 		if (playerControlsBall) {
 
-			if (withinShootingRange(player)) {
-				shoot(player);
+			// Get the farthest forward player who isn't the ballOwner
+			List<Player> sortedPlayerList = new ArrayList<Player>(players);
+			sortPlayersByDistanceFromHomeGoal(sortedPlayerList);
+			Player reciever = sortedPlayerList.get(sortedPlayerList.size() - 1);
+			reciever = (reciever == ball.getOwner()) ? sortedPlayerList
+					.get(sortedPlayerList.size() - 2) : reciever;
+			//
+			// // Create a map of all actions and probabilities
+			// Map<Action, Float> asd = new HashMap<Action, Float>();
+			// for (Player passTarget : sortedPlayerList) {
+			// asd.put(new Pass(ball, player, passTarget, player
+			// .getPlayerPosition()),
+			// 100f / sortedPlayerList.size() + 2);
+			//
+			// calculatePassChance(player, passTarget, ballInDefensiveArea,
+			// ballInOffensiveArea);
+			// }
+			//
+			// float rx = Utils.randomFloat(null, 40,
+			// Game.VIRTUAL_SCREEN_WIDTH - 40);
+			// float ry = Utils.randomFloat(null, 40,
+			// Game.VIRTUAL_SCREEN_HEIGHT - 40);
+			// Vector2 point = new Vector2(rx, ry);
+			//
+			// asd.put(new MoveToPosition(point, player),
+			// 100f / sortedPlayerList.size() + 2);
+			// asd.put(new Kick(ball, targetGoal, player.getBallPosition()),
+			// 100f / sortedPlayerList.size() + 2);
+
+
+			// Calculate pass chance first
+			Gdx.app.log(TAG, "Calculating single player pass chance");
+			float passChance = calculatePassChance(player, reciever,
+					ballInDefensiveArea, ballInOffensiveArea);
+			float rn = Utils.randomFloat(null, 0, 100);
+
+			if (passChance > rn) {
+				moveForward(reciever);
+				passToPlayer(player, reciever);
+				moveForward(player);
 			} else {
-				// If not within shooting range either pass or move
-
-				// get the farthest forward player who isn't the ballOwner
-				List<Player> sortedPlayerList = new ArrayList<Player>(players);
-				sortPlayersByDistanceFromHomeGoal(sortedPlayerList);
-				Player reciever = sortedPlayerList
-						.get(sortedPlayerList.size() - 1);
-				float passChance = calculatePassChance(player, reciever,
-						ballInDefensiveArea, ballInOffensiveArea);
-				float rn = Utils.randomFloat(null, 0, 100);
-
-				if (passChance > rn) {
-
-					reciever = (player == reciever) ? sortedPlayerList
-							.get(sortedPlayerList.size() - 2) : reciever;
-					passToPlayer(player, reciever);
-
+				if (withinShootingRange(player)) {
+					shoot(player);
 				} else {
 					moveForward(player);
 				}
 			}
 
+
+// if (withinShootingRange(player)) {
+			// shoot(player);
+			// } else {
+			// // If not within shooting range either pass or move
+			//
+			// // get the farthest forward player who isn't the ballOwner
+			// List<Player> sortedPlayerList = new ArrayList<Player>(players);
+			// sortPlayersByDistanceFromHomeGoal(sortedPlayerList);
+			// Player target = sortedPlayerList
+			// .get(sortedPlayerList.size() - 1);
+			// float passChance = calculatePassChance(player, target,
+			// ballInDefensiveArea, ballInOffensiveArea);
+			// float rn = Utils.randomFloat(null, 0, 100);
+			//
+			// if (passChance > rn) {
+			//
+			// target = (player == target) ? sortedPlayerList
+			// .get(sortedPlayerList.size() - 2) : target;
+			// passToPlayer(player, target);
+			//
+			// } else {
+			// moveForward(player);
+			// }
+			// }
+
 		} else if (computerControlsBall()) {
 			// Move forward
 			moveForward(player);
 		} else if (opponentControlsBall) {
-			moveBackward(player);
+			if (ballInOffensiveArea) {
+				moveToOffensivePosition(player);
+			} else {
+				moveBackward(player);
+			}
 		} else {
 			// No one has ball
 			if (receiver == player) {
@@ -402,7 +458,7 @@ public class AI {
 		if (ballInDefensiveArea) {
 			passChance += 20;
 		}
-		if (target == receiver) {
+		if (player == receiver) {
 			passChance -= 35;
 			Gdx.app.log(TAG,
 					"Calculating pass chance, lowered due to just receiving ball.");
@@ -410,7 +466,7 @@ public class AI {
 
 		// Considered separately due to shooting chance
 		if (ballInOffensiveArea) {
-			passChance = 0;
+			passChance = 30;
 
 			List<Player> playersInOffence = playersInArea(getOffensiveArea(),
 					players);
@@ -418,21 +474,35 @@ public class AI {
 			List<Player> opponentsInDefence = playersInArea(getOffensiveArea(),
 					opponents);
 
+			// Lower chance if perimeter is clear
 			if (countPlayersInfront(player, opponentColour, 100) == 0) {
 				passChance -= 20;
+				Gdx.app.log(TAG, "-20, clear area.");
+			} else {
+				passChance += 30;
+				Gdx.app.log(TAG, "+30, opponent close.");
 			}
 
+			// Higher chance with more teammates in offense
 			if (playersInOffence.size() > opponentsInDefence.size()) {
-				passChance += 80;
+				passChance += 45;
+				Gdx.app.log(TAG, "+45, players in offense.");
+			} else if (playersInOffence.size() == opponentsInDefence.size()) {
+				passChance += 20;
+				Gdx.app.log(TAG, "+20, equal numbers.");
+			} else if (playersInOffence.size() < opponentsInDefence.size()) {
+				passChance -= 20;
+				Gdx.app.log(TAG, "-20, players in defense.");
 			}
 
-			if (target == receiver) {
-				passChance = 0;
+			if (player == receiver) {
+				passChance -= 0;
 				Gdx.app.log(TAG,
-						"Calculating pass chance, zero due to just receiving ball. May shoot.");
+						"Calculating pass chance, set due to just receiving ball.");
 			}
 
 		}
+		Gdx.app.log(TAG, "Pass Chance = " + passChance);
 		return passChance;
 	}
 
@@ -641,7 +711,7 @@ public class AI {
 	}
 
 	private void moveToMidFieldPosition(Player player) {
-		moveToArea(player, BLUE_GOAL_AREA_BOTTOM, RED_GOAL_AREA_TOP);
+		moveToArea(player, RED_GOAL_AREA_BOTTOM, BLUE_GOAL_AREA_TOP);
 	}
 
 	private void moveToOffensivePosition(Player player) {
