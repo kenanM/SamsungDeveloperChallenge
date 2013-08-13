@@ -201,6 +201,7 @@ public class Game extends AbstractGame {
 							&& player == ball.getOwner()) {
 						Gdx.app.log("Game",
 								"Opponent in proximity. Getting new actions.");
+						player.reset();
 						ai.getActions(player);
 					}
 				}
@@ -255,7 +256,10 @@ public class Game extends AbstractGame {
 				player.update(time);
 				player.restrictToArea(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
 						Game.VIRTUAL_SCREEN_HEIGHT);
-				player.checkForNewOpponentsInProximity(100, getPlayers(team1));
+				player.checkForNewOpponentsInProximity(100,
+						getAllPlayers(team1));
+				// player.checkForNewOpponentsInProximity(100,
+				// getPlayers(team1));
 			}
 
 			ball.update(time);
