@@ -405,6 +405,20 @@ public class AI {
 		}
 	}
 
+	/**
+	 * Calculate a chance to pass the ball based on the ball owner and ball
+	 * position.
+	 * 
+	 * @param player
+	 *            The player to move
+	 * @param target
+	 *            Unused
+	 * @param ballInDefenseiveArea
+	 *            is the ball in the AI half
+	 * @param ballInOffensiveArea
+	 *            is the ball in the opponent half
+	 * @return A float representing the % chance to pass
+	 */
 	protected float calculatePassChance(Player player, Player target,
 			boolean ballInDefensiveArea, boolean ballInOffensiveArea) {
 		float passChance = 35;
