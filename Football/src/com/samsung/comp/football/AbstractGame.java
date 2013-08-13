@@ -1040,6 +1040,20 @@ public abstract class AbstractGame implements ApplicationListener,
 		return result;
 	}
 
+	/**
+	 * Returns a list of all players on a team, including the goal keeper
+	 * 
+	 * @param teamColour
+	 *            the team to get
+	 * @return
+	 */
+	public List<Player> getAllPlayers(TeamColour teamColour) {
+		List<Player> result = new LinkedList<Player>();
+		result.addAll(getPlayers(teamColour));
+		result.add(getGoalie(teamColour));
+		return result;
+	}
+
 	public Player getSelectedPlayer() {
 		return selectedPlayer;
 	}
@@ -1048,6 +1062,13 @@ public abstract class AbstractGame implements ApplicationListener,
 		selectedPlayer = null;
 	}
 
+	/**
+	 * Returns a list of players on a team, EXCLUDING the goal keeper
+	 * 
+	 * @param teamColour
+	 *            the team to get
+	 * @return
+	 */
 	public List<Player> getPlayers(TeamColour colour) {
 		if (colour == TeamColour.RED) {
 			return redPlayers;
