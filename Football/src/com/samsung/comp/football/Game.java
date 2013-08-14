@@ -73,6 +73,25 @@ public class Game extends AbstractGame {
 		whistleBlow.play();
 	}
 
+	@Override
+	protected double calculateRewardFunds() {
+		double reward = 20000;
+
+		float AIDifficultyModifier;
+		float teamDifficultyModifier;
+
+		int humanScore = getScore(team1);
+		int AIScore = getScore(team2);
+
+		if (humanScore > AIScore) {
+			reward += 30000;
+		} else if (humanScore == AIScore) {
+			reward += 7500;
+		}
+
+		return reward;
+	}
+
 	protected void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);

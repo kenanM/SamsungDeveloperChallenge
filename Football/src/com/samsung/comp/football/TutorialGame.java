@@ -81,6 +81,11 @@ public class TutorialGame extends AbstractGame {
 		displayArrows();
 	}
 
+	@Override
+	protected double calculateRewardFunds() {
+		return 10000;
+	}
+
 	private void setupMovePhase() {
 		Player p = new Player(338, VIRTUAL_SCREEN_HEIGHT / 3, TeamColour.BLUE);
 		bluePlayers.add(p);

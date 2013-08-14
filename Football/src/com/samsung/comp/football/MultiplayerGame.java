@@ -65,6 +65,11 @@ public class MultiplayerGame extends AbstractGame {
 
 	}
 
+	@Override
+	protected double calculateRewardFunds() {
+		return 20000;
+	}
+
 	protected void setStartingPositions(TeamColour centerTeam) {
 
 		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);

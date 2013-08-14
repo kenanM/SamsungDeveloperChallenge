@@ -976,7 +976,12 @@ public abstract class AbstractGame implements ApplicationListener,
 		} else {
 
 		}
+		double reward = calculateRewardFunds();
+		// Add reward to DB
+
 	}
+
+	protected abstract double calculateRewardFunds();
 
 	protected Vector2 arrowTipFactory(Texture texture) {
 		if (texture == pathArrow) {
