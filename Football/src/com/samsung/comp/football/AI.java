@@ -398,8 +398,11 @@ public class AI {
 		if (getDefensiveArea().contains(player.getPlayerX(),
 				player.getPlayerY())) {
 			moveToMidFieldPosition(player);
-		} else {
+		} else if (getMidFieldArea().contains(player.getPlayerX(),
+				player.getPlayerY())) {
 			moveToOffensivePosition(player);
+		} else {
+			moveToArea(player, player.getY(), targetGoal.y);
 		}
 	}
 
@@ -764,7 +767,13 @@ public class AI {
 
 	/** Generate a random number between two values */
 	public static float rand(float max, float min) {
-		return min + (int) (Math.random() * ((max - min) + 1));
+		float mi = min;
+		float ma = max;
+		if (min > max) {
+			mi = max;
+			ma = min;
+		}
+		return mi + (int) (Math.random() * ((ma - mi) + 1));
 	}
 
 }
