@@ -381,14 +381,9 @@ public class AI {
 			}
 		} else {
 			// No one has ball
-			if (receiver == player) {
-				// If player is receiving a pass then collect the ball.
-				Gdx.app.log(TAG, "Recipient collecting ball");
-				player.addAction(new MarkBall(player.getPlayerPosition(), ball));
-			} else {
-				moveToMidFieldPosition(player);
-			}
-
+			// Get the ball.
+			Gdx.app.log(TAG, "Recipient collecting ball");
+			player.addAction(new MarkBall(player.getPlayerPosition(), ball));
 		}
 
 	}
