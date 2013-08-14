@@ -217,14 +217,31 @@ public class AI {
 			} else {
 				// Ball is still in offense
 				if (opponentControlsBall) {
-					// Follow ball owner
+					// Follow ball owner unless goalie has it
+					// If goalie has ball either mark a defending player or move
+					// back
 					// Mark opponents in mid or in our defence
 					// Move remaining players forward
 
-					// Follow ball owner
+					// Follow either the ball owner or ball
 					Player playerNearestBall = playerNearestVector(
 							playersWithoutActions, ball.getBallPosition());
-					followPlayer(playerNearestBall, ball.getOwner());
+					if (ball.getOwner() != game.getGoalie(opponentColour)) {
+						followPlayer(playerNearestBall, ball.getOwner());
+					} else {
+						// Either mark a defending player or move back
+						List<Player> opponentsInOffense = playersInArea(
+								getOffensiveArea(), opponents);
+						if (opponentsInOffense.size() > 0) {
+							followPlayer(
+									playerNearestBall,
+									playerNearestVector(opponentsInOffense,
+											playerNearestBall
+													.getPlayerPosition()));
+						} else {
+							moveBackward(playerNearestBall);
+						}
+					}
 					playersWithoutActions.remove(playerNearestBall);
 
 					// Create list of opponents in mid or our defence
@@ -272,6 +289,7 @@ public class AI {
 					}
 
 				} else {
+					// No one has ball.
 					// Collect ball and go offensive:
 					// Nearest player follows ball
 					// Move players in offense move away from any other players
