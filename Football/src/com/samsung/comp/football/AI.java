@@ -52,14 +52,12 @@ public class AI {
 		this.goalie = game.getGoalie(teamColour);
 		this.ball = game.getBall();
 		if (teamColour == TeamColour.RED) {
-			targetGoal = Game.BLUE_GOAL;
-			homeGoal = Game.RED_GOAL;
 			opponentColour = TeamColour.BLUE;
 		} else {
-			targetGoal = Game.RED_GOAL;
-			homeGoal = Game.BLUE_GOAL;
 			opponentColour = TeamColour.RED;
 		}
+		homeGoal = game.getGoal(teamColour).getGoalPoint();
+		targetGoal = game.getGoal(opponentColour).getGoalPoint();
 		players = new ArrayList<Player>(game.getPlayers(teamColour));
 		opponents = new ArrayList<Player>(game.getPlayers(opponentColour));
 

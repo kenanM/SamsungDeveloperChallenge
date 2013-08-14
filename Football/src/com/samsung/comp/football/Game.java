@@ -34,6 +34,7 @@ public class Game extends AbstractGame {
 		createIteractiveObjects();
 		createUI();
 		createRenderingObjects();
+		createGoals();
 
 		createNewPlayersAndBall();
 		// Do we really want this ?

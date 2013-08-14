@@ -1,5 +1,6 @@
 package com.samsung.comp.football;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -44,8 +45,6 @@ import com.samsung.spensdk.applistener.SPenHoverListener;
 public abstract class AbstractGame implements ApplicationListener,
 		InputProcessor, SPenHoverListener {
 
-	protected int result;
-
 	// TODO: Remove these and other hard coded values
 	public static final float RECLAIM_BALL_TIME = 0.75f;
 	public static final float CANNOT_TACKLE_TIME = 1f;
@@ -57,16 +56,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	// TODO: Restrict input, ball / player movement etc. to these
 	public static final int PLAYING_AREA_WIDTH = 670;
 	public static final int PLAYING_AREA_HEIGHT = 1024;
-
-	// TODO: HACK: rough area for goal here
-	public static final Rectangle RED_GOAL_AREA = new Rectangle(290, 0, 110, 44);
-	public static final Rectangle BLUE_GOAL_AREA = new Rectangle(290, 980, 110,
-			44);
-
-	public static final Vector2 BLUE_GOAL = new Vector2(PLAYING_AREA_WIDTH / 2,
-			975);
-	public static final Vector2 RED_GOAL = new Vector2(PLAYING_AREA_WIDTH / 2,
-			24);
 
 	private static final String INPUT_TAG = "GameInputStrategy";
 
@@ -127,6 +116,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected TeamColour team1;
 	protected TeamColour team2;
 	protected TeamColour currentTeam = TeamColour.BLUE;
+	protected Goal redGoal;
+	protected Goal blueGoal;
 
 	protected AI ai;
 	protected TextArea textArea;
@@ -292,6 +283,17 @@ public abstract class AbstractGame implements ApplicationListener,
 		Gdx.input.setCatchMenuKey(true);
 	}
 
+	protected void createGoals() {
+		Texture redGoalTexture = new Texture(Gdx.files.internal("redGoal.png"));
+		redGoal = new Goal(redGoalTexture, TeamColour.RED, VIRTUAL_SCREEN_WIDTH
+				/ 2 - redGoalTexture.getWidth() / 2, 0);
+		Texture blueGoalTexture = new Texture(
+				Gdx.files.internal("blueGoal.png"));
+		blueGoal = new Goal(blueGoalTexture, TeamColour.BLUE,
+				VIRTUAL_SCREEN_WIDTH / 2 - blueGoalTexture.getWidth() / 2,
+				VIRTUAL_SCREEN_HEIGHT - blueGoalTexture.getHeight());
+	}
+
 	public TextureRegion getGhostFrame(float time) {
 		TextureRegion region = ghostRunAnimation.getKeyFrame(time, true);
 		TextureRegion frame = new TextureRegion(region,
@@ -364,6 +366,9 @@ public abstract class AbstractGame implements ApplicationListener,
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, 0, 0, VIRTUAL_SCREEN_WIDTH,
 				VIRTUAL_SCREEN_HEIGHT, false, true);
+		// draw the goals
+		redGoal.draw(batch);
+		blueGoal.draw(batch);
 
 		bar.draw(batch);
 
@@ -787,7 +792,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected void goalScoredDetection() {
 		boolean goalScored = false;
-		if (RED_GOAL_AREA.contains(ball)) {
+		if (redGoal.contains(ball)) {
 			if (ball.hasOwner() && ball.getOwner() == redGoalie) {
 				// do nothing
 			} else {
@@ -796,7 +801,7 @@ public abstract class AbstractGame implements ApplicationListener,
 				onGoalScored(TeamColour.RED);
 
 			}
-		} else if (BLUE_GOAL_AREA.contains(ball)) {
+		} else if (blueGoal.contains(ball)) {
 			if (ball.hasOwner() && ball.getOwner() == blueGoalie) {
 				// do nothing
 			} else {
@@ -828,10 +833,11 @@ public abstract class AbstractGame implements ApplicationListener,
 			if (player == getGoalie(goalieColour)) {
 				continue;
 			} else {
-				if (goalieColour != null
-						&& getGoalAreaCircle(goalieColour).contains(
-								player.getPlayerPosition())) {
-					moveAwayFromGoal(player, goalieColour);
+				if (goalieWithBall != null) {
+					if (getGoal(goalieColour).getGoalCircle(200).contains(
+							player.getPlayerPosition())) {
+						moveAwayFromGoal(player, goalieColour);
+					}
 				} else {
 					separatePlayer(player);
 				}
@@ -850,9 +856,9 @@ public abstract class AbstractGame implements ApplicationListener,
 	 */
 
 	protected void moveAwayFromGoal(Player player, TeamColour teamColour) {
+		Vector2 goalVector = getGoal(teamColour).getGoalPoint();
 		Vector2 towardsGoal = Utils.getMoveVector(player.getPlayerPosition(),
-				getGoalVector(teamColour), 225 - (player.getPlayerPosition()
-						.dst(getGoalVector(teamColour))));
+				goalVector, 225 - (player.getPlayerPosition().dst(goalVector)));
 		Vector2 awayFromGoal = new Vector2(-towardsGoal.x, -towardsGoal.y);
 		awayFromGoal.add(player.getPlayerPosition());
 
@@ -962,13 +968,13 @@ public abstract class AbstractGame implements ApplicationListener,
 		bmf.setScale(3);
 
 		if (blueScore > redScore && team1 == TeamColour.BLUE) {
-			result = 1;
+
 		} else if (blueScore > redScore && team1 == TeamColour.RED) {
-			result = 1;
+
 		} else if (blueScore == redScore) {
-			result = 0;
+
 		} else {
-			result = -1;
+
 		}
 	}
 
@@ -993,6 +999,29 @@ public abstract class AbstractGame implements ApplicationListener,
 		return ball;
 	}
 
+	public Goal getGoal(TeamColour goalColour) {
+		if (goalColour == TeamColour.RED) {
+			return redGoal;
+		} else if (goalColour == TeamColour.BLUE) {
+			return blueGoal;
+		} else if (goalColour == null) {
+			throw new NullPointerException("goalColour is null");
+		} else {
+			throw new InvalidParameterException("Not an accepted team colour");
+		}
+	}
+
+	public int getScore(TeamColour goalColour) {
+		if (goalColour == TeamColour.RED) {
+			return redScore;
+		} else if (goalColour == TeamColour.BLUE) {
+			return blueScore;
+		} else if (goalColour == null) {
+			throw new NullPointerException("goalColour is null");
+		} else {
+			throw new InvalidParameterException("Not an accepted team colour");
+		}
+	}
 	public void setSoundManager(SoundManager soundManager) {
 		this.soundManager = soundManager;
 	}
@@ -1233,25 +1262,6 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	public void onGoalieObtainsBall(TeamColour teamColour) {
 		beginSetupPhase(2.5f);
-	}
-
-	protected Circle getGoalAreaCircle(TeamColour teamColour) {
-
-		float circleRadius = 200;
-		if (teamColour == TeamColour.RED) {
-			return new Circle(RED_GOAL, circleRadius);
-		} else {
-			return new Circle(BLUE_GOAL, circleRadius);
-		}
-	}
-
-	protected Vector2 getGoalVector(TeamColour teamColour) {
-		if (teamColour == TeamColour.RED) {
-			return RED_GOAL;
-		} else if (teamColour == TeamColour.BLUE) {
-			return BLUE_GOAL;
-		}
-		return null;
 	}
 
 	@Override

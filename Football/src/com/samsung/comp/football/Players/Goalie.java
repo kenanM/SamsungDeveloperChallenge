@@ -56,15 +56,15 @@ public class Goalie extends Player {
 				13, 64, 64);
 
 		if (teamColour == TeamColour.BLUE) {
-			this.goal = Game.BLUE_GOAL;
-			this.middle = Game.BLUE_GOAL.cpy().sub(0,
+			this.goal = game.getGoal(teamColour).getGoalPoint();
+			this.middle = goal.cpy().sub(0,
 					DEFENSIVE_DISTANCE_FROM_GOAL);
 			this.walkSheet = new Texture(Gdx.files.internal("greenPlayer.png"));
 			this.walkAnimation = new Animation(0.10f,
 					Utils.createTextureRegion(walkSheet, NUMBER_OF_FRAMES));
 		} else {
-			this.goal = Game.RED_GOAL;
-			this.middle = Game.RED_GOAL.cpy().add(0,
+			this.goal = game.getGoal(teamColour).getGoalPoint();
+			this.middle = goal.cpy().add(0,
 					DEFENSIVE_DISTANCE_FROM_GOAL);
 			this.walkSheet = new Texture(Gdx.files.internal("yellowPlayer.png"));
 			this.walkAnimation = new Animation(0.10f,

@@ -38,6 +38,7 @@ public class TutorialGame extends AbstractGame {
 		createIteractiveObjects();
 		createUI();
 		createRenderingObjects();
+		createGoals();
 
 		setupMovePhase();
 		displayArrows();
@@ -271,7 +272,7 @@ public class TutorialGame extends AbstractGame {
 					arrowTipFactory(pushIndicator));
 			Arrow push2 = new Arrow(pushIndicator,
 					Game.VIRTUAL_SCREEN_WIDTH / 2,
-					Game.RED_GOAL_AREA.getHeight(),
+					getGoal(TeamColour.RED).height,
 					arrowTipFactory(pushIndicator));
 
 			push.follow(ball);

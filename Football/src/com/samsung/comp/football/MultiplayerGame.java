@@ -33,6 +33,7 @@ public class MultiplayerGame extends AbstractGame {
 		createIteractiveObjects();
 		createUI();
 		createRenderingObjects();
+		createGoals();
 
 		createNewPlayersAndBall();
 
