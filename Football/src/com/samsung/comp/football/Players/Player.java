@@ -76,6 +76,12 @@ public class Player extends Rectangle implements Followable {
 	private List<OpponentEntersProximityListener> opponentEntersProximityListeners = new ArrayList<OpponentEntersProximityListener>();
 	private List<Player> opponentsCurrentlyInProximity = new ArrayList<Player>();
 
+	/**
+	 * Used only by subclasses
+	 */
+	protected Player() {
+	}
+
 	/* This is the constructor to call when creating from a database */
 	public Player(int id, String name, boolean purchased, float shootSpeed,
 			float runSpeed, float tackleSkill, float savingSkill, int teamID) {

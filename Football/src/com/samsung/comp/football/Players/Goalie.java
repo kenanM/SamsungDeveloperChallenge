@@ -34,7 +34,10 @@ public class Goalie extends Player {
 
 	public Goalie(float playerX, float playerY, TeamColour teamColour,
 			AbstractGame game, float saving) {
-		super(playerX, playerY, teamColour);
+		this.x = translatePlayerCoordinate(playerX);
+		this.y = translatePlayerCoordinate(playerY);
+		this.savingSkill = saving;
+		this.initialize(game, teamColour);
 	}
 
 	@Override
