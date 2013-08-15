@@ -72,13 +72,20 @@ public class TutorialGame extends AbstractGame {
 			tutorialPhase = TutorialPhase.GOALIE;
 			setupGoaliePhase(1.5f);
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
-			tutorialPhase = TutorialPhase.GOALIE;
+			gameState = GameState.FINISHED;
 			Gdx.app.exit();
 		} else {
 			beginInputStage();
 		}
 
 		displayArrows();
+	}
+
+	@Override
+	protected List<String> getFinishData() {
+		List<String> finishData = new ArrayList<String>();
+		finishData.add("Tutorial Complete: 10,000");
+		return finishData;
 	}
 
 	@Override

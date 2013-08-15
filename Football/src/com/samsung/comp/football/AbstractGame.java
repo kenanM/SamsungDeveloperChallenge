@@ -98,6 +98,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected OrthographicCamera camera;
 	protected boolean controlsActive = false;
 
+	protected float gameLengthScoreMultiplier = 1;
+	protected float teamDifficultyScoreMultiplier = 1;
+	protected float aiDifficultyScoreMultiplier = 1;
+
 	protected List<Player> redPlayers = new LinkedList<Player>();
 	protected List<Player> bluePlayers = new LinkedList<Player>();
 	protected Goalie redGoalie;
@@ -353,13 +357,6 @@ public abstract class AbstractGame implements ApplicationListener,
 					VIRTUAL_SCREEN_WIDTH / 2 - endTexture.getWidth() / 2,
 					VIRTUAL_SCREEN_HEIGHT / 2 - endTexture.getHeight() / 2,
 					endTexture.getWidth(), endTexture.getHeight());
-
-			String score = "Red: " + redScore + "   Blue: " + blueScore;
-			// TODO: These screen positions are a little off, Fix them.
-			bmf.draw(batch, score, (float) VIRTUAL_SCREEN_WIDTH / 3,
-					VIRTUAL_SCREEN_HEIGHT / 3);
-			batch.end();
-			return;
 		}
 
 		// draw the background pitch
@@ -984,11 +981,14 @@ public abstract class AbstractGame implements ApplicationListener,
 		} else {
 
 		}
+
+		List<String> finishData = getFinishData();
 		double reward = calculateRewardFunds();
 		// Add reward to DB
 
 	}
 
+	protected abstract List<String> getFinishData();
 	protected abstract double calculateRewardFunds();
 
 	protected Vector2 arrowTipFactory(Texture texture) {

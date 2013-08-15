@@ -1,5 +1,8 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.events.MovementCompletedListener;
@@ -43,6 +46,12 @@ public class Game extends AbstractGame {
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
 
+		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
+				: remainingMatchTime;
+		gameLengthScoreMultiplier = (float) (remainingMatchTime / 60 * 1.5);
+		// aiDifficultyScoreMultiplier = ;
+		// teamDifficultyScoreMultiplier = ;
+
 		ai = new AI(this, team2);
 		createMovementCompletedListeners(team2);
 		createOpponentEntersProximityListeners(team2);
@@ -71,6 +80,18 @@ public class Game extends AbstractGame {
 		soundManager.play(crowdCheer);
 
 		whistleBlow.play();
+	}
+
+	@Override
+	protected List<String> getFinishData() {
+		List<String> finishData = new ArrayList<String>();
+		finishData.add("Single Player Game: 20,000");
+		finishData.add("Game Length Multiplier: x" + gameLengthScoreMultiplier);
+		finishData.add("Team Difficulty Multiplier: x"
+				+ teamDifficultyScoreMultiplier);
+		finishData.add("AI Difficulty Multiplier: x"
+				+ aiDifficultyScoreMultiplier);
+		return finishData;
 	}
 
 	@Override

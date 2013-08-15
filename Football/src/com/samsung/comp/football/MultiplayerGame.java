@@ -1,5 +1,8 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.samsung.comp.football.Actions.Utils;
@@ -42,6 +45,7 @@ public class MultiplayerGame extends AbstractGame {
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
+		gameLengthScoreMultiplier = (float) (remainingMatchTime / 60 * 1.5);
 
 		bar.setBarColor(blueColor);
 
@@ -63,6 +67,14 @@ public class MultiplayerGame extends AbstractGame {
 
 		whistleBlow.play();
 
+	}
+
+	@Override
+	protected List<String> getFinishData() {
+		List<String> finishData = new ArrayList<String>();
+		finishData.add("Mutliplayer Game: 20,000");
+		finishData.add("Game Length Multiplier: x" + gameLengthScoreMultiplier);
+		return finishData;
 	}
 
 	@Override
