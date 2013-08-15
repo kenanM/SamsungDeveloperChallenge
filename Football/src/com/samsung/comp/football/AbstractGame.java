@@ -357,6 +357,14 @@ public abstract class AbstractGame implements ApplicationListener,
 					VIRTUAL_SCREEN_WIDTH / 2 - endTexture.getWidth() / 2,
 					VIRTUAL_SCREEN_HEIGHT / 2 - endTexture.getHeight() / 2,
 					endTexture.getWidth(), endTexture.getHeight());
+
+			String score = "Red: " + redScore + "   Blue: " + blueScore;
+			// TODO: These screen positions are a little off, Fix them.
+			bmf.draw(batch, score, (float) VIRTUAL_SCREEN_WIDTH / 3,
+					VIRTUAL_SCREEN_HEIGHT / 3);
+			batch.end();
+			return;
+
 		}
 
 		// draw the background pitch
