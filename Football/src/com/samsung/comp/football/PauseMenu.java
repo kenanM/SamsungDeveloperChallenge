@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 public class PauseMenu extends TextArea {
@@ -28,12 +29,14 @@ public class PauseMenu extends TextArea {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch, BitmapFont bmf) {
+	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
+		batch.begin();
 		batch.draw(areaTexture, x, y, width, height);
 		batch.draw(quitButtonTexture, Game.VIRTUAL_SCREEN_WIDTH / 2
 				- quitButtonTexture.getWidth() / 2,
 				Game.VIRTUAL_SCREEN_HEIGHT / 2, quitButtonTexture.getWidth(),
 				quitButtonTexture.getHeight());
+		batch.end();
 	}
 
 	@Override

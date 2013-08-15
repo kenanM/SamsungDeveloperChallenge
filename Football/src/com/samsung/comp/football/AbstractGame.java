@@ -345,6 +345,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		batch.setProjectionMatrix(camera.combined);
 
 		drawSpriteBatch();
+		if (gameState == GameState.PAUSED) {
+			bmf.scale(.22f);
+			textArea.draw(batch, bmf, shapeRenderer);
+			bmf.scale(-.22f);
+		}
 		drawShapeRenderer();
 	}
 
@@ -452,13 +457,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		if (ball != null) {
 			ball.draw(batch);
 		}
-
-		if (gameState == GameState.PAUSED) {
-			bmf.scale(.22f);
-			textArea.draw(batch, bmf);
-			bmf.scale(-.22f);
-		}
-
 		batch.end();
 	}
 

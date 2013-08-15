@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.samsung.comp.events.ButtonPressListener;
 
@@ -33,7 +34,8 @@ public class TextArea extends Rectangle {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
 	}
 
-	public void draw(SpriteBatch batch, BitmapFont bmf) {
+	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
+		batch.begin();
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
 				areaTexture.getHeight(), 0, 0, areaTexture.getWidth(),
 				areaTexture.getHeight(), false, true);
@@ -43,6 +45,7 @@ public class TextArea extends Rectangle {
 		bmf.drawWrapped(batch, text, (60), Game.VIRTUAL_SCREEN_HEIGHT - 978,
 				600);
 		bmf.setColor(tempColor);
+		batch.end();
 	}
 
 	public void onPress(float x, float y) {
