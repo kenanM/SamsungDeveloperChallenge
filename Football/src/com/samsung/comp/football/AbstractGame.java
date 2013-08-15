@@ -580,6 +580,10 @@ public abstract class AbstractGame implements ApplicationListener,
 	public void drawPlayerStats(SpriteBatch batch, Player player) {
 		try {
 			if (positionStatsAtTop) {
+				bmf.draw(batch, player.getName(), VIRTUAL_SCREEN_WIDTH
+						- (25 * statPoint1.getWidth()),
+						4 * statPoint1.getHeight());
+
 				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
 						* 10, 0, 0, 0, stats.getWidth(), stats.getHeight(), 1,
 						1, 0, 0, 0, stats.getWidth(), stats.getHeight(), false,
