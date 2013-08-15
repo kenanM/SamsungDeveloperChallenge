@@ -1292,7 +1292,18 @@ public abstract class AbstractGame implements ApplicationListener,
 	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
 	 *          FIELD COORDINATES
 	 */
-	protected Player findPlayer(Vector2 point) {
+	private Player findPlayer(Vector2 point) {
+		return findPlayerByPriority(point);
+	}
+
+	/**
+	 * Finds a player that overlaps or is near a point, returns null if no
+	 * player found. If multiple players are at the point, this returns the
+	 * first selectable player available.
+	 * 
+	 */
+	private Player findPlayerByPriority(Vector2 point) {
+
 		Player temp = null;
 		Vector2 playerVector;
 		for (Player player : getAllPlayers()) {
@@ -1319,35 +1330,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	/**
-	 * Looks for a player at or near the specified point. Gets index of the
-	 * selected position (Possibly a hack). Returns an integer indicating how
-	 * far in the list of actions has been selected.
-	 * 
-	 * @return The action list queue index at the selected position
-	 */
-	protected int findPlayerIndex(Vector2 point) {
-		Vector2 playerVector;
-		for (Player player : getAllPlayers()) {
-			List<Vector2> pointsList = player.getPositionList();
-			Collections.reverse(pointsList);
-
-			for (int i = 0; i < pointsList.size(); i++) {
-				playerVector = pointsList.get(i);
-				Circle inputDetectionCircle = new Circle(playerVector,
-						INPUT_EPSILON_VALUE);
-				if (inputDetectionCircle.contains(point)) {
-					// We are biased to selectable players, return them before
-					// an unselectable one.
-					if (isSelectable(player)) {
-						return pointsList.size() - 1 - i;
-					}
-				}
-			}
-		}
-		return 0;
-	}
-
-	/**
 	 * Finds the player closest to a point.
 	 * 
 	 * @param point
@@ -1356,7 +1338,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	 *            goalie and players of a specified team.
 	 * @return
 	 */
-	protected Player findClosestPlayer(Vector2 point,
+	private Player findClosestPlayer(Vector2 point,
 			TeamColour specificTeamToSearch) {
 
 		ArrayList<Player> playersList = new ArrayList<Player>();
@@ -1390,13 +1372,42 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	/**
+	 * Looks for a player at or near the specified point. Gets index of the
+	 * selected position (Possibly a hack). Returns an integer indicating how
+	 * far in the list of actions has been selected.
+	 * 
+	 * @return The action list queue index at the selected position
+	 */
+	private int findPlayerIndex(Vector2 point) {
+		Vector2 playerVector;
+		for (Player player : getAllPlayers()) {
+			List<Vector2> pointsList = player.getPositionList();
+			Collections.reverse(pointsList);
+
+			for (int i = 0; i < pointsList.size(); i++) {
+				playerVector = pointsList.get(i);
+				Circle inputDetectionCircle = new Circle(playerVector,
+						INPUT_EPSILON_VALUE);
+				if (inputDetectionCircle.contains(point)) {
+					// We are biased to selectable players, return them before
+					// an unselectable one.
+					if (isSelectable(player)) {
+						return pointsList.size() - 1 - i;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	/**
 	 * Finds the index of the action nearest a point for a particular player.
 	 * 
 	 * @param point
 	 * @param player
 	 * @return
 	 */
-	protected int findPlayerIndex(Vector2 point, Player player) {
+	private int findPlayerIndex(Vector2 point, Player player) {
 
 		List<Vector2> pointsList = player.getPositionList();
 		Collections.reverse(pointsList);
@@ -1410,7 +1421,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		return 0;
 	}
 
-	protected int findClosestPlayerIndex(Vector2 point,
+	private int findClosestPlayerIndex(Vector2 point,
 			TeamColour specificTeamToSearch) {
 
 		ArrayList<Player> playersList = new ArrayList<Player>();
@@ -1448,7 +1459,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	 * @Warning THIS FUNCTION ASSUMES THAT YOU HAVE TRANSLATED THE INPUT TO
 	 *          FIELD COORDINATES
 	 */
-	protected boolean findBall(Vector2 point) {
+	private boolean findBall(Vector2 point) {
 		if (getBall() == null) {
 			return false;
 		}
