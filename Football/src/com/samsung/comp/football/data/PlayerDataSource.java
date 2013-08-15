@@ -48,6 +48,13 @@ public class PlayerDataSource {
 		helper.close();
 	}
 
+	/**
+	 * Returns all players (EXCEPT the goalie!) within a team from the DB
+	 * 
+	 * @param teamID
+	 *            the team to return
+	 * @return
+	 */
 	public List<Player> getPlayers(int teamID) {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
 				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =0",
@@ -63,6 +70,13 @@ public class PlayerDataSource {
 		return result;
 	}
 
+	/**
+	 * Returns the goalie within a team
+	 * 
+	 * @param teamID
+	 *            the team to return
+	 * @return
+	 */
 	public Goalie getGoalie(int teamID) {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, allColumns,
 				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =1",

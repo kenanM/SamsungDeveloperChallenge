@@ -621,6 +621,10 @@ public abstract class AbstractGame implements ApplicationListener,
 							statPoint1.getHeight(), false, true);
 				}
 			} else {
+				bmf.draw(batch, player.getName(), VIRTUAL_SCREEN_WIDTH
+						- (25 * statPoint1.getWidth()), VIRTUAL_SCREEN_HEIGHT
+						- (5 * statPoint1.getHeight()));
+
 				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
 						* 10,
 						(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1.getHeight())),

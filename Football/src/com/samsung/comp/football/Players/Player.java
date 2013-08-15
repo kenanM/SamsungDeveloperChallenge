@@ -100,6 +100,7 @@ public class Player extends Rectangle implements Followable {
 	 * else
 	 */
 	public Player(float x, float y, TeamColour teamColour) {
+		this.name = "Tutorial Guy";
 		this.x = translatePlayerCoordinate(x);
 		this.y = translatePlayerCoordinate(y);
 		initialize(teamColour);
