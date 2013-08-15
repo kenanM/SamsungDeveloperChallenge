@@ -345,7 +345,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		batch.setProjectionMatrix(camera.combined);
 
 		drawSpriteBatch();
-		if (gameState == GameState.PAUSED) {
+		if (gameState == GameState.PAUSED || gameState == GameState.FINISHED) {
 			bmf.scale(.22f);
 			textArea.draw(batch, bmf, shapeRenderer);
 			bmf.scale(-.22f);
@@ -356,21 +356,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void drawSpriteBatch() {
 		// begin a new batch and draw the players and ball
 		batch.begin();
-
-		if (gameState == GameState.FINISHED) {
-			batch.draw(endTexture,
-					VIRTUAL_SCREEN_WIDTH / 2 - endTexture.getWidth() / 2,
-					VIRTUAL_SCREEN_HEIGHT / 2 - endTexture.getHeight() / 2,
-					endTexture.getWidth(), endTexture.getHeight());
-
-			String score = "Red: " + redScore + "   Blue: " + blueScore;
-			// TODO: These screen positions are a little off, Fix them.
-			bmf.draw(batch, score, (float) VIRTUAL_SCREEN_WIDTH / 3,
-					VIRTUAL_SCREEN_HEIGHT / 3);
-			batch.end();
-			return;
-
-		}
 
 		// draw the background pitch
 		batch.draw(pitchTexture, 0, 0, VIRTUAL_SCREEN_WIDTH,
@@ -974,6 +959,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void matchFinish() {
 
 		gameState = GameState.FINISHED;
+		textArea = new GameOverScreen(this);
 
 		bmf.setColor(Color.BLACK);
 		bmf.setScale(3);
