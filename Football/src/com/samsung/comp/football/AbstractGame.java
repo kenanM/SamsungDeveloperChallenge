@@ -343,6 +343,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
+		shapeRenderer.setProjectionMatrix(camera.combined);
 
 		drawSpriteBatch();
 		if (gameState == GameState.PAUSED || gameState == GameState.FINISHED) {
@@ -503,7 +504,6 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected void drawShapeRenderer() {
-		shapeRenderer.setProjectionMatrix(camera.combined);
 		shapeRenderer.begin(ShapeType.Line);
 
 		if (gameState == GameState.INPUT) {

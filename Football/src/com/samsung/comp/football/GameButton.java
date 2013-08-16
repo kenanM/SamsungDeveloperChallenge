@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
@@ -32,23 +34,35 @@ public class GameButton extends Rectangle {
 	}
 	
 	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
-		batch.begin();
+
 		if (backgroundTexture != null) {
+			batch.begin();
 			batch.draw(backgroundTexture, x, y, width, height, 0, 0,
 					backgroundTexture.getWidth(),
 					backgroundTexture.getHeight(), false, true);
+			batch.end();
 		} else {
+			Gdx.gl10.glEnable(GL10.GL_BLEND);
 			renderer.begin(ShapeType.Filled);
+			renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
+			renderer.rect(x, y, width, height);
+			renderer.end();
+			Gdx.gl10.glDisable(GL10.GL_BLEND);
+
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(1, 1, 1, 1);
 			renderer.rect(x, y, width, height);
 			renderer.end();
 		}
 		if (text != null) {
+			batch.begin();
 			TextBounds bounds = bmf.getBounds(text);
 			// Centralise text
 			bmf.draw(batch, text, (x + width / 2) - (bounds.width / 2),
 					(y + height / 2) - (bounds.height / 2));
+			batch.end();
 		}
-		batch.end();
+
 	}
 	
 	

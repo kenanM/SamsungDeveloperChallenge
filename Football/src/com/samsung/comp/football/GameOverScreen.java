@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 
 public class GameOverScreen extends TextArea {
@@ -35,6 +37,14 @@ public class GameOverScreen extends TextArea {
 		if (scoreInfoList == null) {
 			populateScoreInfoList();
 		} else {
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
+			renderer.rect(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
+					Game.VIRTUAL_SCREEN_HEIGHT / 2);
+			renderer.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			
 			for (GameButton info : scoreInfoList) {
 				info.draw(batch, bmf, renderer);
 			}
@@ -51,11 +61,12 @@ public class GameOverScreen extends TextArea {
 			bounds = bmf.getBounds(str);
 
 			// Create 'buttons' with X_OFFSET space from both sides
+			// Height = 2x the text size
 			scoreInfoList.add(new GameButton(null, X_OFFSET, drawHeight,
 					Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET,
 					bounds.height * 2, str));
 
-			//
+			// Space between buttons = 20
 			drawHeight += bounds.height * 2 + 20;
 		}
 	}
