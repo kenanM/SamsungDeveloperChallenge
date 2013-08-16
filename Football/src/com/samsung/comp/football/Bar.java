@@ -1,7 +1,5 @@
 package com.samsung.comp.football;
 
-import android.util.Log;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -57,6 +55,7 @@ public class Bar extends Rectangle {
 				Gdx.files.internal("fonts/absender1.ttf"));
 		bmf = generator.generateFont(35);
 		bmf.setScale(1, -1);
+		generator.dispose();
 		create(topOfScreen);
 	}
 
@@ -178,7 +177,7 @@ public class Bar extends Rectangle {
 				bmf.setScale(1,-1);
 			}
 			
-			Log.v("bar", "Bar width = " + bmf.getBounds(text).width);
+			Gdx.app.log("bar", "Bar width = " + bmf.getBounds(text).width);
 				
 			
 			

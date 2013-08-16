@@ -5,8 +5,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * This is merely a rectangle with backgrounds and text. This does not hold a
+ * set of listeners and events should be implemented via collision detection.
+ */
 public class GameButton extends Rectangle {
 
 	private Texture backgroundTexture;
@@ -32,10 +37,16 @@ public class GameButton extends Rectangle {
 			batch.draw(backgroundTexture, x, y, width, height, 0, 0,
 					backgroundTexture.getWidth(),
 					backgroundTexture.getHeight(), false, true);
+		} else {
+			renderer.begin(ShapeType.Filled);
+			renderer.rect(x, y, width, height);
+			renderer.end();
 		}
 		if (text != null) {
 			TextBounds bounds = bmf.getBounds(text);
-			bmf.draw(batch, text, x, y);
+			// Centralise text
+			bmf.draw(batch, text, (x + width / 2) - (bounds.width / 2),
+					(y + height / 2) - (bounds.height / 2));
 		}
 		batch.end();
 	}
