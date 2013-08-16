@@ -1016,12 +1016,12 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
-	public int getScore(TeamColour goalColour) {
-		if (goalColour == TeamColour.RED) {
+	public int getScore(TeamColour teamColour) {
+		if (teamColour == TeamColour.RED) {
 			return redScore;
-		} else if (goalColour == TeamColour.BLUE) {
+		} else if (teamColour == TeamColour.BLUE) {
 			return blueScore;
-		} else if (goalColour == null) {
+		} else if (teamColour == null) {
 			throw new NullPointerException("goalColour is null");
 		} else {
 			throw new InvalidParameterException("Not an accepted team colour");
