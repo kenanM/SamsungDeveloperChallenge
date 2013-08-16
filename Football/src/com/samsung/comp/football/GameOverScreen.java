@@ -52,11 +52,19 @@ public class GameOverScreen extends TextArea {
 	}
 
 	private void populateScoreInfoList() {
-		List<String> finishData = game.getFinishData();
+		scoreInfoList = new ArrayList<GameButton>();
 		TextBounds bounds;
 		float drawHeight = 225;
-		scoreInfoList = new ArrayList<GameButton>();
 
+		String scoreString = game.getScore(game.team1) + " : "
+				+ game.getScore(game.team2);
+		bounds = bmf.getBounds(scoreString);
+		scoreInfoList.add(new GameButton(null, X_OFFSET, drawHeight,
+				Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET, bounds.height,
+				scoreString));
+		drawHeight += bounds.height * 2 + 20;
+
+		List<String> finishData = game.getFinishData();
 		for (String str : finishData) {
 			bounds = bmf.getBounds(str);
 
