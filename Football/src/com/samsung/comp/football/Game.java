@@ -48,7 +48,10 @@ public class Game extends AbstractGame {
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
-		gameLengthScoreMultiplier = (float) (remainingMatchTime / 60 * 1.5);
+
+		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+		Gdx.app.log("GameOver", "Game Length Multiplier: x"
+				+ gameLengthScoreMultiplier);
 		// aiDifficultyScoreMultiplier = ;
 		// teamDifficultyScoreMultiplier = ;
 
@@ -85,12 +88,30 @@ public class Game extends AbstractGame {
 	@Override
 	protected List<String> getFinishData() {
 		List<String> finishData = new ArrayList<String>();
+		String textStr;
+
 		finishData.add("Single Player Game: 20,000");
-		finishData.add("Game Length Multiplier: x" + gameLengthScoreMultiplier);
-		finishData.add("Team Difficulty Multiplier: x"
-				+ teamDifficultyScoreMultiplier);
-		finishData.add("AI Difficulty Multiplier: x"
-				+ aiDifficultyScoreMultiplier);
+		
+		// Remove redundant decimals
+
+		textStr = "Game Length Multiplier: x";
+		textStr += (gameLengthScoreMultiplier % 1 == 0) ? String
+				.valueOf(Integer.valueOf((int) gameLengthScoreMultiplier))
+				: gameLengthScoreMultiplier;
+		finishData.add(textStr);
+
+		textStr = "Team Difficulty Multiplier: x";
+		textStr += (teamDifficultyScoreMultiplier % 1 == 0) ? String
+				.valueOf(Integer.valueOf((int) teamDifficultyScoreMultiplier))
+				: teamDifficultyScoreMultiplier;
+		finishData.add(textStr);
+
+		textStr = "AI Difficulty Multiplier: x";
+		textStr += (aiDifficultyScoreMultiplier % 1 == 0) ? String
+				.valueOf(Integer.valueOf((int) aiDifficultyScoreMultiplier))
+				: aiDifficultyScoreMultiplier;
+		finishData.add(textStr);
+		
 		return finishData;
 	}
 

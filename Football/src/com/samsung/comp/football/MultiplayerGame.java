@@ -45,7 +45,10 @@ public class MultiplayerGame extends AbstractGame {
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
-		gameLengthScoreMultiplier = (float) (remainingMatchTime / 60 * 1.5);
+
+		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+		Gdx.app.log("GameOver", "Game Length Multiplier: x"
+				+ gameLengthScoreMultiplier);
 
 		bar.setBarColor(blueColor);
 
@@ -72,8 +75,16 @@ public class MultiplayerGame extends AbstractGame {
 	@Override
 	protected List<String> getFinishData() {
 		List<String> finishData = new ArrayList<String>();
+		String textStr;
+
 		finishData.add("Mutliplayer Game: 20,000");
-		finishData.add("Game Length Multiplier: x" + gameLengthScoreMultiplier);
+
+		textStr = "Game Length Multiplier: x";
+		textStr += (gameLengthScoreMultiplier % 1 == 0) ? String
+				.valueOf(Integer.valueOf((int) gameLengthScoreMultiplier))
+				: gameLengthScoreMultiplier;
+		finishData.add(textStr);
+
 		return finishData;
 	}
 
