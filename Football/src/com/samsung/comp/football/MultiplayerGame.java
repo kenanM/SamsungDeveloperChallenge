@@ -46,6 +46,7 @@ public class MultiplayerGame extends AbstractGame {
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
 
+		baseReward = 20000f;
 		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
 		Gdx.app.log("GameOver", "Game Length Multiplier: x"
 				+ gameLengthScoreMultiplier);
@@ -77,7 +78,7 @@ public class MultiplayerGame extends AbstractGame {
 		List<String> finishData = new ArrayList<String>();
 		String textStr;
 
-		finishData.add("Mutliplayer Game: 20,000");
+		finishData.add("Mutliplayer Game: " + baseReward);
 
 		textStr = "Game Length Multiplier: x";
 		textStr += (gameLengthScoreMultiplier % 1 == 0) ? String

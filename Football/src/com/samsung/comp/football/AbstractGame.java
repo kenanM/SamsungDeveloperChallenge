@@ -98,6 +98,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected OrthographicCamera camera;
 	protected boolean controlsActive = false;
 
+	protected float baseReward = 0f;
 	protected float gameLengthScoreMultiplier = 1;
 	protected float teamDifficultyScoreMultiplier = 1;
 	protected float aiDifficultyScoreMultiplier = 1;
@@ -1602,7 +1603,8 @@ public abstract class AbstractGame implements ApplicationListener,
 			positionStatsAtTop = !positionStatsAtTop;
 		}
 
-		if (getGameState() == GameState.PAUSED) {
+		if (getGameState() == GameState.PAUSED
+				|| gameState == GameState.FINISHED) {
 			textArea.onPress(point.x, point.y);
 			return true;
 		}

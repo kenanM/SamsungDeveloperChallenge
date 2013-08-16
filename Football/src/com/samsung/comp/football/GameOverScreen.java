@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class GameOverScreen extends TextArea {
 
 	private static final float X_OFFSET = 30f;
+	private static final float BUTTON_Y_MARGIN = 20f;
 
 	private AbstractGame game;
 	private BitmapFont bmf;
@@ -74,8 +75,8 @@ public class GameOverScreen extends TextArea {
 					Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET,
 					bounds.height * 2, str));
 
-			// Space between buttons = 20
-			drawHeight += bounds.height * 2 + 20;
+			// Space between buttons
+			drawHeight += bounds.height * 2 + BUTTON_Y_MARGIN;
 		}
 	}
 

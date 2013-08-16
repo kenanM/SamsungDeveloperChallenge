@@ -49,6 +49,7 @@ public class Game extends AbstractGame {
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
 
+		baseReward = 20000;
 		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
 		Gdx.app.log("GameOver", "Game Length Multiplier: x"
 				+ gameLengthScoreMultiplier);
@@ -90,8 +91,12 @@ public class Game extends AbstractGame {
 		List<String> finishData = new ArrayList<String>();
 		String textStr;
 
-		finishData.add("Single Player Game: 20,000");
+		finishData.add("Single Player Game: " + baseReward);
 		
+		textStr = "Score Bonus: +";
+		textStr += calculateFinalScoreBonus();
+		finishData.add(textStr);
+
 		// Remove redundant decimals
 
 		textStr = "Game Length Multiplier: x";
@@ -112,26 +117,34 @@ public class Game extends AbstractGame {
 				: aiDifficultyScoreMultiplier;
 		finishData.add(textStr);
 		
+		// Reward
+		// total funds
+		
 		return finishData;
 	}
 
 	@Override
 	protected double calculateRewardFunds() {
-		double reward = 20000;
+		double reward = baseReward;
 
-		float AIDifficultyModifier;
-		float teamDifficultyModifier;
+		reward += calculateFinalScoreBonus();
 
-		int humanScore = getScore(team1);
-		int AIScore = getScore(team2);
-
-		if (humanScore > AIScore) {
-			reward += 30000;
-		} else if (humanScore == AIScore) {
-			reward += 7500;
-		}
+		reward *= gameLengthScoreMultiplier;
+		reward *= teamDifficultyScoreMultiplier;
+		reward *= aiDifficultyScoreMultiplier;
 
 		return reward;
+	}
+
+	private double calculateFinalScoreBonus() {
+		int humanScore = getScore(team1);
+		int AIScore = getScore(team2);
+		if (humanScore > AIScore) {
+			return 30000;
+		} else if (humanScore == AIScore) {
+			return 7500;
+		}
+		return 0;
 	}
 
 	protected void setStartingPositions(TeamColour centerTeam) {

@@ -40,6 +40,8 @@ public class TutorialGame extends AbstractGame {
 		createRenderingObjects();
 		createGoals();
 
+		baseReward = 10000;
+
 		setupMovePhase();
 		displayArrows();
 		beginInputStage();
@@ -84,7 +86,7 @@ public class TutorialGame extends AbstractGame {
 	@Override
 	protected List<String> getFinishData() {
 		List<String> finishData = new ArrayList<String>();
-		finishData.add("Tutorial Complete: 10,000");
+		finishData.add("Tutorial Complete: " + baseReward);
 		return finishData;
 	}
 
