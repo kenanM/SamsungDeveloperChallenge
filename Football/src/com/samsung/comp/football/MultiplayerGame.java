@@ -46,7 +46,7 @@ public class MultiplayerGame extends AbstractGame {
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
 
-		baseReward = 20000f;
+		baseReward = 20000;
 		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
 		Gdx.app.log("GameOver", "Game Length Multiplier: x"
 				+ gameLengthScoreMultiplier);
@@ -86,12 +86,18 @@ public class MultiplayerGame extends AbstractGame {
 				: gameLengthScoreMultiplier;
 		finishData.add(textStr);
 
+		textStr = "Total Reward: ";
+		textStr += calculateRewardFunds();
+		finishData.add(textStr);
+
 		return finishData;
 	}
 
 	@Override
-	protected double calculateRewardFunds() {
-		return 20000;
+	protected int calculateRewardFunds() {
+		int reward = baseReward;
+		reward *= gameLengthScoreMultiplier;
+		return reward;
 	}
 
 	protected void setStartingPositions(TeamColour centerTeam) {

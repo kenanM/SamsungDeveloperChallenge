@@ -20,7 +20,7 @@ public class GameOverScreen extends TextArea {
 
 	private AbstractGame game;
 	private BitmapFont bmf;
-	private List<GameButton> scoreInfoList;
+	private List<GameButton> scoreInfoButtons;
 
 	public GameOverScreen(AbstractGame game) {
 		this.game = game;
@@ -35,7 +35,7 @@ public class GameOverScreen extends TextArea {
 	public void draw(SpriteBatch batch, BitmapFont unusedBmf,
 			ShapeRenderer renderer) {
 
-		if (scoreInfoList == null) {
+		if (scoreInfoButtons == null) {
 			populateScoreInfoList();
 		} else {
 			Gdx.gl.glEnable(GL10.GL_BLEND);
@@ -46,24 +46,24 @@ public class GameOverScreen extends TextArea {
 			renderer.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 			
-			for (GameButton info : scoreInfoList) {
+			for (GameButton info : scoreInfoButtons) {
 				info.draw(batch, bmf, renderer);
 			}
 		}
 	}
 
 	private void populateScoreInfoList() {
-		scoreInfoList = new ArrayList<GameButton>();
+		scoreInfoButtons = new ArrayList<GameButton>();
 		TextBounds bounds;
 		float drawHeight = 225;
 
 		String scoreString = game.getScore(game.team1) + " : "
 				+ game.getScore(game.team2);
 		bounds = bmf.getBounds(scoreString);
-		scoreInfoList.add(new GameButton(null, X_OFFSET, drawHeight,
+		scoreInfoButtons.add(new GameButton(null, X_OFFSET, drawHeight,
 				Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET, bounds.height,
 				scoreString));
-		drawHeight += bounds.height * 2 + 20;
+		drawHeight += bounds.height * 2 + BUTTON_Y_MARGIN;
 
 		List<String> finishData = game.getFinishData();
 		for (String str : finishData) {
@@ -71,7 +71,7 @@ public class GameOverScreen extends TextArea {
 
 			// Create 'buttons' with X_OFFSET space from both sides
 			// Height = 2x the text size
-			scoreInfoList.add(new GameButton(null, X_OFFSET, drawHeight,
+			scoreInfoButtons.add(new GameButton(null, X_OFFSET, drawHeight,
 					Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET,
 					bounds.height * 2, str));
 

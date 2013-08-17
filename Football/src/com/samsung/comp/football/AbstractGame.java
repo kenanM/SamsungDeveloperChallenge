@@ -98,7 +98,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected OrthographicCamera camera;
 	protected boolean controlsActive = false;
 
-	protected float baseReward = 0f;
+	protected int baseReward = 0;
 	protected float gameLengthScoreMultiplier = 1;
 	protected float teamDifficultyScoreMultiplier = 1;
 	protected float aiDifficultyScoreMultiplier = 1;
@@ -982,7 +982,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	protected abstract List<String> getFinishData();
-	protected abstract double calculateRewardFunds();
+
+	protected abstract int calculateRewardFunds();
 
 	protected Vector2 arrowTipFactory(Texture texture) {
 		if (texture == pathArrow) {

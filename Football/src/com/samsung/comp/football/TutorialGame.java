@@ -87,12 +87,18 @@ public class TutorialGame extends AbstractGame {
 	protected List<String> getFinishData() {
 		List<String> finishData = new ArrayList<String>();
 		finishData.add("Tutorial Complete: " + baseReward);
+
+		String textStr = "Total Reward: ";
+		textStr += calculateRewardFunds();
+		finishData.add(textStr);
+
 		return finishData;
 	}
 
 	@Override
-	protected double calculateRewardFunds() {
-		return 10000;
+	protected int calculateRewardFunds() {
+		int reward = baseReward;
+		return reward;
 	}
 
 	private void setupMovePhase() {

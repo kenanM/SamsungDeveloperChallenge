@@ -94,7 +94,7 @@ public class Game extends AbstractGame {
 		finishData.add("Single Player Game: " + baseReward);
 		
 		textStr = "Score Bonus: +";
-		textStr += calculateFinalScoreBonus();
+		textStr += calculateScoreBonus();
 		finishData.add(textStr);
 
 		// Remove redundant decimals
@@ -117,17 +117,18 @@ public class Game extends AbstractGame {
 				: aiDifficultyScoreMultiplier;
 		finishData.add(textStr);
 		
-		// Reward
-		// total funds
+		textStr = "Total Reward: ";
+		textStr += calculateRewardFunds();
+		finishData.add(textStr);
 		
 		return finishData;
 	}
 
 	@Override
-	protected double calculateRewardFunds() {
-		double reward = baseReward;
+	protected int calculateRewardFunds() {
+		int reward = baseReward;
 
-		reward += calculateFinalScoreBonus();
+		reward += calculateScoreBonus();
 
 		reward *= gameLengthScoreMultiplier;
 		reward *= teamDifficultyScoreMultiplier;
@@ -136,7 +137,7 @@ public class Game extends AbstractGame {
 		return reward;
 	}
 
-	private double calculateFinalScoreBonus() {
+	private double calculateScoreBonus() {
 		int humanScore = getScore(team1);
 		int AIScore = getScore(team2);
 		if (humanScore > AIScore) {
