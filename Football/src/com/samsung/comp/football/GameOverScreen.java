@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-
 public class GameOverScreen extends TextArea {
 
 	private static final float X_OFFSET = 30f;
@@ -21,41 +20,64 @@ public class GameOverScreen extends TextArea {
 	private AbstractGame game;
 	private BitmapFont bmf;
 	private List<GameButton> scoreInfoButtons;
+	private GameButton totalFundsButton;
+	private int startingFunds = 0;
 	private int currentFunds = 0;
+	private String currentFundsString;
+	private int reward = 0;
+	private final float fundsAddingTime = 4f;
 
-	public GameOverScreen(AbstractGame game) {
+	public GameOverScreen(AbstractGame game, int reward) {
 		this.game = game;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/absender1.ttf"));
 		bmf = generator.generateFont(35, FreeTypeFontGenerator.DEFAULT_CHARS,
 				true);
 		generator.dispose();
+		this.reward = reward;
 	}
 
-	public GameOverScreen(AbstractGame game, int currentFunds) {
-		this(game);
-		this.currentFunds = currentFunds;
+	public GameOverScreen(AbstractGame game, int reward, int currentFunds) {
+		this(game, reward);
+		this.startingFunds = currentFunds;
+		this.reward = reward;
+	}
+
+	@Override
+	public void update(float time) {
+		if (scoreInfoButtons == null) {
+			populateScoreInfoList();
+		}
+
+		currentFunds += (currentFunds < startingFunds + reward) ? (time / fundsAddingTime)
+				* reward
+				: 0;
+		currentFunds = (currentFunds > startingFunds + reward) ? startingFunds
+				+ reward : currentFunds;
+
+		currentFundsString = "Total Funds: " + currentFunds;
+		totalFundsButton.setText(currentFundsString);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, BitmapFont unusedBmf,
 			ShapeRenderer renderer) {
 
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
+		renderer.rect(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
+				Game.VIRTUAL_SCREEN_HEIGHT / 2);
+		renderer.end();
+		Gdx.gl.glDisable(GL10.GL_BLEND);
+
 		if (scoreInfoButtons == null) {
 			populateScoreInfoList();
-		} else {
-			Gdx.gl.glEnable(GL10.GL_BLEND);
-			renderer.begin(ShapeType.Filled);
-			renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
-			renderer.rect(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
-					Game.VIRTUAL_SCREEN_HEIGHT / 2);
-			renderer.end();
-			Gdx.gl.glDisable(GL10.GL_BLEND);
-			
-			for (GameButton info : scoreInfoButtons) {
-				info.draw(batch, bmf, renderer);
-			}
 		}
+		for (GameButton info : scoreInfoButtons) {
+			info.draw(batch, bmf, renderer);
+		}
+
 	}
 
 	private void populateScoreInfoList() {
@@ -91,12 +113,15 @@ public class GameOverScreen extends TextArea {
 
 		// 'Button' for total funds
 		// Height = 2x the text size
-		String totalFundsString = "Total Funds: " + currentFunds;
+		String totalFundsString = "Total Funds: " + startingFunds;
 		bounds = bmf.getBounds(totalFundsString);
-		scoreInfoButtons.add(new GameButton(null, X_OFFSET, drawHeight,
+		// Store total funds button as a reference
+		totalFundsButton = new GameButton(null, X_OFFSET, drawHeight,
 				Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET, bounds.height * 2,
-				totalFundsString));
+				totalFundsString);
+		scoreInfoButtons.add(totalFundsButton);
 		drawHeight += bounds.height * 2 + BUTTON_Y_MARGIN;
+
 	}
 
 	@Override

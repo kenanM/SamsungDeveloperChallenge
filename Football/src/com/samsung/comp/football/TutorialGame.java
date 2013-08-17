@@ -505,6 +505,7 @@ public class TutorialGame extends AbstractGame {
 		float time = Gdx.graphics.getDeltaTime();
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
 
+		textArea.update(time);
 		bar.update(time);
 		selectTextureStateTime += time;
 		ghostStateTime = (ghostStateTime + time) % roundTime;

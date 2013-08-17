@@ -15,7 +15,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -159,7 +158,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Animation ghostRunAnimation;
 	protected float ghostStateTime = 0f;
 	protected TextureRegion ghostFrame;
-	
+
 	protected Texture pointer;
 	protected Texture pathArrow;
 	protected Texture pushIndicator;
@@ -395,9 +394,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			}
 
 			for (Player player : getPlayers(currentTeam)) {
-				drawActions(
-						player.getAction(),
-						batch,
+				drawActions(player.getAction(), batch,
 						(player == highlightedPlayer || player == selPlayer));
 			}
 
@@ -467,8 +464,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	}
 
 	public void drawGhost(Player player, float futureTime) {
-		PlayerPositionData ghostsPosition = player
-				.getFuturePositionData(futureTime, false);
+		PlayerPositionData ghostsPosition = player.getFuturePositionData(
+				futureTime, false);
 		Vector2 ghostPos = ghostsPosition.position;
 
 		// If the ghost is at the same position as the player, don't render
@@ -480,7 +477,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			PlayerPositionData ghostsNextPosition = player
 					.getFuturePositionData(futureTime + 0.1f, false);
 			Vector2 futurePos = ghostsNextPosition.position;
-			//Only update the ghost animation if it has actually moved
+			// Only update the ghost animation if it has actually moved
 			if (!futurePos.epsilonEquals(ghostPos, 0) || ghostFrame == null) {
 				ghostFrame = getGhostFrame(futureTime);
 			}
@@ -885,8 +882,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 				Circle playerCollisionCircle = new Circle(
 						player1.getPlayerPosition(), 64);
-				if (playerCollisionCircle
-						.contains(player2.getPlayerPosition())) {
+				if (playerCollisionCircle.contains(player2.getPlayerPosition())) {
 					overlappingPlayers.add(player2);
 				}
 			}
@@ -960,23 +956,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void matchFinish() {
 
 		gameState = GameState.FINISHED;
-		textArea = new GameOverScreen(this);
+		textArea = new GameOverScreen(this, calculateRewardFunds());
 
-		bmf.setColor(Color.BLACK);
-		bmf.setScale(3);
-
-		if (blueScore > redScore && team1 == TeamColour.BLUE) {
-
-		} else if (blueScore > redScore && team1 == TeamColour.RED) {
-
-		} else if (blueScore == redScore) {
-
-		} else {
-
-		}
-
-		List<String> finishData = getFinishData();
-		double reward = calculateRewardFunds();
 		// Add reward to DB
 
 	}
@@ -1029,6 +1010,7 @@ public abstract class AbstractGame implements ApplicationListener,
 			throw new InvalidParameterException("Not an accepted team colour");
 		}
 	}
+
 	public void setSoundManager(SoundManager soundManager) {
 		this.soundManager = soundManager;
 	}
@@ -1834,7 +1816,6 @@ public abstract class AbstractGame implements ApplicationListener,
 
 				boolean startAtBall = findBall(startVector);
 				boolean endAtBall = findBall(endVector);
-				
 
 				boolean canShoot = canShoot(startPlayer);
 				boolean canPass = canPass(startPlayer, endPlayer);
@@ -1917,87 +1898,11 @@ public abstract class AbstractGame implements ApplicationListener,
 					}
 					return true;
 				}
-				
+
 				if (!canSelectPlayer && startPlayer != null) {
 					cursor.setTexture(unselectableSprite);
 					return true;
 				}
-				
-
-				// Old algorithm
-//				boolean tapBall = (startAtBall && endAtBall);
-//				boolean tapPlayer = (startPlayer == endPlayer);
-//
-//				if (selectedPlayer == null) {
-//					if (startPlayer == null) {
-//						// Does nothing
-//						cursor.setTexture(null);
-//						return true;
-//					} else if (tapPlayer) {
-//						// Select player
-//						cursor.setTexture(null);
-//						return true;
-//					} else {
-//						// Move player
-//						cursor.setTexture(moveSprite);
-//
-//						if (lineInProgress.size() >= 5) {
-//							Vector2 nearEndPoint = lineInProgress
-//									.get(lineInProgress.size() - 5);
-//							float rotation = new Vector2(endVector.x
-//									- nearEndPoint.x, endVector.y
-//									- nearEndPoint.y).angle();
-//							cursor.setRotation(rotation + 45 + 90);
-//						}
-//
-//						return true;
-//					}
-//				} else {
-//					if (tapBall) {
-//						// Mark ball action
-//						cursor.setTexture(markBallSprite);
-//						return true;
-//					}
-//					if (startPlayer == null) {
-//						// Kick action
-//						cursor.setTexture(kickSprite);
-//						return true;
-//					} else if (tapPlayer) {
-//						if (startPlayer.getTeam() == getCurrentTeamColour()) {
-//							if (startPlayer == selectedPlayer) {
-//								// Deselect player
-//								cursor.setTexture(null);
-//								return true;
-//							} else {
-//								// Pass action
-//								cursor.setTexture(passSprite);
-//								return true;
-//							}
-//						} else {
-//							// Mark player action
-//							if (endPlayer instanceof Goalie) {
-//								cursor.setTexture(unselectableSprite);
-//							} else {
-//								cursor.setTexture(markSprite);
-//							}
-//							return true;
-//						}
-//					} else {
-//						// Move player
-//						cursor.setTexture(moveSprite);
-//
-//						if (lineInProgress.size() >= 5) {
-//							Vector2 nearEndPoint = lineInProgress
-//									.get(lineInProgress.size() - 5);
-//							float rotation = new Vector2(endVector.x
-//									- nearEndPoint.x, endVector.y
-//									- nearEndPoint.y).angle();
-//							cursor.setRotation(rotation + 45 + 90);
-//						}
-//
-//						return true;
-//					}
-//				}
 			}
 		}
 		return true;
@@ -2102,37 +2007,6 @@ public abstract class AbstractGame implements ApplicationListener,
 				if (!canSelectPlayer && hoverPlayer != null) {
 
 				}
-
-				// Old algorithmn
-				// if (selectedPlayer != null) {
-				// if (isBallHighlighted) {
-				// // Mark ball action
-				// cursor.setTexture(markBallSprite);
-				// return true;
-				// } else if (hoverPlayer == null) {
-				// // Kick action
-				// cursor.setTexture(kickSprite);
-				// return true;
-				// } else if (hoverPlayer.getTeam() == getCurrentTeamColour()) {
-				// if (hoverPlayer == selectedPlayer) {
-				// // Deselect player
-				// cursor.setTexture(null);
-				// return true;
-				// } else {
-				// // Pass action
-				// cursor.setTexture(passSprite);
-				// return true;
-				// }
-				// } else {
-				// // Mark player action
-				// if (hoverPlayer instanceof Goalie) {
-				// cursor.setTexture(unselectableSprite);
-				// } else {
-				// cursor.setTexture(markSprite);
-				// }
-				// return true;
-				// }
-				// }
 
 			}
 		}

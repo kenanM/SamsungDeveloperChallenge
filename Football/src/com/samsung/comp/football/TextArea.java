@@ -34,6 +34,10 @@ public class TextArea extends Rectangle {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
 	}
 
+	public void update(float time) {
+
+	}
+
 	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
 		batch.begin();
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),

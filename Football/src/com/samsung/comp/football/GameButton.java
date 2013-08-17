@@ -32,7 +32,7 @@ public class GameButton extends Rectangle {
 		this(texture, x, y, width, height);
 		this.text = text;
 	}
-	
+
 	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
 
 		if (backgroundTexture != null) {
@@ -62,9 +62,10 @@ public class GameButton extends Rectangle {
 					(y + height / 2) - (bounds.height / 2));
 			batch.end();
 		}
-
 	}
 	
+	public void setText(String text) {
+		this.text = text;
+	}
 	
-
 }
