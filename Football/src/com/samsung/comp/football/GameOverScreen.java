@@ -21,6 +21,7 @@ public class GameOverScreen extends TextArea {
 	private AbstractGame game;
 	private BitmapFont bmf;
 	private List<GameButton> scoreInfoButtons;
+	private int currentFunds = 0;
 
 	public GameOverScreen(AbstractGame game) {
 		this.game = game;
@@ -29,6 +30,11 @@ public class GameOverScreen extends TextArea {
 		bmf = generator.generateFont(35, FreeTypeFontGenerator.DEFAULT_CHARS,
 				true);
 		generator.dispose();
+	}
+
+	public GameOverScreen(AbstractGame game, int currentFunds) {
+		this(game);
+		this.currentFunds = currentFunds;
 	}
 
 	@Override
@@ -57,6 +63,7 @@ public class GameOverScreen extends TextArea {
 		TextBounds bounds;
 		float drawHeight = 225;
 
+		// 'Button' for score
 		String scoreString = game.getScore(game.team1) + " : "
 				+ game.getScore(game.team2);
 		bounds = bmf.getBounds(scoreString);
@@ -78,6 +85,18 @@ public class GameOverScreen extends TextArea {
 			// Space between buttons
 			drawHeight += bounds.height * 2 + BUTTON_Y_MARGIN;
 		}
+
+		// Increased separation for total funds 'button'
+		drawHeight += bounds.height * 2 + BUTTON_Y_MARGIN;
+
+		// 'Button' for total funds
+		// Height = 2x the text size
+		String totalFundsString = "Total Funds: " + currentFunds;
+		bounds = bmf.getBounds(totalFundsString);
+		scoreInfoButtons.add(new GameButton(null, X_OFFSET, drawHeight,
+				Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET, bounds.height * 2,
+				totalFundsString));
+		drawHeight += bounds.height * 2 + BUTTON_Y_MARGIN;
 	}
 
 	@Override
