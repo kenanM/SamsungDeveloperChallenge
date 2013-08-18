@@ -40,6 +40,11 @@ public class ProfilesTableManager {
 		onCreate(db);
 	}
 
+	protected static void dropAndRecreate(SQLiteDatabase db) {
+		db.execSQL("DROP TABLE IF EXISTS " + PROFILES_TABLE_NAME);
+		onCreate(db);
+	}
+
 	private static void addDefaultProfile(SQLiteDatabase database) {
 
 		Profile profile = new Profile(1, 0);

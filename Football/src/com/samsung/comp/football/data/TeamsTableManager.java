@@ -54,6 +54,11 @@ public class TeamsTableManager {
 		onCreate(db);
 	}
 
+	protected static void dropAndRecreate(SQLiteDatabase db) {
+		db.execSQL("DROP TABLE IF EXISTS " + TEAMS_TABLE_NAME);
+		onCreate(db);
+	}
+
 	private static void addDefaultTeams(SQLiteDatabase database) {
 
 		Team[] teams = { new Team(0, 1, "Unnamed", 1),

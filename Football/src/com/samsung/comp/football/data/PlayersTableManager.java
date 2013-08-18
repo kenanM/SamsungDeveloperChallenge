@@ -27,7 +27,6 @@ public class PlayersTableManager {
 	protected static final String SHOOT_SPEED_COLUMN_NAME = "shoot_speed";
 	protected static final String RUN_SPEED_COLUMN_NAME = "run_speed";
 	protected static final String TACKLE_SKILL_COLUMN_NAME = "tackle_skill";
-	protected static final String TACKLE_PREVENTION_SKILL_COLUMN_NAME = "tackle_prevention";
 	protected static final String SAVING_SKILL_COLUMN_NAME = "saving_skill";
 	protected static final String TEAM_ID_COLUMN_NAME = "team_id";
 	protected static final String GOALIE_COLUMN_NAME = "goalie";
@@ -39,7 +38,6 @@ public class PlayersTableManager {
 			+ " integer not null, " + SHOOT_SPEED_COLUMN_NAME
 			+ " real not null, " + RUN_SPEED_COLUMN_NAME + " real not null, "
 			+ TACKLE_SKILL_COLUMN_NAME + " real not null, "
-			+ TACKLE_PREVENTION_SKILL_COLUMN_NAME + " real not null, "
 			+ SAVING_SKILL_COLUMN_NAME + " real not null, "
 			+ TEAM_ID_COLUMN_NAME + " integer not null, " + GOALIE_COLUMN_NAME
 			+ " integer not null, " + "FOREIGN KEY(" + TEAM_ID_COLUMN_NAME
@@ -49,8 +47,8 @@ public class PlayersTableManager {
 	private static final String[] allColumns = { ID_COLUMN_NAME,
 			PLAYER_NAME_COLUMN_NAME, PURCHASED_COLUMN_NAME,
 			SHOOT_SPEED_COLUMN_NAME, RUN_SPEED_COLUMN_NAME,
-			TACKLE_SKILL_COLUMN_NAME, TACKLE_PREVENTION_SKILL_COLUMN_NAME,
-			SAVING_SKILL_COLUMN_NAME, TEAM_ID_COLUMN_NAME, GOALIE_COLUMN_NAME };
+			TACKLE_SKILL_COLUMN_NAME, SAVING_SKILL_COLUMN_NAME,
+			TEAM_ID_COLUMN_NAME, GOALIE_COLUMN_NAME };
 
 	SQLiteDatabase database;
 
@@ -71,6 +69,11 @@ public class PlayersTableManager {
 		Log.w(PlayerDatabaseHelper.class.getName(),
 				"Upgrading players table from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
+		db.execSQL("DROP TABLE IF EXISTS " + PLAYER_TABLE_NAME);
+		onCreate(db);
+	}
+
+	protected static void dropAndRecreate(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS " + PLAYER_TABLE_NAME);
 		onCreate(db);
 	}
@@ -111,6 +114,7 @@ public class PlayersTableManager {
 		int isGoalie = player.isGoalie() ? 1 : 0;
 		values.put(GOALIE_COLUMN_NAME, isGoalie);
 		Log.v("db", "team_id: " + player.getTeamID());
+		Log.v("db", "isGoalie: " + isGoalie);
 		return database.insert(PLAYER_TABLE_NAME, null, values);
 	}
 
@@ -129,8 +133,6 @@ public class PlayersTableManager {
 				.getColumnIndex(RUN_SPEED_COLUMN_NAME));
 		float tackleSkill = cursor.getFloat(cursor
 				.getColumnIndex(TACKLE_SKILL_COLUMN_NAME));
-		float tacklePrevention = cursor.getFloat(cursor
-				.getColumnIndex(TACKLE_PREVENTION_SKILL_COLUMN_NAME));
 		float savingSkill = cursor.getFloat(cursor
 				.getColumnIndex(SAVING_SKILL_COLUMN_NAME));
 		int teamId = cursor.getInt(cursor.getColumnIndex(TEAM_ID_COLUMN_NAME));
@@ -161,7 +163,8 @@ public class PlayersTableManager {
 	 */
 	public List<Player> getPlayers(int teamID) {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
-				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =0",
+				TEAM_ID_COLUMN_NAME + "=? and "
+						+ GOALIE_COLUMN_NAME + " =0",
 				new String[] { Integer.toString(teamID) }, null, null, null);
 		cursor.moveToFirst();
 		LinkedList<Player> result = new LinkedList<Player>();

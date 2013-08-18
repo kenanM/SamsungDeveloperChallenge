@@ -27,8 +27,13 @@ public class PlayerDataSource {
 		database = helper.getWritableDatabase();
 
 		profilesTableManager = new ProfilesTableManager(database);
+		ProfilesTableManager.dropAndRecreate(database);
+
 		teamsTableManager = new TeamsTableManager(database);
+		TeamsTableManager.dropAndRecreate(database);
+
 		playersTableManager = new PlayersTableManager(database);
+		PlayersTableManager.dropAndRecreate(database);
 
 	}
 

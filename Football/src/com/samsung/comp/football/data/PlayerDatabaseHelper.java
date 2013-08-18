@@ -26,6 +26,7 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 
 		Log.w(PlayerDatabaseHelper.class.getName(), "Creating DB... "
 				+ "version " + DATABASE_VERSION);
+		Log.v("GameDB", "creating...");
 	}
 
 	@Override
@@ -39,6 +40,7 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 
 		Log.w(PlayerDatabaseHelper.class.getName(), "Upgrading DB... "
 				+ oldVersion + " to " + newVersion);
+		Log.v("GameDB", "upgrading...");
 	}
 
 }

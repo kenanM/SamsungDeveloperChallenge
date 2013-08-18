@@ -234,11 +234,11 @@ public class Game extends AbstractGame {
 		redGoalie.initialize(this, TeamColour.RED);
 
 
-		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
+		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(0);
 		for (Player player: bluePlayers){
 			player.initialize(TeamColour.BLUE);
 		}
-		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
+		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(0);
 		blueGoalie.initialize(this, TeamColour.BLUE);
 		
 		playerDatabase.close();
