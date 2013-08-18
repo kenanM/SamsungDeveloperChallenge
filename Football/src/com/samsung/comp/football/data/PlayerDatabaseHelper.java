@@ -30,7 +30,7 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 	public static final String GOALIE_COLUMN_NAME = "goalie";
 
 	public static final String DATABASE_NAME = "database.db";
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 
 	private static final String CREATE_PLAYER_TABLE = "create table "
 			+ PLAYER_TABLE_NAME + "(" + ID_COLUMN_NAME
@@ -42,7 +42,9 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 			+ TACKLE_PREVENTION_SKILL_COLUMN_NAME + " real not null, "
 			+ SAVING_SKILL_COLUMN_NAME + " real not null, "
 			+ TEAM_ID_COLUMN_NAME + " integer not null, " + GOALIE_COLUMN_NAME
-			+ " integer not null);";
+			+ " integer not null" + "FOREIGN KEY(" + TEAM_ID_COLUMN_NAME
+			+ ") REFERENCES " + TeamsTableManager.TEAMS_TABLE_NAME + "("
+			+ TeamsTableManager.TEAM_ID_COLUMN_NAME + ")" + ");";
 
 	public PlayerDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,13 +52,26 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
+		ProfileTableManager.onCreate(database);
+		TeamsTableManager.onCreate(database);
+
 		database.execSQL(CREATE_PLAYER_TABLE);
 		addDefaultPlayers(database);
 	}
 
+	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// As there hasn't yet been any updates to the database, this is
 		// redundant
+
+		ProfileTableManager.onUpgrade(db, oldVersion, newVersion);
+		TeamsTableManager.onUpgrade(db, oldVersion, newVersion);
+
+		Log.w(PlayerDatabaseHelper.class.getName(),
+		        "Upgrading players table from version " + oldVersion + " to "
+		            + newVersion + ", which will destroy all old data");
+		    db.execSQL("DROP TABLE IF EXISTS " + PLAYER_TABLE_NAME);
+		    onCreate(db);
 	}
 
 	private void addDefaultPlayers(SQLiteDatabase database) {
@@ -66,7 +81,17 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 				new Player(2, "Alex", true, 540.0f, 200.0f, 80.0f, 380.0f, 1),
 				new Player(3, "Thomas", true, 550.0f, 100.0f, 100.0f, 420.0f, 1),
 				new Player(4, "Samuel", true, 530.0f, 150.0f, 80.0f, 420.0f, 1),
-				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 1) };
+				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 1),
+
+				new Player(6, "Bartholomew", true, 520.0f, 150.0f, 100.0f,
+						420.0f, 0),
+				new Player(7, "Edgar", true, 540.0f, 200.0f, 80.0f, 380.0f, 0),
+				new Player(8, "Oswald", true, 550.0f, 100.0f, 100.0f, 420.0f, 0),
+				new Player(9, "Quinten", true, 530.0f, 150.0f, 80.0f, 420.0f, 0),
+				new Goalie(10, "Victor", true, 520.0f, 150.0f, 100.0f, 500.0f,
+						0) };
+		
+		
 		for (Player player : players) {
 			insertPlayer(database, player);
 		}
