@@ -8,8 +8,7 @@ import android.util.Log;
 import com.samsung.comp.football.Team;
 
 /**
- * This class creates and updates the players database and is heavily inspired
- * by: http://www.vogella.com/articles/AndroidSQLite/article.html
+ * A helper class for querying and other iterations with the SQLite Teams table.
  */
 public class TeamsTableManager {
 
@@ -27,24 +26,26 @@ public class TeamsTableManager {
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + TEAM_NAME_COLUMN_NAME
 			+ " text not null, " + PROFILE_COLUMN_NAME + " integer not null, "
 			+ TEAM_DIFFICULTY_COLUMN_NAME + " integer not null, "
-			+ WIN_COUNT_COLUMN_NAME + " int not null, "
-			+ LOSS_COUNT_COLUMN_NAME + " int not null" + DRAW_COUNT_COLUMN_NAME
-			+ " int not null" + "FOREIGN KEY(" + PROFILE_COLUMN_NAME
-			+ ") REFERENCES "
-			+ ProfileTableManager.PROFILES_TABLE_NAME + "("
-			+ ProfileTableManager.PROFILE_ID_COLUMN_NAME + ")" + ");";
+			+ WIN_COUNT_COLUMN_NAME + " integer not null, "
+			+ LOSS_COUNT_COLUMN_NAME + " integer not null, "
+			+ DRAW_COUNT_COLUMN_NAME + " integer not null, " + "FOREIGN KEY("
+			+ PROFILE_COLUMN_NAME
+			+ ") REFERENCES " + ProfilesTableManager.PROFILES_TABLE_NAME + "("
+			+ ProfilesTableManager.PROFILE_ID_COLUMN_NAME + ")" + ");";
 
-	// static class hack
-	private TeamsTableManager() {
+	private SQLiteDatabase database;
+
+	protected TeamsTableManager(SQLiteDatabase database) {
+		this.database = database;
 	}
 
-	public static void onCreate(SQLiteDatabase database) {
+	protected static void onCreate(SQLiteDatabase database) {
 		database.execSQL(CREATE_TEAMS_TABLE);
 		addDefaultTeams(database);
 	}
 
 
-	public static void onUpgrade(SQLiteDatabase db, int oldVersion,
+	protected static void onUpgrade(SQLiteDatabase db, int oldVersion,
 			int newVersion) {
 		Log.w(TeamsTableManager.class.getName(),
 				"Upgrading teams table from version " + oldVersion + " to "
@@ -55,7 +56,8 @@ public class TeamsTableManager {
 
 	private static void addDefaultTeams(SQLiteDatabase database) {
 
-		Team[] teams = { new Team(1, 0, "The Misfits", 1),
+		Team[] teams = { new Team(0, 1, "Unnamed", 1),
+				new Team(1, 0, "The Misfits", 1),
 				new Team(2, 0, "Team Brunel", 1),
 				new Team(3, 0, "Team Null", 1),
 				new Team(3, 0, "The All Rounders", 1) };
@@ -101,7 +103,11 @@ public class TeamsTableManager {
 				lossCount, drawCount);
 	}
 
-	public static Team getTeam(SQLiteDatabase database, int teamID) {
+	private void insertTeam(Team team) {
+		insertTeam(database, team);
+	}
+
+	public Team getTeam(int teamID) {
 		Cursor cursor = database.query(TEAMS_TABLE_NAME, null,
 				TEAM_ID_COLUMN_NAME + "=? ",
 				new String[] { Integer.toString(teamID) }, null, null, null);

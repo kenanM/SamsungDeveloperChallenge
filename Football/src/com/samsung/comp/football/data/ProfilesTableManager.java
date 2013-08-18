@@ -8,10 +8,10 @@ import android.util.Log;
 import com.samsung.comp.football.Profile;
 
 /**
- * This class creates and updates the players database and is heavily inspired
- * by: http://www.vogella.com/articles/AndroidSQLite/article.html
+ * A helper class for querying and other iterations with the SQLite Profiles
+ * table.
  */
-public class ProfileTableManager {
+public class ProfilesTableManager {
 
 	protected static final String PROFILES_TABLE_NAME = "profiles";
 
@@ -23,18 +23,17 @@ public class ProfileTableManager {
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + FUNDS_COLUMN_NAME
 			+ " integer not null" + ");";
 
-	// static class hack
-	private ProfileTableManager() {
+	protected ProfilesTableManager(SQLiteDatabase database) {
 	}
 
-	public static void onCreate(SQLiteDatabase database) {
+	protected static void onCreate(SQLiteDatabase database) {
 		database.execSQL(CREATE_PROFILES_TABLE);
 		addDefaultProfile(database);
 	}
 
-	public static void onUpgrade(SQLiteDatabase db, int oldVersion,
+	protected static void onUpgrade(SQLiteDatabase db, int oldVersion,
 			int newVersion) {
-		Log.w(ProfileTableManager.class.getName(),
+		Log.w(ProfilesTableManager.class.getName(),
 				"Upgrading profiles table from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS " + PROFILES_TABLE_NAME);

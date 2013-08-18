@@ -226,19 +226,19 @@ public class Game extends AbstractGame {
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
-		redPlayers = playerDatabase.getPlayers(1);
+		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
 		for (Player player: redPlayers){
 			player.initialize(TeamColour.RED);
 		}
-		redGoalie = playerDatabase.getGoalie(1);
+		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
 		redGoalie.initialize(this, TeamColour.RED);
 
 
-		bluePlayers = playerDatabase.getPlayers(1);
+		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
 		for (Player player: bluePlayers){
 			player.initialize(TeamColour.BLUE);
 		}
-		blueGoalie = playerDatabase.getGoalie(1);
+		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
 		blueGoalie.initialize(this, TeamColour.BLUE);
 		
 		playerDatabase.close();
