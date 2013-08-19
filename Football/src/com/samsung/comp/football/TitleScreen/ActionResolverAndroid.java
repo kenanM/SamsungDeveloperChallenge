@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 
 import com.samsung.comp.football.ActionResolver;
+import com.samsung.comp.football.data.PlayerDataSource;
 
 public class ActionResolverAndroid implements ActionResolver {
 	Handler uiThread;
@@ -27,4 +28,11 @@ public class ActionResolverAndroid implements ActionResolver {
 		intent.putExtra("page", page);
 		appContext.startActivity(intent);
 	}
+
+	@Override
+	public PlayerDataSource openDatasource() {
+		return new PlayerDataSource(appContext);
+
+	}
+
 }
