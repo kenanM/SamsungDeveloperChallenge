@@ -27,9 +27,10 @@ public class Goalie extends Player {
 
 	/* This is the constructor to call when creating from a database */
 	public Goalie(int id, String name, boolean purchased, float shootSpeed,
-			float runSpeed, float tackleSkill, float savingSkill, int teamID) {
+			float runSpeed, float tackleSkill, float savingSkill, int teamID,
+			int cost) {
 		super(id, name, purchased, shootSpeed, runSpeed, tackleSkill,
-				savingSkill, teamID);
+				savingSkill, teamID, cost);
 	}
 
 	public Goalie(float playerX, float playerY, TeamColour teamColour,

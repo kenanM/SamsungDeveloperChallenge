@@ -30,6 +30,7 @@ public class PlayersTableManager {
 	protected static final String SAVING_SKILL_COLUMN_NAME = "saving_skill";
 	protected static final String TEAM_ID_COLUMN_NAME = "team_id";
 	protected static final String GOALIE_COLUMN_NAME = "goalie";
+	protected static final String COST_COLUMN_NAME = "cost";
 
 	private static final String CREATE_PLAYER_TABLE = "create table "
 			+ PLAYER_TABLE_NAME + "(" + ID_COLUMN_NAME
@@ -40,15 +41,16 @@ public class PlayersTableManager {
 			+ TACKLE_SKILL_COLUMN_NAME + " real not null, "
 			+ SAVING_SKILL_COLUMN_NAME + " real not null, "
 			+ TEAM_ID_COLUMN_NAME + " integer not null, " + GOALIE_COLUMN_NAME
-			+ " integer not null, " + "FOREIGN KEY(" + TEAM_ID_COLUMN_NAME
-			+ ") REFERENCES " + TeamsTableManager.TEAMS_TABLE_NAME + "("
+			+ " integer not null, " + COST_COLUMN_NAME + " integer not null, "
+			+ "FOREIGN KEY(" + TEAM_ID_COLUMN_NAME + ") REFERENCES "
+			+ TeamsTableManager.TEAMS_TABLE_NAME + "("
 			+ TeamsTableManager.TEAM_ID_COLUMN_NAME + ")" + ");";
 
 	private static final String[] allColumns = { ID_COLUMN_NAME,
 			PLAYER_NAME_COLUMN_NAME, PURCHASED_COLUMN_NAME,
 			SHOOT_SPEED_COLUMN_NAME, RUN_SPEED_COLUMN_NAME,
 			TACKLE_SKILL_COLUMN_NAME, SAVING_SKILL_COLUMN_NAME,
-			TEAM_ID_COLUMN_NAME, GOALIE_COLUMN_NAME };
+			TEAM_ID_COLUMN_NAME, GOALIE_COLUMN_NAME, COST_COLUMN_NAME };
 
 	SQLiteDatabase database;
 
@@ -57,6 +59,7 @@ public class PlayersTableManager {
 	}
 
 	protected static void onCreate(SQLiteDatabase database) {
+		Log.v("GameDB", "Creating Players Table...");
 		database.execSQL(CREATE_PLAYER_TABLE);
 		addDefaultPlayers(database);
 	}
@@ -81,19 +84,27 @@ public class PlayersTableManager {
 	private static void addDefaultPlayers(SQLiteDatabase database) {
 
 		Player[] players = {
-				new Player(1, "Steve", true, 520.0f, 150.0f, 100.0f, 420.0f, 1),
-				new Player(2, "Alex", true, 540.0f, 200.0f, 80.0f, 380.0f, 1),
-				new Player(3, "Thomas", true, 550.0f, 100.0f, 100.0f, 420.0f, 1),
-				new Player(4, "Samuel", true, 530.0f, 150.0f, 80.0f, 420.0f, 1),
-				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 1),
+				new Player(1, "Steve", true, 520.0f, 150.0f, 100.0f, 420.0f, 1,
+						2000),
+				new Player(2, "Alex", true, 540.0f, 200.0f, 80.0f, 380.0f, 1,
+						2000),
+				new Player(3, "Thomas", true, 550.0f, 100.0f, 100.0f, 420.0f,
+						1, 2000),
+				new Player(4, "Samuel", true, 530.0f, 150.0f, 80.0f, 420.0f, 1,
+						2000),
+				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 1,
+						2000),
 
 				new Player(6, "Bartholomew", true, 520.0f, 150.0f, 100.0f,
-						420.0f, 0),
-				new Player(7, "Edgar", true, 540.0f, 200.0f, 80.0f, 380.0f, 0),
-				new Player(8, "Oswald", true, 550.0f, 100.0f, 100.0f, 420.0f, 0),
-				new Player(9, "Quinten", true, 530.0f, 150.0f, 80.0f, 420.0f, 0),
+						420.0f, 0, 0),
+				new Player(7, "Edgar", true, 540.0f, 200.0f, 80.0f, 380.0f, 0,
+						0),
+				new Player(8, "Oswald", true, 550.0f, 100.0f, 100.0f, 420.0f,
+						0, 0),
+				new Player(9, "Quinten", true, 530.0f, 150.0f, 80.0f, 420.0f,
+						0, 0),
 				new Goalie(10, "Victor", true, 520.0f, 150.0f, 100.0f, 500.0f,
-						0) };
+						0, 0) };
 
 		for (Player player : players) {
 			insertPlayer(database, player);
@@ -113,6 +124,7 @@ public class PlayersTableManager {
 		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
 		int isGoalie = player.isGoalie() ? 1 : 0;
 		values.put(GOALIE_COLUMN_NAME, isGoalie);
+		values.put(COST_COLUMN_NAME, 0);
 		Log.v("db", "team_id: " + player.getTeamID());
 		Log.v("db", "isGoalie: " + isGoalie);
 		return database.insert(PLAYER_TABLE_NAME, null, values);
@@ -141,12 +153,14 @@ public class PlayersTableManager {
 		boolean goalie = cursor.getInt(cursor
 				.getColumnIndex(GOALIE_COLUMN_NAME)) > 0;
 
+		int cost = cursor.getInt(cursor.getColumnIndex(COST_COLUMN_NAME));
+
 		if (goalie) {
 			return new Goalie(id, name, purchased, shootSpeed, runSpeed,
-					tackleSkill, savingSkill, teamId);
+					tackleSkill, savingSkill, teamId, cost);
 		} else {
 			return new Player(id, name, purchased, shootSpeed, runSpeed,
-					tackleSkill, savingSkill, teamId);
+					tackleSkill, savingSkill, teamId, cost);
 		}
 	}
 

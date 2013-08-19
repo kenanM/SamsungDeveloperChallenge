@@ -62,6 +62,7 @@ public class Player extends Rectangle implements Followable {
 	protected float tackleSkill = 100;
 	protected float savingSkill = 420;
 	private int teamID = 0;
+	private int playerCost = 0;
 
 	Vector2[] path;
 	int positionInPath = 0;
@@ -84,7 +85,8 @@ public class Player extends Rectangle implements Followable {
 
 	/* This is the constructor to call when creating from a database */
 	public Player(int id, String name, boolean purchased, float shootSpeed,
-			float runSpeed, float tackleSkill, float savingSkill, int teamID) {
+			float runSpeed, float tackleSkill, float savingSkill, int teamID,
+			int cost) {
 		this.id = id;
 		this.name = name;
 		this.purchased = purchased;
@@ -93,6 +95,7 @@ public class Player extends Rectangle implements Followable {
 		this.tackleSkill = tackleSkill;
 		this.savingSkill = savingSkill;
 		this.teamID = teamID;
+		this.playerCost = cost;
 	}
 
 	/*
@@ -206,6 +209,10 @@ public class Player extends Rectangle implements Followable {
 
 	public void setNoticationTime(float time) {
 		this.notificationTime = time;
+	}
+
+	public int getPlayerCost() {
+		return playerCost;
 	}
 
 	public void addAction(Action newAction) {
