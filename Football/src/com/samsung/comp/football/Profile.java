@@ -17,4 +17,16 @@ public class Profile {
 	public int getFunds() {
 		return funds;
 	}
+
+	public void setFunds(int amount) {
+		funds = amount;
+	}
+
+	public void addFunds(int amount) {
+		funds += amount;
+	}
+
+	public void subtractFunds(int amount) {
+		funds -= amount;
+	}
 }

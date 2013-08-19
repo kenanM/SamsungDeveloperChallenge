@@ -23,7 +23,10 @@ public class ProfilesTableManager {
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + FUNDS_COLUMN_NAME
 			+ " integer not null" + ");";
 
+	private SQLiteDatabase database;
+
 	protected ProfilesTableManager(SQLiteDatabase database) {
+		this.database = database;
 	}
 
 	protected static void onCreate(SQLiteDatabase database) {
@@ -76,12 +79,48 @@ public class ProfilesTableManager {
 		return new Profile(profileID, funds);
 	}
 
-	public static Profile getProfile(SQLiteDatabase database, int profileID) {
+	private static ContentValues profileToValues(Profile profile) {
+		ContentValues values = new ContentValues();
+		values.put(PROFILE_ID_COLUMN_NAME, profile.getProfileID());
+		values.put(FUNDS_COLUMN_NAME, profile.getFunds());
+		return values;
+	}
+
+	private static Profile getProfile(SQLiteDatabase database, int profileID) {
 		Cursor cursor = database.query(PROFILES_TABLE_NAME, null,
 				PROFILE_ID_COLUMN_NAME + "=? ",
 				new String[] { Integer.toString(profileID) }, null, null, null);
 		cursor.moveToFirst();
 		return cursorToProfile(cursor);
+	}
+
+	public Profile getProfile(int profileID) {
+		Cursor cursor = database.query(PROFILES_TABLE_NAME, null,
+				PROFILE_ID_COLUMN_NAME + "=? ",
+				new String[] { Integer.toString(profileID) }, null, null, null);
+		cursor.moveToFirst();
+		return (cursor == null) ? null : cursorToProfile(cursor);
+	}
+
+	/**
+	 * Adds an amount to the existing amount in a given profile
+	 * 
+	 * @param profileID
+	 *            the profile to add the funds to
+	 * @param funds
+	 *            the amount to add
+	 * @return the new amount of funds in the profile
+	 */
+	public int addFundsToProfile(int profileID, int funds) {
+		Profile profile = getProfile(profileID);
+		profile.addFunds(funds);
+		database.update(
+				PROFILES_TABLE_NAME,
+				profileToValues(profile),
+				"?=?",
+				new String[] { PROFILE_ID_COLUMN_NAME,
+						String.valueOf(profileID) });
+		return profile.getFunds();
 	}
 
 }

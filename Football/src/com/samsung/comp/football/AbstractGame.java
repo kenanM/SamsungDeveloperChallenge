@@ -61,7 +61,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected ActionResolver actionResolver;
 
-	PlayerDataSource playerDatabase;
+	protected PlayerDataSource playerDatabase;
+	protected int userProfileID = 2;
 
 	protected int xOffset;
 	protected int yOffset;
@@ -962,10 +963,20 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void matchFinish() {
 
 		gameState = GameState.FINISHED;
-		textArea = new GameOverScreen(this, calculateRewardFunds());
+		int reward = calculateRewardFunds();
+		textArea = new GameOverScreen(this, reward);
 
 		// Add reward to DB
+		playerDatabase = actionResolver.openDatasource();
 
+		int newFunds = playerDatabase.getProfilesTableManager()
+				.addFundsToProfile(
+				userProfileID, reward);
+		
+		Gdx.app.log("GameDB", "Added reward of " + reward + ". New total = "
+				+ newFunds);
+
+		playerDatabase.close();
 	}
 
 	protected abstract List<String> getFinishData();
