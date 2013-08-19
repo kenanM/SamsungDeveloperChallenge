@@ -14,7 +14,6 @@ public class MultiplayerGame extends AbstractGame {
 
 	Color redColor = Color.RED;
 	Color blueColor = new Color(0.2f, 0.6f, 1f, 1f);
-	PlayerDataSource playerDatabase;
 	
 	public MultiplayerGame(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
 			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
@@ -38,7 +37,10 @@ public class MultiplayerGame extends AbstractGame {
 		createRenderingObjects();
 		createGoals();
 
+		createTeams();
 		createNewPlayersAndBall();
+
+		playerDatabase.close();
 
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
@@ -202,6 +204,14 @@ public class MultiplayerGame extends AbstractGame {
 		}
 
 		soundManager.play(whistleBlow);
+	}
+
+	private void createTeams() {
+		Gdx.app.log("GameDB", "Assigning teams...");
+		teamA = playerDatabase.getTeamsTableManager().getTeam(1);
+		Gdx.app.log("GameDB", "Suceeded assigning Team A");
+		teamB = playerDatabase.getTeamsTableManager().getTeam(1);
+		Gdx.app.log("GameDB", "Suceeded assigning Team B");
 	}
 
 	@Override

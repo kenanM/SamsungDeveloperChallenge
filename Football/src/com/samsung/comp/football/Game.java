@@ -14,8 +14,6 @@ import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.data.PlayerDataSource;
 
 public class Game extends AbstractGame {
-
-	PlayerDataSource playerDatabase;
 	
 	public Game(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
 			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
@@ -39,9 +37,12 @@ public class Game extends AbstractGame {
 		createRenderingObjects();
 		createGoals();
 
+		createTeams();
 		createNewPlayersAndBall();
 		// Do we really want this ?
 		randomiseStats(getAllPlayers());
+
+		playerDatabase.close();
 
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
@@ -54,7 +55,7 @@ public class Game extends AbstractGame {
 		Gdx.app.log("GameOver", "Game Length Multiplier: x"
 				+ gameLengthScoreMultiplier);
 		// aiDifficultyScoreMultiplier = ;
-		// teamDifficultyScoreMultiplier = ;
+		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
 
 		ai = new AI(this, team2);
 		createMovementCompletedListeners(team2);
@@ -72,7 +73,12 @@ public class Game extends AbstractGame {
 
 		controlsActive = true;
 
+
 		beginInputStage();
+	}
+
+	private float calculateTeamDifficultyMultiplier() {
+		return teamB.getDifficulty();
 	}
 
 	@Override
@@ -226,23 +232,23 @@ public class Game extends AbstractGame {
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
-		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
+		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(2);
 		for (Player player: redPlayers){
 			player.initialize(TeamColour.RED);
 		}
-		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
+		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(2);
 		redGoalie.initialize(this, TeamColour.RED);
 
 
-		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(0);
+		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
 		for (Player player: bluePlayers){
 			player.initialize(TeamColour.BLUE);
 		}
-		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(0);
+		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
 		blueGoalie.initialize(this, TeamColour.BLUE);
 		
-		playerDatabase.close();
 		
+
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
 		} else {
@@ -250,6 +256,14 @@ public class Game extends AbstractGame {
 		}
 
 		soundManager.play(whistleBlow);
+	}
+
+	private void createTeams() {
+		Gdx.app.log("GameDB", "Assigning teams...");
+		teamA = playerDatabase.getTeamsTableManager().getTeam(1);
+		Gdx.app.log("GameDB", "Suceeded assigning Team A");
+		teamB = playerDatabase.getTeamsTableManager().getTeam(2);
+		Gdx.app.log("GameDB", "Suceeded assigning Team B");
 	}
 
 	private void createMovementCompletedListeners(TeamColour teamColour) {

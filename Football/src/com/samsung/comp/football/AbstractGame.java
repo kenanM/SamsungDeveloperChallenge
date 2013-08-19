@@ -39,6 +39,7 @@ import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.football.data.PlayerDataSource;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public abstract class AbstractGame implements ApplicationListener,
@@ -59,6 +60,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	private static final String INPUT_TAG = "GameInputStrategy";
 
 	protected ActionResolver actionResolver;
+
+	PlayerDataSource playerDatabase;
 
 	protected int xOffset;
 	protected int yOffset;
@@ -117,6 +120,9 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected SoundManager soundManager;
 
+	// Need to refactor out related team fields into class
+	protected Team teamA;
+	protected Team teamB;
 	protected TeamColour team1;
 	protected TeamColour team2;
 	protected TeamColour currentTeam = TeamColour.BLUE;

@@ -86,8 +86,9 @@ public class GameOverScreen extends TextArea {
 		float drawHeight = 225;
 
 		// 'Button' for score
-		String scoreString = game.getScore(game.team1) + " : "
-				+ game.getScore(game.team2);
+		String scoreString = game.teamA.getTeamName() + " "
+				+ game.getScore(game.team1) + " : "
+				+ game.getScore(game.team2) + " " + game.teamB.getTeamName();
 		bounds = bmf.getBounds(scoreString);
 		scoreInfoButtons.add(new GameButton(null, X_OFFSET, drawHeight,
 				Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET, bounds.height,
