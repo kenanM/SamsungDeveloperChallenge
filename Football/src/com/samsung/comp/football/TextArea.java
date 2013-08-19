@@ -46,8 +46,14 @@ public class TextArea extends Rectangle {
 
 		Color tempColor = bmf.getColor();
 		bmf.setColor(Color.BLACK);
+
+		// TODO: NOTE: Current library has a bug with drawWrapped. This used to
+		// be
+		// bmf.drawWrapped(batch, text, (60), Game.VIRTUAL_SCREEN_HEIGHT - 978,
+		// 600);
+
 		bmf.drawWrapped(batch, text, (60), Game.VIRTUAL_SCREEN_HEIGHT - 978,
-				600);
+				Game.VIRTUAL_SCREEN_HEIGHT - 60);
 		bmf.setColor(tempColor);
 		batch.end();
 	}
