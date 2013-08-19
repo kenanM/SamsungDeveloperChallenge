@@ -367,7 +367,6 @@ public class TutorialGame extends AbstractGame {
 					+ "Press the play button and they'll run for 5 seconds.\n\n"
 					+ "Move this player to the bottom half of the pitch.\n\n"
 					+ "Tap or press back to close this window. ");
-			bar.setText("Draw a line to move player");
 		} else if (tutorialPhase == TutorialPhase.FOLLOW) {
 			textArea.setText("Nice. Now we've put a ball onto the upper half of the pitch. \n\n"
 					+ "Tap on your player to select them, then tap the ball.\n\n"
