@@ -27,6 +27,7 @@ public class ProfilesTableManager {
 	}
 
 	protected static void onCreate(SQLiteDatabase database) {
+		Log.v("GameDB", "Creating Profiles Table");
 		database.execSQL(CREATE_PROFILES_TABLE);
 		addDefaultProfile(database);
 	}
@@ -47,7 +48,9 @@ public class ProfilesTableManager {
 
 	private static void addDefaultProfile(SQLiteDatabase database) {
 
-		Profile profile = new Profile(1, 0);
+		Profile profile = new Profile(0, 0);
+
+		insertProfile(database, profile);
 		insertProfile(database, profile);
 	}
 
@@ -56,7 +59,6 @@ public class ProfilesTableManager {
 				"adding profile: " + profile.toString());
 
 		ContentValues values = new ContentValues();
-		values.put(PROFILE_ID_COLUMN_NAME, profile.getProfileID());
 		values.put(FUNDS_COLUMN_NAME, profile.getFunds());
 
 		Log.v("db", "profile_id: " + profile.getProfileID());

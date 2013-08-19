@@ -1,5 +1,8 @@
 package com.samsung.comp.football.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -40,6 +43,7 @@ public class TeamsTableManager {
 	}
 
 	protected static void onCreate(SQLiteDatabase database) {
+		Log.v("GameDB", "Creating Teams Table");
 		database.execSQL(CREATE_TEAMS_TABLE);
 		addDefaultTeams(database);
 	}
@@ -61,11 +65,11 @@ public class TeamsTableManager {
 
 	private static void addDefaultTeams(SQLiteDatabase database) {
 
-		Team[] teams = { new Team(0, 1, "Unnamed", 1),
-				new Team(1, 0, "The Misfits", 1),
-				new Team(2, 0, "Team Brunel", 1),
-				new Team(3, 0, "Team Null", 1),
-				new Team(3, 0, "The All Rounders", 1) };
+		Team[] teams = { new Team(0, 2, "Unnamed", 1),
+				new Team(0, 1, "The Misfits", 1),
+				new Team(0, 1, "Team Brunel", 1),
+				new Team(0, 1, "Team Null", 1),
+				new Team(0, 1, "The All Rounders", 1) };
 		for (Team team : teams) {
 			insertTeam(database, team);
 		}
@@ -83,9 +87,10 @@ public class TeamsTableManager {
 		values.put(LOSS_COUNT_COLUMN_NAME, team.getLosses());
 		values.put(DRAW_COUNT_COLUMN_NAME, team.getDraws());
 
-		Log.v("db", "team_id: " + team.getTeamID());
-		Log.v("db", "profile_id: " + team.getProfileID());
-		database.insert(TEAMS_TABLE_NAME, null, values);
+		Log.v("GameDB", "team_id: " + team.getTeamID());
+		Log.v("GameDB", "profile_id: " + team.getProfileID());
+		long id = database.insert(TEAMS_TABLE_NAME, null, values);
+		Log.v("GameDB", "team added...row id =: " + id);
 	}
 
 	private static Team cursorToTeam(Cursor cursor) {
@@ -118,6 +123,19 @@ public class TeamsTableManager {
 				new String[] { Integer.toString(teamID) }, null, null, null);
 		cursor.moveToFirst();
 		return cursorToTeam(cursor);
+	}
+
+	public List<Team> getAllTeams() {
+		Cursor cursor = database.query(TEAMS_TABLE_NAME, null, null, null,
+				null, null, null);
+		List<Team> teams = new ArrayList<Team>();
+
+		cursor.moveToFirst();
+		do {
+			teams.add(cursorToTeam(cursor));
+		} while (cursor != null && cursor.moveToNext());
+
+		return teams;
 	}
 
 }

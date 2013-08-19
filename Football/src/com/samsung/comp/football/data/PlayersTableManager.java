@@ -84,27 +84,27 @@ public class PlayersTableManager {
 	private static void addDefaultPlayers(SQLiteDatabase database) {
 
 		Player[] players = {
-				new Player(1, "Steve", true, 520.0f, 150.0f, 100.0f, 420.0f, 1,
+				new Player(0, "Steve", true, 520.0f, 150.0f, 100.0f, 420.0f, 2,
 						2000),
-				new Player(2, "Alex", true, 540.0f, 200.0f, 80.0f, 380.0f, 1,
+				new Player(0, "Alex", true, 540.0f, 200.0f, 80.0f, 380.0f, 2,
 						2000),
-				new Player(3, "Thomas", true, 550.0f, 100.0f, 100.0f, 420.0f,
-						1, 2000),
-				new Player(4, "Samuel", true, 530.0f, 150.0f, 80.0f, 420.0f, 1,
+				new Player(0, "Thomas", true, 550.0f, 100.0f, 100.0f, 420.0f,
+						2, 2000),
+				new Player(0, "Samuel", true, 530.0f, 150.0f, 80.0f, 420.0f, 2,
 						2000),
-				new Goalie(5, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 1,
+				new Goalie(0, "David", true, 520.0f, 150.0f, 100.0f, 500.0f, 2,
 						2000),
 
-				new Player(6, "Bartholomew", true, 520.0f, 150.0f, 100.0f,
-						420.0f, 0, 0),
-				new Player(7, "Edgar", true, 540.0f, 200.0f, 80.0f, 380.0f, 0,
+				new Player(0, "Bartholomew", true, 520.0f, 150.0f, 100.0f,
+						420.0f, 1, 0),
+				new Player(0, "Edgar", true, 540.0f, 200.0f, 80.0f, 380.0f, 1,
 						0),
-				new Player(8, "Oswald", true, 550.0f, 100.0f, 100.0f, 420.0f,
-						0, 0),
-				new Player(9, "Quinten", true, 530.0f, 150.0f, 80.0f, 420.0f,
-						0, 0),
-				new Goalie(10, "Victor", true, 520.0f, 150.0f, 100.0f, 500.0f,
-						0, 0) };
+				new Player(0, "Oswald", true, 550.0f, 100.0f, 100.0f, 420.0f,
+						1, 0),
+				new Player(0, "Quinten", true, 530.0f, 150.0f, 80.0f, 420.0f,
+						1, 0),
+				new Goalie(0, "Victor", true, 520.0f, 150.0f, 100.0f, 500.0f,
+						1, 0) };
 
 		for (Player player : players) {
 			insertPlayer(database, player);
@@ -125,8 +125,8 @@ public class PlayersTableManager {
 		int isGoalie = player.isGoalie() ? 1 : 0;
 		values.put(GOALIE_COLUMN_NAME, isGoalie);
 		values.put(COST_COLUMN_NAME, 0);
-		Log.v("db", "team_id: " + player.getTeamID());
-		Log.v("db", "isGoalie: " + isGoalie);
+		Log.v("db", "player's team_id: " + player.getTeamID());
+		Log.v("db", "player isGoalie: " + isGoalie);
 		return database.insert(PLAYER_TABLE_NAME, null, values);
 	}
 
@@ -177,8 +177,7 @@ public class PlayersTableManager {
 	 */
 	public List<Player> getPlayers(int teamID) {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
-				TEAM_ID_COLUMN_NAME + "=? and "
-						+ GOALIE_COLUMN_NAME + " =0",
+				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =0",
 				new String[] { Integer.toString(teamID) }, null, null, null);
 		cursor.moveToFirst();
 		LinkedList<Player> result = new LinkedList<Player>();
@@ -186,8 +185,8 @@ public class PlayersTableManager {
 			result.add(cursorToPlayer(cursor));
 		} while (cursor.moveToNext() == true);
 
-		Log.v("db", "Found a total of " + result.size() + " players for team "
-				+ teamID);
+		Log.v("GameDB", "Found a total of " + result.size()
+				+ " players for team " + teamID);
 		return result;
 	}
 
