@@ -355,6 +355,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		drawSpriteBatch();
 		if (gameState == GameState.PAUSED || gameState == GameState.FINISHED) {
 			bmf.scale(.22f);
+			textArea.update(Gdx.graphics.getDeltaTime());
 			textArea.draw(batch, bmf, shapeRenderer);
 			bmf.scale(-.22f);
 		}
@@ -1234,7 +1235,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
-			textArea = new PauseMenu();
+			textArea = new TeamSetupScreen(this);
 		}
 		Gdx.app.log("GameState", gameState.toString());
 
