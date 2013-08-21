@@ -72,7 +72,7 @@ public class TeamSetupScreen extends TextArea {
 				false);
 
 		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
-				.getPlayers(1);
+				.getAllPlayers(1);
 
 		fieldedPlayersList = new ArrayList<Player>();
 		benchedPlayersList = new ArrayList<Player>();

@@ -228,6 +228,28 @@ public class PlayersTableManager {
 		return result;
 	}
 
+	/**
+	 * Returns ALL players within a team from the DB
+	 * 
+	 * @param teamID
+	 *            the team to return
+	 * @return
+	 */
+	public List<Player> getAllPlayers(int teamID) {
+		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
+				TEAM_ID_COLUMN_NAME + "=?",
+				new String[] { Integer.toString(teamID) }, null, null, null);
+
+		LinkedList<Player> result = new LinkedList<Player>();
+
+		while (cursor.moveToNext() && cursor != null) {
+			result.add(cursorToPlayer(cursor));
+		}
+
+		Log.v("GameDB", "Found a team of " + result.size()
+				+ " players for team " + teamID);
+		return result;
+	}
 
 }
 
