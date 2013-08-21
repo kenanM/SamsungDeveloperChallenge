@@ -1,6 +1,7 @@
 package com.samsung.comp.football.data;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -204,6 +205,27 @@ public class PlayersTableManager {
 				new String[] { Integer.toString(teamID) }, null, null, null);
 
 		return cursor.moveToFirst() ? (Goalie) cursorToPlayer(cursor) : null;
+	}
+
+	/**
+	 * Returns all goal keepers within a team
+	 * 
+	 * @param teamID
+	 *            the team to search in
+	 * @return
+	 */
+	public ArrayList<Goalie> getGoalies(int teamID) {
+		Cursor cursor = database.query(PLAYER_TABLE_NAME, allColumns,
+				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =1",
+				new String[] { Integer.toString(teamID) }, null, null, null);
+
+		ArrayList<Goalie> result = new ArrayList<Goalie>();
+
+		while (cursor.moveToNext() && cursor != null) {
+			result.add((Goalie) cursorToPlayer(cursor));
+		}
+
+		return result;
 	}
 
 
