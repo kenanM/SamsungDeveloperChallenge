@@ -130,10 +130,9 @@ public class TeamsTableManager {
 				null, null, null);
 		List<Team> teams = new ArrayList<Team>();
 
-		cursor.moveToFirst();
-		do {
+		while (cursor != null && cursor.moveToNext()) {
 			teams.add(cursorToTeam(cursor));
-		} while (cursor != null && cursor.moveToNext());
+		}
 
 		return teams;
 	}

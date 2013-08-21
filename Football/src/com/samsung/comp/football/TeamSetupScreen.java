@@ -85,11 +85,30 @@ public class TeamSetupScreen extends TextArea {
 			}
 		}
 
-		Team team = dataSource.getTeamsTableManager().getTeam(1);
+		Team playerTeam = null;
+		ArrayList<String> aiTeamsList = new ArrayList<String>();
+		java.util.List<Team> allTeams = dataSource.getTeamsTableManager()
+				.getAllTeams();
+
+		for (Team t : allTeams) {
+			if (t.getTeamID() == 1) {
+				playerTeam = t;
+			} else {
+				aiTeamsList.add(t.getTeamName());
+			}
+		}
+
+		String teamName = "Unnamed";
+		if (playerTeam != null) {
+			playerTeam.getTeamName();
+		} else {
+			Gdx.app.error("GameDB", "No team found for the person");
+			throw new NullPointerException("No team found for the person");
+		}
 
 		Gdx.input.setInputProcessor(stage);
 
-		TextField textfield = new TextField(team.getTeamName(), skin);
+		TextField textfield = new TextField(teamName, skin);
 		textfield.setMessageText("Team Name");
 
 		benchedPlayersListMenu = new List(benchedPlayersList.toArray(), skin);
@@ -101,13 +120,8 @@ public class TeamSetupScreen extends TextArea {
 		rightScrollPane = new ScrollPane(benchedPlayersListMenu, skin);
 		rightScrollPane.setFlickScroll(true);
 
-
-		SelectBox aiTeamSelection = new SelectBox(new String[] { "Android",
-				"Windows", "Linux", "OSX", "Android", "Windows", "Linux",
-				"OSX", "Android", "Windows", "Linux", "OSX", "Android",
-				"Windows", "Linux", "OSX", "Android", "Windows", "Linux",
-				"OSX", "Android", "Windows", "Linux", "OSX", "Android",
-				"Windows", "Linux", "OSX" }, skin);
+		SelectBox aiTeamSelection = new SelectBox(
+				aiTeamsList.toArray(new String[] {}), skin);
 
 		final Slider slider = new Slider(0, 2, 1, false, skin);
 
@@ -179,12 +193,17 @@ public class TeamSetupScreen extends TextArea {
 						.button("No", false).key(Keys.ENTER, true)
 						.key(Keys.ESCAPE, false).show(stage);
 
+				if (fieldedPlayersListMenu.getItems().length == 0
+						|| benchedPlayersListMenu.getItems().length == 0
+						|| fieldedPlayersListMenu.getSelectedIndex() == -1
+						|| benchedPlayersListMenu.getSelectedIndex() == -1) {
+					return;
+				}
+
 				Player fieldedPlayer = fieldedPlayersList
-						.get(fieldedPlayersListMenu
-						.getSelectedIndex());
+						.get(fieldedPlayersListMenu.getSelectedIndex());
 				Player benchedPlayer = benchedPlayersList
-						.get(benchedPlayersListMenu
-						.getSelectedIndex());
+						.get(benchedPlayersListMenu.getSelectedIndex());
 
 				fieldedPlayersList.set(
 						fieldedPlayersListMenu.getSelectedIndex(),
@@ -195,8 +214,8 @@ public class TeamSetupScreen extends TextArea {
 
 				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
 				benchedPlayersListMenu.setItems(benchedPlayersList.toArray());
-
 			}
+
 		});
 	}
 
