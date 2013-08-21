@@ -179,11 +179,12 @@ public class PlayersTableManager {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
 				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =0",
 				new String[] { Integer.toString(teamID) }, null, null, null);
-		cursor.moveToFirst();
+
 		LinkedList<Player> result = new LinkedList<Player>();
-		do {
+
+		while (cursor.moveToNext() && cursor != null) {
 			result.add(cursorToPlayer(cursor));
-		} while (cursor.moveToNext() == true);
+		}
 
 		Log.v("GameDB", "Found a total of " + result.size()
 				+ " players for team " + teamID);
@@ -201,8 +202,8 @@ public class PlayersTableManager {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, allColumns,
 				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =1",
 				new String[] { Integer.toString(teamID) }, null, null, null);
-		cursor.moveToFirst();
-		return (Goalie) cursorToPlayer(cursor);
+
+		return cursor.moveToFirst() ? (Goalie) cursorToPlayer(cursor) : null;
 	}
 
 

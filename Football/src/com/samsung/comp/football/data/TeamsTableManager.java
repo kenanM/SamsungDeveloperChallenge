@@ -121,8 +121,8 @@ public class TeamsTableManager {
 		Cursor cursor = database.query(TEAMS_TABLE_NAME, null,
 				TEAM_ID_COLUMN_NAME + "=? ",
 				new String[] { Integer.toString(teamID) }, null, null, null);
-		cursor.moveToFirst();
-		return cursorToTeam(cursor);
+
+		return (cursor.moveToFirst()) ? cursorToTeam(cursor) : null;
 	}
 
 	public List<Team> getAllTeams() {
@@ -130,7 +130,7 @@ public class TeamsTableManager {
 				null, null, null);
 		List<Team> teams = new ArrayList<Team>();
 
-		while (cursor != null && cursor.moveToNext()) {
+		while (cursor.moveToNext() && cursor != null) {
 			teams.add(cursorToTeam(cursor));
 		}
 
