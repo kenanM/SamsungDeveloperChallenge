@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
@@ -13,62 +15,101 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.football.data.PlayerDataSource;
 
 public class TeamSetupScreen extends TextArea {
+	private AbstractGame game;
+	private Skin skin;
+	private Stage stage;
+	private Texture texture1;
 
-	String[] listEntries = { "This is a list entry", "And another one",
-			"The meaning of life", "Is hard to come by",
-			"This is a list entry", "And another one", "The meaning of life",
-			"Is hard to come by", "This is a list entry", "And another one",
-			"The meaning of life", "Is hard to come by",
-			"This is a list entry", "And another one", "The meaning of life",
-			"Is hard to come by", "This is a list entry", "And another one",
-			"The meaning of life", "Is hard to come by" };
+	java.util.List<Player> fieldedPlayersList;
+	java.util.List<Player> benchedPlayersList;
 
-	Skin skin;
-	Stage stage;
-	SpriteBatch batch;
-	Texture texture1;
-	Texture texture2;
-	Label fpsLabel;
+	private Player goalKeeper;
 
-	public TeamSetupScreen(AbstractGame game) {
+	List benchedPlayersListMenu;
+	List fieldedPlayersListMenu;
+
+	private PlayerDataSource dataSource;
+
+	float resolutionX = Game.VIRTUAL_SCREEN_WIDTH / 2;
+	float resolutionY = (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 2;
+
+	ScrollPane leftScrollPane;
+	ScrollPane rightScrollPane;
+
+	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource) {
+		this.game = game;
+		this.dataSource = dataSource;
 		create();
 	}
 
 	public void create() {
-		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		texture1 = new Texture(Gdx.files.internal("redSelect.png"));
-		texture2 = new Texture(Gdx.files.internal("blueSelect.png"));
 		TextureRegion image = new TextureRegion(texture1);
 		TextureRegion imageFlipped = new TextureRegion(image);
 		imageFlipped.flip(true, true);
-		TextureRegion image2 = new TextureRegion(texture2);
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+		stage = new Stage(resolutionX, resolutionY,
 				false);
+
+		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
+				.getPlayers(1);
+
+		fieldedPlayersList = new ArrayList<Player>();
+		benchedPlayersList = new ArrayList<Player>();
+		for (Player player : allPlayers) {
+			int i = 0;
+			if (i < 5) {
+				fieldedPlayersList.add(player);
+			} else {
+				benchedPlayersList.add(player);
+			}
+		}
+
+		Team team = dataSource.getTeamsTableManager().getTeam(1);
+
 		Gdx.input.setInputProcessor(stage);
 
-		// Group.debug = true;
+		TextField textfield = new TextField(team.getTeamName(), skin);
+		textfield.setMessageText("Team Name");
+
+		benchedPlayersListMenu = new List(benchedPlayersList.toArray(), skin);
+		fieldedPlayersListMenu = new List(fieldedPlayersList.toArray(), skin);
+
+		leftScrollPane = new ScrollPane(fieldedPlayersListMenu, skin);
+		leftScrollPane.setFlickScroll(true);
+
+		rightScrollPane = new ScrollPane(benchedPlayersListMenu, skin);
+		rightScrollPane.setFlickScroll(true);
+
+
+		SelectBox aiTeamSelection = new SelectBox(new String[] { "Android",
+				"Windows", "Linux", "OSX", "Android", "Windows", "Linux",
+				"OSX", "Android", "Windows", "Linux", "OSX", "Android",
+				"Windows", "Linux", "OSX", "Android", "Windows", "Linux",
+				"OSX", "Android", "Windows", "Linux", "OSX", "Android",
+				"Windows", "Linux", "OSX" }, skin);
+
+		final Slider slider = new Slider(0, 2, 1, false, skin);
 
 		ImageButtonStyle style = new ImageButtonStyle(
 				skin.get(ButtonStyle.class));
@@ -78,73 +119,38 @@ public class TeamSetupScreen extends TextArea {
 
 		Button buttonMulti = new TextButton("Multi\nLine\nToggle", skin,
 				"toggle");
-		Button imgButton = new Button(new Image(image), skin);
-		Button imgToggleButton = new Button(new Image(image), skin, "toggle");
 
-		Label myLabel = new Label("this is some text.", skin);
-		myLabel.setWrap(true);
 
-		Table t = new Table();
-		t.row();
-		t.add(myLabel);
-
-		t.layout();
-
-		CheckBox checkBox = new CheckBox("Check me", skin);
-		final Slider slider = new Slider(0, 10, 1, false, skin);
-		TextField textfield = new TextField("", skin);
-		textfield.setMessageText("Click here!");
-		SelectBox dropdown = new SelectBox(new String[] { "Android", "Windows",
-				"Linux", "OSX", "Android", "Windows", "Linux", "OSX",
-				"Android", "Windows", "Linux", "OSX", "Android", "Windows",
-				"Linux", "OSX", "Android", "Windows", "Linux", "OSX",
-				"Android", "Windows", "Linux", "OSX", "Android", "Windows",
-				"Linux", "OSX" }, skin);
-		Image imageActor = new Image(image2);
-		ScrollPane scrollPane = new ScrollPane(imageActor);
-		List list = new List(listEntries, skin);
-		ScrollPane scrollPane2 = new ScrollPane(list, skin);
-		scrollPane2.setFlickScroll(true);
-		SplitPane splitPane = new SplitPane(scrollPane, scrollPane2, false,
-				skin, "default-horizontal");
-		fpsLabel = new Label("fps:", skin);
-
-		// configures an example of a TextField in password mode.
-		final Label passwordLabel = new Label("Textfield in password mode: ",
-				skin);
-		final TextField passwordTextField = new TextField("", skin);
-		passwordTextField.setMessageText("password");
-		passwordTextField.setPasswordCharacter('*');
-		passwordTextField.setPasswordMode(true);
-
-		// window.debug();
 		Window window = new Window("Dialog", skin);
 		// Table window = new Table();
-		// window.setPosition(Game.VIRTUAL_SCREEN_WIDTH,
-		// Game.VIRTUAL_SCREEN_HEIGHT);
-		window.setPosition(0, 0);
-		window.defaults().spaceBottom(10);
-		window.row().fill().expandX();
+
+
+
+		window.debug();
+
+		window.defaults().spaceBottom(2.5f).prefHeight(17.5f);
+
+		window.row().fillX().expandX();
+		window.add(textfield).minWidth(25).expandX().fillX().colspan(2);
+
+		window.row().fillX().expandX().prefHeight(150);
+		window.add(leftScrollPane).prefWidth(resolutionX / 2);
+		window.add(rightScrollPane).prefWidth(resolutionX / 2);
+
+		window.row();
 		window.add(iconButton);
-		window.add(buttonMulti);
-		window.add(imgButton);
-		window.add(imgToggleButton);
+		window.add(iconButton);
+
 		window.row();
-		window.add(checkBox);
-		window.add(slider).minWidth(100).fillX().colspan(3);
+		window.add(aiTeamSelection);
+		window.add(slider).minWidth(25).fillX();
+
 		window.row();
-		window.add(dropdown);
-		window.add(textfield).minWidth(100).expandX().fillX().colspan(3);
-		window.row();
-		window.add(splitPane).fill().expand().colspan(4).maxHeight(200);
-		window.row();
-		window.add(passwordLabel).colspan(2);
-		window.add(passwordTextField).minWidth(100).expandX().fillX()
-				.colspan(2);
-		window.row();
-		window.add(fpsLabel).colspan(4);
+
 		// window.scale(1);
 		window.pack();
+		window.setPosition(0, resolutionY - window.getHeight());
+		window.setBackground((Drawable) null);
 
 		// stage.addActor(new Button("Behind Window", skin));
 		stage.addActor(window);
@@ -164,6 +170,7 @@ public class TeamSetupScreen extends TextArea {
 
 		iconButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
+
 				new Dialog("Some Dialog", skin, "dialog") {
 					protected void result(Object object) {
 						System.out.println("Chosen: " + object);
@@ -171,6 +178,24 @@ public class TeamSetupScreen extends TextArea {
 				}.text("Are you enjoying this demo?").button("Yes", true)
 						.button("No", false).key(Keys.ENTER, true)
 						.key(Keys.ESCAPE, false).show(stage);
+
+				Player fieldedPlayer = fieldedPlayersList
+						.get(fieldedPlayersListMenu
+						.getSelectedIndex());
+				Player benchedPlayer = benchedPlayersList
+						.get(benchedPlayersListMenu
+						.getSelectedIndex());
+
+				fieldedPlayersList.set(
+						fieldedPlayersListMenu.getSelectedIndex(),
+						benchedPlayer);
+				benchedPlayersList.set(
+						benchedPlayersListMenu.getSelectedIndex(),
+						fieldedPlayer);
+
+				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
+				benchedPlayersListMenu.setItems(benchedPlayersList.toArray());
+
 			}
 		});
 	}
@@ -178,6 +203,8 @@ public class TeamSetupScreen extends TextArea {
 	@Override
 	public void update(float time) {
 		stage.act(time);
+
+
 	}
 
 	@Override

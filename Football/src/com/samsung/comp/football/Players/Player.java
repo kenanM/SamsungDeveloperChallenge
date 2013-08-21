@@ -971,4 +971,9 @@ public class Player extends Rectangle implements Followable {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }

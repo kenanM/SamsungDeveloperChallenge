@@ -1235,7 +1235,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
-			textArea = new TeamSetupScreen(this);
+			textArea = new TeamSetupScreen(this,
+					actionResolver.openDatasource());
 		}
 		Gdx.app.log("GameState", gameState.toString());
 
