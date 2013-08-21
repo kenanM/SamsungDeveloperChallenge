@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -43,10 +44,21 @@ public class TeamSetupScreen extends TextArea {
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
 
-	private Player goalKeeper;
+	Team playerTeam;
+	ArrayList<Team> aiTeamsList;
+	ArrayList<String> aiTeamNamesList;
+
+	java.util.List<Team> allTeams;
+
 
 	List benchedPlayersListMenu;
 	List fieldedPlayersListMenu;
+
+	Slider slider;
+	Label labelTeamDifficulty;
+	Label labelAIDifficulty;
+
+	SelectBox aiTeamSelection;
 
 	private PlayerDataSource dataSource;
 
@@ -71,6 +83,9 @@ public class TeamSetupScreen extends TextArea {
 		stage = new Stage(resolutionX, resolutionY,
 				false);
 
+		Label labelTitle = new Label("Team Setup", skin);
+
+
 		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
 				.getAllPlayers(1);
 
@@ -85,16 +100,18 @@ public class TeamSetupScreen extends TextArea {
 			}
 		}
 
-		Team playerTeam = null;
-		ArrayList<String> aiTeamsList = new ArrayList<String>();
-		java.util.List<Team> allTeams = dataSource.getTeamsTableManager()
+		playerTeam = null;
+		aiTeamsList = new ArrayList<Team>();
+		aiTeamNamesList = new ArrayList<String>();
+		allTeams = dataSource.getTeamsTableManager()
 				.getAllTeams();
 
 		for (Team t : allTeams) {
 			if (t.getTeamID() == 1) {
 				playerTeam = t;
 			} else {
-				aiTeamsList.add(t.getTeamName());
+				aiTeamsList.add(t);
+				aiTeamNamesList.add(t.getTeamName());
 			}
 		}
 
@@ -120,11 +137,6 @@ public class TeamSetupScreen extends TextArea {
 		rightScrollPane = new ScrollPane(benchedPlayersListMenu, skin);
 		rightScrollPane.setFlickScroll(true);
 
-		SelectBox aiTeamSelection = new SelectBox(
-				aiTeamsList.toArray(new String[] {}), skin);
-
-		final Slider slider = new Slider(0, 2, 1, false, skin);
-
 		ImageButtonStyle style = new ImageButtonStyle(
 				skin.get(ButtonStyle.class));
 		style.imageUp = new TextureRegionDrawable(image);
@@ -134,15 +146,24 @@ public class TeamSetupScreen extends TextArea {
 		Button buttonMulti = new TextButton("Multi\nLine\nToggle", skin,
 				"toggle");
 
+		aiTeamSelection = new SelectBox(
+				aiTeamNamesList.toArray(new String[] {}), skin);
 
-		Window window = new Window("Dialog", skin);
-		// Table window = new Table();
+		final Slider slider = new Slider(0, 2, 1, false, skin);
+
+		labelTeamDifficulty = new Label("Amateurs", skin);
+		labelAIDifficulty = new Label("Easy", skin);
 
 
+		// Window window = new Window("Team Setup", skin);
+		Table window = new Table(skin);
 
 		window.debug();
 
 		window.defaults().spaceBottom(2.5f).prefHeight(17.5f);
+
+		window.row().expandX();
+		window.add(labelTitle).expandX().colspan(2);
 
 		window.row().fillX().expandX();
 		window.add(textfield).minWidth(25).expandX().fillX().colspan(2);
@@ -152,12 +173,25 @@ public class TeamSetupScreen extends TextArea {
 		window.add(rightScrollPane).prefWidth(resolutionX / 2);
 
 		window.row();
+		window.add(buttonMulti);
 		window.add(iconButton);
-		window.add(iconButton);
+		window.add();
+
+		window.row();
+		window.add();
+		window.add();
+
+		window.row();
+		window.add("AI Team");
+		window.add("AI Difficulty");
+
+		window.row();
+		window.add(labelTeamDifficulty);
+		window.add(labelAIDifficulty);
 
 		window.row();
 		window.add(aiTeamSelection);
-		window.add(slider).minWidth(25).fillX();
+		window.add(slider).minWidth(25).fill();
 
 		window.row();
 
@@ -176,9 +210,43 @@ public class TeamSetupScreen extends TextArea {
 			}
 		});
 
+		aiTeamSelection.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.log("Team Setup", "AI Team: " + "");
+
+				int selectedAITeamIndex = aiTeamSelection.getSelectionIndex();
+
+				if (selectedAITeamIndex == -1) {
+					return;
+				}
+
+				Team selectedAITeam = aiTeamsList.get(selectedAITeamIndex);
+
+				float value = selectedAITeam.getDifficulty();
+				if (value == 1) {
+					labelTeamDifficulty.setText("Amateurs");
+				} else if (value == 2) {
+					labelTeamDifficulty.setText("Rising Stars");
+				} else if (value == 3) {
+					labelTeamDifficulty.setText("Experts");
+				}
+
+			}
+		});
+
 		slider.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				Gdx.app.log("UITest", "slider: " + slider.getValue());
+				Gdx.app.log("Team Setup", "slider: " + slider.getValue());
+
+				float value = slider.getValue();
+				if (value == 0) {
+					labelAIDifficulty.setText("Easy");
+				} else if (value == 1) {
+					labelAIDifficulty.setText("Medium");
+				} else if (value == 2) {
+					labelAIDifficulty.setText("Hard");
+				}
+
 			}
 		});
 
