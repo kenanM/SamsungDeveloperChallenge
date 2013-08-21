@@ -155,53 +155,71 @@ public class TeamSetupScreen extends TextArea {
 		labelAIDifficulty = new Label("Easy", skin);
 
 
-		// Window window = new Window("Team Setup", skin);
-		Table window = new Table(skin);
+		Table playersLayout = new Table(skin);
+		playersLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
 
-		window.debug();
+		playersLayout.row().expandX();
+		playersLayout.add(labelTitle).colspan(2);
 
-		window.defaults().spaceBottom(2.5f).prefHeight(17.5f);
+		playersLayout.row().fillX().expandX();
+		playersLayout.add(textfield).minWidth(25).expandX().fillX().colspan(2);
 
-		window.row().expandX();
-		window.add(labelTitle).expandX().colspan(2);
+		playersLayout.row();
+		playersLayout.add("Fielded Players");
+		playersLayout.add("Benched Players");
 
-		window.row().fillX().expandX();
-		window.add(textfield).minWidth(25).expandX().fillX().colspan(2);
+		playersLayout.row().fillX().expandX().prefHeight(135);
+		playersLayout.add(leftScrollPane).prefWidth(resolutionX / 2);
+		playersLayout.add(rightScrollPane).prefWidth(resolutionX / 2);
+		
+		playersLayout.pack();
+		playersLayout.setBackground((Drawable) null);
+		
+		Table buttonsLayout = new Table(skin);
+		buttonsLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
+		buttonsLayout.row();
+		buttonsLayout.add(buttonMulti);
+		buttonsLayout.add(iconButton);
+		buttonsLayout.add();
+		
+		buttonsLayout.pack();
+		buttonsLayout.setBackground((Drawable) null);
 
-		window.row().fillX().expandX().prefHeight(150);
-		window.add(leftScrollPane).prefWidth(resolutionX / 2);
-		window.add(rightScrollPane).prefWidth(resolutionX / 2);
+		Table paddingLayout = new Table(skin);
+		paddingLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
+		paddingLayout.row();
+		paddingLayout.add();
+		
+		paddingLayout.pack();
+		paddingLayout.setBackground((Drawable) null);
 
-		window.row();
-		window.add(buttonMulti);
-		window.add(iconButton);
-		window.add();
+		Table aiPlayerLayout = new Table(skin);
+		aiPlayerLayout.defaults().space(4.5f).prefHeight(17.5f);
+		aiPlayerLayout.row();
+		aiPlayerLayout.add("AI Team");
+		aiPlayerLayout.add(aiTeamSelection);
+		aiPlayerLayout.add(labelTeamDifficulty);
 
-		window.row();
-		window.add();
-		window.add();
+		aiPlayerLayout.row();
+		aiPlayerLayout.add("AI Difficulty");
+		aiPlayerLayout.add(slider).minWidth(25).fill();
+		aiPlayerLayout.add(labelAIDifficulty);
 
-		window.row();
-		window.add("AI Team");
-		window.add("AI Difficulty");
+		aiPlayerLayout.pack();
+		aiPlayerLayout.setBackground((Drawable) null);
 
-		window.row();
-		window.add(labelTeamDifficulty);
-		window.add(labelAIDifficulty);
+		playersLayout.setPosition(0, resolutionY - playersLayout.getHeight());
+		buttonsLayout.setPosition(0,
+				playersLayout.getY() - buttonsLayout.getHeight());
+		paddingLayout.setPosition(0,
+				buttonsLayout.getY() - paddingLayout.getHeight());
+		aiPlayerLayout.setPosition(0,
+				paddingLayout.getY() - aiPlayerLayout.getHeight());
 
-		window.row();
-		window.add(aiTeamSelection);
-		window.add(slider).minWidth(25).fill();
-
-		window.row();
-
-		// window.scale(1);
-		window.pack();
-		window.setPosition(0, resolutionY - window.getHeight());
-		window.setBackground((Drawable) null);
-
-		// stage.addActor(new Button("Behind Window", skin));
-		stage.addActor(window);
+		stage.addActor(playersLayout);
+		stage.addActor(buttonsLayout);
+		stage.addActor(paddingLayout);
+		stage.addActor(aiPlayerLayout);
 
 		textfield.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
