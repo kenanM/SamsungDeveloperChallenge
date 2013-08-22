@@ -3,7 +3,6 @@ package com.samsung.comp.football;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -28,7 +26,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -39,7 +36,7 @@ public class TeamSetupScreen extends TextArea {
 	private AbstractGame game;
 	private Skin skin;
 	private Stage stage;
-	private Texture texture1;
+	private Texture upIconTexture;
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -76,12 +73,40 @@ public class TeamSetupScreen extends TextArea {
 
 	public void create() {
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		texture1 = new Texture(Gdx.files.internal("redSelect.png"));
-		TextureRegion image = new TextureRegion(texture1);
-		TextureRegion imageFlipped = new TextureRegion(image);
-		imageFlipped.flip(true, true);
-		stage = new Stage(resolutionX, resolutionY,
-				false);
+		stage = new Stage(resolutionX, resolutionY, false);
+
+		TextureRegion upIconUpRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("icons/upIconUp.png")));
+		TextureRegion upIconUpRegionFlipped = new TextureRegion(upIconUpRegion);
+		upIconUpRegionFlipped.flip(true, true);
+
+		TextureRegion upIconRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("icons/upIcon.png")));
+		TextureRegion upIconRegionFlipped = new TextureRegion(upIconRegion);
+		upIconRegionFlipped.flip(true, true);
+
+		TextureRegion downIconUpRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("icons/downIconUp.png")));
+		TextureRegion downIconUpRegionFlipped = new TextureRegion(
+				downIconUpRegion);
+		downIconUpRegionFlipped.flip(true, true);
+
+		TextureRegion downIconRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("icons/downIcon.png")));
+		TextureRegion downIconRegionFlipped = new TextureRegion(downIconRegion);
+		downIconRegionFlipped.flip(true, true);
+
+		TextureRegion switchIconUpRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("icons/switchIconUp.png")));
+		TextureRegion switchIconUpRegionFlipped = new TextureRegion(
+				switchIconUpRegion);
+		switchIconUpRegionFlipped.flip(true, true);
+
+		TextureRegion switchIconRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("icons/switchIcon.png")));
+		TextureRegion switchIconRegionFlipped = new TextureRegion(
+				switchIconRegion);
+		switchIconRegionFlipped.flip(true, true);
 
 		Label labelTitle = new Label("Team Setup", skin);
 
@@ -137,11 +162,24 @@ public class TeamSetupScreen extends TextArea {
 		rightScrollPane = new ScrollPane(benchedPlayersListMenu, skin);
 		rightScrollPane.setFlickScroll(true);
 
-		ImageButtonStyle style = new ImageButtonStyle(
+		ImageButtonStyle styleUpIcon = new ImageButtonStyle(
 				skin.get(ButtonStyle.class));
-		style.imageUp = new TextureRegionDrawable(image);
-		style.imageDown = new TextureRegionDrawable(imageFlipped);
-		ImageButton iconButton = new ImageButton(style);
+		styleUpIcon.imageDown = new TextureRegionDrawable(upIconRegion);
+		styleUpIcon.imageUp = new TextureRegionDrawable(upIconUpRegion);
+
+		ImageButtonStyle styleDownIcon = new ImageButtonStyle(
+				skin.get(ButtonStyle.class));
+		styleDownIcon.imageDown = new TextureRegionDrawable(downIconRegion);
+		styleDownIcon.imageUp = new TextureRegionDrawable(downIconUpRegion);
+
+		ImageButtonStyle styleSwitchIcon = new ImageButtonStyle(
+				skin.get(ButtonStyle.class));
+		styleSwitchIcon.imageDown = new TextureRegionDrawable(switchIconRegion);
+		styleSwitchIcon.imageUp = new TextureRegionDrawable(switchIconUpRegion);
+
+		ImageButton upButton = new ImageButton(styleUpIcon);
+		ImageButton downButton = new ImageButton(styleDownIcon);
+		ImageButton switchButton = new ImageButton(styleSwitchIcon);
 
 		Button buttonMulti = new TextButton("Multi\nLine\nToggle", skin,
 				"toggle");
@@ -176,11 +214,13 @@ public class TeamSetupScreen extends TextArea {
 		playersLayout.setBackground((Drawable) null);
 		
 		Table buttonsLayout = new Table(skin);
-		buttonsLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
-		buttonsLayout.row();
-		buttonsLayout.add(buttonMulti);
-		buttonsLayout.add(iconButton);
-		buttonsLayout.add();
+		buttonsLayout.defaults().spaceBottom(2.5f);
+		buttonsLayout.row().fill().expandX().prefWidth(resolutionX / 5);
+		buttonsLayout.add(upButton).expandX();
+		buttonsLayout.add(downButton).expandX();
+		buttonsLayout.add(switchButton).expandX();
+		buttonsLayout.add().expandX();
+		buttonsLayout.add().expandX();
 		
 		buttonsLayout.pack();
 		buttonsLayout.setBackground((Drawable) null);
@@ -268,16 +308,48 @@ public class TeamSetupScreen extends TextArea {
 			}
 		});
 
-		iconButton.addListener(new ChangeListener() {
+		downButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 
-				new Dialog("Some Dialog", skin, "dialog") {
-					protected void result(Object object) {
-						System.out.println("Chosen: " + object);
-					}
-				}.text("Are you enjoying this demo?").button("Yes", true)
-						.button("No", false).key(Keys.ENTER, true)
-						.key(Keys.ESCAPE, false).show(stage);
+				int selectedIndex = fieldedPlayersListMenu.getSelectedIndex();
+				if (selectedIndex >= fieldedPlayersList.size() - 1
+						|| selectedIndex == -1) {
+					return;
+				}
+
+				Player selectedPlayer = fieldedPlayersList.get(selectedIndex);
+				Player nextPlayer = fieldedPlayersList.get(selectedIndex + 1);
+
+				fieldedPlayersList.set(selectedIndex, nextPlayer);
+				fieldedPlayersList.set(selectedIndex + 1, selectedPlayer);
+
+				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
+				fieldedPlayersListMenu.setSelectedIndex(selectedIndex + 1);
+			}
+		});
+
+		upButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+
+				int selectedIndex = fieldedPlayersListMenu.getSelectedIndex();
+				if (selectedIndex <= 0) {
+					return;
+				}
+
+				Player selectedPlayer = fieldedPlayersList.get(selectedIndex);
+				Player previousPlayer = fieldedPlayersList
+						.get(selectedIndex - 1);
+
+				fieldedPlayersList.set(selectedIndex, previousPlayer);
+				fieldedPlayersList.set(selectedIndex - 1, selectedPlayer);
+
+				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
+				fieldedPlayersListMenu.setSelectedIndex(selectedIndex - 1);
+			}
+		});
+
+		switchButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
 
 				if (fieldedPlayersListMenu.getItems().length == 0
 						|| benchedPlayersListMenu.getItems().length == 0
@@ -324,8 +396,8 @@ public class TeamSetupScreen extends TextArea {
 		Gdx.gl.glDisable(GL10.GL_BLEND);
 
 		stage.draw();
-		Table.drawDebug(stage);
-		Window.drawDebug(stage);
+		// Table.drawDebug(stage);
+		// Window.drawDebug(stage);
 
 	}
 
