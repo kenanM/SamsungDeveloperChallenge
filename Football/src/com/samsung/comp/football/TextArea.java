@@ -69,12 +69,13 @@ public class TextArea extends Rectangle {
 		// }
 	}
 
-	public void onTouchUp(float x, float y) {
+	public boolean onTouchUp(float x, float y) {
+		return false;
 
 	}
 
-	public void onTouchDragged(float x, float y) {
-
+	public boolean onTouchDragged(float x, float y) {
+		return false;
 	}
 
 	public void setText(String text) {

@@ -479,4 +479,14 @@ public class TeamSetupScreen extends TextArea {
 		return false;
 	}
 
+	@Override
+	public boolean onTouchDragged(float x, float y) {
+		return false;
+	}
+
+	@Override
+	public boolean onTouchUp(float x, float y) {
+		return false;
+	}
+
 }
