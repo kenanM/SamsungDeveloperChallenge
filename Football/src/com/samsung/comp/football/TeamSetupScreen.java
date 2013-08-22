@@ -282,10 +282,6 @@ public class TeamSetupScreen extends TextArea {
 		stage.addActor(paddingLayout);
 		stage.addActor(aiPlayerLayout);
 
-		float xOffset = 40;
-		float buttonWidth = 64 * 4;
-		float buttonHeight = 64;
-
 		backButton = new TextButton("Back to main menu", skin, "default");
 		startButton = new TextButton("Begin match!", skin, "default");
 
