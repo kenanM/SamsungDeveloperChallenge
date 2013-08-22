@@ -150,6 +150,8 @@ public class TeamSetupScreen extends TextArea {
 
 		benchedPlayersListMenu = new List(benchedPlayersList.toArray(), skin);
 		fieldedPlayersListMenu = new List(fieldedPlayersList.toArray(), skin);
+		benchedPlayersListMenu.setColor(hardLabelColour);
+		fieldedPlayersListMenu.setColor(hardLabelColour);
 
 		leftScrollPane = new ScrollPane(fieldedPlayersListMenu, skin);
 		leftScrollPane.setFlickScroll(true);
