@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -38,6 +39,7 @@ public class TeamSetupScreen extends TextArea {
 	private Stage stage;
 	private Texture upIconTexture;
 	private BitmapFont bmf;
+	private Color overlayColour = new Color(0.27f, 0.27f, 0.35f, 0.70f);
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -148,9 +150,11 @@ public class TeamSetupScreen extends TextArea {
 
 		leftScrollPane = new ScrollPane(fieldedPlayersListMenu, skin);
 		leftScrollPane.setFlickScroll(true);
+		leftScrollPane.setColor(overlayColour);
 
 		rightScrollPane = new ScrollPane(benchedPlayersListMenu, skin);
 		rightScrollPane.setFlickScroll(true);
+		rightScrollPane.setColor(overlayColour);
 
 		ImageButtonStyle styleUpIcon = new ImageButtonStyle(
 				skin.get(ButtonStyle.class));
@@ -170,6 +174,9 @@ public class TeamSetupScreen extends TextArea {
 		ImageButton upButton = new ImageButton(styleUpIcon);
 		ImageButton downButton = new ImageButton(styleDownIcon);
 		ImageButton switchButton = new ImageButton(styleSwitchIcon);
+		upButton.setColor(overlayColour);
+		downButton.setColor(overlayColour);
+		switchButton.setColor(overlayColour);
 
 		Button buttonMulti = new TextButton("Multi\nLine\nToggle", skin,
 				"toggle");
