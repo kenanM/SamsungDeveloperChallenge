@@ -1,9 +1,12 @@
 package com.samsung.comp.football;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.samsung.comp.football.Players.Player;
 
@@ -42,7 +45,23 @@ public class StatsDisplay extends Rectangle {
 		return player;
 	}
 
-	public void draw(SpriteBatch batch, BitmapFont bmf) {
+	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
+
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
+		renderer.rect(x, y, width, height);
+		renderer.end();
+
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(0f, 0f, 0f, 1f);
+		renderer.line(x, y, 0, x + width, y, 0);
+		renderer.line(x, y, 0, x, y + height, 0);
+		renderer.line(x + width, y, 0, x + width, y + height, 0);
+		renderer.line(x, y + height, 0, x + width, y + height, 0);
+		renderer.end();
+		Gdx.gl.glDisable(GL10.GL_BLEND);
+
 		batch.begin();
 		
 		float height = 2 * bmf.getBounds(player.getName()).height;

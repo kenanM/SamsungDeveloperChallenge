@@ -58,7 +58,7 @@ public class TeamSetupScreen extends TextArea {
 
 	SelectBox aiTeamSelection;
 
-	StatsDisplay sd;
+	StatsDisplay statsDisplayArea;
 
 	private PlayerDataSource dataSource;
 
@@ -245,9 +245,13 @@ public class TeamSetupScreen extends TextArea {
 				buttonsLayout.getY() - paddingLayout.getHeight());
 		aiPlayerLayout.setPosition(0,
 				paddingLayout.getY() - aiPlayerLayout.getHeight());
+		
+		float verticalProportion = (resolutionY - aiPlayerLayout.getY() + 10)
+				/ resolutionY;
 
-		sd = new StatsDisplay(fieldedPlayersList.get(1), 0,
-				Game.VIRTUAL_SCREEN_HEIGHT * 2 / 3, resolutionX / 2, 300, false);
+		statsDisplayArea = new StatsDisplay(fieldedPlayersList.get(1), 0,
+				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * verticalProportion,
+				Game.VIRTUAL_SCREEN_WIDTH / 2, 225, false);
 
 		stage.addActor(playersLayout);
 		stage.addActor(buttonsLayout);
@@ -388,7 +392,7 @@ public class TeamSetupScreen extends TextArea {
 		renderer.end();
 		Gdx.gl.glDisable(GL10.GL_BLEND);
 
-		sd.draw(batch, bmf);
+		statsDisplayArea.draw(batch, bmf, renderer);
 		stage.draw();
 
 		// Table.drawDebug(stage);
