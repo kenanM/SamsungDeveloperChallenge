@@ -37,8 +37,8 @@ public class GameOverScreen extends TextArea {
 	float resolutionX = Game.VIRTUAL_SCREEN_WIDTH / 2;
 	float resolutionY = (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 2;
 
-	private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-	private Stage stage = new Stage(resolutionX, resolutionY, false);
+	private Skin skin;
+	private Stage stage;
 
 	TextButton backButton;
 
@@ -50,6 +50,9 @@ public class GameOverScreen extends TextArea {
 				true);
 		generator.dispose();
 		this.reward = reward;
+
+		this.skin = game.skin;
+		stage = new Stage(resolutionX, resolutionY, false, game.batch);
 
 		backButton = new TextButton("Back to menu", skin, "default");
 		backButton.addListener(new ChangeListener() {

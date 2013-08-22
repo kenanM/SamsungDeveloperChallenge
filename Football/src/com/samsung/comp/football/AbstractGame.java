@@ -27,6 +27,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
 import com.samsung.comp.football.Actions.Mark;
@@ -175,6 +176,8 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture pathArrow;
 	protected Texture pushIndicator;
 
+	protected Skin skin;
+
 	protected abstract void onGoalScored(TeamColour scoringTeam);
 
 	@Override
@@ -229,6 +232,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
+
+		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 	}
 
 	protected void createIteractiveObjects() {

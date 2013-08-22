@@ -37,7 +37,6 @@ public class TeamSetupScreen extends TextArea {
 	private AbstractGame game;
 	private Skin skin;
 	private Stage stage;
-	private Texture upIconTexture;
 	private BitmapFont bmf;
 	private Color overlayColour = new Color(0.27f, 0.27f, 0.35f, 0.70f);
 	private Color hardLabelColour = new Color(1f, 0f, 0f, 1f);
@@ -78,13 +77,13 @@ public class TeamSetupScreen extends TextArea {
 
 	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource) {
 		this.game = game;
+		this.skin = game.skin;
 		this.dataSource = dataSource;
 		create();
 	}
 
 	public void create() {
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		stage = new Stage(resolutionX, resolutionY, false);
+		stage = new Stage(resolutionX, resolutionY, false, game.batch);
 
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
