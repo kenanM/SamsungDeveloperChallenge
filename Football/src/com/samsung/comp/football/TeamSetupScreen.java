@@ -417,20 +417,31 @@ public class TeamSetupScreen extends TextArea {
 					return;
 				}
 
+				int leftSelectedIndex = fieldedPlayersListMenu
+						.getSelectedIndex();
+				int rightSelectedIndex = benchedPlayersListMenu
+						.getSelectedIndex();
+
 				Player fieldedPlayer = fieldedPlayersList
-						.get(fieldedPlayersListMenu.getSelectedIndex());
+						.get(leftSelectedIndex);
 				Player benchedPlayer = benchedPlayersList
-						.get(benchedPlayersListMenu.getSelectedIndex());
+						.get(rightSelectedIndex);
 
-				fieldedPlayersList.set(
-						fieldedPlayersListMenu.getSelectedIndex(),
-						benchedPlayer);
-				benchedPlayersList.set(
-						benchedPlayersListMenu.getSelectedIndex(),
-						fieldedPlayer);
+				// Swap the players in the array lists
+				fieldedPlayersList.set(leftSelectedIndex, benchedPlayer);
+				benchedPlayersList.set(rightSelectedIndex, fieldedPlayer);
 
+				// Set the menu to the new array lists
 				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
 				benchedPlayersListMenu.setItems(benchedPlayersList.toArray());
+
+				// Restore the selected index
+				fieldedPlayersListMenu.setSelectedIndex(leftSelectedIndex);
+				benchedPlayersListMenu.setSelectedIndex(rightSelectedIndex);
+
+				// Update stats displays
+				statsDisplayAreaLeft.setPlayer(benchedPlayer);
+				statsDisplayAreaRight.setPlayer(fieldedPlayer);
 			}
 
 		});
