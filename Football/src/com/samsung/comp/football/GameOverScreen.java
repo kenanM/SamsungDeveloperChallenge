@@ -52,7 +52,7 @@ public class GameOverScreen extends TextArea {
 		this.reward = reward;
 
 		this.skin = game.skin;
-		stage = new Stage(resolutionX, resolutionY, false, game.batch);
+		stage = new Stage(resolutionX, resolutionY, false);
 
 		backButton = new TextButton("Back to menu", skin, "default");
 		backButton.addListener(new ChangeListener() {

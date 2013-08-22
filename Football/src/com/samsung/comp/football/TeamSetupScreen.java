@@ -82,7 +82,7 @@ public class TeamSetupScreen extends TextArea {
 	}
 
 	public void create() {
-		stage = new Stage(resolutionX, resolutionY, false, game.batch);
+		stage = new Stage(resolutionX, resolutionY, false);
 
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
