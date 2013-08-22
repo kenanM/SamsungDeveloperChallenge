@@ -1665,18 +1665,18 @@ public abstract class AbstractGame implements ApplicationListener,
 			return false;
 		}
 
+		if (getGameState() == GameState.PAUSED
+				|| gameState == GameState.FINISHED) {
+			textArea.onTouchDown(screenX, screenY, pointer, button);
+			return true;
+		}
+
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getStatsRectangle(positionStatsAtTop) != null
 				&& getStatsRectangle(positionStatsAtTop).contains(point.x,
 						point.y)) {
 			positionStatsAtTop = !positionStatsAtTop;
-		}
-
-		if (getGameState() == GameState.PAUSED
-				|| gameState == GameState.FINISHED) {
-			textArea.onTouchDown(point.x, point.y);
-			return true;
 		}
 
 		if (getGameState() == GameState.INPUT) {
@@ -1712,6 +1712,12 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (!controlsActive) {
 			return false;
+		}
+
+		if (getGameState() == GameState.PAUSED
+				|| gameState == GameState.FINISHED) {
+			textArea.onTouchUp(screenX, screenY, pointer, button);
+			return true;
 		}
 
 		cursor.setHighlightedPlayer(null);
@@ -1874,6 +1880,12 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (!controlsActive) {
 			return false;
+		}
+
+		if (getGameState() == GameState.PAUSED
+				|| gameState == GameState.FINISHED) {
+			textArea.onTouchDragged(screenX, screenY, pointer);
+			return true;
 		}
 
 		Vector2 point = translateInputToField(new Vector2(screenX, screenY));

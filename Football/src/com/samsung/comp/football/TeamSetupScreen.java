@@ -86,7 +86,6 @@ public class TeamSetupScreen extends TextArea {
 
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
-		Gdx.input.setInputProcessor(stage);
 
 		TextureRegion upIconUpRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/upIconUp.png")));
@@ -475,18 +474,18 @@ public class TeamSetupScreen extends TextArea {
 	}
 
 	@Override
-	public boolean onTouchDown(float x, float y) {
-		return false;
+	public boolean onTouchDown(float x, float y, int pointer, int button) {
+		return stage.touchDown((int) x, (int) y, pointer, button);
 	}
 
 	@Override
-	public boolean onTouchDragged(float x, float y) {
-		return false;
+	public boolean onTouchDragged(float x, float y, int pointer) {
+		return stage.touchDragged((int) x, (int) y, pointer);
 	}
 
 	@Override
-	public boolean onTouchUp(float x, float y) {
-		return false;
+	public boolean onTouchUp(float x, float y, int pointer, int button) {
+		return stage.touchUp((int) x, (int) y, pointer, button);
 	}
 
 }

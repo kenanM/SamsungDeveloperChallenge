@@ -15,7 +15,7 @@ public class NullTextArea extends TextArea {
 	}
 
 	@Override
-	public boolean onTouchDown(float x, float y) {
+	public boolean onTouchDown(float x, float y, int pointer, int button) {
 		return false;
 	}
 }

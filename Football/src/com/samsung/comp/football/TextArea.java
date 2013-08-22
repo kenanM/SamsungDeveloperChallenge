@@ -58,7 +58,7 @@ public class TextArea extends Rectangle {
 		batch.end();
 	}
 
-	public boolean onTouchDown(float x, float y) {
+	public boolean onTouchDown(float x, float y, int pointer, int button) {
 		// if (this.contains(x, y)) {
 		if (observer != null) {
 			observer.onButtonPress();
@@ -69,12 +69,12 @@ public class TextArea extends Rectangle {
 		// }
 	}
 
-	public boolean onTouchUp(float x, float y) {
+	public boolean onTouchUp(float x, float y, int pointer, int button) {
 		return false;
 
 	}
 
-	public boolean onTouchDragged(float x, float y) {
+	public boolean onTouchDragged(float x, float y, int pointer) {
 		return false;
 	}
 

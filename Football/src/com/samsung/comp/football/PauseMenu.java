@@ -40,7 +40,7 @@ public class PauseMenu extends TextArea {
 	}
 
 	@Override
-	public boolean onTouchDown(float x, float y) {
+	public boolean onTouchDown(float x, float y, int pointer, int button) {
 
 		Log.i("PauseMenu", x + ", " + y);
 
