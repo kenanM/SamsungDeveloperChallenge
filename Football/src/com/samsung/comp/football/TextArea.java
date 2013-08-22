@@ -58,10 +58,23 @@ public class TextArea extends Rectangle {
 		batch.end();
 	}
 
-	public void onPress(float x, float y) {
+	public boolean onTouchDown(float x, float y) {
 		// if (this.contains(x, y)) {
-		observer.onButtonPress();
+		if (observer != null) {
+			observer.onButtonPress();
+			return true;
+		} else {
+			return false;
+		}
 		// }
+	}
+
+	public void onTouchUp(float x, float y) {
+
+	}
+
+	public void onTouchDragged(float x, float y) {
+
 	}
 
 	public void setText(String text) {

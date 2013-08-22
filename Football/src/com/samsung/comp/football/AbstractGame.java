@@ -1607,7 +1607,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		if (getGameState() == GameState.PAUSED
 				|| gameState == GameState.FINISHED) {
-			textArea.onPress(point.x, point.y);
+			textArea.onTouchDown(point.x, point.y);
 			return true;
 		}
 

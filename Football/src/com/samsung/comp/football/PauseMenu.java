@@ -40,13 +40,15 @@ public class PauseMenu extends TextArea {
 	}
 
 	@Override
-	public void onPress(float x, float y) {
+	public boolean onTouchDown(float x, float y) {
 
 		Log.i("PauseMenu", x + ", " + y);
 
 		if (quitButton.contains(x, y)) {
 			Gdx.app.exit();
 			// notifyObserver();
+			return true;
 		}
+		return false;
 	}
 }

@@ -126,7 +126,8 @@ public class GameOverScreen extends TextArea {
 	}
 
 	@Override
-	public void onPress(float x, float y) {
+	public boolean onTouchDown(float x, float y) {
+		return false;
 	}
 
 }
