@@ -14,6 +14,7 @@ public class StatsDisplay extends Rectangle {
 
 	private Player player;
 	private boolean flip = false;
+	private final float xOffset = 8;
 
 	Texture statPoint1 = new Texture(Gdx.files.internal("statPointRed.png"));
 	Texture statPoint2 = new Texture(Gdx.files.internal("statPoint.png"));
@@ -21,7 +22,13 @@ public class StatsDisplay extends Rectangle {
 	Texture statPoint4 = new Texture(Gdx.files.internal("statPointBlue.png"));
 	Texture statPoint5 = new Texture(Gdx.files.internal("statPointPurple.png"));
 
-	Texture statIcon = new Texture(Gdx.files.internal("statPointPurple.png"));
+	Texture statRunIcon = new Texture(Gdx.files.internal("icons/runIcon.png"));
+	Texture statTackleIcon = new Texture(
+			Gdx.files.internal("icons/tackleIcon.png"));
+	Texture statShootIcon = new Texture(
+			Gdx.files.internal("icons/shootIcon.png"));
+	Texture statSavingIcon = new Texture(
+			Gdx.files.internal("icons/timerIcon.png"));
 
 	public StatsDisplay(Player player, float x, float y, float width,
 			float height, boolean flip) {
@@ -62,14 +69,44 @@ public class StatsDisplay extends Rectangle {
 		renderer.end();
 		Gdx.gl.glDisable(GL10.GL_BLEND);
 
+		if (player == null) {
+			return;
+		}
+
 		batch.begin();
 		
 		float height = 2 * bmf.getBounds(player.getName()).height;
 
-		bmf.draw(batch, player.getName(), 0, y);
+		bmf.draw(batch, player.getName(), x, y);
+		
+		
+		batch.draw(statRunIcon, x + xOffset, y + height, 0, 0,
+				statRunIcon.getWidth(),
+				statRunIcon.getHeight(), 1, 1, 0, 0, 0, statRunIcon.getWidth(),
+				statRunIcon.getHeight(), false, flip);
+
+		batch.draw(statShootIcon, x + xOffset,
+				y + height + statSavingIcon.getHeight(),
+				0, 0, statShootIcon.getWidth(), statShootIcon.getHeight(), 1,
+				1, 0, 0, 0, statShootIcon.getWidth(),
+				statShootIcon.getHeight(), false, flip);
+
+		batch.draw(statTackleIcon, x + xOffset,
+				y + height + 2 * statSavingIcon.getHeight(), 0, 0,
+				statTackleIcon.getWidth(), statTackleIcon.getHeight(), 1, 1, 0,
+				0, 0, statTackleIcon.getWidth(), statTackleIcon.getHeight(),
+				false, flip);
+
+		batch.draw(statSavingIcon, x + xOffset,
+				y + height + 3 * +statSavingIcon.getHeight(), 0, 0,
+				statSavingIcon.getWidth(), statSavingIcon.getHeight(), 1, 1, 0,
+				0, 0, statSavingIcon.getWidth(), statSavingIcon.getHeight(),
+				false, flip);
 
 		for (int i = 0; i < player.getRunSpeedBarCount(); i++) {
-			batch.draw(statPointImageFactory(i), x + statIcon.getWidth()
+			batch.draw(
+					statPointImageFactory(i),
+					x + xOffset + statRunIcon.getWidth()
 					+ (i * statPoint1.getWidth()),
 					y + height +
 					(0 * statPoint1.getHeight()), 0, 0, statPoint1.getWidth(),
@@ -78,7 +115,9 @@ public class StatsDisplay extends Rectangle {
 		}
 
 		for (int i = 0; i < player.getShootSpeedBarCount(); i++) {
-			batch.draw(statPointImageFactory(i), x + statIcon.getWidth()
+			batch.draw(
+					statPointImageFactory(i),
+					x + xOffset + statRunIcon.getWidth()
 					+ (i * statPoint1.getWidth()),
 					y + height +
 					(1 * statPoint1.getHeight()), 0, 0, statPoint1.getWidth(),
@@ -87,7 +126,9 @@ public class StatsDisplay extends Rectangle {
 		}
 
 		for (int i = 0; i < player.getTackleSkillBarCount(); i++) {
-			batch.draw(statPointImageFactory(i), x + statIcon.getWidth()
+			batch.draw(
+					statPointImageFactory(i),
+					x + xOffset + statRunIcon.getWidth()
 					+ (i * statPoint1.getWidth()),
 					y + height +
 					(2 * statPoint1.getHeight()), 0, 0, statPoint1.getWidth(),
@@ -96,7 +137,9 @@ public class StatsDisplay extends Rectangle {
 		}
 
 		for (int i = 0; i < player.getSavingSkillBarCount(); i++) {
-			batch.draw(statPointImageFactory(i), x + statIcon.getWidth()
+			batch.draw(
+					statPointImageFactory(i),
+					x + xOffset + statRunIcon.getWidth()
 					+ (i * statPoint1.getWidth()),
 					y + height +
 					(3 * statPoint1.getHeight()), 0, 0, statPoint1.getWidth(),
