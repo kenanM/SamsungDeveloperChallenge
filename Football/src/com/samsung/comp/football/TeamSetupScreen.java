@@ -268,12 +268,18 @@ public class TeamSetupScreen extends TextArea {
 
 		statsDisplayAreaLeft = new StatsDisplay(fieldedPlayersList.get(0), 20,
 				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * verticalProportion,
-				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, 32 * 7, true);
+				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, 32 * 7, true,
+				game.statPoint1, game.statPoint2, game.statPoint3,
+				game.statPoint4, game.statPoint5, game.statRunIcon,
+				game.statShootIcon, game.statTackleIcon, game.statSavingIcon);
 
 		statsDisplayAreaRight = new StatsDisplay(null,
 				20 + Game.VIRTUAL_SCREEN_WIDTH / 2,
 				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * verticalProportion,
-				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, 32 * 7, true);
+				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, 32 * 7, true,
+				game.statPoint1, game.statPoint2, game.statPoint3,
+				game.statPoint4, game.statPoint5, game.statRunIcon,
+				game.statShootIcon, game.statTackleIcon, game.statSavingIcon);
 
 
 		stage.addActor(playersLayout);

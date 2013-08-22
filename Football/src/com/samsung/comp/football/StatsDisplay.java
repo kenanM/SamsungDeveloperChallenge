@@ -38,6 +38,36 @@ public class StatsDisplay extends Rectangle {
 		this.width = width;
 		this.height = height;
 		this.flip = flip;
+		
+		statPoint1 = new Texture(Gdx.files.internal("statPointRed.png"));
+		statPoint2 = new Texture(Gdx.files.internal("statPoint.png"));
+		statPoint3 = new Texture(Gdx.files.internal("statPointGreen.png"));
+		statPoint4 = new Texture(Gdx.files.internal("statPointBlue.png"));
+		statPoint5 = new Texture(Gdx.files.internal("statPointPurple.png"));
+	}
+
+	public StatsDisplay(Player player, float x, float y, float width,
+			float height, boolean flip, Texture statPoint1, Texture statPoint2,
+			Texture statPoint3, Texture statPoint4, Texture statPoint5,
+			Texture statRunIcon, Texture statShootIcon, Texture statTackleIcon,
+			Texture statSavingIcon) {
+		this.player = player;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.flip = flip;
+
+		this.statPoint1 = statPoint1;
+		this.statPoint2 = statPoint2;
+		this.statPoint3 = statPoint3;
+		this.statPoint4 = statPoint4;
+		this.statPoint5 = statPoint5;
+
+		this.statRunIcon = statRunIcon;
+		this.statShootIcon = statShootIcon;
+		this.statTackleIcon = statTackleIcon;
+		this.statSavingIcon = statSavingIcon;
 	}
 
 	private float flippedY(float val) {

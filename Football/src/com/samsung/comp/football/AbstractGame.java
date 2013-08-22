@@ -70,14 +70,14 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected int drawnPitchHeight;
 	protected double scaleFactor;
 
-	public static Texture endTexture;
-	public static Texture pitchTexture;
-	public static Texture playTexture;
-	public static Texture statPoint1;
-	public static Texture statPoint2;
-	public static Texture statPoint3;
-	public static Texture statPoint4;
-	public static Texture statPoint5;
+	protected Texture endTexture;
+	protected Texture pitchTexture;
+	protected Texture playTexture;
+	protected Texture statPoint1;
+	protected Texture statPoint2;
+	protected Texture statPoint3;
+	protected Texture statPoint4;
+	protected Texture statPoint5;
 
 	protected Texture statRunIcon;
 	protected Texture statTackleIcon;
