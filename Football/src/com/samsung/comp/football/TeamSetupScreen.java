@@ -74,39 +74,25 @@ public class TeamSetupScreen extends TextArea {
 	public void create() {
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		stage = new Stage(resolutionX, resolutionY, false);
+		Gdx.input.setInputProcessor(stage);
 
 		TextureRegion upIconUpRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/upIconUp.png")));
-		TextureRegion upIconUpRegionFlipped = new TextureRegion(upIconUpRegion);
-		upIconUpRegionFlipped.flip(true, true);
 
 		TextureRegion upIconRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/upIcon.png")));
-		TextureRegion upIconRegionFlipped = new TextureRegion(upIconRegion);
-		upIconRegionFlipped.flip(true, true);
 
 		TextureRegion downIconUpRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/downIconUp.png")));
-		TextureRegion downIconUpRegionFlipped = new TextureRegion(
-				downIconUpRegion);
-		downIconUpRegionFlipped.flip(true, true);
 
 		TextureRegion downIconRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/downIcon.png")));
-		TextureRegion downIconRegionFlipped = new TextureRegion(downIconRegion);
-		downIconRegionFlipped.flip(true, true);
 
 		TextureRegion switchIconUpRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/switchIconUp.png")));
-		TextureRegion switchIconUpRegionFlipped = new TextureRegion(
-				switchIconUpRegion);
-		switchIconUpRegionFlipped.flip(true, true);
 
 		TextureRegion switchIconRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/switchIcon.png")));
-		TextureRegion switchIconRegionFlipped = new TextureRegion(
-				switchIconRegion);
-		switchIconRegionFlipped.flip(true, true);
 
 		Label labelTitle = new Label("Team Setup", skin);
 
@@ -147,8 +133,6 @@ public class TeamSetupScreen extends TextArea {
 			Gdx.app.error("GameDB", "No team found for the person");
 			throw new NullPointerException("No team found for the person");
 		}
-
-		Gdx.input.setInputProcessor(stage);
 
 		TextField textfield = new TextField(teamName, skin);
 		textfield.setMessageText("Team Name");
