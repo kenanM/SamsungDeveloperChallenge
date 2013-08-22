@@ -267,11 +267,11 @@ public class TeamSetupScreen extends TextArea {
 		float verticalProportion = (resolutionY - aiPlayerLayout.getY() + 20)
 				/ resolutionY;
 
-		statsDisplayAreaLeft = new StatsDisplay(fieldedPlayersList.get(1), 20,
+		statsDisplayAreaLeft = new StatsDisplay(fieldedPlayersList.get(0), 20,
 				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * verticalProportion,
 				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, 32 * 7, true);
 
-		statsDisplayAreaRight = new StatsDisplay(fieldedPlayersList.get(1),
+		statsDisplayAreaRight = new StatsDisplay(null,
 				20 + Game.VIRTUAL_SCREEN_WIDTH / 2,
 				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * verticalProportion,
 				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, 32 * 7, true);
@@ -286,6 +286,38 @@ public class TeamSetupScreen extends TextArea {
 			public void keyTyped(TextField textField, char key) {
 				if (key == '\n')
 					textField.getOnscreenKeyboard().show(false);
+			}
+		});
+
+		fieldedPlayersListMenu.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+
+				int selectedPlayerIndex = fieldedPlayersListMenu
+						.getSelectedIndex();
+
+				if (selectedPlayerIndex == -1) {
+					return;
+				}
+
+				Player selectedPlayer = fieldedPlayersList
+						.get(selectedPlayerIndex);
+				statsDisplayAreaLeft.setPlayer(selectedPlayer);
+			}
+		});
+
+		benchedPlayersListMenu.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+
+				int selectedPlayerIndex = benchedPlayersListMenu
+						.getSelectedIndex();
+
+				if (selectedPlayerIndex == -1) {
+					return;
+				}
+
+				Player selectedPlayer = benchedPlayersList
+						.get(selectedPlayerIndex);
+				statsDisplayAreaRight.setPlayer(selectedPlayer);
 			}
 		});
 
