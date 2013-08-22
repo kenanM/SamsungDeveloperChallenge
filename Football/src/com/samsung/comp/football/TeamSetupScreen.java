@@ -40,6 +40,9 @@ public class TeamSetupScreen extends TextArea {
 	private Texture upIconTexture;
 	private BitmapFont bmf;
 	private Color overlayColour = new Color(0.27f, 0.27f, 0.35f, 0.70f);
+	private Color hardLabelColour = new Color(1f, 0f, 0f, 1f);
+	private Color medLabelColour = new Color(0.12f, 0.51f, .95f, 1f);
+	private Color easyLabelColour = new Color(0f, 1f, 0f, 1f);
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -187,7 +190,9 @@ public class TeamSetupScreen extends TextArea {
 		final Slider slider = new Slider(0, 2, 1, false, skin);
 
 		labelTeamDifficulty = new Label("Amateurs", skin);
+		labelTeamDifficulty.setColor(easyLabelColour);
 		labelAIDifficulty = new Label("Easy", skin);
+		labelAIDifficulty.setColor(easyLabelColour);
 
 
 		Table playersLayout = new Table(skin);
@@ -287,10 +292,13 @@ public class TeamSetupScreen extends TextArea {
 				float value = selectedAITeam.getDifficulty();
 				if (value == 1) {
 					labelTeamDifficulty.setText("Amateurs");
+					labelTeamDifficulty.setColor(easyLabelColour);
 				} else if (value == 2) {
 					labelTeamDifficulty.setText("Rising Stars");
+					labelTeamDifficulty.setColor(medLabelColour);
 				} else if (value == 3) {
 					labelTeamDifficulty.setText("Experts");
+					labelTeamDifficulty.setColor(hardLabelColour);
 				}
 
 			}
@@ -303,10 +311,13 @@ public class TeamSetupScreen extends TextArea {
 				float value = slider.getValue();
 				if (value == 0) {
 					labelAIDifficulty.setText("Easy");
+					labelAIDifficulty.setColor(easyLabelColour);
 				} else if (value == 1) {
 					labelAIDifficulty.setText("Medium");
+					labelAIDifficulty.setColor(medLabelColour);
 				} else if (value == 2) {
 					labelAIDifficulty.setText("Hard");
+					labelAIDifficulty.setColor(hardLabelColour);
 				}
 
 			}
