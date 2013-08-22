@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -492,21 +490,9 @@ public class TeamSetupScreen extends TextArea {
 
 	@Override
 	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
-
-		Gdx.gl.glEnable(GL10.GL_BLEND);
-		renderer.begin(ShapeType.Filled);
-		renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
-
-		renderer.end();
-		Gdx.gl.glDisable(GL10.GL_BLEND);
-
 		statsDisplayAreaLeft.draw(batch, bmf, renderer);
 		statsDisplayAreaRight.draw(batch, bmf, renderer);
 		stage.draw();
-
-		// Table.drawDebug(stage);
-		// Window.drawDebug(stage);
-
 	}
 
 	@Override
