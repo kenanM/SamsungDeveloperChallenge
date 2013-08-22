@@ -78,7 +78,12 @@ public abstract class AbstractGame implements ApplicationListener,
 	public static Texture statPoint3;
 	public static Texture statPoint4;
 	public static Texture statPoint5;
-	public static Texture stats;
+
+	protected Texture statRunIcon;
+	protected Texture statTackleIcon;
+	protected Texture statShootIcon;
+	protected Texture statSavingIcon;
+
 	public static Texture goalMessage;
 
 	protected Sound whistleBlow;
@@ -275,8 +280,12 @@ public abstract class AbstractGame implements ApplicationListener,
 		statPoint3 = new Texture(Gdx.files.internal("statPointGreen.png"));
 		statPoint4 = new Texture(Gdx.files.internal("statPointBlue.png"));
 		statPoint5 = new Texture(Gdx.files.internal("statPointPurple.png"));
-		stats = new Texture(Gdx.files.internal("stats.png"));
 		goalMessage = new Texture(Gdx.files.internal("GoalScored.png"));
+
+		statRunIcon = new Texture(Gdx.files.internal("icons/runIcon.png"));
+		statTackleIcon = new Texture(Gdx.files.internal("icons/tackleIcon.png"));
+		statShootIcon = new Texture(Gdx.files.internal("icons/shootIcon.png"));
+		statSavingIcon = new Texture(Gdx.files.internal("icons/timerIcon.png"));
 
 		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
@@ -578,10 +587,35 @@ public abstract class AbstractGame implements ApplicationListener,
 						- (25 * statPoint1.getWidth()),
 						4 * statPoint1.getHeight());
 
-				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
-						* 10, 0, 0, 0, stats.getWidth(), stats.getHeight(), 1,
-						1, 0, 0, 0, stats.getWidth(), stats.getHeight(), false,
+				batch.draw(
+						statRunIcon,
+						VIRTUAL_SCREEN_WIDTH - statRunIcon.getWidth() - 25 * 10,
+						0, 0, 0, statRunIcon.getWidth(),
+						statRunIcon.getHeight(), 1, 1, 0, 0, 0,
+						statRunIcon.getWidth(), statRunIcon.getHeight(), false,
 						true);
+
+				batch.draw(statShootIcon,
+						VIRTUAL_SCREEN_WIDTH - statShootIcon.getWidth() - 25
+								* 10, (1 * statPoint1.getHeight()), 0, 0,
+						statShootIcon.getWidth(),
+						statShootIcon.getHeight(), 1, 1, 0, 0, 0,
+						statShootIcon.getWidth(), statShootIcon.getHeight(),
+						false, true);
+
+				batch.draw(statTackleIcon, VIRTUAL_SCREEN_WIDTH
+						- statTackleIcon.getWidth() - 25 * 10,
+						(2 * statPoint1.getHeight()), 0, 0,
+						statTackleIcon.getWidth(), statTackleIcon.getHeight(),
+						1, 1, 0, 0, 0, statTackleIcon.getWidth(),
+						statTackleIcon.getHeight(), false, true);
+
+				batch.draw(statSavingIcon, VIRTUAL_SCREEN_WIDTH
+						- statSavingIcon.getWidth() - 25 * 10,
+						(3 * statPoint1.getHeight()), 0, 0,
+						statSavingIcon.getWidth(), statSavingIcon.getHeight(),
+						1, 1, 0, 0, 0, statSavingIcon.getWidth(),
+						statSavingIcon.getHeight(), false, true);
 
 				for (int i = 0; i < player.getRunSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
@@ -623,11 +657,38 @@ public abstract class AbstractGame implements ApplicationListener,
 						- (25 * statPoint1.getWidth()), VIRTUAL_SCREEN_HEIGHT
 						- (5 * statPoint1.getHeight()));
 
-				batch.draw(stats, VIRTUAL_SCREEN_WIDTH - stats.getWidth() - 25
-						* 10,
+				batch.draw(
+						statRunIcon,
+						VIRTUAL_SCREEN_WIDTH - statRunIcon.getWidth() - 25 * 10,
 						(VIRTUAL_SCREEN_HEIGHT - (4 * statPoint1.getHeight())),
-						0, 0, stats.getWidth(), stats.getHeight(), 1, 1, 0, 0,
-						0, stats.getWidth(), stats.getHeight(), false, true);
+						0, 0, statRunIcon.getWidth(), statRunIcon.getHeight(),
+						1, 1, 0, 0, 0, statRunIcon.getWidth(),
+						statRunIcon.getHeight(), false, true);
+
+				batch.draw(statShootIcon,
+						VIRTUAL_SCREEN_WIDTH - statShootIcon.getWidth() - 25
+								* 10,
+						(VIRTUAL_SCREEN_HEIGHT - (3 * statPoint1.getHeight())),
+						0, 0, statShootIcon.getWidth(),
+						statShootIcon.getHeight(), 1, 1, 0, 0, 0,
+						statShootIcon.getWidth(), statShootIcon.getHeight(),
+						false, true);
+
+				batch.draw(statTackleIcon, VIRTUAL_SCREEN_WIDTH
+						- statTackleIcon.getWidth() - 25 * 10,
+						(VIRTUAL_SCREEN_HEIGHT - (2 * statPoint1.getHeight())),
+						0, 0, statTackleIcon.getWidth(),
+						statTackleIcon.getHeight(), 1, 1, 0, 0, 0,
+						statTackleIcon.getWidth(), statTackleIcon.getHeight(),
+						false, true);
+
+				batch.draw(statSavingIcon, VIRTUAL_SCREEN_WIDTH
+						- statSavingIcon.getWidth() - 25 * 10,
+						(VIRTUAL_SCREEN_HEIGHT - (1 * statPoint1.getHeight())),
+						0, 0, statSavingIcon.getWidth(),
+						statSavingIcon.getHeight(), 1, 1, 0, 0, 0,
+						statSavingIcon.getWidth(), statSavingIcon.getHeight(),
+						false, true);
 
 				for (int i = 0; i < player.getRunSpeedBarCount(); i++) {
 					batch.draw(statPointImageFactory(i), VIRTUAL_SCREEN_WIDTH
@@ -1151,15 +1212,18 @@ public abstract class AbstractGame implements ApplicationListener,
 		float pointWidth = 10;
 		float pointCount = 25;
 		try {
+
+			float iconWidth = statSavingIcon.getWidth();
+			float iconHeight = statSavingIcon.getHeight();
 			if (isAtTopPosition) {
-				return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
-						- pointCount * pointWidth, 0, stats.getWidth()
-						+ pointWidth * pointCount, stats.getHeight());
+				return new Rectangle(VIRTUAL_SCREEN_WIDTH - iconWidth
+						- pointCount * pointWidth, 0, iconWidth + pointWidth
+						* pointCount, iconHeight * 5);
 			} else {
-				return new Rectangle(VIRTUAL_SCREEN_WIDTH - stats.getWidth()
+				return new Rectangle(VIRTUAL_SCREEN_WIDTH - iconWidth
 						- pointCount * pointWidth, VIRTUAL_SCREEN_HEIGHT
-						- stats.getHeight(), stats.getWidth() + pointWidth
-						* pointCount, stats.getHeight());
+						- iconHeight * 5, iconWidth + pointWidth * pointCount,
+						iconHeight * 5);
 			}
 		} catch (NullPointerException e) {
 			return null;
@@ -1185,7 +1249,10 @@ public abstract class AbstractGame implements ApplicationListener,
 		statPoint3.dispose();
 		statPoint4.dispose();
 		statPoint5.dispose();
-		stats.dispose();
+		statRunIcon.dispose();
+		statShootIcon.dispose();
+		statTackleIcon.dispose();
+		statSavingIcon.dispose();
 		goalMessage.dispose();
 		whistleBlow.dispose();
 		batch.dispose();
