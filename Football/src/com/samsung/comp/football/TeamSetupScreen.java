@@ -42,6 +42,7 @@ public class TeamSetupScreen extends TextArea {
 	private Color hardLabelColour = new Color(1f, 0f, 0f, 1f);
 	private Color medLabelColour = new Color(0.12f, 0.51f, .95f, 1f);
 	private Color easyLabelColour = new Color(0f, 1f, 0f, 1f);
+	private Color buttonColour = new Color(1f, 1f, 1f, .8f);
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -178,9 +179,9 @@ public class TeamSetupScreen extends TextArea {
 		ImageButton upButton = new ImageButton(styleUpIcon);
 		ImageButton downButton = new ImageButton(styleDownIcon);
 		ImageButton switchButton = new ImageButton(styleSwitchIcon);
-		upButton.setColor(overlayColour);
-		downButton.setColor(overlayColour);
-		switchButton.setColor(overlayColour);
+		upButton.setColor(buttonColour);
+		downButton.setColor(buttonColour);
+		switchButton.setColor(buttonColour);
 
 		aiTeamSelection = new SelectBox(
 				aiTeamNamesList.toArray(new String[] {}), skin);
