@@ -53,7 +53,6 @@ public class TeamSetupScreen extends TextArea {
 
 	java.util.List<Team> allTeams;
 
-
 	List benchedPlayersListMenu;
 	List fieldedPlayersListMenu;
 
@@ -73,6 +72,9 @@ public class TeamSetupScreen extends TextArea {
 
 	ScrollPane leftScrollPane;
 	ScrollPane rightScrollPane;
+
+	Button backButton;
+	Button startButton;
 
 	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource) {
 		this.game = game;
@@ -107,7 +109,6 @@ public class TeamSetupScreen extends TextArea {
 
 		Label labelTitle = new Label("Team Setup", skin);
 
-
 		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
 				.getAllPlayers(1);
 
@@ -125,8 +126,7 @@ public class TeamSetupScreen extends TextArea {
 		playerTeam = null;
 		aiTeamsList = new ArrayList<Team>();
 		aiTeamNamesList = new ArrayList<String>();
-		allTeams = dataSource.getTeamsTableManager()
-				.getAllTeams();
+		allTeams = dataSource.getTeamsTableManager().getAllTeams();
 
 		for (Team t : allTeams) {
 			if (t.getTeamID() == 1) {
@@ -183,9 +183,6 @@ public class TeamSetupScreen extends TextArea {
 		downButton.setColor(overlayColour);
 		switchButton.setColor(overlayColour);
 
-		Button buttonMulti = new TextButton("Multi\nLine\nToggle", skin,
-				"toggle");
-
 		aiTeamSelection = new SelectBox(
 				aiTeamNamesList.toArray(new String[] {}), skin);
 
@@ -195,7 +192,6 @@ public class TeamSetupScreen extends TextArea {
 		labelTeamDifficulty.setColor(easyLabelColour);
 		labelAIDifficulty = new Label("Easy", skin);
 		labelAIDifficulty.setColor(easyLabelColour);
-
 
 		Table playersLayout = new Table(skin);
 		playersLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
@@ -213,10 +209,10 @@ public class TeamSetupScreen extends TextArea {
 		playersLayout.row().fillX().expandX().prefHeight(135);
 		playersLayout.add(leftScrollPane).prefWidth(resolutionX / 2);
 		playersLayout.add(rightScrollPane).prefWidth(resolutionX / 2);
-		
+
 		playersLayout.pack();
 		playersLayout.setBackground((Drawable) null);
-		
+
 		Table buttonsLayout = new Table(skin);
 		buttonsLayout.defaults().spaceBottom(2.5f);
 		buttonsLayout.row().fill().expandX().prefWidth(resolutionX / 5);
@@ -225,7 +221,7 @@ public class TeamSetupScreen extends TextArea {
 		buttonsLayout.add(switchButton).expandX();
 		buttonsLayout.add().expandX();
 		buttonsLayout.add().expandX();
-		
+
 		buttonsLayout.pack();
 		buttonsLayout.setBackground((Drawable) null);
 
@@ -233,7 +229,7 @@ public class TeamSetupScreen extends TextArea {
 		paddingLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
 		paddingLayout.row();
 		paddingLayout.add();
-		
+
 		paddingLayout.pack();
 		paddingLayout.setBackground((Drawable) null);
 
@@ -281,11 +277,47 @@ public class TeamSetupScreen extends TextArea {
 				game.statPoint4, game.statPoint5, game.statRunIcon,
 				game.statShootIcon, game.statTackleIcon, game.statSavingIcon);
 
-
 		stage.addActor(playersLayout);
 		stage.addActor(buttonsLayout);
 		stage.addActor(paddingLayout);
 		stage.addActor(aiPlayerLayout);
+
+		float xOffset = 40;
+		float buttonWidth = 64 * 4;
+		float buttonHeight = 64;
+
+		backButton = new TextButton("Back to main menu", skin, "default");
+		startButton = new TextButton("Begin match!", skin, "default");
+
+		// Position of the bottom left of the stats display as a %
+		float verticalProportionBack = (statsDisplayAreaLeft.getY() + statsDisplayAreaLeft
+				.getHeight()) / (Game.VIRTUAL_SCREEN_HEIGHT + 64);
+
+		Table backButtonLayout = new Table(skin);
+		backButtonLayout.defaults().spaceBottom(2.5f);
+		backButtonLayout.row().fill().expandX().prefWidth(resolutionX * 2 / 7);
+		backButtonLayout.add(backButton).expandX()
+				.prefWidth(resolutionX * 2 / 7);
+
+		backButtonLayout.setPosition(20, resolutionY - backButton.getHeight()
+				- 10 - verticalProportionBack * resolutionY);
+		backButtonLayout.pack();
+		backButtonLayout.setBackground((Drawable) null);
+
+		Table startButtonLayout = new Table(skin);
+		startButtonLayout.defaults().spaceBottom(2.5f);
+		startButtonLayout.row().fill().expandX().prefWidth(resolutionX * 2 / 7);
+		startButtonLayout.add(startButton).expandX()
+				.prefWidth(resolutionX * 2 / 7);
+
+		startButtonLayout.setPosition(resolutionX - resolutionX * 2 / 7 - 20,
+				resolutionY - startButton.getHeight() - 10
+						- verticalProportionBack * resolutionY);
+		startButtonLayout.pack();
+		startButtonLayout.setBackground((Drawable) null);
+
+		stage.addActor(backButtonLayout);
+		stage.addActor(startButtonLayout);
 
 		textfield.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
@@ -456,12 +488,10 @@ public class TeamSetupScreen extends TextArea {
 	public void update(float time) {
 		stage.act(time);
 
-
 	}
 
 	@Override
-	public void draw(SpriteBatch batch, BitmapFont bmf,
-			ShapeRenderer renderer) {
+	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
 
 		Gdx.gl.glEnable(GL10.GL_BLEND);
 		renderer.begin(ShapeType.Filled);
