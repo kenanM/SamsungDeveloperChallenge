@@ -324,6 +324,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public void render() {
+		// Gdx.app.log("Game", "FPS: " + Gdx.graphics.getFramesPerSecond());
 
 		update();
 
