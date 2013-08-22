@@ -282,7 +282,7 @@ public class TeamSetupScreen extends TextArea {
 		stage.addActor(paddingLayout);
 		stage.addActor(aiPlayerLayout);
 
-		backButton = new TextButton("Back to main menu", skin, "default");
+		backButton = new TextButton("Back to menu", skin, "default");
 		startButton = new TextButton("Begin match!", skin, "default");
 
 		// Position of the bottom left of the stats display as a %
@@ -295,8 +295,7 @@ public class TeamSetupScreen extends TextArea {
 		backButtonLayout.add(backButton).expandX()
 				.prefWidth(resolutionX * 2 / 7);
 
-		backButtonLayout.setPosition(20, resolutionY - backButton.getHeight()
-				- 10 - verticalProportionBack * resolutionY);
+		backButtonLayout.setPosition(20, 32);
 		backButtonLayout.pack();
 		backButtonLayout.setBackground((Drawable) null);
 
@@ -307,8 +306,7 @@ public class TeamSetupScreen extends TextArea {
 				.prefWidth(resolutionX * 2 / 7);
 
 		startButtonLayout.setPosition(resolutionX - resolutionX * 2 / 7 - 20,
-				resolutionY - startButton.getHeight() - 10
-						- verticalProportionBack * resolutionY);
+				32);
 		startButtonLayout.pack();
 		startButtonLayout.setBackground((Drawable) null);
 
@@ -319,6 +317,12 @@ public class TeamSetupScreen extends TextArea {
 			public void keyTyped(TextField textField, char key) {
 				if (key == '\n')
 					textField.getOnscreenKeyboard().show(false);
+			}
+		});
+
+		backButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				game.backButtonPressed();
 			}
 		});
 

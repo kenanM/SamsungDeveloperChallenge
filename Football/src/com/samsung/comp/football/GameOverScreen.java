@@ -11,6 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class GameOverScreen extends TextArea {
 
@@ -27,7 +34,15 @@ public class GameOverScreen extends TextArea {
 	private int reward = 0;
 	private final float fundsAddingTime = 4f;
 
-	public GameOverScreen(AbstractGame game, int reward) {
+	float resolutionX = Game.VIRTUAL_SCREEN_WIDTH / 2;
+	float resolutionY = (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 2;
+
+	private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+	private Stage stage = new Stage(resolutionX, resolutionY, false);
+
+	TextButton backButton;
+
+	public GameOverScreen(final AbstractGame game, int reward) {
 		this.game = game;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/absender1.ttf"));
@@ -35,6 +50,24 @@ public class GameOverScreen extends TextArea {
 				true);
 		generator.dispose();
 		this.reward = reward;
+
+		backButton = new TextButton("Back to menu", skin, "default");
+		backButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				game.backButtonPressed();
+			}
+		});
+
+		Table backButtonLayout = new Table(skin);
+		backButtonLayout.defaults().spaceBottom(2.5f);
+		backButtonLayout.row().fill().expandX().prefWidth(resolutionX * 2 / 7);
+		backButtonLayout.add(backButton).expandX()
+				.prefWidth(resolutionX * 2 / 7);
+
+		backButtonLayout.setPosition(20, 32);
+		backButtonLayout.pack();
+		backButtonLayout.setBackground((Drawable) null);
+		stage.addActor(backButtonLayout);
 	}
 
 	public GameOverScreen(AbstractGame game, int reward, int currentFunds) {
@@ -57,6 +90,8 @@ public class GameOverScreen extends TextArea {
 
 		currentFundsString = "Total Funds: " + currentFunds;
 		totalFundsButton.setText(currentFundsString);
+
+		stage.act();
 	}
 
 	@Override
@@ -78,6 +113,7 @@ public class GameOverScreen extends TextArea {
 			info.draw(batch, bmf, renderer);
 		}
 
+		stage.draw();
 	}
 
 	private void populateScoreInfoList() {
@@ -127,7 +163,17 @@ public class GameOverScreen extends TextArea {
 
 	@Override
 	public boolean onTouchDown(float x, float y, int pointer, int button) {
-		return false;
+		return stage.touchDown((int) x, (int) y, pointer, button);
+	}
+
+	@Override
+	public boolean onTouchDragged(float x, float y, int pointer) {
+		return stage.touchDragged((int) x, (int) y, pointer);
+	}
+
+	@Override
+	public boolean onTouchUp(float x, float y, int pointer, int button) {
+		return stage.touchUp((int) x, (int) y, pointer, button);
 	}
 
 }
