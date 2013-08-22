@@ -37,6 +37,7 @@ public class TeamSetupScreen extends TextArea {
 	private Skin skin;
 	private Stage stage;
 	private Texture upIconTexture;
+	private BitmapFont bmf;
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -57,6 +58,8 @@ public class TeamSetupScreen extends TextArea {
 
 	SelectBox aiTeamSelection;
 
+	StatsDisplay sd;
+
 	private PlayerDataSource dataSource;
 
 	float resolutionX = Game.VIRTUAL_SCREEN_WIDTH / 2;
@@ -74,6 +77,9 @@ public class TeamSetupScreen extends TextArea {
 	public void create() {
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		stage = new Stage(resolutionX, resolutionY, false);
+
+		bmf = new BitmapFont(true);
+		bmf.scale(.5f);
 		Gdx.input.setInputProcessor(stage);
 
 		TextureRegion upIconUpRegion = new TextureRegion(new Texture(
@@ -240,6 +246,9 @@ public class TeamSetupScreen extends TextArea {
 		aiPlayerLayout.setPosition(0,
 				paddingLayout.getY() - aiPlayerLayout.getHeight());
 
+		sd = new StatsDisplay(fieldedPlayersList.get(1), 0,
+				Game.VIRTUAL_SCREEN_HEIGHT * 2 / 3, resolutionX / 2, 300, false);
+
 		stage.addActor(playersLayout);
 		stage.addActor(buttonsLayout);
 		stage.addActor(paddingLayout);
@@ -369,7 +378,7 @@ public class TeamSetupScreen extends TextArea {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch, BitmapFont unusedBmf,
+	public void draw(SpriteBatch batch, BitmapFont bmf,
 			ShapeRenderer renderer) {
 
 		Gdx.gl.glEnable(GL10.GL_BLEND);
@@ -379,7 +388,9 @@ public class TeamSetupScreen extends TextArea {
 		renderer.end();
 		Gdx.gl.glDisable(GL10.GL_BLEND);
 
+		sd.draw(batch, bmf);
 		stage.draw();
+
 		// Table.drawDebug(stage);
 		// Window.drawDebug(stage);
 
