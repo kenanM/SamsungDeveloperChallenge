@@ -406,13 +406,13 @@ public class TeamSetupScreen extends TextArea {
 				Gdx.app.log("Team Setup", "slider: " + slider.getValue());
 
 				float value = slider.getValue();
-				if (value == 0) {
+				if (value == 1) {
 					labelAIDifficulty.setText("Easy");
 					labelAIDifficulty.setColor(easyLabelColour);
-				} else if (value == 1) {
+				} else if (value == 2) {
 					labelAIDifficulty.setText("Medium");
 					labelAIDifficulty.setColor(medLabelColour);
-				} else if (value == 2) {
+				} else if (value == 3) {
 					labelAIDifficulty.setText("Hard");
 					labelAIDifficulty.setColor(hardLabelColour);
 				}
