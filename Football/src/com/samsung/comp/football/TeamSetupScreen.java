@@ -47,6 +47,8 @@ public class TeamSetupScreen extends TextArea {
 
 	private Rectangle overlayBackground = new Rectangle(0, 0,
 			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 6);
+	
+	TextField teamNameField;
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -80,11 +82,24 @@ public class TeamSetupScreen extends TextArea {
 	Button backButton;
 	Button startButton;
 
+	TeamSetupListener listener;
+
+
+	// Remove
 	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource) {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
 		create();
+	}
+
+	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource,
+			TeamSetupListener listener) {
+		this.game = game;
+		this.skin = game.skin;
+		this.dataSource = dataSource;
+		create();
+		this.listener = listener;
 	}
 
 	public void create() {
@@ -149,8 +164,8 @@ public class TeamSetupScreen extends TextArea {
 			throw new NullPointerException("No team found for the person");
 		}
 
-		TextField textfield = new TextField(teamName, skin);
-		textfield.setMessageText("Team Name");
+		teamNameField = new TextField(teamName, skin);
+		teamNameField.setMessageText("Team Name");
 
 		benchedPlayersListMenu = new List(benchedPlayersList.toArray(), skin);
 		fieldedPlayersListMenu = new List(fieldedPlayersList.toArray(), skin);
@@ -204,7 +219,7 @@ public class TeamSetupScreen extends TextArea {
 		playersLayout.add(labelTitle).colspan(2);
 
 		playersLayout.row().fillX().expandX();
-		playersLayout.add(textfield).minWidth(25).expandX().fillX().colspan(2);
+		playersLayout.add(teamNameField).minWidth(25).expandX().fillX().colspan(2);
 
 		playersLayout.row();
 		playersLayout.add("Fielded Players");
@@ -317,7 +332,7 @@ public class TeamSetupScreen extends TextArea {
 		stage.addActor(backButtonLayout);
 		stage.addActor(startButtonLayout);
 
-		textfield.setTextFieldListener(new TextFieldListener() {
+		teamNameField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				if (key == '\n')
 					textField.getOnscreenKeyboard().show(false);
@@ -327,6 +342,12 @@ public class TeamSetupScreen extends TextArea {
 		backButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				game.backButtonPressed();
+			}
+		});
+
+		startButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				hackNotify();
 			}
 		});
 
@@ -486,6 +507,32 @@ public class TeamSetupScreen extends TextArea {
 			}
 
 		});
+	}
+	
+	private void hackNotify() {
+		// Can't call keyword this from inner class
+		listener.onStartButtonPressed(this);
+	}
+
+	public java.util.List<Player> getSelectedFieldedPlayers() {
+		return new ArrayList<Player>(fieldedPlayersList);
+	}
+
+	public Player getSelectedFieldedPlayer() {
+		int selectedPlayerIndex = fieldedPlayersListMenu.getSelectedIndex();
+
+		return selectedPlayerIndex == 0 ? null : fieldedPlayersList
+				.get(selectedPlayerIndex);
+	}
+
+	public Team getSelectedAITeam() {
+		int selectedAITeamIndex = aiTeamSelection.getSelectionIndex();
+		return selectedAITeamIndex == 0 ? null : aiTeamsList
+				.get(selectedAITeamIndex);
+	}
+
+	public String getTeamName() {
+		return teamNameField.getText();
 	}
 
 	@Override
