@@ -1678,13 +1678,21 @@ public abstract class AbstractGame implements ApplicationListener,
 			return false;
 		}
 
+		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
+
 		if (getGameState() == GameState.PAUSED
 				|| gameState == GameState.FINISHED) {
+
+			// TODO: Hack: need a better way of handling different coordinates
+			// bewteen screens
+			if (textArea instanceof PauseMenu) {
+				textArea.onTouchDown(point.x, point.y, pointer, button);
+				return true;
+			}
+
 			textArea.onTouchDown(screenX, screenY, pointer, button);
 			return true;
 		}
-
-		Vector2 point = translateInputToField(new Vector2(screenX, screenY));
 
 		if (getStatsRectangle(positionStatsAtTop) != null
 				&& getStatsRectangle(positionStatsAtTop).contains(point.x,
