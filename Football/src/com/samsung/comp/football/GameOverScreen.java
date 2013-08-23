@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -40,7 +41,9 @@ public class GameOverScreen extends TextArea {
 	private Skin skin;
 	private Stage stage;
 
-	TextButton backButton;
+	private TextButton backButton;
+	private String title = "Full-Time";
+	private Rectangle titleRectangle;
 
 	public GameOverScreen(final AbstractGame game, int reward) {
 		this.game = game;
@@ -101,13 +104,34 @@ public class GameOverScreen extends TextArea {
 	public void draw(SpriteBatch batch, BitmapFont unusedBmf,
 			ShapeRenderer renderer) {
 
+		if (titleRectangle == null) {
+			titleRectangle = new Rectangle(X_OFFSET, 10,
+					Game.VIRTUAL_SCREEN_WIDTH - 2 * X_OFFSET,
+					bmf.getBounds(title).height + 2 * 10);
+		}
+
 		Gdx.gl.glEnable(GL10.GL_BLEND);
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
 		renderer.rect(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
 				Game.VIRTUAL_SCREEN_HEIGHT / 2);
+		renderer.rect(titleRectangle.x, titleRectangle.y, titleRectangle.width,
+				titleRectangle.height);
+		renderer.end();
+
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(1, 1, 1, 1f);
+		renderer.rect(titleRectangle.x, titleRectangle.y, titleRectangle.width,
+				titleRectangle.height);
 		renderer.end();
 		Gdx.gl.glDisable(GL10.GL_BLEND);
+
+
+		batch.begin();
+		bmf.draw(batch, title,
+				Game.VIRTUAL_SCREEN_WIDTH / 2 - bmf.getBounds(title).width / 2,
+				20);
+		batch.end();
 
 		if (scoreInfoButtons == null) {
 			populateScoreInfoList();
