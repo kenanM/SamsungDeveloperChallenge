@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -41,6 +44,9 @@ public class TeamSetupScreen extends TextArea {
 	private Color medLabelColour = new Color(0.12f, 0.51f, .95f, 1f);
 	private Color easyLabelColour = new Color(0f, 1f, 0f, 1f);
 	private Color buttonColour = new Color(1f, 1f, 1f, .8f);
+
+	private Rectangle overlayBackground = new Rectangle(0, 0,
+			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 6);
 
 	java.util.List<Player> fieldedPlayersList;
 	java.util.List<Player> benchedPlayersList;
@@ -492,6 +498,16 @@ public class TeamSetupScreen extends TextArea {
 	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
 		statsDisplayAreaLeft.draw(batch, bmf, renderer);
 		statsDisplayAreaRight.draw(batch, bmf, renderer);
+
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
+		renderer.rect(overlayBackground.x, overlayBackground.y,
+				overlayBackground.width, overlayBackground.height);
+
+		renderer.end();
+		Gdx.gl.glDisable(GL10.GL_BLEND);
+
 		stage.draw();
 	}
 
