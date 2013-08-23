@@ -92,10 +92,7 @@ public class StatsDisplay extends Rectangle {
 
 		renderer.begin(ShapeType.Line);
 		renderer.setColor(0f, 0f, 0f, 1f);
-		renderer.line(x, y, 0, x + width, y, 0);
-		renderer.line(x, y, 0, x, y + height, 0);
-		renderer.line(x + width, y, 0, x + width, y + height, 0);
-		renderer.line(x, y + height, 0, x + width, y + height, 0);
+		renderer.rect(x, y, width, height);
 		renderer.end();
 		Gdx.gl.glDisable(GL10.GL_BLEND);
 
