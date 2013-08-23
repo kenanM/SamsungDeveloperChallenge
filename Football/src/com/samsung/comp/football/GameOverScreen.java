@@ -114,7 +114,7 @@ public class GameOverScreen extends TextArea {
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(0.27f, 0.27f, 0.35f, 0.70f);
 		renderer.rect(0, 0, Game.VIRTUAL_SCREEN_WIDTH,
-				Game.VIRTUAL_SCREEN_HEIGHT / 2);
+				Game.VIRTUAL_SCREEN_HEIGHT);
 		renderer.rect(titleRectangle.x, titleRectangle.y, titleRectangle.width,
 				titleRectangle.height);
 		renderer.end();
