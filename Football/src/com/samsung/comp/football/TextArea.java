@@ -78,6 +78,10 @@ public class TextArea extends Rectangle {
 		return false;
 	}
 
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
 	public void setText(String text) {
 		this.text = text;
 	}

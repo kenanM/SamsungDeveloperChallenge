@@ -150,7 +150,7 @@ public class TeamSetupScreen extends TextArea {
 
 		String teamName = "Unnamed";
 		if (playerTeam != null) {
-			playerTeam.getTeamName();
+			teamName = playerTeam.getTeamName();
 		} else {
 			Gdx.app.error("GameDB", "No team found for the person");
 			throw new NullPointerException("No team found for the person");
@@ -324,8 +324,9 @@ public class TeamSetupScreen extends TextArea {
 
 		teamNameField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
-				if (key == '\n')
+				if (key == '\n') {
 					textField.getOnscreenKeyboard().show(false);
+				}
 			}
 		});
 
@@ -575,6 +576,11 @@ public class TeamSetupScreen extends TextArea {
 	@Override
 	public boolean onTouchUp(float x, float y, int pointer, int button) {
 		return stage.touchUp((int) x, (int) y, pointer, button);
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return stage.keyTyped(character);
 	}
 
 }

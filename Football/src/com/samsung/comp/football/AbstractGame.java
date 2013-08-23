@@ -1660,6 +1660,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public boolean keyTyped(char character) {
+		textArea.keyTyped(character);
 		return false;
 	}
 
