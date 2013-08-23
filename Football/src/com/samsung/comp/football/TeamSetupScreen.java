@@ -62,7 +62,7 @@ public class TeamSetupScreen extends TextArea {
 	List benchedPlayersListMenu;
 	List fieldedPlayersListMenu;
 
-	Slider slider;
+	final Slider slider;
 	Label labelTeamDifficulty;
 	Label labelAIDifficulty;
 
@@ -90,6 +90,7 @@ public class TeamSetupScreen extends TextArea {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
+		slider = new Slider(1, 3, 1, false, skin);
 		create();
 	}
 
@@ -98,6 +99,7 @@ public class TeamSetupScreen extends TextArea {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
+		slider = new Slider(1, 3, 1, false, skin);
 		create();
 		this.listener = listener;
 	}
@@ -129,7 +131,7 @@ public class TeamSetupScreen extends TextArea {
 		Label labelTitle = new Label("Team Setup", skin);
 
 		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
-				.getAllPlayers(1);
+				.getAllPlayers(1, true);
 
 		fieldedPlayersList = new ArrayList<Player>();
 		benchedPlayersList = new ArrayList<Player>();
@@ -204,8 +206,6 @@ public class TeamSetupScreen extends TextArea {
 
 		aiTeamSelection = new SelectBox(
 				aiTeamNamesList.toArray(new String[] {}), skin);
-
-		final Slider slider = new Slider(0, 2, 1, false, skin);
 
 		labelTeamDifficulty = new Label("Amateurs", skin);
 		labelTeamDifficulty.setColor(easyLabelColour);
@@ -521,14 +521,18 @@ public class TeamSetupScreen extends TextArea {
 	public Player getSelectedFieldedPlayer() {
 		int selectedPlayerIndex = fieldedPlayersListMenu.getSelectedIndex();
 
-		return selectedPlayerIndex == 0 ? null : fieldedPlayersList
+		return selectedPlayerIndex == -1 ? null : fieldedPlayersList
 				.get(selectedPlayerIndex);
 	}
 
 	public Team getSelectedAITeam() {
 		int selectedAITeamIndex = aiTeamSelection.getSelectionIndex();
-		return selectedAITeamIndex == 0 ? null : aiTeamsList
+		return selectedAITeamIndex == -1 ? null : aiTeamsList
 				.get(selectedAITeamIndex);
+	}
+
+	public float getSelectedAIDifficulty() {
+		return slider.getValue();
 	}
 
 	public String getTeamName() {

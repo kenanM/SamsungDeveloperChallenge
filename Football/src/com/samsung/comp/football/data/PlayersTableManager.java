@@ -134,8 +134,12 @@ public class PlayersTableManager {
 	/**
 	 * Extract a Player object from a cursor pointing at a row in the player
 	 * table
+	 * 
+	 * @param returnAsPlayer
+	 *            If true, returns object as instance of Player. Otherwise
+	 *            object is returned as its subclass.
 	 */
-	private static Player cursorToPlayer(Cursor cursor) {
+	private static Player cursorToPlayer(Cursor cursor, boolean returnAsPlayer) {
 		String name = cursor.getString(cursor
 				.getColumnIndex(PLAYER_NAME_COLUMN_NAME));
 		boolean purchased = (cursor.getInt(cursor
@@ -156,13 +160,43 @@ public class PlayersTableManager {
 
 		int cost = cursor.getInt(cursor.getColumnIndex(COST_COLUMN_NAME));
 
-		if (goalie) {
+		if (goalie && !returnAsPlayer) {
 			return new Goalie(id, name, purchased, shootSpeed, runSpeed,
 					tackleSkill, savingSkill, teamId, cost);
 		} else {
 			return new Player(id, name, purchased, shootSpeed, runSpeed,
 					tackleSkill, savingSkill, teamId, cost);
 		}
+	}
+
+	/**
+	 * Extract a Goalie object from a cursor pointing at a row in the player
+	 * table
+	 */
+	private static Goalie cursorToGoalie(Cursor cursor) {
+		String name = cursor.getString(cursor
+				.getColumnIndex(PLAYER_NAME_COLUMN_NAME));
+		boolean purchased = (cursor.getInt(cursor
+				.getColumnIndex(PURCHASED_COLUMN_NAME)) > 0);
+		float shootSpeed = cursor.getFloat(cursor
+				.getColumnIndex(SHOOT_SPEED_COLUMN_NAME));
+		float runSpeed = cursor.getFloat(cursor
+				.getColumnIndex(RUN_SPEED_COLUMN_NAME));
+		float tackleSkill = cursor.getFloat(cursor
+				.getColumnIndex(TACKLE_SKILL_COLUMN_NAME));
+		float savingSkill = cursor.getFloat(cursor
+				.getColumnIndex(SAVING_SKILL_COLUMN_NAME));
+		int teamId = cursor.getInt(cursor.getColumnIndex(TEAM_ID_COLUMN_NAME));
+		int id = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
+
+		boolean goalie = cursor.getInt(cursor
+				.getColumnIndex(GOALIE_COLUMN_NAME)) > 0;
+
+		int cost = cursor.getInt(cursor.getColumnIndex(COST_COLUMN_NAME));
+
+		return new Goalie(id, name, purchased, shootSpeed, runSpeed,
+				tackleSkill, savingSkill, teamId, cost);
+
 	}
 
 	public long insertPlayer(Player player) {
@@ -184,7 +218,7 @@ public class PlayersTableManager {
 		LinkedList<Player> result = new LinkedList<Player>();
 
 		while (cursor.moveToNext() && cursor != null) {
-			result.add(cursorToPlayer(cursor));
+			result.add(cursorToPlayer(cursor, true));
 		}
 
 		Log.v("GameDB", "Found a total of " + result.size()
@@ -204,7 +238,7 @@ public class PlayersTableManager {
 				TEAM_ID_COLUMN_NAME + "=? and " + GOALIE_COLUMN_NAME + " =1",
 				new String[] { Integer.toString(teamID) }, null, null, null);
 
-		return cursor.moveToFirst() ? (Goalie) cursorToPlayer(cursor) : null;
+		return cursor.moveToFirst() ? cursorToGoalie(cursor) : null;
 	}
 
 	/**
@@ -222,7 +256,7 @@ public class PlayersTableManager {
 		ArrayList<Goalie> result = new ArrayList<Goalie>();
 
 		while (cursor.moveToNext() && cursor != null) {
-			result.add((Goalie) cursorToPlayer(cursor));
+			result.add(cursorToGoalie(cursor));
 		}
 
 		return result;
@@ -233,9 +267,12 @@ public class PlayersTableManager {
 	 * 
 	 * @param teamID
 	 *            the team to return
+	 * @param returnAsPlayer
+	 *            If true, returns all objects as instances of Player. Otherwise
+	 *            each object is returned as its subclass.
 	 * @return
 	 */
-	public List<Player> getAllPlayers(int teamID) {
+	public List<Player> getAllPlayers(int teamID, boolean returnAsPlayer) {
 		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
 				TEAM_ID_COLUMN_NAME + "=?",
 				new String[] { Integer.toString(teamID) }, null, null, null);
@@ -243,7 +280,7 @@ public class PlayersTableManager {
 		LinkedList<Player> result = new LinkedList<Player>();
 
 		while (cursor.moveToNext() && cursor != null) {
-			result.add(cursorToPlayer(cursor));
+			result.add(cursorToPlayer(cursor, true));
 		}
 
 		Log.v("GameDB", "Found a team of " + result.size()
