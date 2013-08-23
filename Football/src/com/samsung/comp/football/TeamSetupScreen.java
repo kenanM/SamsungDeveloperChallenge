@@ -84,16 +84,6 @@ public class TeamSetupScreen extends TextArea {
 
 	TeamSetupListener listener;
 
-
-	// Remove
-	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource) {
-		this.game = game;
-		this.skin = game.skin;
-		this.dataSource = dataSource;
-		slider = new Slider(1, 3, 1, false, skin);
-		create();
-	}
-
 	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource,
 			TeamSetupListener listener) {
 		this.game = game;
@@ -364,6 +354,7 @@ public class TeamSetupScreen extends TextArea {
 				Player selectedPlayer = fieldedPlayersList
 						.get(selectedPlayerIndex);
 				statsDisplayAreaLeft.setPlayer(selectedPlayer);
+				hackNotifyPlayerChanged(selectedPlayer, selectedPlayerIndex);
 			}
 		});
 
@@ -446,6 +437,8 @@ public class TeamSetupScreen extends TextArea {
 
 				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
 				fieldedPlayersListMenu.setSelectedIndex(selectedIndex + 1);
+
+				hackNotifyPlayerChanged(selectedPlayer, selectedIndex + 1);
 			}
 		});
 
@@ -466,6 +459,8 @@ public class TeamSetupScreen extends TextArea {
 
 				fieldedPlayersListMenu.setItems(fieldedPlayersList.toArray());
 				fieldedPlayersListMenu.setSelectedIndex(selectedIndex - 1);
+
+				hackNotifyPlayerChanged(selectedPlayer, selectedIndex - 1);
 			}
 		});
 
@@ -512,6 +507,11 @@ public class TeamSetupScreen extends TextArea {
 	private void hackNotify() {
 		// Can't call keyword this from inner class
 		listener.onStartButtonPressed(this);
+	}
+
+	private void hackNotifyPlayerChanged(Player player, int index) {
+		// Can't call keyword this from inner class
+		listener.onSelectedPlayerChanged(this, player, index);
 	}
 
 	public java.util.List<Player> getSelectedFieldedPlayers() {

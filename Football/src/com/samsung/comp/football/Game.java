@@ -54,13 +54,23 @@ public class Game extends AbstractGame {
 
 		controlsActive = true;
 
+		selectedPlayer = bluePlayers.get(0);
 		textArea = new TeamSetupScreen(this, actionResolver.openDatasource(),
 				new TeamSetupListener() {
 					@Override
 					public void onStartButtonPressed(TeamSetupScreen screen) {
 						completeAssembly(screen);
 					}
+
+					@Override
+					public void onSelectedPlayerChanged(TeamSetupScreen screen,
+							Player player, int index) {
+						selectedPlayer = getAllPlayers(TeamColour.BLUE).get(
+								index);
+						selectTextureStateTime = 0f;
+					}
 				});
+
 
 		// Finished state draws the text area object
 		gameState = GameState.FINISHED;
@@ -226,9 +236,11 @@ public class Game extends AbstractGame {
 		for (int i = 0; i < 4; i++) {
 			redPlayers.add(new Player(0, 0, TeamColour.RED));
 			bluePlayers.add(new Player(0, 0, TeamColour.BLUE));
+			bluePlayers.get(i).initialize(TeamColour.BLUE);
 		}
 		redGoalie = new Goalie(0, 0, TeamColour.RED, this, 0);
 		blueGoalie = new Goalie(0, 0, TeamColour.BLUE, this, 0);
+		blueGoalie.initialize(this, TeamColour.BLUE);
 		
 		setStartingPositions(TeamColour.RED);
 		

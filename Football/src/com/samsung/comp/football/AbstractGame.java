@@ -401,6 +401,13 @@ public abstract class AbstractGame implements ApplicationListener,
 					false, true);
 		}
 
+		if (gameState == GameState.FINISHED) {
+			Player selPlayer = this.selectedPlayer;
+			if (selPlayer != null) {
+				selPlayer.drawSelect(batch, selectTextureStateTime);
+			}
+		}
+
 		if (gameState == GameState.INPUT) {
 
 			Player highlightedPlayer = cursor.getHighlightedPlayer();
@@ -1118,6 +1125,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		Gdx.app.log("Game", "Beginning execution");
 		elapsedRoundTime = 0;
 		this.gameState = GameState.EXECUTION;
+		selectedPlayer = null;
+		cursor.setHighlightedPlayer(null);
 		bar.setPositionToUp();
 	}
 
@@ -1308,8 +1317,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		} else {
 			gameStateToGoIntoWhenBackButtonPressed = gameState;
 			gameState = GameState.PAUSED;
-			textArea = new TeamSetupScreen(this,
-					actionResolver.openDatasource());
+			textArea = new PauseMenu();
 		}
 		Gdx.app.log("GameState", gameState.toString());
 
