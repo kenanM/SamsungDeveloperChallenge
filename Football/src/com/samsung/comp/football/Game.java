@@ -9,6 +9,7 @@ import com.samsung.comp.events.MovementCompletedListener;
 import com.samsung.comp.events.OpponentEntersProximityListener;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Utils;
+import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.data.PlayerDataSource;
@@ -37,12 +38,9 @@ public class Game extends AbstractGame {
 		createRenderingObjects();
 		createGoals();
 
-		createTeams();
-		createNewPlayersAndBall();
-		// Do we really want this ?
-		randomiseStats(getAllPlayers());
 
-		playerDatabase.close();
+		createNewPlayersAndBall();
+
 
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
@@ -51,30 +49,21 @@ public class Game extends AbstractGame {
 				: remainingMatchTime;
 
 		baseReward = 20000;
-		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
-		Gdx.app.log("GameOver", "Game Length Multiplier: x"
-				+ gameLengthScoreMultiplier);
-		// aiDifficultyScoreMultiplier = ;
-		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
 
-		ai = new AI(this, team2);
-		createMovementCompletedListeners(team2);
-		createOpponentEntersProximityListeners(team2);
 
-		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
-
-			@Override
-			public void onBallOwnerSet(Ball ball, Player newOwner) {
-				if (gameState == GameState.EXECUTION) {
-					ai.getComputerActions();
-				}
-			}
-		});
 
 		controlsActive = true;
 
+		textArea = new TeamSetupScreen(this, actionResolver.openDatasource(),
+				new TeamSetupListener() {
+					@Override
+					public void onStartButtonPressed(TeamSetupScreen screen) {
+						completeAssembly(screen);
+					}
+				});
 
-		beginInputStage();
+		// Finished state draws the text area object
+		gameState = GameState.FINISHED;
 	}
 
 	private float calculateTeamDifficultyMultiplier() {
@@ -232,36 +221,58 @@ public class Game extends AbstractGame {
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
-		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(2);
+		redPlayers = new ArrayList<Player>();
+		bluePlayers = new ArrayList<Player>();
+		for (int i = 0; i < 4; i++) {
+			redPlayers.add(new Player(0, 0, TeamColour.RED));
+			bluePlayers.add(new Player(0, 0, TeamColour.BLUE));
+		}
+		redGoalie = new Goalie(0, 0, TeamColour.RED, this, 0);
+		blueGoalie = new Goalie(0, 0, TeamColour.BLUE, this, 0);
+		
+		setStartingPositions(TeamColour.RED);
+		
+		soundManager.play(whistleBlow);
+	}
+
+	private void loadPlayersFromDB(List<Player> fieldedPlayers, int aiTeamID) {
+		bluePlayers = new ArrayList<Player>();
+		for (int i = 0; i < 5; i++) {
+			Player p = fieldedPlayers.get(i);
+			if (i == 4) {
+				blueGoalie = new Goalie(p.getID(), p.getName(), true,
+						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
+						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+				blueGoalie.initialize(this, TeamColour.BLUE);
+			} else {
+				bluePlayers.add(p);
+				p.initialize(TeamColour.BLUE);
+			}
+		}
+
+		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(
+				aiTeamID);
 		for (Player player: redPlayers){
 			player.initialize(TeamColour.RED);
 		}
-		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(2);
+		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(aiTeamID);
 		redGoalie.initialize(this, TeamColour.RED);
+	}
 
-
-		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
-		for (Player player: bluePlayers){
-			player.initialize(TeamColour.BLUE);
-		}
-		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
-		blueGoalie.initialize(this, TeamColour.BLUE);
-		
-		
-
+	private void coinFlipForStart() {
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
 		} else {
 			setStartingPositions(TeamColour.RED);
 		}
-
-		soundManager.play(whistleBlow);
 	}
 
-	private void createTeams() {
+	private void createTeams(String humanTeamName) {
 		Gdx.app.log("GameDB", "Assigning teams...");
 		teamA = playerDatabase.getTeamsTableManager().getTeam(1);
 		Gdx.app.log("GameDB", "Suceeded assigning Team A");
+		teamA.setTeamName(humanTeamName);
+		playerDatabase.getTeamsTableManager().alterTeam(teamA);
 		teamB = playerDatabase.getTeamsTableManager().getTeam(2);
 		Gdx.app.log("GameDB", "Suceeded assigning Team B");
 	}
@@ -297,6 +308,48 @@ public class Game extends AbstractGame {
 				}
 			});
 		}
+	}
+
+	public void completeAssembly(TeamSetupScreen screen) {
+
+		selectedPlayer = null;
+		cursor.setHighlightedPlayer(null);
+
+		String teamName = screen.getTeamName();
+		List<Player> fieldedPlayers = screen.getSelectedFieldedPlayers();
+		Team aiTeam = screen.getSelectedAITeam();
+		float aiDifficulty = screen.getSelectedAIDifficulty();
+
+		createTeams(teamName);
+		loadPlayersFromDB(fieldedPlayers, aiTeam.getTeamID());
+		coinFlipForStart();
+		createAI();
+
+		// Set reward multipliers
+		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+		aiDifficultyScoreMultiplier = aiDifficulty;
+		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
+		Gdx.app.log("GameOver", "Game Length Multiplier: x"
+				+ gameLengthScoreMultiplier);
+
+		beginInputStage();
+		playerDatabase.close();
+	}
+
+	private void createAI() {
+		ai = new AI(this, team2);
+		createMovementCompletedListeners(team2);
+		createOpponentEntersProximityListeners(team2);
+
+		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
+
+			@Override
+			public void onBallOwnerSet(Ball ball, Player newOwner) {
+				if (gameState == GameState.EXECUTION) {
+					ai.getComputerActions();
+				}
+			}
+		});
 	}
 
 	@Override
