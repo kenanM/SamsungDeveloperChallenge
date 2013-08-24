@@ -101,6 +101,7 @@ public class MultiplayerGame extends AbstractGame {
 		Gdx.app.log("GameOver", "Game Length Multiplier: x"
 				+ gameLengthScoreMultiplier);
 
+		bar.setBarColor(blueColor);
 		currentTeam = TeamColour.BLUE;
 		beginInputStage();
 		playerDatabase.close();
