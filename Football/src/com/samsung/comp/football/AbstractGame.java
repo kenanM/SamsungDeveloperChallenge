@@ -126,7 +126,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected TeamColour team1;
 	protected TeamColour team2;
-	protected TeamColour currentTeam = TeamColour.BLUE;
+	protected TeamColour currentTeam;
 
 	protected AI ai;
 	protected TextArea textArea;
@@ -180,9 +180,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		createIteractiveObjects();
 		createUI();
 		createRenderingObjects();
-
-		team1 = TeamColour.BLUE;
-		team2 = TeamColour.RED;
 
 		controlsActive = true;
 
@@ -1088,76 +1085,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
-	/**
-	 * Depreciated.
-	 * 
-	 * @return team1
-	 */
-	public TeamColour getHumanColour() {
-		return team1;
-	}
-
-	/**
-	 * Depreciated if AI becomes constructed with a colour.
-	 */
-	public TeamColour getComputerColour() {
-		return team2;
-	}
-
 	public TeamColour getCurrentTeamColour() {
 		return currentTeam;
-	}
-
-	/**
-	 * depreciated Use getPlayers(TeamColour colour) instead
-	 * 
-	 * @return Team1's players
-	 */
-	public List<Player> getHumanPlayers() {
-		if (team1 == TeamColour.RED) {
-			return redPlayers;
-		} else {
-			return bluePlayers;
-		}
-	}
-
-	/**
-	 * depreciated Use getPlayers(TeamColour colour) instead
-	 * 
-	 * @return Team2's Players
-	 */
-	public List<Player> getComputerPlayers() {
-		if (team2 == TeamColour.RED) {
-			return redPlayers;
-		} else {
-			return bluePlayers;
-		}
-	}
-
-	/**
-	 * depreciated Use getGoalie(TeamColour colour) instead
-	 * 
-	 * @return Team1's Goalie
-	 */
-	public Player getHumanGoalie() {
-		if (team1 == TeamColour.RED) {
-			return redGoalie;
-		} else {
-			return blueGoalie;
-		}
-	}
-
-	/**
-	 * depreciated Use getGoalie(TeamColour colour) instead
-	 * 
-	 * @return Team2's Goalie
-	 */
-	public Player getComputerGoalie() {
-		if (team2 == TeamColour.RED) {
-			return redGoalie;
-		} else {
-			return blueGoalie;
-		}
 	}
 
 	public Bar getBar() {

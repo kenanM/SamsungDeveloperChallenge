@@ -25,9 +25,10 @@ public class MainApplication extends Activity {
 
 	boolean statusBarAtTop = false;
 	float roundTime = 5f;
-	float matchTime = 3 * 60;
+	float matchTime;
 	byte scoreLimit = -1;
-
+	boolean isBlueTeam;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,7 +63,11 @@ public class MainApplication extends Activity {
 				gameIntent.putExtra("Score_Limit", scoreLimit);
 				gameIntent.putExtra("Status_Bar_Top", statusBarAtTop);
 
-				showDialog(MainApplication.this, gameIntent).show();
+				selectMatchTime(MainApplication.this).show();
+				gameIntent.putExtra("Match_Time", matchTime);
+				selectTeamColour(MainApplication.this).show();
+				gameIntent.putExtra("Team_Colour", isBlueTeam);
+				startActivity(gameIntent);
 			}
 		});
 
@@ -76,8 +81,9 @@ public class MainApplication extends Activity {
 				multiplayerGameIntent.putExtra("Score_Limit", scoreLimit);
 				multiplayerGameIntent
 						.putExtra("Status_Bar_Top", statusBarAtTop);
-
-				showDialog(MainApplication.this, multiplayerGameIntent).show();
+				selectMatchTime(MainApplication.this).show();
+				multiplayerGameIntent.putExtra("Match_Time", matchTime);
+				startActivity(multiplayerGameIntent);
 			}
 		});
 
@@ -132,7 +138,7 @@ public class MainApplication extends Activity {
 		return super.onPrepareOptionsMenu(menu);
 	}
 
-	private AlertDialog showDialog(Context context, final Intent intent) {
+	private AlertDialog selectMatchTime(final MainApplication context) {
 		CharSequence[] options = { "One Minute", "Two Minutes", "Three Minutes" };
 		final float[] values = { 60f, 120f, 180f};
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -142,9 +148,25 @@ public class MainApplication extends Activity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int choice) {
-								intent.putExtra("Match_Time", values[choice]);
+								context.matchTime = values[choice];
 								dialog.dismiss();
-								startActivity(intent);
+							}
+						});
+		return builder.create();
+	}
+	
+	private AlertDialog selectTeamColour(final MainApplication context) {
+		CharSequence[] options = { "Blue Team", "Red Team"};
+		final boolean[] values = { true, false};
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("How long would you like to play for?")
+				.setSingleChoiceItems(options, -1,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int choice) {
+								context.isBlueTeam = values[choice];
+								dialog.dismiss();
 							}
 						});
 		return builder.create();

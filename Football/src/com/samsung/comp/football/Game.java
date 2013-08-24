@@ -12,15 +12,26 @@ import com.samsung.comp.football.data.PlayerDataSource;
 public class Game extends AbstractGame {
 
 	PlayerDataSource playerDatabase;
-	
-	public Game(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
-			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
+
+	public Game(PlayerDataSource playerDatabase, ActionResolver actionResolver,
+			float matchTime, float roundTime, boolean statusBarAtTop,
+			byte scoreLimit, TeamColour humanColour) {
 		this.playerDatabase = playerDatabase;
 		this.actionResolver = actionResolver;
 		this.remainingMatchTime = matchTime;
 		this.roundTime = roundTime;
 		this.positionUIBarAtTop = statusBarAtTop;
 		this.scoreLimit = scoreLimit;
+
+		if (humanColour == TeamColour.BLUE) {
+			team1 = TeamColour.BLUE;
+			team2 = TeamColour.RED;
+		} else {
+			team1 = TeamColour.RED;
+			team2 = TeamColour.BLUE;
+		}
+		this.currentTeam = humanColour;
+
 	}
 
 	@Override
@@ -38,10 +49,7 @@ public class Game extends AbstractGame {
 		// Do we really want this ?
 		randomiseStats(getAllPlayers());
 
-		team1 = TeamColour.BLUE;
-		team2 = TeamColour.RED;
-
-		ai = new AI(this);
+		ai = new AI(this, team2);
 		createMovementCompletedListeners(team2);
 
 		ball.addBallOwnerSetListener(new BallOwnerSetListener() {
@@ -149,22 +157,21 @@ public class Game extends AbstractGame {
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
 		redPlayers = playerDatabase.getPlayers(1);
-		for (Player player: redPlayers){
+		for (Player player : redPlayers) {
 			player.initialize(TeamColour.RED);
 		}
 		redGoalie = playerDatabase.getGoalie(1);
 		redGoalie.initialize(this, TeamColour.RED);
 
-
 		bluePlayers = playerDatabase.getPlayers(1);
-		for (Player player: bluePlayers){
+		for (Player player : bluePlayers) {
 			player.initialize(TeamColour.BLUE);
 		}
 		blueGoalie = playerDatabase.getGoalie(1);
 		blueGoalie.initialize(this, TeamColour.BLUE);
-		
+
 		playerDatabase.close();
-		
+
 		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
 			setStartingPositions(TeamColour.BLUE);
 		} else {
