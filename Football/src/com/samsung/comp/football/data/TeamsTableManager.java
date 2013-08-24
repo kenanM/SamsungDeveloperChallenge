@@ -144,14 +144,14 @@ public class TeamsTableManager {
 		ContentValues values = new ContentValues();
 		values.put(TEAM_ID_COLUMN_NAME, team.getTeamID());
 		values.put(TEAM_NAME_COLUMN_NAME, team.getTeamName());
-		values.put(PROFILE_COLUMN_NAME, team.getProfileID());
-		values.put(TEAM_DIFFICULTY_COLUMN_NAME, team.getDifficulty());
-		values.put(WIN_COUNT_COLUMN_NAME, team.getWins());
-		values.put(LOSS_COUNT_COLUMN_NAME, team.getLosses());
-		values.put(DRAW_COUNT_COLUMN_NAME, team.getDraws());
 
 		Log.v("GameDB", "team_id: " + team.getTeamID());
-		long id = database.replace(TEAMS_TABLE_NAME, null, values);
+		long id = database.update(
+				TEAMS_TABLE_NAME,
+				values,
+				"?=?",
+				new String[] { TEAM_ID_COLUMN_NAME,
+						String.valueOf(team.getTeamID()) });
 		Log.v("GameDB", "team replaced...row id =: " + id);
 	}
 
