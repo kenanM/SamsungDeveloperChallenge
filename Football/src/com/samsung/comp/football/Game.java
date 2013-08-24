@@ -56,7 +56,7 @@ public class Game extends AbstractGame {
 
 		selectedPlayer = bluePlayers.get(0);
 		textArea = new TeamSetupScreen(this, actionResolver.openDatasource(),
-				new TeamSetupListener() {
+				true, new TeamSetupListener() {
 					@Override
 					public void onStartButtonPressed(TeamSetupScreen screen) {
 						completeAssembly(screen);
@@ -70,7 +70,6 @@ public class Game extends AbstractGame {
 						selectTextureStateTime = 0f;
 					}
 				});
-
 
 		// Finished state draws the text area object
 		gameState = GameState.FINISHED;

@@ -60,7 +60,7 @@ public class MultiplayerGame extends AbstractGame {
 		currentTeam = TeamColour.BLUE;
 		selectedPlayer = bluePlayers.get(0);
 		textArea = new TeamSetupScreen(this, actionResolver.openDatasource(),
-				new TeamSetupListener() {
+				false, new TeamSetupListener() {
 					@Override
 					public void onStartButtonPressed(TeamSetupScreen screen) {
 						if (currentTeam == TeamColour.BLUE) {

@@ -85,16 +85,16 @@ public class TeamSetupScreen extends TextArea {
 	TeamSetupListener listener;
 
 	public TeamSetupScreen(AbstractGame game, PlayerDataSource dataSource,
-			TeamSetupListener listener) {
+			boolean showAI, TeamSetupListener listener) {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
 		slider = new Slider(1, 3, 1, false, skin);
-		create();
+		create(showAI);
 		this.listener = listener;
 	}
 
-	public void create() {
+	public void create(boolean showAI) {
 		stage = new Stage(resolutionX, resolutionY, false);
 
 		bmf = new BitmapFont(true);
@@ -289,8 +289,9 @@ public class TeamSetupScreen extends TextArea {
 		stage.addActor(playersLayout);
 		stage.addActor(buttonsLayout);
 		stage.addActor(paddingLayout);
-		stage.addActor(aiPlayerLayout);
-
+		if (showAI){
+			stage.addActor(aiPlayerLayout);
+		}
 		backButton = new TextButton("Back to menu", skin, "default");
 		startButton = new TextButton("Begin match!", skin, "default");
 
