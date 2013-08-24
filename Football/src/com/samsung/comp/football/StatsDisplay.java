@@ -28,7 +28,7 @@ public class StatsDisplay extends Rectangle {
 	Texture statShootIcon = new Texture(
 			Gdx.files.internal("icons/shootIcon.png"));
 	Texture statSavingIcon = new Texture(
-			Gdx.files.internal("icons/timerIcon.png"));
+			Gdx.files.internal("icons/savingIcon.png"));
 
 	public StatsDisplay(Player player, float x, float y, float width,
 			float height, boolean flip) {

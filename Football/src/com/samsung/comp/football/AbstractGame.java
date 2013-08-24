@@ -290,7 +290,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		statRunIcon = new Texture(Gdx.files.internal("icons/runIcon.png"));
 		statTackleIcon = new Texture(Gdx.files.internal("icons/tackleIcon.png"));
 		statShootIcon = new Texture(Gdx.files.internal("icons/shootIcon.png"));
-		statSavingIcon = new Texture(Gdx.files.internal("icons/timerIcon.png"));
+		statSavingIcon = new Texture(Gdx.files.internal("icons/savingIcon.png"));
 
 		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
