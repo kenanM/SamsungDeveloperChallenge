@@ -48,6 +48,8 @@ public class TutorialGame extends AbstractGame {
 
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
+		teamA = new Team(-1, 2, "Blue", 0);
+		teamB = new Team(-1, 1, "Red", 0);
 
 		remainingMatchTime = roundTime;
 
@@ -75,7 +77,7 @@ public class TutorialGame extends AbstractGame {
 			setupGoaliePhase(1.5f);
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			gameState = GameState.FINISHED;
-			Gdx.app.exit();
+			matchFinish();
 		} else {
 			beginInputStage();
 		}

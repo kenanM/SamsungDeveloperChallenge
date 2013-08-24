@@ -1043,7 +1043,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		// Add reward to DB
 		playerDatabase = actionResolver.openDatasource();
 		textArea = new GameOverScreen(this, reward, playerDatabase
-				.getProfilesTableManager().getProfile(2).getFunds());
+				.getProfilesTableManager().getProfile(userProfileID).getFunds());
 
 		int newFunds = playerDatabase.getProfilesTableManager()
 				.addFundsToProfile(userProfileID, reward);
