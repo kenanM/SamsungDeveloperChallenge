@@ -139,10 +139,10 @@ public class MultiplayerGame extends AbstractGame {
 			bluePlayers.get(1).setRotation(180);
 		} else {
 			bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
-			bluePlayers.get(0).y = Player.translatePlayerCoordinate(768);
+			bluePlayers.get(0).y = Player.translatePlayerCoordinate(640);
 
 			bluePlayers.get(1).x = Player.translatePlayerCoordinate(338);
-			bluePlayers.get(1).y = Player.translatePlayerCoordinate(640);
+			bluePlayers.get(1).y = Player.translatePlayerCoordinate(768);
 		}
 
 		if (centerTeam == TeamColour.RED) {
