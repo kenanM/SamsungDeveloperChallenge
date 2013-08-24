@@ -1039,17 +1039,14 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		gameState = GameState.FINISHED;
 		int reward = calculateRewardFunds();
-		textArea = new GameOverScreen(this, reward);
 
 		// Add reward to DB
 		playerDatabase = actionResolver.openDatasource();
+		textArea = new GameOverScreen(this, reward, playerDatabase
+				.getProfilesTableManager().getProfile(2).getFunds());
 
 		int newFunds = playerDatabase.getProfilesTableManager()
-				.addFundsToProfile(
-				userProfileID, reward);
-		
-		Gdx.app.log("GameDB", "Added reward of " + reward + ". New total = "
-				+ newFunds);
+				.addFundsToProfile(userProfileID, reward);
 
 		playerDatabase.close();
 	}

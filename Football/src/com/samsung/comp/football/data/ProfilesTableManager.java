@@ -113,13 +113,16 @@ public class ProfilesTableManager {
 	 */
 	public int addFundsToProfile(int profileID, int funds) {
 		Profile profile = getProfile(profileID);
+		int previousAmount = profile.getFunds();
 		profile.addFunds(funds);
-		database.update(
-				PROFILES_TABLE_NAME,
-				profileToValues(profile),
-				"?=?",
-				new String[] { PROFILE_ID_COLUMN_NAME,
-						String.valueOf(profileID) });
+		int rowsAffected = database.update(PROFILES_TABLE_NAME,
+				profileToValues(profile), PROFILE_ID_COLUMN_NAME + "="
+						+ profileID, null);
+
+		Log.v("GameDB", "Added reward of " + funds + " to " + "profile"
+				+ profileID + "'s " + previousAmount + ". New total = "
+				+ profile.getFunds() + ". Rows affected = " + rowsAffected);
+
 		return profile.getFunds();
 	}
 
