@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.samsung.comp.football.Actions.Utils;
+import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.data.PlayerDataSource;
@@ -37,7 +38,6 @@ public class MultiplayerGame extends AbstractGame {
 		createRenderingObjects();
 		createGoals();
 
-		createTeams();
 		createNewPlayersAndBall();
 
 		playerDatabase.close();
@@ -57,7 +57,100 @@ public class MultiplayerGame extends AbstractGame {
 
 		controlsActive = true;
 
+		currentTeam = TeamColour.BLUE;
+		selectedPlayer = bluePlayers.get(0);
+		textArea = new TeamSetupScreen(this, actionResolver.openDatasource(),
+				new TeamSetupListener() {
+					@Override
+					public void onStartButtonPressed(TeamSetupScreen screen) {
+						if (currentTeam == TeamColour.BLUE) {
+							switchPlayerAssembly(screen);
+						} else {
+							completeAssembly(screen);
+						}
+					}
+
+					@Override
+					public void onSelectedPlayerChanged(TeamSetupScreen screen,
+							Player player, int index) {
+						selectedPlayer = getAllPlayers(currentTeam).get(index);
+						selectTextureStateTime = 0f;
+					}
+				});
+
+		// Finished state draws the text area object
+		gameState = GameState.FINISHED;
+	}
+
+	private void completeAssembly(TeamSetupScreen screen) {
+
+		selectedPlayer = null;
+		cursor.setHighlightedPlayer(null);
+
+		String teamName = screen.getTeamName();
+		List<Player> fieldedPlayers = screen.getSelectedFieldedPlayers();
+
+		// Create Team
+		teamB = new Team(-1, -1, teamName, -1);
+
+		loadPlayers(fieldedPlayers);
+		coinFlipForStart();
+
+		// Set reward multipliers
+		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+		Gdx.app.log("GameOver", "Game Length Multiplier: x"
+				+ gameLengthScoreMultiplier);
+
+		currentTeam = TeamColour.BLUE;
 		beginInputStage();
+		playerDatabase.close();
+	}
+
+	private void switchPlayerAssembly(TeamSetupScreen screen) {
+
+		selectedPlayer = redPlayers.get(0);
+		cursor.setHighlightedPlayer(null);
+
+		String teamName = screen.getTeamName();
+		List<Player> fieldedPlayers = screen.getSelectedFieldedPlayers();
+
+		// Create Team
+		teamA = new Team(-1, -1, teamName, -1);
+
+		loadPlayers(fieldedPlayers);
+		setStartingPositions(TeamColour.BLUE);
+		currentTeam = TeamColour.RED;
+		bar.setBarColor(redColor);
+	}
+
+	private void loadPlayers(List<Player> fieldedPlayers) {
+		getPlayers(currentTeam).clear();
+		for (int i = 0; i < 5; i++) {
+			Player p = fieldedPlayers.get(i);
+			Player pCopy = new Player(p.getID(), p.getName(), true,
+					p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
+					p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+			if (i == 4) {
+				setGoalie(
+						currentTeam,
+						new Goalie(pCopy.getID(), pCopy.getName(), true, pCopy
+								.getShootSpeed(), pCopy.getRunSpeed(), pCopy
+								.getTackleSkill(), pCopy.getSavingSkill(),
+								pCopy.getTeamID(), pCopy.getPlayerCost()));
+				getGoalie(currentTeam).initialize(this, currentTeam);
+			} else {
+				getPlayers(currentTeam).add(pCopy);
+				pCopy.initialize(currentTeam);
+			}
+		}
+	}
+
+	private void coinFlipForStart() {
+		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
+			setStartingPositions(TeamColour.BLUE);
+		} else {
+			setStartingPositions(TeamColour.RED);
+		}
 	}
 
 	@Override
@@ -180,38 +273,22 @@ public class MultiplayerGame extends AbstractGame {
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
 
-		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
-		for (Player player : redPlayers) {
-			player.initialize(TeamColour.RED);
+		redPlayers = new ArrayList<Player>();
+		bluePlayers = new ArrayList<Player>();
+		for (int i = 0; i < 4; i++) {
+			redPlayers.add(new Player(0, 0, TeamColour.RED));
+			redPlayers.get(i).initialize(TeamColour.RED);
+			bluePlayers.add(new Player(0, 0, TeamColour.BLUE));
+			bluePlayers.get(i).initialize(TeamColour.BLUE);
 		}
-		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
+		redGoalie = new Goalie(0, 0, TeamColour.RED, this, 0);
 		redGoalie.initialize(this, TeamColour.RED);
-
-		bluePlayers = playerDatabase.getPlayersTableManager().getPlayers(1);
-		for (Player player : bluePlayers) {
-			player.initialize(TeamColour.BLUE);
-		}
-
-		blueGoalie = playerDatabase.getPlayersTableManager().getGoalie(1);
+		blueGoalie = new Goalie(0, 0, TeamColour.BLUE, this, 0);
 		blueGoalie.initialize(this, TeamColour.BLUE);
-
-		playerDatabase.close();
 		
-		if (Utils.randomFloat(rng, 0, 1) > 0.5) {
-			setStartingPositions(TeamColour.BLUE);
-		} else {
-			setStartingPositions(TeamColour.RED);
-		}
+		setStartingPositions(TeamColour.RED);
 
 		soundManager.play(whistleBlow);
-	}
-
-	private void createTeams() {
-		Gdx.app.log("GameDB", "Assigning teams...");
-		teamA = playerDatabase.getTeamsTableManager().getTeam(1);
-		Gdx.app.log("GameDB", "Suceeded assigning Team A");
-		teamB = playerDatabase.getTeamsTableManager().getTeam(1);
-		Gdx.app.log("GameDB", "Suceeded assigning Team B");
 	}
 
 	@Override

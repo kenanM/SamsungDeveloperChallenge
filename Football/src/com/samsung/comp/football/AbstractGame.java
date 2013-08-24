@@ -1190,11 +1190,19 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 	}
 
-	public Player getGoalie(TeamColour colour) {
+	public Goalie getGoalie(TeamColour colour) {
 		if (colour == TeamColour.RED) {
 			return redGoalie;
 		} else {
 			return blueGoalie;
+		}
+	}
+
+	public void setGoalie(TeamColour colour, Goalie newGoalie) {
+		if (colour == TeamColour.RED) {
+			redGoalie = newGoalie;
+		} else {
+			blueGoalie = newGoalie;
 		}
 	}
 
