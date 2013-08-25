@@ -37,6 +37,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".TitleScreen.PlayerStoreActivity"
+            android:label="Football"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".TitleScreen.InstructionsActivity"
             android:label="Football"
             android:screenOrientation="portrait" >
