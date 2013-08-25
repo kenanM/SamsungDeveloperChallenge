@@ -128,13 +128,13 @@ public class MultiplayerGame extends AbstractGame {
 		getPlayers(currentTeam).clear();
 		for (int i = 0; i < 5; i++) {
 			Player p = fieldedPlayers.get(i);
-			Player pCopy = new Player(p.getID(), p.getName(), true,
+			Player pCopy = new Player(p.getID(), p.getName(),
 					p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
 					p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
 			if (i == 4) {
 				setGoalie(
 						currentTeam,
-						new Goalie(pCopy.getID(), pCopy.getName(), true, pCopy
+						new Goalie(pCopy.getID(), pCopy.getName(), pCopy
 								.getShootSpeed(), pCopy.getRunSpeed(), pCopy
 								.getTackleSkill(), pCopy.getSavingSkill(),
 								pCopy.getTeamID(), pCopy.getPlayerCost()));

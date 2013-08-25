@@ -251,7 +251,7 @@ public class Game extends AbstractGame {
 		for (int i = 0; i < 5; i++) {
 			Player p = fieldedPlayers.get(i);
 			if (i == 4) {
-				blueGoalie = new Goalie(p.getID(), p.getName(), true,
+				blueGoalie = new Goalie(p.getID(), p.getName(),
 						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
 						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
 				blueGoalie.initialize(this, TeamColour.BLUE);
@@ -261,13 +261,21 @@ public class Game extends AbstractGame {
 			}
 		}
 
-		redPlayers = playerDatabase.getPlayersTableManager().getPlayers(
-				aiTeamID);
-		for (Player player: redPlayers){
-			player.initialize(TeamColour.RED);
+		List<Player> dbPlayers = playerDatabase.getPlayersTableManager()
+				.getPlayers(aiTeamID);
+		redPlayers = new ArrayList<Player>();
+		for (int i = 0; i < 5; i++) {
+			Player p = dbPlayers.get(i);
+			if (i == 4) {
+				redGoalie = new Goalie(p.getID(), p.getName(),
+						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
+						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+				redGoalie.initialize(this, TeamColour.RED);
+			} else {
+				redPlayers.add(p);
+				p.initialize(TeamColour.RED);
+			}
 		}
-		redGoalie = playerDatabase.getPlayersTableManager().getGoalie(aiTeamID);
-		redGoalie.initialize(this, TeamColour.RED);
 	}
 
 	private void coinFlipForStart() {

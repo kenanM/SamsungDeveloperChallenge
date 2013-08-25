@@ -65,7 +65,8 @@ public class TeamsTableManager {
 
 	private static void addDefaultTeams(SQLiteDatabase database) {
 
-		Team[] teams = { new Team(0, 2, "Unnamed", 1),
+		Team[] teams = { new Team(0, 2, "Unnamed Team", 1),
+				new Team(0, 1, "The Store", 1),
 				new Team(0, 1, "The Misfits", 1),
 				new Team(0, 1, "Team Brunel", 1),
 				new Team(0, 1, "Team Null", 1),

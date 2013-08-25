@@ -96,8 +96,7 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 
 		Label labelTitle = new Label("Player Store", skin);
 
-		teamPlayersList = dataSource.getPlayersTableManager()
-				.getAllPlayers(1, true);
+		teamPlayersList = dataSource.getPlayersTableManager().getPlayers(1);
 
 		storePlayersList = new ArrayList<Player>();
 

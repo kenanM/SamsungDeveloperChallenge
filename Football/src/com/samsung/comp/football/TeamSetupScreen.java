@@ -121,7 +121,7 @@ public class TeamSetupScreen extends TextArea {
 		Label labelTitle = new Label("Team Setup", skin);
 
 		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
-				.getAllPlayers(1, true);
+				.getPlayers(1);
 
 		fieldedPlayersList = new ArrayList<Player>();
 		benchedPlayersList = new ArrayList<Player>();

@@ -26,10 +26,10 @@ public class Goalie extends Player {
 	private AbstractGame game;
 
 	/* This is the constructor to call when creating from a database */
-	public Goalie(int id, String name, boolean purchased, float shootSpeed,
+	public Goalie(int id, String name, float shootSpeed,
 			float runSpeed, float tackleSkill, float savingSkill, int teamID,
 			int cost) {
-		super(id, name, purchased, shootSpeed, runSpeed, tackleSkill,
+		super(id, name, shootSpeed, runSpeed, tackleSkill,
 				savingSkill, teamID, cost);
 	}
 
