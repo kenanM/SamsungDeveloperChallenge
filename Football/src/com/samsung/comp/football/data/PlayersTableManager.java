@@ -288,5 +288,24 @@ public class PlayersTableManager {
 		return result;
 	}
 
+	public void updatePlayer(Player player) {
+		Log.v(PlayerDataSource.class.toString(), "updating player...ID = "
+				+ player.getID() + ", name =" + player.getName());
+
+		ContentValues values = new ContentValues();
+		values.put(PLAYER_NAME_COLUMN_NAME, player.getName());
+		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeed());
+		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeed());
+		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkill());
+		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkill());
+		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
+		values.put(COST_COLUMN_NAME, player.getPlayerCost());
+
+		long updateCount = database
+				.update(PLAYER_TABLE_NAME, values, "?=?", new String[] {
+						ID_COLUMN_NAME, String.valueOf(player.getID()) });
+		Log.v("GameDB", "Number of rows updated = " + updateCount);
+	}
+
 }
 
