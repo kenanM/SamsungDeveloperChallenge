@@ -17,6 +17,7 @@ public class PlayerDataSource {
 	private ProfilesTableManager profilesTableManager;
 	private TeamsTableManager teamsTableManager;
 	private PlayersTableManager playersTableManager;
+	private SquadsTableManager squadsTableManager;
 
 	public PlayerDataSource(Context context) {
 		helper = new PlayerDatabaseHelper(context);
@@ -27,13 +28,16 @@ public class PlayerDataSource {
 		database = helper.getWritableDatabase();
 
 		profilesTableManager = new ProfilesTableManager(database);
-		ProfilesTableManager.dropAndRecreate(database);
+		// ProfilesTableManager.dropAndRecreate(database);
 
 		teamsTableManager = new TeamsTableManager(database);
-		TeamsTableManager.dropAndRecreate(database);
+		// TeamsTableManager.dropAndRecreate(database);
 
 		playersTableManager = new PlayersTableManager(database);
-		PlayersTableManager.dropAndRecreate(database);
+		// PlayersTableManager.dropAndRecreate(database);
+
+		squadsTableManager = new SquadsTableManager(database);
+		// SquadsTableManager.dropAndRecreate(database);
 
 	}
 
@@ -53,5 +57,8 @@ public class PlayerDataSource {
 		return playersTableManager;
 	}
 
+	public SquadsTableManager getSquadsTableManager() {
+		return squadsTableManager;
+	}
 
 }
