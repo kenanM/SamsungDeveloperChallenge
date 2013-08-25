@@ -194,7 +194,37 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 		buyButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				// Get selected player
+				int selectedPlayerIndex = storePlayersMenu.getSelectedIndex();
+
+				if (selectedPlayerIndex == -1) {
+					return;
+				}
+
+				Player selectedPlayer = storePlayersList
+						.get(selectedPlayerIndex);
+
+				statsDisplayAreaLeft.setPlayer(selectedPlayer);
+
 				// Update to be in team
+
+				// Swap the players in the array lists
+				teamPlayersList.add(selectedPlayer);
+				storePlayersList.remove(selectedPlayer);
+
+				// Set the menus to the new array lists
+				teamPlayersMenu.setItems(teamPlayersList.toArray());
+				storePlayersMenu.setItems(storePlayersList.toArray());
+
+				// Set new selected indexes
+				teamPlayersMenu.setSelectedIndex(teamPlayersList.size() - 1);
+				if (storePlayersList.size() > 0) {
+					storePlayersMenu.setSelectedIndex(0);
+				}
+
+				// Update stats displays
+				statsDisplayAreaLeft.setPlayer(selectedPlayer);
+				statsDisplayAreaRight.setPlayer(null);
+
 			}
 		});
 
