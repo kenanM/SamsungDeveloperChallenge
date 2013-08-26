@@ -186,7 +186,12 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				- backButtonLayout.getHeight() - 10)
 				/ resolutionY;
 
-		statsDisplayAreaLeft = new StatsDisplay(teamPlayersList.get(0), 20,
+		Player leftPlayer = teamPlayersList.size() > 0 ? teamPlayersList.get(0)
+				: null;
+		Player rightPlayer = storePlayersList.size() > 0 ? storePlayersList
+				.get(0) : null;
+
+		statsDisplayAreaLeft = new StatsDisplay(leftPlayer, 20,
 				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * backButtonY
 						- statsDisplayHeight,
 				(Game.VIRTUAL_SCREEN_WIDTH / 2) - 20 * 2, statsDisplayHeight,
@@ -194,7 +199,7 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				statPoint5, statRunIcon, statShootIcon, statTackleIcon,
 				statSavingIcon);
 
-		statsDisplayAreaRight = new StatsDisplay(null,
+		statsDisplayAreaRight = new StatsDisplay(rightPlayer,
 				20 + Game.VIRTUAL_SCREEN_WIDTH / 2,
 				(Game.VIRTUAL_SCREEN_HEIGHT + 64) * backButtonY
 						- statsDisplayHeight,
