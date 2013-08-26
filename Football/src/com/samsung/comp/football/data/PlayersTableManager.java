@@ -83,8 +83,8 @@ public class PlayersTableManager {
 		Player[] players = {
 
 				// Player Store (Team ID 2)
-				new Player(0, "A", 530.0f, 150.0f, 80.0f, 420.0f, 2, 0),
-				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 0),
+				new Player(0, "A", 530.0f, 150.0f, 80.0f, 420.0f, 2, 30000),
+				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 20000),
 
 				// The Misfits (Team ID 3)
 				new Player(0, "Steve", 520.0f, 150.0f, 100.0f, 420.0f, 3, 2000),
@@ -116,7 +116,7 @@ public class PlayersTableManager {
 		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkill());
 		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkill());
 		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
-		values.put(COST_COLUMN_NAME, 0);
+		values.put(COST_COLUMN_NAME, player.getPlayerCost());
 		Log.v("db", "player's team_id: " + player.getTeamID());
 		return database.insert(PLAYER_TABLE_NAME, null, values);
 	}
