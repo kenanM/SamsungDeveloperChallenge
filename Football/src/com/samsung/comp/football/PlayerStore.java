@@ -122,8 +122,9 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 		rightScrollPane.setFlickScroll(true);
 		rightScrollPane.setColor(overlayColour);
 
-		fundsDisplay = dataSource.getProfilesTableManager()
+		currentFunds = dataSource.getProfilesTableManager()
 				.getProfile(humanProfileID).getFunds();
+		fundsDisplay = currentFunds;
 		fundsLabel = new Label(String.valueOf(fundsDisplay), skin);
 
 		Table playersLayout = new Table(skin);
@@ -220,8 +221,6 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				Player selectedPlayer = storePlayersList
 						.get(selectedPlayerIndex);
 
-				statsDisplayAreaLeft.setPlayer(selectedPlayer);
-
 				// Check person can afford the player
 				int playerCost = selectedPlayer.getPlayerCost();
 				if (currentFunds < playerCost) {
@@ -231,6 +230,13 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				}
 
 				// Update to be in team
+				selectedPlayer.setTeamID(humanTeamID);
+				dataSource.getPlayersTableManager()
+						.updatePlayer(selectedPlayer);
+
+				// Subtract funds from profile
+				dataSource.getProfilesTableManager().addFundsToProfile(
+						humanProfileID, -playerCost);
 
 				// Swap the players in the array lists
 				teamPlayersList.add(selectedPlayer);

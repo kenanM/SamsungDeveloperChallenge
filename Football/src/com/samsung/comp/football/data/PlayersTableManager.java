@@ -206,7 +206,7 @@ public class PlayersTableManager {
 	}
 
 	public void updatePlayer(Player player) {
-		Log.v(PlayerDataSource.class.toString(), "updating player...ID = "
+		Log.v("GameDB", "updating player...ID = "
 				+ player.getID() + ", name =" + player.getName());
 
 		ContentValues values = new ContentValues();
@@ -218,9 +218,9 @@ public class PlayersTableManager {
 		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
 		values.put(COST_COLUMN_NAME, player.getPlayerCost());
 
-		long updateCount = database
-				.update(PLAYER_TABLE_NAME, values, "?=?", new String[] {
-						ID_COLUMN_NAME, String.valueOf(player.getID()) });
+		long updateCount = database.update(PLAYER_TABLE_NAME, values,
+				ID_COLUMN_NAME + "=?",
+				new String[] { String.valueOf(player.getID()) });
 		Log.v("GameDB", "Number of rows updated = " + updateCount);
 	}
 

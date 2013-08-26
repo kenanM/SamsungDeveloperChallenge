@@ -212,6 +212,10 @@ public class Player extends Rectangle implements Followable {
 		return playerCost;
 	}
 
+	public void setTeamID(int teamID) {
+		this.teamID = teamID;
+	}
+
 	public void addAction(Action newAction) {
 		if (this.action == null) {
 			this.action = newAction;
