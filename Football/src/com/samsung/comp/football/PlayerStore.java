@@ -214,7 +214,8 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				// Get selected player
 				int selectedPlayerIndex = storePlayersMenu.getSelectedIndex();
 
-				if (selectedPlayerIndex == -1) {
+				if (selectedPlayerIndex == -1
+						|| selectedPlayerIndex > storePlayersMenu.getItems().length - 1) {
 					return;
 				}
 
@@ -268,7 +269,8 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				int selectedPlayerIndex = teamPlayersMenu
 						.getSelectedIndex();
 
-				if (selectedPlayerIndex == -1) {
+				if (selectedPlayerIndex == -1
+						|| selectedPlayerIndex > storePlayersMenu.getItems().length - 1) {
 					return;
 				}
 
