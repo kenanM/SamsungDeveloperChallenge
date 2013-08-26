@@ -45,6 +45,9 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 	protected float resolutionX = Game.VIRTUAL_SCREEN_WIDTH / 2;
 	protected float resolutionY = (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 2;
 
+	protected int pitchResolutionX = Game.VIRTUAL_SCREEN_WIDTH;
+	protected int pitchResolutionY = (Game.VIRTUAL_SCREEN_HEIGHT + 64);
+
 	private Rectangle overlayBackground = new Rectangle(0, 0,
 			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 10);
 
@@ -358,6 +361,12 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 
 		// tell the camera to update its matrices.
 		camera.update();
+
+		// draw the background pitch
+		batch.begin();
+		batch.draw(pitchTexture, 0, 0, pitchResolutionX, pitchResolutionY, 0,
+				0, pitchResolutionX, pitchResolutionY, false, true);
+		batch.end();
 
 		statsDisplayAreaLeft.draw(batch, bmf, renderer);
 		statsDisplayAreaRight.draw(batch, bmf, renderer);
