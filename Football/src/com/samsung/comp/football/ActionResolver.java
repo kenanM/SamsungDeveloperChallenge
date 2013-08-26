@@ -8,4 +8,9 @@ public interface ActionResolver {
 	public void openGuideBook(int page);
 
 	public PlayerDataSource openDatasource();
+
+	public void showShortToast(final CharSequence toastMessage);
+
+	public void showLongToast(final CharSequence toastMessage);
+
 }

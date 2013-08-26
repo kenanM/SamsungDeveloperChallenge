@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.samsung.comp.football.ActionResolver;
 import com.samsung.comp.football.PlayerStore;
 import com.samsung.comp.football.data.PlayerDataSource;
 import com.samsung.spen.lib.input.SPenEventLibrary;
@@ -21,8 +22,9 @@ public class PlayerStoreActivity extends AndroidApplication {
 		cfg.useCompass = false;
 
 		PlayerStore screen;
+		ActionResolver actionResolver = new ActionResolverAndroid(this);
 
-		screen = new PlayerStore(new PlayerDataSource(this));
+		screen = new PlayerStore(new PlayerDataSource(this), actionResolver);
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 

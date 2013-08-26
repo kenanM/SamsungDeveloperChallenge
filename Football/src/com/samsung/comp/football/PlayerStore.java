@@ -1,7 +1,5 @@
 package com.samsung.comp.football;
 
-import java.util.ArrayList;
-
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -59,6 +57,11 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 	protected List storePlayersMenu;
 	protected List teamPlayersMenu;
 
+	protected int fundsDisplay;
+	protected int currentFunds;
+	protected int subtractionVelocity = 4000;
+	protected Label fundsLabel;
+
 	protected Button backButton;
 	protected Button buyButton;
 
@@ -66,6 +69,7 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 	protected ScrollPane rightScrollPane;
 
 	private PlayerDataSource dataSource;
+	private ActionResolver actionResolver;
 
 	protected Texture pitchTexture;
 
@@ -80,9 +84,15 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 	protected Texture statShootIcon;
 	protected Texture statSavingIcon;
 
+	private int humanTeamID = 1;
+	private int humanProfileID = 2;
+	private int storeTeamID = 2;
 
-	public PlayerStore(PlayerDataSource dataSource) {
+
+	public PlayerStore(PlayerDataSource dataSource,
+			ActionResolver actionResolver) {
 		this.dataSource = dataSource;
+		this.actionResolver = actionResolver;
 	}
 
 	@Override
@@ -92,13 +102,12 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 		createTextures();
 		createRenderingObjects();
 
-
-
 		Label labelTitle = new Label("Player Store", skin);
 
-		teamPlayersList = dataSource.getPlayersTableManager().getPlayers(1);
-
-		storePlayersList = new ArrayList<Player>();
+		teamPlayersList = dataSource.getPlayersTableManager().getPlayers(
+				humanTeamID);
+		storePlayersList = dataSource.getPlayersTableManager().getPlayers(
+				storeTeamID);
 
 		storePlayersMenu = new List(storePlayersList.toArray(), skin);
 		teamPlayersMenu = new List(teamPlayersList.toArray(), skin);
@@ -113,6 +122,10 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 		rightScrollPane.setFlickScroll(true);
 		rightScrollPane.setColor(overlayColour);
 
+		fundsDisplay = dataSource.getProfilesTableManager()
+				.getProfile(humanProfileID).getFunds();
+		fundsLabel = new Label(String.valueOf(fundsDisplay), skin);
+
 		Table playersLayout = new Table(skin);
 		playersLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
 
@@ -123,14 +136,19 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 		playersLayout.add("Current Team");
 		playersLayout.add("Available Players");
 
-		playersLayout.row().fillX().expandX().prefHeight(297);
+		playersLayout.row().fillX().expandX().prefHeight(280.5f);
 		playersLayout.add(leftScrollPane).prefWidth(resolutionX / 2);
 		playersLayout.add(rightScrollPane).prefWidth(resolutionX / 2);
+
+		playersLayout.row().fillX().expandX().prefHeight(17.5f);
+		playersLayout.add("Available Funds:").prefWidth(resolutionX / 2);
+		playersLayout.add(fundsLabel).prefWidth(resolutionX / 2).fillX()
+				.expandX();
 
 		playersLayout.pack();
 		playersLayout.setBackground((Drawable) null);
 
-		playersLayout.setPosition(0, resolutionY - playersLayout.getHeight());		
+		playersLayout.setPosition(0, resolutionY - playersLayout.getHeight());
 
 		stage.addActor(playersLayout);
 
@@ -204,6 +222,14 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 
 				statsDisplayAreaLeft.setPlayer(selectedPlayer);
 
+				// Check person can afford the player
+				int playerCost = selectedPlayer.getPlayerCost();
+				if (currentFunds < playerCost) {
+					// Cannot afford, display a message.
+					actionResolver.showShortToast("Can't afford this player!");
+					return;
+				}
+
 				// Update to be in team
 
 				// Swap the players in the array lists
@@ -223,6 +249,9 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 				// Update stats displays
 				statsDisplayAreaLeft.setPlayer(selectedPlayer);
 				statsDisplayAreaRight.setPlayer(null);
+
+				// Edit funds display
+				currentFunds -= selectedPlayer.getPlayerCost();
 
 			}
 		});
@@ -388,8 +417,11 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 	}
 
 	public void update(float time) {
+		fundsDisplay = fundsDisplay > currentFunds ? (int) (fundsDisplay - subtractionVelocity
+				* time)
+				: currentFunds;
+		fundsLabel.setText(String.valueOf(fundsDisplay));
 		stage.act(time);
-
 	}
 
 	@Override
