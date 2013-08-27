@@ -131,17 +131,6 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 
 		Label labelTitle = new Label("Team Setup", skin);
 
-		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
-				.getPlayers(humanTeamID);
-
-		Squad squad = dataSource.getSquadsTableManager().getSquad(humanTeamID);
-		squadList = new ArrayList<Player>();
-
-		benchedPlayersList = new ArrayList<Player>();
-		for (Player player : allPlayers) {
-				benchedPlayersList.add(player);
-		}
-
 		playerTeam = dataSource.getTeamsTableManager().getTeam(humanTeamID);
 
 		String teamName = "Unnamed";
@@ -149,11 +138,29 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 			teamName = playerTeam.getTeamName();
 		} else {
 			Gdx.app.error("GameDB", "No team found for the person");
-			throw new NullPointerException("No team found for the person");
+			throw new NullPointerException(
+					"No team found in the database for the person");
 		}
 
 		teamNameField = new TextField(teamName, skin);
 		teamNameField.setMessageText("Team Name");
+
+		Squad squad = dataSource.getSquadsTableManager().getSquad(humanTeamID);
+		squadList = squad.getAllPlayers();
+
+		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
+				.getPlayers(humanTeamID);
+
+		benchedPlayersList = new ArrayList<Player>();
+		for (Player player : allPlayers) {
+			benchedPlayersList.add(player);
+
+			for (Player squadPlayer : squadList) {
+				if (squadPlayer.getID() == player.getID()) {
+					benchedPlayersList.remove(player);
+				}
+			}
+		}
 
 		benchedPlayersMenu = new List(benchedPlayersList.toArray(), skin);
 		squadMenu = new List(squadList.toArray(), skin);
@@ -203,7 +210,7 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		playersLayout.add("Fielded Players");
 		playersLayout.add("Benched Players");
 
-		playersLayout.row().fillX().expandX().prefHeight(135);
+		playersLayout.row().fillX().expandX().prefHeight(225.5f);
 		playersLayout.add(leftScrollPane).prefWidth(resolutionX / 2);
 		playersLayout.add(rightScrollPane).prefWidth(resolutionX / 2);
 

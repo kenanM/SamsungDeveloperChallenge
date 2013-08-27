@@ -94,19 +94,32 @@ public class SquadsTableManager {
 	}
 
 	private static void addDefaultSquads(SQLiteDatabase database) {
-		Squad squad = new Squad(1, 6, 7, 8, 9, 10);
-		insertSquad(database, squad);
+		insertSquad(database, 1, 6, 7, 8, 9, 10);
 	}
 
 	private static long insertSquad(SQLiteDatabase database, Squad squad) {
 		Log.v("GameDB", "inserting squad...");
 		ContentValues values = new ContentValues();
 		values.put(ID_COLUMN_NAME, squad.getSquadID());
-		values.put(STRIKER_COLUMN_NAME, squad.getStriker());
-		values.put(MIDFIELD_A_COLUMN_NAME, squad.getMidfieldA());
-		values.put(MIDFIELD_B_COLUMN_NAME, squad.getMidfieldB());
-		values.put(DEFENDER_COLUMN_NAME, squad.getDefender());
-		values.put(GOALKEEPER_COLUMN_NAME, squad.getGoalKeeper());
+		values.put(STRIKER_COLUMN_NAME, squad.getStriker().getID());
+		values.put(MIDFIELD_A_COLUMN_NAME, squad.getMidfieldA().getID());
+		values.put(MIDFIELD_B_COLUMN_NAME, squad.getMidfieldB().getID());
+		values.put(DEFENDER_COLUMN_NAME, squad.getDefender().getID());
+		values.put(GOALKEEPER_COLUMN_NAME, squad.getGoalKeeper().getID());
+
+		return database.insert(SQUADS_TABLE_NAME, null, values);
+	}
+
+	private static long insertSquad(SQLiteDatabase database, int id,
+			int striker, int midA, int midB, int defender, int goalKeeper) {
+		Log.v("GameDB", "inserting squad...");
+		ContentValues values = new ContentValues();
+		values.put(ID_COLUMN_NAME, id);
+		values.put(STRIKER_COLUMN_NAME, striker);
+		values.put(MIDFIELD_A_COLUMN_NAME, midA);
+		values.put(MIDFIELD_B_COLUMN_NAME, midB);
+		values.put(DEFENDER_COLUMN_NAME, defender);
+		values.put(GOALKEEPER_COLUMN_NAME, goalKeeper);
 
 		return database.insert(SQUADS_TABLE_NAME, null, values);
 	}
@@ -115,7 +128,7 @@ public class SquadsTableManager {
 	 * Extract a Squad object from a cursor pointing at a row in the squads
 	 * table
 	 */
-	private static Squad cursorToSquad(Cursor cursor) {
+	private static Squad cursorToSquad(SQLiteDatabase database, Cursor cursor) {
 
 		int squadID = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
 		int strikerID = cursor.getInt(cursor
@@ -129,9 +142,12 @@ public class SquadsTableManager {
 		int goalKeeperID = cursor.getInt(cursor
 				.getColumnIndex(GOALKEEPER_COLUMN_NAME));
 
-		return new Squad(squadID, strikerID, midFieldAID, midFieldBID,
-				defenderID, goalKeeperID);
-
+		return new Squad(squadID, PlayersTableManager.getPlayer(database,
+				strikerID),
+				PlayersTableManager.getPlayer(database, midFieldAID),
+				PlayersTableManager.getPlayer(database, midFieldBID),
+				PlayersTableManager.getPlayer(database, defenderID),
+				PlayersTableManager.getPlayer(database, goalKeeperID));
 	}
 
 	public long insertSquad(Squad squad) {
@@ -150,7 +166,7 @@ public class SquadsTableManager {
 				ID_COLUMN_NAME + "=?",
 				new String[] { Integer.toString(teamID) }, null, null, null);
 
-		return cursor.moveToFirst() ? cursorToSquad(cursor) : null;
+		return cursor.moveToFirst() ? cursorToSquad(database, cursor) : null;
 	}
 
 	public void updateSquad(Squad squad) {
@@ -158,11 +174,11 @@ public class SquadsTableManager {
 
 		ContentValues values = new ContentValues();
 		values.put(ID_COLUMN_NAME, squad.getSquadID());
-		values.put(STRIKER_COLUMN_NAME, squad.getStriker());
-		values.put(MIDFIELD_A_COLUMN_NAME, squad.getMidfieldA());
-		values.put(MIDFIELD_B_COLUMN_NAME, squad.getMidfieldB());
-		values.put(DEFENDER_COLUMN_NAME, squad.getDefender());
-		values.put(GOALKEEPER_COLUMN_NAME, squad.getGoalKeeper());
+		values.put(STRIKER_COLUMN_NAME, squad.getStriker().getID());
+		values.put(MIDFIELD_A_COLUMN_NAME, squad.getMidfieldA().getID());
+		values.put(MIDFIELD_B_COLUMN_NAME, squad.getMidfieldB().getID());
+		values.put(DEFENDER_COLUMN_NAME, squad.getDefender().getID());
+		values.put(GOALKEEPER_COLUMN_NAME, squad.getGoalKeeper().getID());
 
 		long updateCount = database.update(
 				SQUADS_TABLE_NAME,

@@ -82,10 +82,6 @@ public class PlayersTableManager {
 
 		Player[] players = {
 
-				// Player Store (Team ID 2)
-				new Player(0, "A", 530.0f, 150.0f, 80.0f, 420.0f, 2, 30000),
-				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 20000),
-
 				// The Misfits (Team ID 3)
 				new Player(0, "Steve", 520.0f, 150.0f, 100.0f, 420.0f, 3, 2000),
 				new Player(0, "Alex", 540.0f, 200.0f, 80.0f, 380.0f, 3, 2000),
@@ -99,7 +95,11 @@ public class PlayersTableManager {
 				new Player(0, "Edgar", 540.0f, 200.0f, 80.0f, 380.0f, 1, 0),
 				new Player(0, "Oswald", 550.0f, 100.0f, 100.0f, 420.0f, 1, 0),
 				new Player(0, "Quinten", 530.0f, 150.0f, 80.0f, 420.0f, 1, 0),
-				new Goalie(0, "Victor", 520.0f, 150.0f, 100.0f, 500.0f, 1, 0) };
+				new Goalie(0, "Victor", 520.0f, 150.0f, 100.0f, 500.0f, 1, 0),
+
+				// Player Store (Team ID 2)
+				new Player(0, "A", 530.0f, 150.0f, 80.0f, 420.0f, 2, 30000),
+				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 20000) };
 
 		for (Player player : players) {
 			insertPlayer(database, player);
@@ -119,6 +119,29 @@ public class PlayersTableManager {
 		values.put(COST_COLUMN_NAME, player.getPlayerCost());
 		Log.v("db", "player's team_id: " + player.getTeamID());
 		return database.insert(PLAYER_TABLE_NAME, null, values);
+	}
+
+	protected static List<Player> getPlayers(SQLiteDatabase database, int teamID) {
+		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
+				TEAM_ID_COLUMN_NAME + "=?",
+				new String[] { Integer.toString(teamID) }, null, null, null);
+
+		LinkedList<Player> result = new LinkedList<Player>();
+
+		while (cursor.moveToNext() && cursor != null) {
+			result.add(cursorToPlayer(cursor, true));
+		}
+
+		Log.v("GameDB", "Found a total of " + result.size()
+				+ " players for team " + teamID);
+		return result;
+	}
+
+	protected static Player getPlayer(SQLiteDatabase database, int playerID) {
+		Cursor cursor = database.query(PLAYER_TABLE_NAME, null, ID_COLUMN_NAME
+				+ "=?", new String[] { Integer.toString(playerID) }, null,
+				null, null);
+		return cursor.moveToFirst() ? cursorToGoalie(cursor) : null;
 	}
 
 	/**
@@ -190,19 +213,11 @@ public class PlayersTableManager {
 	 * @return
 	 */
 	public List<Player> getPlayers(int teamID) {
-		Cursor cursor = database.query(PLAYER_TABLE_NAME, null,
-				TEAM_ID_COLUMN_NAME + "=?",
-				new String[] { Integer.toString(teamID) }, null, null, null);
+		return getPlayers(database, teamID);
+	}
 
-		LinkedList<Player> result = new LinkedList<Player>();
-
-		while (cursor.moveToNext() && cursor != null) {
-			result.add(cursorToPlayer(cursor, true));
-		}
-
-		Log.v("GameDB", "Found a total of " + result.size()
-				+ " players for team " + teamID);
-		return result;
+	public Player getPlayer(int playerID) {
+		return getPlayer(database, playerID);
 	}
 
 	public void updatePlayer(Player player) {

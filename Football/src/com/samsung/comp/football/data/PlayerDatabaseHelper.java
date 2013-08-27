@@ -23,6 +23,7 @@ public class PlayerDatabaseHelper extends SQLiteOpenHelper {
 		ProfilesTableManager.onCreate(database);
 		TeamsTableManager.onCreate(database);
 		PlayersTableManager.onCreate(database);
+		SquadsTableManager.onCreate(database);
 
 		Log.w(PlayerDatabaseHelper.class.getName(), "Creating DB... "
 				+ "version " + DATABASE_VERSION);
