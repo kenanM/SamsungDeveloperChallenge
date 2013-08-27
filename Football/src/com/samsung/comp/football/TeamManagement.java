@@ -482,6 +482,10 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		stage.draw();
 	}
 
+	public void backButtonPressed() {
+		Gdx.app.exit();
+	}
+
 	@Override
 	public boolean onHover(View arg0, MotionEvent arg1) {
 		return false;
@@ -535,13 +539,8 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		statSavingIcon.dispose();
 	}
 
-
 	@Override
 	public boolean keyDown(int keycode) {
-
-		if (stage.keyDown(keycode)) {
-			return true;
-		}
 		if (keycode == Keys.BACK) {
 			Gdx.app.exit();
 			return true;

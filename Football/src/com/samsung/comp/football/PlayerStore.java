@@ -483,9 +483,6 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 	@Override
 	public boolean keyDown(int keycode) {
 
-		if (stage.keyDown(keycode)) {
-			return true;
-		}
 		if (keycode == Keys.BACK) {
 			Gdx.app.exit();
 			return true;
