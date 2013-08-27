@@ -139,20 +139,13 @@ public class TeamsTableManager {
 	}
 
 	public void alterTeam(Team team) {
-		Log.v(PlayerDataSource.class.toString(),
-				"adding team: " + team.toString());
 
 		ContentValues values = new ContentValues();
-		values.put(TEAM_ID_COLUMN_NAME, team.getTeamID());
 		values.put(TEAM_NAME_COLUMN_NAME, team.getTeamName());
 
 		Log.v("GameDB", "team_id: " + team.getTeamID());
-		long id = database.update(
-				TEAMS_TABLE_NAME,
-				values,
-				"?=?",
-				new String[] { TEAM_ID_COLUMN_NAME,
-						String.valueOf(team.getTeamID()) });
+		long id = database.update(TEAMS_TABLE_NAME, values, TEAM_ID_COLUMN_NAME
+				+ "=?", new String[] { String.valueOf(team.getTeamID()) });
 		Log.v("GameDB", "team replaced...row id =: " + id);
 	}
 

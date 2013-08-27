@@ -173,19 +173,15 @@ public class SquadsTableManager {
 		Log.v("GameDB", "updating squad...ID = " + squad.getSquadID());
 
 		ContentValues values = new ContentValues();
-		values.put(ID_COLUMN_NAME, squad.getSquadID());
 		values.put(STRIKER_COLUMN_NAME, squad.getStriker().getID());
 		values.put(MIDFIELD_A_COLUMN_NAME, squad.getMidfieldA().getID());
 		values.put(MIDFIELD_B_COLUMN_NAME, squad.getMidfieldB().getID());
 		values.put(DEFENDER_COLUMN_NAME, squad.getDefender().getID());
 		values.put(GOALKEEPER_COLUMN_NAME, squad.getGoalKeeper().getID());
 
-		long updateCount = database.update(
-				SQUADS_TABLE_NAME,
-				values,
-				"?=?",
-				new String[] { ID_COLUMN_NAME,
-						String.valueOf(squad.getSquadID()) });
+		long updateCount = database.update(SQUADS_TABLE_NAME, values,
+				ID_COLUMN_NAME + "=?",
+				new String[] { String.valueOf(squad.getSquadID()) });
 		Log.v("GameDB", "Number of rows updated = " + updateCount);
 	}
 

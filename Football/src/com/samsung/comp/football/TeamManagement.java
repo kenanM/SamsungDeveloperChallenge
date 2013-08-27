@@ -243,7 +243,8 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		paddingLayout.setPosition(0,
 				buttonsLayout.getY() - paddingLayout.getHeight());
 
-		backButton = new TextButton("Back to menu", skin, "default");
+		backButton = new TextButton("Back to Menu", skin, "default");
+		startButton = new TextButton("Save and Exit", skin, "default");
 
 		Table backButtonLayout = new Table(skin);
 		backButtonLayout.defaults().spaceBottom(2.5f);
@@ -254,6 +255,18 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		backButtonLayout.setPosition(20, 32);
 		backButtonLayout.pack();
 		backButtonLayout.setBackground((Drawable) null);
+
+
+		Table startButtonLayout = new Table(skin);
+		startButtonLayout.defaults().spaceBottom(2.5f);
+		startButtonLayout.row().fill().expandX().prefWidth(resolutionX * 2 / 7);
+		startButtonLayout.add(startButton).expandX()
+				.prefWidth(resolutionX * 2 / 7);
+
+		startButtonLayout.setPosition(resolutionX - resolutionX * 2 / 7 - 20,
+				32);
+		startButtonLayout.pack();
+		startButtonLayout.setBackground((Drawable) null);
 
 		float statsDisplayHeight = 32 * 7;
 		// The button Y in the virtual resolution coordinates
@@ -286,12 +299,32 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		stage.addActor(buttonsLayout);
 		stage.addActor(paddingLayout);
 		stage.addActor(backButtonLayout);
+		stage.addActor(startButtonLayout);
 
 		teamNameField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				if (key == '\n') {
 					textField.getOnscreenKeyboard().show(false);
 				}
+			}
+		});
+
+		backButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.exit();
+			}
+		});
+
+		startButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+
+				Squad squad = new Squad(humanTeamID, squadList);
+				dataSource.getSquadsTableManager().updateSquad(squad);
+
+				playerTeam.setTeamName(teamNameField.getText());
+				dataSource.getTeamsTableManager().alterTeam(playerTeam);
+
+				Gdx.app.exit();
 			}
 		});
 
