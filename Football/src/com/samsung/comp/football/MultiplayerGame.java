@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
@@ -15,9 +16,10 @@ public class MultiplayerGame extends AbstractGame {
 
 	Color redColor = Color.RED;
 	Color blueColor = new Color(0.2f, 0.6f, 1f, 1f);
-	
-	public MultiplayerGame(PlayerDataSource playerDatabase, ActionResolver actionResolver, float matchTime,
-			float roundTime, boolean statusBarAtTop, byte scoreLimit) {
+
+	public MultiplayerGame(PlayerDataSource playerDatabase,
+			ActionResolver actionResolver, float matchTime, float roundTime,
+			boolean statusBarAtTop, byte scoreLimit) {
 		this.playerDatabase = playerDatabase;
 		this.actionResolver = actionResolver;
 		this.remainingMatchTime = matchTime;
@@ -198,69 +200,81 @@ public class MultiplayerGame extends AbstractGame {
 
 	protected void setStartingPositions(TeamColour centerTeam) {
 
-		redPlayers.get(2).x = Player.translatePlayerCoordinate(169);
-		redPlayers.get(2).y = Player.translatePlayerCoordinate(320);
+		// Non centred positions
+		Vector2 redStriker = new Vector2(Player.translatePlayerCoordinate(338),
+				Player.translatePlayerCoordinate(334));
+		Vector2 redMidA = new Vector2(Player.translatePlayerCoordinate(507),
+				Player.translatePlayerCoordinate(320));
+		Vector2 redMidB = new Vector2(Player.translatePlayerCoordinate(169),
+				Player.translatePlayerCoordinate(320));
+		Vector2 redDef = new Vector2(Player.translatePlayerCoordinate(338),
+				Player.translatePlayerCoordinate(256));
+		Vector2 redGoalKeeper = new Vector2(
+				Player.translatePlayerCoordinate(338),
+				Player.translatePlayerCoordinate(174));
 
-		redPlayers.get(3).x = Player.translatePlayerCoordinate(507);
-		redPlayers.get(3).y = Player.translatePlayerCoordinate(320);
-
-		redGoalie.x = Player.translatePlayerCoordinate(338);
-		redGoalie.y = Player.translatePlayerCoordinate(174);
-
-		bluePlayers.get(2).x = Player.translatePlayerCoordinate(169);
-		bluePlayers.get(2).y = Player.translatePlayerCoordinate(704);
-
-		bluePlayers.get(3).x = Player.translatePlayerCoordinate(507);
-		bluePlayers.get(3).y = Player.translatePlayerCoordinate(704);
-
-		blueGoalie.x = Player.translatePlayerCoordinate(338);
-		blueGoalie.y = Player.translatePlayerCoordinate(850);
+		Vector2 blueStriker = new Vector2(
+				Player.translatePlayerCoordinate(338),
+				Player.translatePlayerCoordinate(640));
+		Vector2 blueMidA = new Vector2(Player.translatePlayerCoordinate(169),
+				Player.translatePlayerCoordinate(704));
+		Vector2 blueMidB = new Vector2(Player.translatePlayerCoordinate(507),
+				Player.translatePlayerCoordinate(704));
+		Vector2 blueDef = new Vector2(Player.translatePlayerCoordinate(338),
+				Player.translatePlayerCoordinate(768));
+		Vector2 blueGoalKeeper = new Vector2(
+				Player.translatePlayerCoordinate(338),
+				Player.translatePlayerCoordinate(850));
 
 		if (centerTeam == TeamColour.BLUE) {
-			bluePlayers.get(0).x = Player
+			blueDef = blueMidA.cpy();
+
+			blueStriker.x = Player
 					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) - (Player
 							.getPlayerSize())));
-			bluePlayers.get(0).y = Player
+			blueStriker.y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
 
-			bluePlayers.get(1).x = Player
+			blueMidA.x = Player
 					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) + (Player
 							.getPlayerSize())));
-			bluePlayers.get(1).y = Player
+			blueMidA.y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
 
 			bluePlayers.get(0).setRotation(0);
 			bluePlayers.get(1).setRotation(180);
-		} else {
-			bluePlayers.get(0).x = Player.translatePlayerCoordinate(338);
-			bluePlayers.get(0).y = Player.translatePlayerCoordinate(640);
-
-			bluePlayers.get(1).x = Player.translatePlayerCoordinate(338);
-			bluePlayers.get(1).y = Player.translatePlayerCoordinate(768);
 		}
 
 		if (centerTeam == TeamColour.RED) {
-			redPlayers.get(0).x = Player
+			redDef = redMidA.cpy();
+
+			redStriker.x = Player
 					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) - (Player
 							.getPlayerSize())));
-			redPlayers.get(0).y = Player
+			redStriker.y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
 
-			redPlayers.get(1).x = Player
+			redMidA.x = Player
 					.translatePlayerCoordinate((float) ((VIRTUAL_SCREEN_WIDTH / 2) + (Player
 							.getPlayerSize())));
-			redPlayers.get(1).y = Player
+			redMidA.y = Player
 					.translatePlayerCoordinate(VIRTUAL_SCREEN_HEIGHT / 2);
 
 			redPlayers.get(0).setRotation(0);
 			redPlayers.get(1).setRotation(180);
-		} else {
-			redPlayers.get(0).x = Player.translatePlayerCoordinate(338);
-			redPlayers.get(0).y = Player.translatePlayerCoordinate(334);
-
-			redPlayers.get(1).x = Player.translatePlayerCoordinate(338);
-			redPlayers.get(1).y = Player.translatePlayerCoordinate(256);
 		}
+
+		bluePlayers.get(0).setPosition(blueStriker);
+		bluePlayers.get(1).setPosition(blueMidA);
+		bluePlayers.get(2).setPosition(blueMidB);
+		bluePlayers.get(3).setPosition(blueDef);
+		blueGoalie.setPosition(blueGoalKeeper);
+
+		redPlayers.get(0).setPosition(redStriker);
+		redPlayers.get(1).setPosition(redMidA);
+		redPlayers.get(2).setPosition(redMidB);
+		redPlayers.get(3).setPosition(redDef);
+		redGoalie.setPosition(redGoalKeeper);
 
 		ball.x = Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2);
 		ball.y = Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2);
@@ -286,7 +300,7 @@ public class MultiplayerGame extends AbstractGame {
 		redGoalie.initialize(this, TeamColour.RED);
 		blueGoalie = new Goalie(0, 0, TeamColour.BLUE, this, 0);
 		blueGoalie.initialize(this, TeamColour.BLUE);
-		
+
 		setStartingPositions(TeamColour.RED);
 
 		soundManager.play(whistleBlow);
