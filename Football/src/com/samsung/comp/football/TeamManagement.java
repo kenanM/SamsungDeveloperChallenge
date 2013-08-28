@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -311,7 +312,23 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 
 		backButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				Gdx.app.exit();
+
+				java.util.List<Player> dbSquadList = dataSource
+						.getSquadsTableManager().getSquad(humanTeamID)
+						.getAllPlayers();
+				boolean changesMade = false;
+
+				for (int i = 0; i < dbSquadList.size() - 1; i++) {
+					if (squadList.get(i).getID() != dbSquadList.get(i).getID()) {
+						changesMade = true;
+					}
+				}
+
+				if (changesMade) {
+					showConfirmationDialog();
+				} else {
+					exit();
+				}
 			}
 		});
 
@@ -515,7 +532,24 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		stage.draw();
 	}
 
-	public void backButtonPressed() {
+	public void showConfirmationDialog() {
+		Button yesButton = new TextButton("Yes", skin);
+		Button noButton = new TextButton("No", skin);
+
+		Dialog dialog = new Dialog("Discard changes and exit?", skin, "dialog") {
+			protected void result(Object object) {
+				if (object.equals(true)) {
+					exit();
+				}
+			}
+		}.text("You will lose any changes you made.").button(noButton, false)
+				.button(yesButton, true).key(Keys.ENTER, true)
+				.key(Keys.ESCAPE, false).key(Keys.BACK, false);
+
+		dialog.show(stage);
+	}
+
+	public void exit() {
 		Gdx.app.exit();
 	}
 
@@ -575,7 +609,9 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 	@Override
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.BACK) {
-			Gdx.app.exit();
+			if (!stage.keyDown(Keys.BACK)) {
+				showConfirmationDialog();
+			}
 			return true;
 		}
 		if (keycode == Keys.MENU) {
