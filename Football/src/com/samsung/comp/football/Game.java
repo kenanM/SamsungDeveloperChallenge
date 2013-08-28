@@ -38,41 +38,31 @@ public class Game extends AbstractGame {
 		createRenderingObjects();
 		createGoals();
 
-
-		createNewPlayersAndBall();
-
-
 		team1 = TeamColour.BLUE;
 		team2 = TeamColour.RED;
+
+		createNewPlayersAndBall();
+		createTeams();
+		loadPlayersFromDB();
+		coinFlipForStart();
+		createAI();
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
 
+		// Set reward multipliers
+		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
+		Gdx.app.log("GameOver", "Game Length Multiplier: x"
+				+ gameLengthScoreMultiplier);
+
 		baseReward = 20000;
-
-
 
 		controlsActive = true;
 
-		selectedPlayer = bluePlayers.get(0);
-		textArea = new TeamSetupScreen(this, actionResolver.openDatasource(),
-				true, new TeamSetupListener() {
-					@Override
-					public void onStartButtonPressed(TeamSetupScreen screen) {
-						completeAssembly(screen);
-					}
-
-					@Override
-					public void onSelectedPlayerChanged(TeamSetupScreen screen,
-							Player player, int index) {
-						selectedPlayer = getAllPlayers(TeamColour.BLUE).get(
-								index);
-						selectTextureStateTime = 0f;
-					}
-				});
-
-		// Finished state draws the text area object
-		gameState = GameState.FINISHED;
+		soundManager.play(whistleBlow);
+		beginInputStage();
+		playerDatabase.close();
 	}
 
 	private float calculateTeamDifficultyMultiplier() {
@@ -109,16 +99,10 @@ public class Game extends AbstractGame {
 				: gameLengthScoreMultiplier;
 		finishData.add(textStr);
 
-		textStr = "Team Difficulty Multiplier: x";
+		textStr = "AI Team Difficulty Multiplier: x";
 		textStr += (teamDifficultyScoreMultiplier % 1 == 0) ? String
 				.valueOf(Integer.valueOf((int) teamDifficultyScoreMultiplier))
 				: teamDifficultyScoreMultiplier;
-		finishData.add(textStr);
-
-		textStr = "AI Difficulty Multiplier: x";
-		textStr += (aiDifficultyScoreMultiplier % 1 == 0) ? String
-				.valueOf(Integer.valueOf((int) aiDifficultyScoreMultiplier))
-				: aiDifficultyScoreMultiplier;
 		finishData.add(textStr);
 		
 		textStr = "Total Reward: ";
@@ -225,31 +209,20 @@ public class Game extends AbstractGame {
 	}
 
 	private void createNewPlayersAndBall() {
-
 		// Create a ball
 		ball = new Ball(Ball.translateBallCoordinate(PLAYING_AREA_WIDTH / 2),
 				Ball.translateBallCoordinate(PLAYING_AREA_HEIGHT / 2));
-
-		redPlayers = new ArrayList<Player>();
-		bluePlayers = new ArrayList<Player>();
-		for (int i = 0; i < 4; i++) {
-			redPlayers.add(new Player(0, 0, TeamColour.RED));
-			bluePlayers.add(new Player(0, 0, TeamColour.BLUE));
-			bluePlayers.get(i).initialize(TeamColour.BLUE);
-		}
-		redGoalie = new Goalie(0, 0, TeamColour.RED, this, 0);
-		blueGoalie = new Goalie(0, 0, TeamColour.BLUE, this, 0);
-		blueGoalie.initialize(this, TeamColour.BLUE);
-		
-		setStartingPositions(TeamColour.RED);
-		
-		soundManager.play(whistleBlow);
 	}
 
-	private void loadPlayersFromDB(List<Player> fieldedPlayers, int aiTeamID) {
+	private void loadPlayersFromDB() {
+
+		Squad userSquad = playerDatabase.getSquadsTableManager().getSquad(
+				userTeamID);
+		List<Player> userPlayers = userSquad.getAllPlayers();
+
 		bluePlayers = new ArrayList<Player>();
 		for (int i = 0; i < 5; i++) {
-			Player p = fieldedPlayers.get(i);
+			Player p = userPlayers.get(i);
 			if (i == 4) {
 				blueGoalie = new Goalie(p.getID(), p.getName(),
 						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
@@ -286,14 +259,19 @@ public class Game extends AbstractGame {
 		}
 	}
 
-	private void createTeams(String humanTeamName) {
+	private void createTeams() {
 		Gdx.app.log("GameDB", "Assigning teams...");
-		teamA = playerDatabase.getTeamsTableManager().getTeam(1);
+
+		teamA = playerDatabase.getTeamsTableManager().getTeam(userTeamID);
 		Gdx.app.log("GameDB", "Suceeded assigning Team A");
-		teamA.setTeamName(humanTeamName);
+
+		teamA.setTeamName(playerDatabase.getTeamsTableManager()
+				.getTeam(userTeamID).getTeamName());
 		playerDatabase.getTeamsTableManager().alterTeam(teamA);
+
 		teamB = playerDatabase.getTeamsTableManager().getTeam(2);
 		Gdx.app.log("GameDB", "Suceeded assigning Team B");
+
 	}
 
 	private void createMovementCompletedListeners(TeamColour teamColour) {
@@ -327,32 +305,6 @@ public class Game extends AbstractGame {
 				}
 			});
 		}
-	}
-
-	public void completeAssembly(TeamSetupScreen screen) {
-
-		selectedPlayer = null;
-		cursor.setHighlightedPlayer(null);
-
-		String teamName = screen.getTeamName();
-		List<Player> fieldedPlayers = screen.getSelectedFieldedPlayers();
-		Team aiTeam = screen.getSelectedAITeam();
-		float aiDifficulty = screen.getSelectedAIDifficulty();
-
-		createTeams(teamName);
-		loadPlayersFromDB(fieldedPlayers, aiTeam.getTeamID());
-		coinFlipForStart();
-		createAI();
-
-		// Set reward multipliers
-		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
-		aiDifficultyScoreMultiplier = aiDifficulty;
-		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
-		Gdx.app.log("GameOver", "Game Length Multiplier: x"
-				+ gameLengthScoreMultiplier);
-
-		beginInputStage();
-		playerDatabase.close();
 	}
 
 	private void createAI() {

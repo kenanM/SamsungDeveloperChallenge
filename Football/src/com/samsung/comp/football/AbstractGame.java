@@ -64,6 +64,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	protected PlayerDataSource playerDatabase;
 	protected int userProfileID = 2;
+	protected int userTeamID = 1;
+	protected int aiTeamID = 1;
 
 	protected int xOffset;
 	protected int yOffset;
