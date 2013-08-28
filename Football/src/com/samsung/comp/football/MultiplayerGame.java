@@ -124,6 +124,10 @@ public class MultiplayerGame extends AbstractGame {
 		setStartingPositions(TeamColour.BLUE);
 		currentTeam = TeamColour.RED;
 		bar.setBarColor(redColor);
+
+		bluePlayers.get(0).setRotation(270);
+		bluePlayers.get(1).setRotation(270);
+		redPlayers.get(0).setRotation(90);
 	}
 
 	private void loadPlayers(List<Player> fieldedPlayers) {
