@@ -11,18 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.samsung.comp.football.R;
 
 public class MainApplication extends Activity {
 
-	Button startTutorialButton;
-	Button startGameButton;
-	Button startMultiplayerButton;
-	Button howToPlay;
-	Button manageTeam;
-	Button playerStore;
+	ImageButton startTutorialButton;
+	ImageButton startGameButton;
+	ImageButton startMultiplayerButton;
+	ImageButton howToPlay;
+	ImageButton manageTeam;
+	ImageButton playerStore;
 
 	boolean statusBarAtTop = false;
 	float roundTime = 5f;
@@ -44,7 +44,7 @@ public class MainApplication extends Activity {
 
 		setContentView(R.layout.activity_main);
 
-		startTutorialButton = (Button) findViewById(R.id.startTutorialGame);
+		startTutorialButton = (ImageButton) findViewById(R.id.startTutorialGame);
 		startTutorialButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -53,7 +53,7 @@ public class MainApplication extends Activity {
 			}
 		});
 
-		startGameButton = (Button) findViewById(R.id.startGame);
+		startGameButton = (ImageButton) findViewById(R.id.startGame);
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -67,7 +67,7 @@ public class MainApplication extends Activity {
 			}
 		});
 
-		startMultiplayerButton = (Button) findViewById(R.id.startMultiplayerGame);
+		startMultiplayerButton = (ImageButton) findViewById(R.id.startMultiplayerGame);
 		startMultiplayerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -82,7 +82,7 @@ public class MainApplication extends Activity {
 			}
 		});
 
-		howToPlay = (Button) findViewById(R.id.howToPlay);
+		howToPlay = (ImageButton) findViewById(R.id.howToPlay);
 		howToPlay.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -91,7 +91,7 @@ public class MainApplication extends Activity {
 			}
 		});
 
-		manageTeam = (Button) findViewById(R.id.manageTeam);
+		manageTeam = (ImageButton) findViewById(R.id.manageTeam);
 		manageTeam.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(MainApplication.this,
@@ -99,7 +99,7 @@ public class MainApplication extends Activity {
 			}
 		});
 
-		playerStore = (Button) findViewById(R.id.playerStore);
+		playerStore = (ImageButton) findViewById(R.id.playerStore);
 		playerStore.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(MainApplication.this,

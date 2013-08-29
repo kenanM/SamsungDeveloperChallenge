@@ -14,31 +14,34 @@
         android:layout_marginTop="18dp"
         android:orientation="vertical" >
 
-        <Button
+        <ImageButton
             android:id="@+id/startGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/start_game_btn"
+            android:background="@drawable/start_game_selector"
             android:height="60dp"
+            android:src="@drawable/start_game_selector"
             android:textSize="35sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/manageTeam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/manage_team_btn"
+            android:background="@drawable/manage_team_selector"
             android:height="60dp"
+            android:src="@drawable/manage_team_selector"
             android:textSize="35sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/startTutorialGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/tutorial_btn"
+            android:background="@drawable/tutorial_selector"
             android:height="60dp"
+            android:src="@drawable/tutorial_selector"
             android:textSize="35sp" />
     </LinearLayout>
 
@@ -50,31 +53,34 @@
         android:layout_marginTop="18dp"
         android:orientation="vertical" >
 
-        <Button
+        <ImageButton
             android:id="@+id/startMultiplayerGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/multiplayer_btn"
+            android:background="@drawable/multiplayer_selector"
             android:height="60dp"
+            android:src="@drawable/multiplayer_selector"
             android:textSize="35sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/playerStore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/player_store_btn"
+            android:background="@drawable/player_store_selector"
             android:height="60dp"
+            android:src="@drawable/player_store_selector"
             android:textSize="35sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/howToPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/guidebook_btn"
+            android:background="@drawable/guidebook_selector"
             android:height="60dp"
+            android:src="@drawable/guidebook_selector"
             android:textSize="35sp" />
     </LinearLayout>
 
