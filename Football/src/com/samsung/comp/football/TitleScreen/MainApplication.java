@@ -21,7 +21,8 @@ public class MainApplication extends Activity {
 	Button startGameButton;
 	Button startMultiplayerButton;
 	Button howToPlay;
-	Button aboutUs;
+	Button manageTeam;
+	Button playerStore;
 
 	boolean statusBarAtTop = false;
 	float roundTime = 5f;
@@ -90,11 +91,19 @@ public class MainApplication extends Activity {
 			}
 		});
 
-		aboutUs = (Button) findViewById(R.id.aboutUs);
-		aboutUs.setOnClickListener(new OnClickListener() {
+		manageTeam = (Button) findViewById(R.id.manageTeam);
+		manageTeam.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(MainApplication.this,
-						AboutUsActivity.class));
+						TeamManagementActivity.class));
+			}
+		});
+
+		playerStore = (Button) findViewById(R.id.playerStore);
+		playerStore.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(MainApplication.this,
+						PlayerStoreActivity.class));
 			}
 		});
 	}
