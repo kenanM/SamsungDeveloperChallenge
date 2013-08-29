@@ -734,7 +734,9 @@ public class Player extends Rectangle implements Followable {
 	public void pass(Ball ball, Player target) {
 		if (hasBall()) {
 
-			float initialDistance = ball.getBallPosition().dst(
+			// We begin with the INITIAL distance between ball and receiver
+			// x
+			float distance = ball.getBallPosition().dst(
 					target.getPlayerPosition());
 
 			// equations of motion -> v^2 - u^2 = 2ax
@@ -746,24 +748,51 @@ public class Player extends Rectangle implements Followable {
 			// Note: a target moving towards the ball may have a negligible
 			// failure rate
 
+			// v
 			float idealFinalSpeed = target.getSavingSkill() - 20;
 
 			float idealInitialSpeed = (float) Math.sqrt(idealFinalSpeed
 					* idealFinalSpeed
-					- (2 * (-ball.getDeceleration() * initialDistance)));
+					- (2 * (-ball.getDeceleration() * distance)));
 
+			// u
 			float lowestSpeed = Math.min(idealInitialSpeed, shootSpeed);
 
-			float time = initialDistance / lowestSpeed;
-			Vector2 targetFuturePosition = target.getFuturePosition(time,
-					target.getPositionInPath());
+			// ESTIMATE the time to pass the ball to the receiver's initial
+			// location using:
+			// x=ut+0.5at^2
+			// 0.5at^2 + ut - x = 0 <-- Quadratic.
+			// Solve using quadratic formula. (two solutions)
 
-			// repeat once with new time for more accuracy
-			time = targetFuturePosition.dst(ball.getBallPosition())
-					/ lowestSpeed;
-			targetFuturePosition = target.getFuturePosition(time,
-					target.getPositionInPath());
+			// a
+			double a = 0.5 * -ball.getDeceleration();
+			double b = lowestSpeed;
+			double c = -distance;
 
+			double time = 0;
+			double time2 = 0;
+			Vector2 targetFuturePosition = new Vector2();
+
+			for (int i = 0; i < 5; i++) {
+				time = (-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a);
+				time2 = (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a);
+				time = (time2 < time && time2 > 0) ? time2 : time;
+				// double time2 = (-b - Math.sqrt(b * b - 4 * a * c)) / 2 * a;
+
+				// Having estimated the time, we can then estimate the position
+				// a player will be at.
+				targetFuturePosition = target.getFuturePosition((float) time,
+						target.getPositionInPath());
+
+				// Distance is updated to relate to the point the receiver will
+				// be at.
+				// Can then repeat with the new distance for more accuracy.
+				c = -targetFuturePosition.dst(ball.getBallPosition());
+			}
+
+			Gdx.app.log("Game", "calculated time in transit " + time);
+
+			// Move the ball to our predicted target location.
 			Vector2 ballVelocity = Utils.getMoveVector(ball.getBallPosition(),
 					targetFuturePosition, lowestSpeed);
 
