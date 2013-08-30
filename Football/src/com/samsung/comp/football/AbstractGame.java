@@ -915,6 +915,8 @@ public abstract class AbstractGame implements ApplicationListener,
 					if (getGoal(goalieColour).getGoalCircle(200).contains(
 							player.getPlayerPosition())) {
 						moveAwayFromGoal(player, goalieColour);
+					} else {
+						separatePlayer(player);
 					}
 				} else {
 					separatePlayer(player);
