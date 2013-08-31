@@ -59,4 +59,9 @@ public class Team {
 	public int getDraws() {
 		return draws;
 	}
+
+	@Override
+	public String toString() {
+		return teamName;
+	}
 }

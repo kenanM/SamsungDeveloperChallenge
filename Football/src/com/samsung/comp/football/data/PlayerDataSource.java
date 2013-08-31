@@ -19,6 +19,9 @@ public class PlayerDataSource {
 	private PlayersTableManager playersTableManager;
 	private SquadsTableManager squadsTableManager;
 
+	protected static final int AI_PROFILE_ID = 1;
+	protected static final int STORE_TEAM_ID = 2;
+
 	public PlayerDataSource(Context context) {
 		helper = new PlayerDatabaseHelper(context);
 		open();

@@ -138,6 +138,23 @@ public class TeamsTableManager {
 		return teams;
 	}
 
+	public List<Team> getOpponentTeams() {
+		Cursor cursor = database.query(
+				TEAMS_TABLE_NAME,
+				null,
+				PROFILE_COLUMN_NAME + "="
+						+ Integer.toString(PlayerDataSource.AI_PROFILE_ID)
+						+ " AND " + TEAM_ID_COLUMN_NAME + "!="
+						+ Integer.toString(PlayerDataSource.STORE_TEAM_ID),
+				null, null, null, null);
+
+		List<Team> teams = new ArrayList<Team>();
+		while (cursor.moveToNext() && cursor != null) {
+			teams.add(cursorToTeam(cursor));
+		}
+		return teams;
+	}
+
 	public void alterTeam(Team team) {
 
 		ContentValues values = new ContentValues();

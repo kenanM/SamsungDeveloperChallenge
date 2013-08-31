@@ -45,8 +45,6 @@ public class Game extends AbstractGame {
 		createNewPlayersAndBall();
 		createTeams();
 		loadPlayersFromDB();
-		coinFlipForStart();
-		createAI();
 
 		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
 				: remainingMatchTime;
@@ -61,9 +59,25 @@ public class Game extends AbstractGame {
 
 		controlsActive = true;
 
-		soundManager.play(whistleBlow);
-		beginInputStage();
-		playerDatabase.close();
+		textArea = new AISelectionScreen(this, playerDatabase,
+				new AISelectionListener() {
+
+					@Override
+					public void onStartButtonPressed(AISelectionScreen screen) {
+						teamB = screen.getSelectedAITeam();
+						Gdx.app.log("Game", "Loading AI players. Team ID = "
+								+ teamB.getTeamID());
+						loadAiPlayersFromDB(teamB.getTeamID());
+
+						coinFlipForStart();
+						createAI();
+
+						soundManager.play(whistleBlow);
+						playerDatabase.close();
+						beginInputStage();
+					}
+				});
+		gameState = GameState.FINISHED;
 	}
 
 	private float calculateTeamDifficultyMultiplier() {
@@ -246,12 +260,16 @@ public class Game extends AbstractGame {
 				p.initialize(TeamColour.BLUE);
 			}
 		}
+	}
 
-		List<Player> dbPlayers = playerDatabase.getPlayersTableManager()
+	private void loadAiPlayersFromDB(int aiTeamID) {
+
+		List<Player> aiPlayers = playerDatabase.getPlayersTableManager()
 				.getPlayers(aiTeamID);
+
 		redPlayers = new ArrayList<Player>();
 		for (int i = 0; i < 5; i++) {
-			Player p = dbPlayers.get(i);
+			Player p = aiPlayers.get(i);
 			if (i == 4) {
 				redGoalie = new Goalie(p.getID(), p.getName(),
 						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
