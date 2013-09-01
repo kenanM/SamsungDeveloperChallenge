@@ -43,6 +43,7 @@ public class Game extends AbstractGame {
 		team2 = TeamColour.RED;
 
 		createNewPlayersAndBall();
+		
 		createTeams();
 		loadPlayersFromDB();
 

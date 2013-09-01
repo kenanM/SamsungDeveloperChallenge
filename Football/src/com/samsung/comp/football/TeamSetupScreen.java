@@ -95,7 +95,7 @@ public class TeamSetupScreen extends TextArea {
 	}
 
 	public void create(boolean showAI) {
-		stage = new Stage(resolutionX, resolutionY, false);
+		stage = new Stage(resolutionX, resolutionY, true);
 
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
