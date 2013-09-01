@@ -60,7 +60,7 @@ public class AISelectionScreen extends TextArea {
 	}
 
 	public void create() {
-		stage = new Stage(resolutionX, resolutionY, false);
+		stage = new Stage(resolutionX, resolutionY, true);
 
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
