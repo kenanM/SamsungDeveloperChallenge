@@ -27,6 +27,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.samsung.comp.football.Actions.Action;
 import com.samsung.comp.football.Actions.Kick;
@@ -1225,17 +1226,12 @@ public abstract class AbstractGame implements ApplicationListener,
 		double vx = (vector.x / scaleFactor) - xOffset;
 		double vy = (vector.y / scaleFactor) - yOffset;
 
-		// try {
-		// if (positionUIBarAtTop) {
-		// vy -= bar.getHeight() / scaleFactor;
-		// } else {
-		//
-		// }
-		//
-		// } catch (NullPointerException e) {
-		// }
+		Vector3 result = new Vector3(vector.x, vector.y, 1);
+		camera.unproject(result, 0,
+				Gdx.graphics.getHeight() - drawnPitchHeight, drawnPitchWidth,
+				drawnPitchHeight);
 
-		return new Vector2((float) vx, (float) vy);
+		return new Vector2(result.x, result.y);
 	}
 
 	protected Rectangle getStatsRectangle(boolean isAtTopPosition) {
