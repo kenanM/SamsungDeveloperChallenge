@@ -363,8 +363,6 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		// clear the screen with a dark blue color.
-		Gdx.gl.glViewport(xOffset, Gdx.graphics.getHeight() - drawnPitchHeight,
-				drawnPitchWidth, drawnPitchHeight);
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -1227,9 +1225,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		double vy = (vector.y / scaleFactor) - yOffset;
 
 		Vector3 result = new Vector3(vector.x, vector.y, 1);
-		camera.unproject(result, 0,
-				Gdx.graphics.getHeight() - drawnPitchHeight, drawnPitchWidth,
-				drawnPitchHeight);
+		camera.unproject(result);
 
 		return new Vector2(result.x, result.y);
 	}
@@ -1290,32 +1286,78 @@ public abstract class AbstractGame implements ApplicationListener,
 	public void resize(int width, int height) {
 		Gdx.app.log("Game", "Resized...: " + width + ", " + height);
 
-		double screenRatio = (double) width / (double) height;
-		double pitchImageRatio = (double) VIRTUAL_SCREEN_WIDTH
-				/ (double) TOTAL_SCREEN_HEIGHT;
+		// double screenRatio = (double) width / (double) height;
+		// double pitchImageRatio = (double) VIRTUAL_SCREEN_WIDTH
+		// / (double) TOTAL_SCREEN_HEIGHT;
+		//
+		// if (width > height) {
+		// // Need to draw pitch on it's side
+		// }
+		//
+		// if (screenRatio > pitchImageRatio) {
+		// // Borders to left and right
+		// scaleFactor = (double) height / (double) TOTAL_SCREEN_HEIGHT;
+		// drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
+		// drawnPitchHeight = (int) (TOTAL_SCREEN_HEIGHT * scaleFactor);
+		// xOffset = 0;
+		// yOffset = 0;
+		// } else {
+		// // Borders top and bottom
+		// scaleFactor = (double) width / (double) VIRTUAL_SCREEN_WIDTH;
+		// drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
+		// drawnPitchHeight = (int) (TOTAL_SCREEN_HEIGHT * scaleFactor);
+		// xOffset = 0;
+		// yOffset = 0;
+		// }
+		//
+		// Stage stage = new Stage(VIRTUAL_SCREEN_WIDTH, TOTAL_SCREEN_HEIGHT,
+		// true);
+		// stage.getCamera().translate(-stage.getGutterWidth(),
+		// -stage.getGutterHeight(), 0);
+		//
+		//
+		// Vector2 size = Scaling.fit.apply(VIRTUAL_SCREEN_WIDTH,
+		// TOTAL_SCREEN_HEIGHT, width, height);
+		//
+		// Gdx.gl.glViewport(xOffset, Gdx.graphics.getHeight() -
+		// drawnPitchHeight,
+		// (int) size.x, (int) size.y);
+		//
+		// Gdx.app.log("Game", "Resize results: " + scaleFactor + ", "
+		// + drawnPitchWidth + ", " + drawnPitchHeight + ", " + xOffset
+		// + ", " + yOffset);
 
-		if (width > height) {
-			// Need to draw pitch on it's side
-		}
+		float gutterWidth;
+		float gutterHeight;
 
-		if (screenRatio > pitchImageRatio) {
-			// Borders to left and right
-			scaleFactor = (double) height / (double) TOTAL_SCREEN_HEIGHT;
-			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
-			drawnPitchHeight = (int) (TOTAL_SCREEN_HEIGHT * scaleFactor);
-			xOffset = 0;
-			yOffset = 0;
+		float viewPortWidth;
+		float viewPortHeight;
+
+		float screenWidth = Gdx.graphics.getWidth();
+		float screenHeight = Gdx.graphics.getHeight();
+		if (screenHeight / screenWidth < height / width) {
+			float toScreenSpace = screenHeight / height;
+			float toViewportSpace = height / screenHeight;
+			float deviceWidth = width * toScreenSpace;
+			float lengthen = (screenWidth - deviceWidth) * toViewportSpace;
+			viewPortWidth = width + lengthen;
+			viewPortHeight = height;
+			gutterWidth = lengthen / 2;
+			gutterHeight = 0;
 		} else {
-			// Borders top and bottom
-			scaleFactor = (double) width / (double) VIRTUAL_SCREEN_WIDTH;
-			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
-			drawnPitchHeight = (int) (TOTAL_SCREEN_HEIGHT * scaleFactor);
-			xOffset = 0;
-			yOffset = 0;
+			float toScreenSpace = screenWidth / width;
+			float toViewportSpace = width / screenWidth;
+			float deviceHeight = height * toScreenSpace;
+			float lengthen = (screenHeight - deviceHeight) * toViewportSpace;
+			viewPortHeight = height + lengthen;
+			viewPortWidth = width;
+			gutterWidth = 0;
+			gutterHeight = lengthen / 2;
 		}
-		Gdx.app.log("Game", "Resize results: " + scaleFactor + ", "
-				+ drawnPitchWidth + ", " + drawnPitchHeight + ", " + xOffset
-				+ ", " + yOffset);
+
+		Gdx.gl.glViewport(xOffset,
+				(int) (Gdx.graphics.getHeight() - viewPortHeight),
+				(int) viewPortWidth, (int) viewPortHeight);
 	}
 
 	public void menuButtonPressed() {

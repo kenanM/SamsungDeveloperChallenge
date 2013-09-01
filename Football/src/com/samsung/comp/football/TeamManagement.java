@@ -465,7 +465,7 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 	protected void createRenderingObjects() {
 
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		stage = new Stage(resolutionX, resolutionY, false);
+		stage = new Stage(resolutionX, resolutionY, true);
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, Game.VIRTUAL_SCREEN_WIDTH,
