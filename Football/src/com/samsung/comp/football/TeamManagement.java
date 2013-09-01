@@ -133,7 +133,7 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		TextureRegion switchIconRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/switchIcon.png")));
 
-		Label labelTitle = new Label("Team Setup", skin);
+		Label labelTitle = new Label("Team Management", skin);
 
 		playerTeam = dataSource.getTeamsTableManager().getTeam(humanTeamID);
 

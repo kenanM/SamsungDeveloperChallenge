@@ -66,7 +66,7 @@ public class AISelectionScreen extends TextArea {
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
 
-		Label labelTitle = new Label("Select an Opponent", skin);
+		Label labelTitle = new Label("Single Player", skin);
 
 		aiTeamsList = dataSource.getTeamsTableManager().getOpponentTeams();
 		aiTeamsMenu = new List(aiTeamsList.toArray(), skin);
