@@ -33,12 +33,13 @@ public class AISelectionScreen extends TextArea {
 	private Color buttonColour = new Color(1f, 1f, 1f, .8f);
 
 	private Rectangle overlayBackground = new Rectangle(0, 0,
-			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 6);
+			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 9);
 
 	java.util.List<Team> aiTeamsList;
 	List aiTeamsMenu;
 	ScrollPane aiScrollPane;
 	Label labelTeamDifficulty;
+	Label labelSelectedTeam;
 
 	private PlayerDataSource dataSource;
 
@@ -78,6 +79,8 @@ public class AISelectionScreen extends TextArea {
 		labelTeamDifficulty = new Label("Easy", skin);
 		labelTeamDifficulty.setColor(easyLabelColour);
 
+		labelSelectedTeam = new Label("The Misfits", skin);
+
 		Table aiLayout = new Table(skin);
 		aiLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
 
@@ -85,11 +88,17 @@ public class AISelectionScreen extends TextArea {
 		aiLayout.add(labelTitle).colspan(2);
 
 		aiLayout.row();
-		aiLayout.add("Select an opponent").prefWidth(resolutionX * 2 / 3);
-		aiLayout.add("Difficulty").prefWidth(resolutionX * 1 / 3);
-
+		aiLayout.add("Select an opponent").prefWidth(resolutionX).colspan(2);
+		
 		aiLayout.row().fillX().expandX().prefHeight(280.5f);
-		aiLayout.add(aiScrollPane).prefWidth(resolutionX * 2 / 3);
+		aiLayout.add(aiScrollPane).prefWidth(resolutionX).colspan(2);
+
+		aiLayout.row();
+		aiLayout.add("Selected opponent");
+		aiLayout.add("Team Difficulty");
+
+		aiLayout.row();
+		aiLayout.add(labelSelectedTeam);
 		aiLayout.add(labelTeamDifficulty);
 
 		aiLayout.pack();
@@ -160,6 +169,8 @@ public class AISelectionScreen extends TextArea {
 				}
 				
 				Team selectedAITeam = aiTeamsList.get(selectedAITeamIndex);
+
+				labelSelectedTeam.setText(selectedAITeam.getTeamName());
 
 				float value = selectedAITeam.getDifficulty();
 				if (value == 1) {
