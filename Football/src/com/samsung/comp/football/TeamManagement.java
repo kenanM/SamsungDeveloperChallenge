@@ -312,23 +312,7 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 
 		backButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-
-				java.util.List<Player> dbSquadList = dataSource
-						.getSquadsTableManager().getSquad(humanTeamID)
-						.getAllPlayers();
-				boolean changesMade = false;
-
-				for (int i = 0; i < dbSquadList.size() - 1; i++) {
-					if (squadList.get(i).getID() != dbSquadList.get(i).getID()) {
-						changesMade = true;
-					}
-				}
-
-				if (changesMade) {
-					showConfirmationDialog();
-				} else {
-					exit();
-				}
+				backButtonPressed();
 			}
 		});
 
@@ -532,7 +516,34 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 		stage.draw();
 	}
 
+	public void backButtonPressed() {
+		// Check for any changes
+		boolean changesMade = false;
+
+		// Check the squad players and order
+		java.util.List<Player> dbSquadList = dataSource.getSquadsTableManager()
+				.getSquad(humanTeamID).getAllPlayers();
+
+		for (int i = 0; i < dbSquadList.size() - 1; i++) {
+			if (squadList.get(i).getID() != dbSquadList.get(i).getID()) {
+				changesMade = true;
+			}
+		}
+
+		// Check the team name
+		if (!playerTeam.getTeamName().equals(teamNameField.getText())) {
+			changesMade = true;
+		}
+
+		if (changesMade) {
+			showConfirmationDialog();
+		} else {
+			exit();
+		}
+	}
+
 	public void showConfirmationDialog() {
+
 		Button yesButton = new TextButton("Yes", skin);
 		Button noButton = new TextButton("No", skin);
 
@@ -610,9 +621,9 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.BACK) {
 			if (!stage.keyDown(Keys.BACK)) {
-				showConfirmationDialog();
+				backButtonPressed();
+				return true;
 			}
-			return true;
 		}
 		if (keycode == Keys.MENU) {
 
