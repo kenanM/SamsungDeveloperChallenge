@@ -81,6 +81,9 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 	protected ScrollPane leftScrollPane;
 	protected ScrollPane rightScrollPane;
 
+	protected Dialog dialog;
+	protected boolean dialogShown = false;
+
 	protected Button backButton;
 	protected Button startButton;
 
@@ -306,6 +309,8 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 			public void keyTyped(TextField textField, char key) {
 				if (key == '\n') {
 					textField.getOnscreenKeyboard().show(false);
+					stage.setKeyboardFocus(null);
+
 				}
 			}
 		});
@@ -544,20 +549,25 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 
 	public void showConfirmationDialog() {
 
-		Button yesButton = new TextButton("Yes", skin);
-		Button noButton = new TextButton("No", skin);
+		if (!dialogShown) {
+			dialogShown = true;
+			Button yesButton = new TextButton("Yes", skin);
+			Button noButton = new TextButton("No", skin);
 
-		Dialog dialog = new Dialog("Discard changes and exit?", skin, "dialog") {
-			protected void result(Object object) {
-				if (object.equals(true)) {
-					exit();
+			dialog = new Dialog("Discard changes and exit?", skin, "dialog") {
+				protected void result(Object object) {
+					if (object.equals(true)) {
+						exit();
+					}
+					dialogShown = false;
 				}
-			}
-		}.text("You will lose any changes you made.").button(noButton, false)
-				.button(yesButton, true).key(Keys.ENTER, true)
-				.key(Keys.ESCAPE, false).key(Keys.BACK, false);
+			}.text("You will lose any changes you made.")
+					.button(noButton, false).button(yesButton, true)
+					.key(Keys.ENTER, true).key(Keys.ESCAPE, false)
+					.key(Keys.BACK, false);
 
-		dialog.show(stage);
+			dialog.show(stage);
+		}
 	}
 
 	public void exit() {
@@ -620,6 +630,8 @@ public class TeamManagement implements ApplicationListener, InputProcessor,
 	@Override
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.BACK) {
+			stage.setKeyboardFocus(null);
+
 			if (!stage.keyDown(Keys.BACK)) {
 				backButtonPressed();
 				return true;
