@@ -149,7 +149,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected AI ai;
 	protected TextArea textArea;
 	public Bar bar;
-	protected boolean positionStatsAtTop = false;
+	protected boolean positionStatsAtTop = true;
 	protected boolean positionUIBarAtTop = false;
 	private boolean repositionCameraOnUpdate = false;
 
