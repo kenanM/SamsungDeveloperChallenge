@@ -60,6 +60,13 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	private static final String INPUT_TAG = "GameInputStrategy";
 
+	// Assumes bar at bottom
+	private static final Rectangle pitchRectangle = new Rectangle(0, 0,
+			VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
+
+	// A complete and total hack for resolution due to the bar
+	private static final int TOTAL_SCREEN_HEIGHT = VIRTUAL_SCREEN_HEIGHT + 64;
+
 	protected ActionResolver actionResolver;
 
 	protected PlayerDataSource playerDatabase;
@@ -205,8 +212,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void createRenderingObjects() {
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT
-				+ bar.getHeight());
+		camera.setToOrtho(true, VIRTUAL_SCREEN_WIDTH, TOTAL_SCREEN_HEIGHT);
 		camera.zoom = 1f;
 		if (positionUIBarAtTop) {
 			// Move the camera
@@ -356,8 +362,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		// clear the screen with a dark blue color.
-		Gdx.gl.glViewport(xOffset, yOffset, drawnPitchWidth, drawnPitchHeight
-				+ (int) bar.getHeight());
+		Gdx.gl.glViewport(xOffset, Gdx.graphics.getHeight() - drawnPitchHeight,
+				drawnPitchWidth, drawnPitchHeight);
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -1219,15 +1225,15 @@ public abstract class AbstractGame implements ApplicationListener,
 		double vx = (vector.x / scaleFactor) - xOffset;
 		double vy = (vector.y / scaleFactor) - yOffset;
 
-		try {
-			if (positionUIBarAtTop) {
-				vy -= bar.getHeight() / scaleFactor;
-			} else {
-
-			}
-
-		} catch (NullPointerException e) {
-		}
+		// try {
+		// if (positionUIBarAtTop) {
+		// vy -= bar.getHeight() / scaleFactor;
+		// } else {
+		//
+		// }
+		//
+		// } catch (NullPointerException e) {
+		// }
 
 		return new Vector2((float) vx, (float) vy);
 	}
@@ -1286,30 +1292,34 @@ public abstract class AbstractGame implements ApplicationListener,
 
 	@Override
 	public void resize(int width, int height) {
-		int pitchHeight = (int) (height - bar.getHeight());
-		double screenRatio = (double) width / (double) pitchHeight;
-		double pitchImageRatio = (double) VIRTUAL_SCREEN_WIDTH
-				/ (double) VIRTUAL_SCREEN_HEIGHT;
+		Gdx.app.log("Game", "Resized...: " + width + ", " + height);
 
-		if (width > pitchHeight) {
+		double screenRatio = (double) width / (double) height;
+		double pitchImageRatio = (double) VIRTUAL_SCREEN_WIDTH
+				/ (double) TOTAL_SCREEN_HEIGHT;
+
+		if (width > height) {
 			// Need to draw pitch on it's side
 		}
 
 		if (screenRatio > pitchImageRatio) {
 			// Borders to left and right
-			scaleFactor = (double) pitchHeight / (double) VIRTUAL_SCREEN_HEIGHT;
+			scaleFactor = (double) height / (double) TOTAL_SCREEN_HEIGHT;
 			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
-			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * scaleFactor);
-			xOffset = (width - drawnPitchWidth) / 2;
+			drawnPitchHeight = (int) (TOTAL_SCREEN_HEIGHT * scaleFactor);
+			xOffset = 0;
 			yOffset = 0;
 		} else {
 			// Borders top and bottom
 			scaleFactor = (double) width / (double) VIRTUAL_SCREEN_WIDTH;
 			drawnPitchWidth = (int) (VIRTUAL_SCREEN_WIDTH * scaleFactor);
-			drawnPitchHeight = (int) (VIRTUAL_SCREEN_HEIGHT * scaleFactor);
+			drawnPitchHeight = (int) (TOTAL_SCREEN_HEIGHT * scaleFactor);
 			xOffset = 0;
-			yOffset = (pitchHeight - drawnPitchHeight) / 2;
+			yOffset = 0;
 		}
+		Gdx.app.log("Game", "Resize results: " + scaleFactor + ", "
+				+ drawnPitchWidth + ", " + drawnPitchHeight + ", " + xOffset
+				+ ", " + yOffset);
 	}
 
 	public void menuButtonPressed() {
@@ -1720,7 +1730,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 				isBallHighlighted = findBall(point);
 
-				if (!bar.contains(point.x, point.y)) {
+				if (pitchRectangle.contains(point.x, point.y)) {
 					lineInProgress.clear();
 					lineInProgress.add(point);
 				}
@@ -1928,7 +1938,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		if (getGameState() == GameState.INPUT) {
-			if (!bar.contains(point.x, point.y)) {
+			if (pitchRectangle.contains(point.x, point.y)) {
 				lineInProgress.add(point);
 				if (lineInProgress.size() < 2) {
 					return false;
@@ -2100,7 +2110,7 @@ public abstract class AbstractGame implements ApplicationListener,
 		}
 
 		if (getGameState() == GameState.INPUT) {
-			if (!bar.contains(hoverPoint.x, hoverPoint.y)) {
+			if (pitchRectangle.contains(hoverPoint.x, hoverPoint.y)) {
 
 				Player hoverPlayer = findPlayer(hoverPoint);
 				isBallHighlighted = findBall(hoverPoint);
