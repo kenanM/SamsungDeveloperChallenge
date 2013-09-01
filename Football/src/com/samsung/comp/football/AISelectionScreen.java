@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -33,13 +34,16 @@ public class AISelectionScreen extends TextArea {
 	private Color buttonColour = new Color(1f, 1f, 1f, .8f);
 
 	private Rectangle overlayBackground = new Rectangle(0, 0,
-			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 9);
+			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64));
 
 	java.util.List<Team> aiTeamsList;
 	List aiTeamsMenu;
 	ScrollPane aiScrollPane;
 	Label labelTeamDifficulty;
 	Label labelSelectedTeam;
+
+	final Slider gameLengthSlider;
+	Label labelGameLength;
 
 	private PlayerDataSource dataSource;
 
@@ -56,6 +60,7 @@ public class AISelectionScreen extends TextArea {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
+		gameLengthSlider = new Slider(60, 180, 60, false, skin);
 		create();
 		this.listener = listener;
 	}
@@ -81,6 +86,9 @@ public class AISelectionScreen extends TextArea {
 
 		labelSelectedTeam = new Label("The Misfits", skin);
 
+		labelGameLength = new Label("1 minute", skin);
+		labelGameLength.setColor(easyLabelColour);
+
 		Table aiLayout = new Table(skin);
 		aiLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
 
@@ -100,6 +108,17 @@ public class AISelectionScreen extends TextArea {
 		aiLayout.row();
 		aiLayout.add(labelSelectedTeam);
 		aiLayout.add(labelTeamDifficulty);
+
+		aiLayout.row();
+		aiLayout.add();
+
+		aiLayout.row();
+		aiLayout.add("Game Length");
+		aiLayout.add("Time");
+
+		aiLayout.row();
+		aiLayout.add(gameLengthSlider);
+		aiLayout.add(labelGameLength);
 
 		aiLayout.pack();
 		aiLayout.setBackground((Drawable) null);
@@ -184,6 +203,26 @@ public class AISelectionScreen extends TextArea {
 					labelTeamDifficulty.setColor(hardLabelColour);
 				}
 
+			}
+		});
+
+		gameLengthSlider.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				float time = gameLengthSlider.getValue();
+
+				// Quick, short, normal, long
+				// 30, 60, 120, 180
+
+				if (time == 60) {
+					labelGameLength.setText("1 minute");
+					labelGameLength.setColor(easyLabelColour);
+				} else if (time == 120) {
+					labelGameLength.setText("2 minutes");
+					labelGameLength.setColor(medLabelColour);
+				} else if (time == 180) {
+					labelGameLength.setText("3 minutes");
+					labelGameLength.setColor(hardLabelColour);
+				}
 			}
 		});
 	}
