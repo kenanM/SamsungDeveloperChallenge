@@ -29,7 +29,8 @@ public class AISelectionScreen extends TextArea {
 	private BitmapFont bmf;
 	private Color overlayColour = new Color(0.27f, 0.27f, 0.35f, 0.70f);
 	private Color hardLabelColour = new Color(1f, 0f, 0f, 1f);
-	private Color medLabelColour = new Color(0.12f, 0.51f, .95f, 1f);
+	private Color yellowLabelColour = new Color(0.902f, 0.902f, 0f, 1f);
+	private Color medLabelColour = new Color(0.05f, 0.59f, .85f, 1f);
 	private Color easyLabelColour = new Color(0f, 1f, 0f, 1f);
 	private Color buttonColour = new Color(1f, 1f, 1f, .8f);
 
@@ -60,7 +61,7 @@ public class AISelectionScreen extends TextArea {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
-		gameLengthSlider = new Slider(60, 180, 60, false, skin);
+		gameLengthSlider = new Slider(0, 180, 60, false, skin);
 		create();
 		this.listener = listener;
 	}
@@ -213,12 +214,15 @@ public class AISelectionScreen extends TextArea {
 				// Quick, short, normal, long
 				// 30, 60, 120, 180
 
-				if (time == 60) {
-					labelGameLength.setText("1 minute");
+				if (time == 0) {
+					labelGameLength.setText("30 seconds");
 					labelGameLength.setColor(easyLabelColour);
+				} else if (time == 60) {
+					labelGameLength.setText("1 minute");
+					labelGameLength.setColor(medLabelColour);
 				} else if (time == 120) {
 					labelGameLength.setText("2 minutes");
-					labelGameLength.setColor(medLabelColour);
+					labelGameLength.setColor(yellowLabelColour);
 				} else if (time == 180) {
 					labelGameLength.setText("3 minutes");
 					labelGameLength.setColor(hardLabelColour);
@@ -238,6 +242,20 @@ public class AISelectionScreen extends TextArea {
 				.get(selectedAITeamIndex);
 	}
 	
+	public float getSelectedGameLength() {
+		float time = gameLengthSlider.getValue();
+		if (time == 0) {
+			return 30;
+		} else if (time == 60) {
+			return 60;
+		} else if (time == 120) {
+			return 120;
+		} else if (time == 180) {
+			return 180;
+		}
+		return 30;
+	}
+
 	@Override
 	public void update(float time) {
 		stage.act(time);

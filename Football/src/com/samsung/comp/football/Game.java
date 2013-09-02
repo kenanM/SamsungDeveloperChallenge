@@ -47,15 +47,6 @@ public class Game extends AbstractGame {
 		createTeams();
 		loadPlayersFromDB();
 
-		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
-				: remainingMatchTime;
-
-		// Set reward multipliers
-		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
-		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
-		Gdx.app.log("GameOver", "Game Length Multiplier: x"
-				+ gameLengthScoreMultiplier);
-
 		baseReward = 20000;
 
 		controlsActive = true;
@@ -72,6 +63,15 @@ public class Game extends AbstractGame {
 
 						coinFlipForStart();
 						createAI();
+
+						remainingMatchTime = screen.getSelectedGameLength();
+
+						// Set reward multipliers
+						gameLengthScoreMultiplier = (remainingMatchTime == 30) ? 0.4f
+								: (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+						teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
+						Gdx.app.log("GameOver", "Game Length Multiplier: x"
+								+ gameLengthScoreMultiplier);
 
 						soundManager.play(whistleBlow);
 						playerDatabase.close();
