@@ -87,7 +87,7 @@ public class AISelectionScreen extends TextArea {
 
 		labelSelectedTeam = new Label("The Misfits", skin);
 
-		labelGameLength = new Label("1 minute", skin);
+		labelGameLength = new Label("30 seconds", skin);
 		labelGameLength.setColor(easyLabelColour);
 
 		Table aiLayout = new Table(skin);
