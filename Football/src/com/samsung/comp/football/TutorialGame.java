@@ -266,6 +266,8 @@ public class TutorialGame extends AbstractGame {
 			if (!runSubsequentPhaseSetup()) {
 				beginInputStage();
 			}
+		} else {
+			successMessageDrawTime = 3f;
 		}
 	}
 
@@ -510,6 +512,7 @@ public class TutorialGame extends AbstractGame {
 
 		float time = Gdx.graphics.getDeltaTime();
 		goalScoredDrawTime = Math.max(0, goalScoredDrawTime - time);
+		successMessageDrawTime = Math.max(0, successMessageDrawTime - time);
 
 		textArea.update(time);
 		bar.update(time);

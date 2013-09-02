@@ -132,6 +132,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected float elapsedRoundTime = 0;
 	protected float remainingSetupTime = 0;
 	protected float goalScoredDrawTime = 0f;
+	protected float successMessageDrawTime = 0f;
 	protected int redScore = 0;
 	protected int blueScore = 0;
 
@@ -186,6 +187,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture pointer;
 	protected Texture pathArrow;
 	protected Texture pushIndicator;
+	protected Texture successMessage;
 
 	protected Skin skin;
 
@@ -239,6 +241,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		pathArrow = new Texture(Gdx.files.internal("arrowPath.png"));
 		pushIndicator = new Texture(
 				Gdx.files.internal("pushIndicatorOrange.png"));
+		successMessage = new Texture(Gdx.files.internal("successMessage.png"));
+
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
@@ -384,6 +388,20 @@ public abstract class AbstractGame implements ApplicationListener,
 			textArea.draw(batch, bmf, shapeRenderer);
 			bmf.scale(-.22f);
 		}
+
+		if (successMessageDrawTime > 0) {
+			batch.begin();
+			batch.draw(
+					successMessage,
+					VIRTUAL_SCREEN_WIDTH / 2 - successMessage.getWidth() / 2,
+					(VIRTUAL_SCREEN_HEIGHT / 2 - successMessage.getHeight() / 2)
+							+ (successMessageDrawTime * 20) - (3f * 20), 0, 0,
+					successMessage.getWidth(), successMessage.getHeight(), 1,
+					1, 0, 0, 0, successMessage.getWidth(),
+					successMessage.getHeight(), false, true);
+			batch.end();
+		}
+
 		drawShapeRenderer();
 	}
 
