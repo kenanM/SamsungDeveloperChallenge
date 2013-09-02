@@ -872,6 +872,8 @@ public abstract class AbstractGame implements ApplicationListener,
 					// passing through self)
 					float delta = ball.getSpeed() - player.getSavingSkill();
 					float rn = Utils.randomFloat(rng, 0, 100);
+					Gdx.app.log("Game", "Ball Collection: delta = " + delta
+							+ ", rn = " + rn);
 
 					if (rn > delta) {
 						// Clear collection restriction to allow quick repass
