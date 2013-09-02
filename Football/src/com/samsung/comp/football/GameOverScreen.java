@@ -33,7 +33,7 @@ public class GameOverScreen extends TextArea {
 	private int currentFunds = 0;
 	private String currentFundsString;
 	private int reward = 0;
-	private final float fundsAddingTime = 4f;
+	private final float fundsAddingTime = 3f;
 
 	float resolutionX = Game.VIRTUAL_SCREEN_WIDTH / 2;
 	float resolutionY = (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 2;
@@ -79,6 +79,7 @@ public class GameOverScreen extends TextArea {
 	public GameOverScreen(AbstractGame game, int reward, int currentFunds) {
 		this(game, reward);
 		this.startingFunds = currentFunds;
+		this.currentFunds = currentFunds;
 		this.reward = reward;
 	}
 
