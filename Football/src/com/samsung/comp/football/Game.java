@@ -57,6 +57,7 @@ public class Game extends AbstractGame {
 					@Override
 					public void onStartButtonPressed(AISelectionScreen screen) {
 						teamB = screen.getSelectedAITeam();
+						Gdx.app.log("GameDB", "Suceeded assigning Team B");
 						Gdx.app.log("Game", "Loading AI players. Team ID = "
 								+ teamB.getTeamID());
 						loadAiPlayersFromDB(teamB.getTeamID());
@@ -299,11 +300,6 @@ public class Game extends AbstractGame {
 
 		teamA.setTeamName(playerDatabase.getTeamsTableManager()
 				.getTeam(userTeamID).getTeamName());
-		playerDatabase.getTeamsTableManager().alterTeam(teamA);
-
-		teamB = playerDatabase.getTeamsTableManager().getTeam(2);
-		Gdx.app.log("GameDB", "Suceeded assigning Team B");
-
 	}
 
 	private void createMovementCompletedListeners(TeamColour teamColour) {
