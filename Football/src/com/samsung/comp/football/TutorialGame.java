@@ -330,26 +330,28 @@ public class TutorialGame extends AbstractGame {
 			Player bp = bluePlayers.get(0);
 			Player bp1 = bluePlayers.get(1);
 			
-			Arrow bluePush1 = new Arrow(pushIndicator, bp.getPlayerX(), bp.getPlayerY(),
-					arrowTipFactory(pushIndicator));
+			// Arrow bluePush1 = new Arrow(pushIndicator, bp.getPlayerX(),
+			// bp.getPlayerY(),
+			// arrowTipFactory(pushIndicator));
 			
 			Arrow bluePush2 = new Arrow(pushIndicator, bp1.getPlayerX(), bp1.getPlayerY(),
 					arrowTipFactory(pushIndicator));
 			
-			Arrow redPush1 = new Arrow(pushIndicator, rp.getPlayerX(), rp.getPlayerY(),
-					arrowTipFactory(pushIndicator));
+			// Arrow redPush1 = new Arrow(pushIndicator, rp.getPlayerX(),
+			// rp.getPlayerY(),
+			// arrowTipFactory(pushIndicator));
 
 			Arrow redPush2 = new Arrow(pushIndicator, rp1.getPlayerX(), rp1.getPlayerY(),
 					arrowTipFactory(pushIndicator));
 
-			bluePush1.follow(bp);
+			// bluePush1.follow(bp);
 			bluePush2.follow(bp1);
-			redPush1.follow(rp);
+			// redPush1.follow(rp);
 			redPush2.follow(rp1);
 
-			arrows.add(bluePush1);
+			// arrows.add(bluePush1);
 			arrows.add(bluePush2);
-			arrows.add(redPush1);
+			// arrows.add(redPush1);
 			arrows.add(redPush2);
 
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
