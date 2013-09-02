@@ -872,9 +872,9 @@ public abstract class AbstractGame implements ApplicationListener,
 					// passing through self)
 					float delta = ball.getSpeed() - player.getSavingSkill();
 					float rn = Utils.randomFloat(rng, 0, 100);
-					Gdx.app.log("Game", "Ball Collection: delta = " + delta
-							+ ", rn = " + rn);
-
+					Gdx.app.log("Game",
+							"Ball Collection (rn > delta for success): delta = "
+									+ delta + ", rn = " + rn);
 					if (rn > delta) {
 						// Clear collection restriction to allow quick repass
 						for (Player p : getAllPlayers()) {
@@ -908,6 +908,9 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void performTackle(Player player) {
 		float tackleChance = player.getTackleSkill();
 		float rn = Utils.randomFloat(rng, 0, 100);
+		Gdx.app.log("Game",
+				"Tackling (rn < tackleChance for success): tackleChance = "
+						+ tackleChance + ", rn = " + rn);
 		if (rn < tackleChance) {
 			float rotation = 0;
 			rotation = Utils.getMoveVector(ball.getOwner().getPlayerPosition(),
