@@ -16,6 +16,7 @@ public class TextArea extends Rectangle {
 	protected Texture areaTexture;
 	protected String text = "NO TEXT";
 	protected ButtonPressListener observer;
+	protected BitmapFont font = null;
 
 	public TextArea() {
 		areaTexture = new Texture(Gdx.files.internal("textArea.png"));
@@ -24,6 +25,12 @@ public class TextArea extends Rectangle {
 		width = areaTexture.getWidth();
 		height = areaTexture.getHeight();
 	}
+
+	public TextArea(BitmapFont font) {
+		this();
+		this.font = font;
+	}
+
 
 	public TextArea(float x, float y, float width, float height, String text) {
 		this.x = x;
@@ -39,6 +46,10 @@ public class TextArea extends Rectangle {
 	}
 
 	public void draw(SpriteBatch batch, BitmapFont bmf, ShapeRenderer renderer) {
+		if (this.font != null) {
+			bmf = font;
+		}
+
 		batch.begin();
 		batch.draw(areaTexture, x, y, areaTexture.getWidth(),
 				areaTexture.getHeight(), 0, 0, areaTexture.getWidth(),
@@ -53,7 +64,7 @@ public class TextArea extends Rectangle {
 		// 600);
 
 		bmf.drawWrapped(batch, text, (60), Game.VIRTUAL_SCREEN_HEIGHT - 978,
-				Game.VIRTUAL_SCREEN_HEIGHT - 60);
+				Game.VIRTUAL_SCREEN_HEIGHT + 130);
 		bmf.setColor(tempColor);
 		batch.end();
 	}

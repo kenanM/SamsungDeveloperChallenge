@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.events.ButtonPressListener;
 import com.samsung.comp.football.Actions.MarkBall;
@@ -23,6 +24,7 @@ public class TutorialGame extends AbstractGame {
 
 	private TutorialPhase tutorialPhase = TutorialPhase.MOVE;
 	private int guideBookPage = 0;
+	private BitmapFont textAreaFont;
 
 	public TutorialGame(ActionResolver actionResolver) {
 		this.actionResolver = actionResolver;
@@ -39,6 +41,9 @@ public class TutorialGame extends AbstractGame {
 		createUI();
 		createRenderingObjects();
 		createGoals();
+
+		textAreaFont = new BitmapFont(true);
+		textAreaFont.scale(1.0f);
 
 		baseReward = 10000;
 
@@ -356,7 +361,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	protected void displayTutorialMessage() {
-		textArea = new TextArea();
+		textArea = new TextArea(textAreaFont);
 		textArea.setListener(new ButtonPressListener() {
 			@Override
 			public void onButtonPress() {
@@ -375,7 +380,7 @@ public class TutorialGame extends AbstractGame {
 					+ "Your player will run straight towards the ball to collect it, even if it's moving.\n\n"
 					+ "Don't forget to hit the play button when you're ready.");
 		} else if (tutorialPhase == TutorialPhase.SHOOT) {
-			textArea.setText("Now that you have the ball, tap on your player to select them again, then tap on the pitch to shoot. \n\n"
+			textArea.setText("Now that you have the ball, tap on your player to select them again, then tap on the pitch to shoot at full power. \n\n"
 					+ "How else are you going to score? \n\n"
 					+ "Shoot the ball into either goal.");
 		} else if (tutorialPhase == TutorialPhase.PASS) {
@@ -383,23 +388,21 @@ public class TutorialGame extends AbstractGame {
 					+ "Select the new player then tap on the other to give an order to pass to them. \n\n"
 					+ "Tip: If you order the receiver to move, the other player will pass ahead of their path for you. \n\n");
 		} else if (tutorialPhase == TutorialPhase.MARK) {
-			textArea.setText("Marking opponents: \n\n"
-					+ "Select your player, then select a red player to mark them. \n\n"
+			textArea.setText(" Select your player, then select a red player to mark them. \n\n"
 					+ "They'll follow them until they get the ball. \n\n"
 					+ "Mark both of these players and get the ball back. \n\n"
 					+ "Tip: If you queue up another action, they will perform it once they have the ball");
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
-			textArea.setText("You can give multiple actions to any player to plan out better strategies and maneuvers. \n\n"
-					+ "You can continue a path from any of your previous actions. \n"
-					+ "You can also select a player by tapping one of their later locations. \n\n"
+			textArea.setText("You can give multiple actions to any player to plan out better strategies. \n\n"
+					+ "You can use any of a player's actions to continue a path or even to select them. \n\n"
 					+ "Continuing a path from a marked opponent or the ball will create a straight line to the next point. \n\n"
 					+ "Try tackling the red player, then moving away from them and scoring a goal.");
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
-			textArea.setText("The goal keeper acts differently than your other players. \n\n"
-					+ "It moves automatically, and you can give them instructions only when they have the ball. \n\n"
-					+ "If they are holding the ball, they must be ordered to pass or kick it before play can continue. \n\n"
-					+ "Goal keepers also have a better chance of stopping a fast moving ball than other players do and cannot be tackled. \n\n"
-					+ "Score a goal to complete the tutorial.");
+			textArea.setText("Goal keepers move automatically, and can be ordered only when they have the ball. \n\n"
+					+ "They must be ordered to pass or kick the ball before play can continue. \n\n"
+					+ "Goal keepers can stop faster shots and cannot be tackled. \n\n"
+					+ "Score a goal to complete the tutorial. \n"
+					+ "Tip: Try luring the goal keeper out and then passing the ball.");
 		}
 		gameStateToGoIntoWhenBackButtonPressed = gameState;
 		gameState = GameState.PAUSED;
