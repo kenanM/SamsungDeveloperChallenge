@@ -82,25 +82,81 @@ public class PlayersTableManager {
 
 		Player[] players = {
 
-				// The Misfits (Team ID 3)
-				new Player(0, "Steve", 520.0f, 150.0f, 100.0f, 420.0f, 3, 2000),
-				new Player(0, "Alex", 540.0f, 200.0f, 80.0f, 380.0f, 3, 2000),
-				new Player(0, "Thomas", 550.0f, 100.0f, 100.0f, 420.0f, 3, 2000),
-				new Player(0, "Samuel", 530.0f, 150.0f, 80.0f, 420.0f, 3, 2000),
-				new Goalie(0, "David", 520.0f, 150.0f, 100.0f, 500.0f, 3, 2000),
-
+				
 				// Human 1 (Team ID 1)
-				new Player(0, "Bartholomew", 520.0f, 150.0f, 100.0f, 420.0f, 1,
-						0),
-				new Player(0, "Edgar", 540.0f, 200.0f, 80.0f, 380.0f, 1, 0),
-				new Player(0, "Oswald", 550.0f, 100.0f, 100.0f, 420.0f, 1, 0),
-				new Player(0, "Quinten", 530.0f, 150.0f, 80.0f, 420.0f, 1, 0),
-				new Goalie(0, "Victor", 520.0f, 150.0f, 100.0f, 500.0f, 1, 0),
+				new Player(0, "Donald", 520.0f, 150.0f, 100.0f, 420.0f, 1, 0),
+				new Player(0, "Bobby", 540.0f, 200.0f, 80.0f, 380.0f, 1, 0),
+				new Player(0, "Dexter", 550.0f, 100.0f, 100.0f, 420.0f, 1, 0),
+				new Player(0, "Edward", 530.0f, 150.0f, 80.0f, 420.0f, 1, 0),
+				new Goalie(0, "Rory", 520.0f, 150.0f, 100.0f, 500.0f, 1, 0),
 
 				// Player Store (Team ID 2)
 				new Player(0, "A", 530.0f, 150.0f, 80.0f, 420.0f, 2, 30000),
-				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 20000) };
+				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 20000),
 
+				// The Barnsbury Blunderers (Team ID 3)
+				new Player(0, "Luke", 520.0f, 150.0f, 100.0f, 420.0f, 3, 2000),
+				new Player(0, "Billy", 540.0f, 200.0f, 80.0f, 380.0f, 3, 2000),
+				new Player(0, "Alfie", 550.0f, 100.0f, 100.0f, 420.0f, 3, 2000),
+				new Player(0, "Owen", 530.0f, 150.0f, 80.0f, 420.0f, 3, 2000),
+				new Goalie(0, "Amiable Andy", 520.0f, 150.0f, 100.0f, 500.0f, 3, 2000),
+
+				// Scouting for goals (Team ID 4)
+				new Player(0, "Oliver", 520.0f, 150.0f, 100.0f, 420.0f, 4, 2000),
+				new Player(0, "Madman Max", 540.0f, 200.0f, 80.0f, 380.0f, 4, 2000),
+				new Player(0, "Tiny Tom", 550.0f, 100.0f, 100.0f, 420.0f, 4, 2000),
+				new Player(0, "Fred", 530.0f, 150.0f, 80.0f, 420.0f, 4, 2000),
+				new Goalie(0, "David", 520.0f, 150.0f, 100.0f, 500.0f, 4, 2000),
+
+				// Goal Direction (Team ID 5)
+				new Player(0, "Krazy Kevin", 520.0f, 150.0f, 100.0f, 420.0f, 5, 2000),
+				new Player(0, "Aiden", 540.0f, 200.0f, 80.0f, 380.0f, 5, 2000),
+				new Player(0, "Ryan", 550.0f, 100.0f, 100.0f, 420.0f, 5, 2000),
+				new Player(0, "Scott", 530.0f, 150.0f, 80.0f, 420.0f, 5, 2000),
+				new Goalie(0, "Matthew", 520.0f, 150.0f, 100.0f, 500.0f, 5, 2000),
+
+				// Random Rovers (Team ID 6)
+				new Player(0, "Mad Michael", 520.0f, 150.0f, 100.0f, 420.0f, 6, 2000),
+				new Player(0, "Riley", 540.0f, 200.0f, 80.0f, 380.0f, 6, 2000),
+				new Player(0, "Ben", 550.0f, 100.0f, 100.0f, 420.0f, 6, 2000),
+				new Player(0, "Dylan", 530.0f, 150.0f, 80.0f, 420.0f, 6, 2000),
+				new Goalie(0, "Frank", 520.0f, 150.0f, 100.0f, 500.0f, 6, 2000),
+
+				// Real Reunited (Team ID 7)
+				new Player(0, "Angry Adam ", 520.0f, 150.0f, 100.0f, 420.0f, 7, 2000),
+				new Player(0, "James ", 540.0f, 200.0f, 80.0f, 380.0f, 7, 2000),
+				new Player(0, "William", 550.0f, 100.0f, 100.0f, 420.0f, 7, 2000),
+				new Player(0, "Zain", 530.0f, 150.0f, 80.0f, 420.0f, 7, 2000),
+				new Goalie(0, "David", 520.0f, 150.0f, 100.0f, 500.0f, 7, 2000),
+
+				// Real aphid (Team ID 8)
+				new Player(0, "Troubled Trevor", 520.0f, 150.0f, 100.0f, 420.0f, 8, 2000),
+				new Player(0, "Felix", 540.0f, 200.0f, 80.0f, 380.0f, 8, 2000),
+				new Player(0, "Nathan", 550.0f, 100.0f, 100.0f, 420.0f, 8, 2000),
+				new Player(0, "Trevor", 530.0f, 150.0f, 80.0f, 420.0f, 8, 2000),
+				new Goalie(0, "Louis", 520.0f, 150.0f, 100.0f, 500.0f, 8, 2000),
+
+				// Men Reunited (Team ID 9)
+				new Player(0, "Naughty Nev", 520.0f, 150.0f, 100.0f, 420.0f, 9, 2000),
+				new Player(0, "Harry", 540.0f, 200.0f, 80.0f, 380.0f, 9, 2000),
+				new Player(0, "Jack", 550.0f, 100.0f, 100.0f, 420.0f, 9, 2000),
+				new Player(0, "Charlie", 530.0f, 150.0f, 80.0f, 420.0f, 9, 2000),
+				new Goalie(0, "Jacob", 520.0f, 150.0f, 100.0f, 500.0f, 9, 2000),
+
+				// Malden Mavericks (Team ID 10)
+				new Player(0, "Guy", 520.0f, 150.0f, 100.0f, 420.0f, 10, 2000),
+				new Player(0, "Ross", 540.0f, 200.0f, 80.0f, 380.0f, 10, 2000),
+				new Player(0, "Michael", 550.0f, 100.0f, 100.0f, 420.0f, 10, 2000),
+				new Player(0, "Henry", 530.0f, 150.0f, 80.0f, 420.0f, 10, 2000),
+				new Goalie(0, "Richard", 520.0f, 150.0f, 100.0f, 500.0f, 10, 2000),
+
+				// Team Null (Team ID 11)
+				new Player(0, "Gavin the Great", 520.0f, 150.0f, 100.0f, 420.0f, 11, 2000),
+				new Player(0, "Kenan the Koder", 540.0f, 200.0f, 80.0f, 380.0f, 11, 2000),
+				new Player(0, "Liz la Artiste", 550.0f, 100.0f, 100.0f, 420.0f, 11, 2000),
+				new Player(0, "Allan the Tackler", 530.0f, 150.0f, 80.0f, 420.0f, 11, 2000),
+				new Goalie(0, "Stephen the Swift", 520.0f, 150.0f, 100.0f, 500.0f, 11, 2000)};
+		
 		for (Player player : players) {
 			insertPlayer(database, player);
 		}
