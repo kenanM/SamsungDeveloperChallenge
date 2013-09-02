@@ -749,7 +749,7 @@ public class Player extends Rectangle implements Followable {
 			// failure rate
 
 			// v
-			float idealFinalSpeed = target.getSavingSkill() - 20;
+			float idealFinalSpeed = target.getSavingSkill() - 45;
 
 			float idealInitialSpeed = (float) Math.sqrt(idealFinalSpeed
 					* idealFinalSpeed
