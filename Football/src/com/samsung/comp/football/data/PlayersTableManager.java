@@ -167,10 +167,10 @@ public class PlayersTableManager {
 				"adding player: " + player.toString());
 		ContentValues values = new ContentValues();
 		values.put(PLAYER_NAME_COLUMN_NAME, player.getName());
-		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeed());
-		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeed());
-		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkill());
-		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkill());
+		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeedBarCount());
+		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeedBarCount());
+		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkillBarCount());
+		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkillBarCount());
 		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
 		values.put(COST_COLUMN_NAME, player.getPlayerCost());
 		Log.v("db", "player's team_id: " + player.getTeamID());
@@ -278,10 +278,10 @@ public class PlayersTableManager {
 
 		ContentValues values = new ContentValues();
 		values.put(PLAYER_NAME_COLUMN_NAME, player.getName());
-		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeed());
-		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeed());
-		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkill());
-		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkill());
+		values.put(RUN_SPEED_COLUMN_NAME, player.getRunSpeedBarCount());
+		values.put(SHOOT_SPEED_COLUMN_NAME, player.getShootSpeedBarCount());
+		values.put(TACKLE_SKILL_COLUMN_NAME, player.getTackleSkillBarCount());
+		values.put(SAVING_SKILL_COLUMN_NAME, player.getSavingSkillBarCount());
 		values.put(TEAM_ID_COLUMN_NAME, player.getTeamID());
 		values.put(COST_COLUMN_NAME, player.getPlayerCost());
 
