@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -28,17 +29,22 @@ public class AISelectionScreen extends TextArea {
 	private BitmapFont bmf;
 	private Color overlayColour = new Color(0.27f, 0.27f, 0.35f, 0.70f);
 	private Color hardLabelColour = new Color(1f, 0f, 0f, 1f);
-	private Color medLabelColour = new Color(0.12f, 0.51f, .95f, 1f);
+	private Color yellowLabelColour = new Color(0.902f, 0.902f, 0f, 1f);
+	private Color medLabelColour = new Color(0.05f, 0.59f, .85f, 1f);
 	private Color easyLabelColour = new Color(0f, 1f, 0f, 1f);
 	private Color buttonColour = new Color(1f, 1f, 1f, .8f);
 
 	private Rectangle overlayBackground = new Rectangle(0, 0,
-			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64) / 6);
+			Game.VIRTUAL_SCREEN_WIDTH, (Game.VIRTUAL_SCREEN_HEIGHT + 64));
 
 	java.util.List<Team> aiTeamsList;
 	List aiTeamsMenu;
 	ScrollPane aiScrollPane;
 	Label labelTeamDifficulty;
+	Label labelSelectedTeam;
+
+	final Slider gameLengthSlider;
+	Label labelGameLength;
 
 	private PlayerDataSource dataSource;
 
@@ -55,6 +61,7 @@ public class AISelectionScreen extends TextArea {
 		this.game = game;
 		this.skin = game.skin;
 		this.dataSource = dataSource;
+		gameLengthSlider = new Slider(0, 180, 60, false, skin);
 		create();
 		this.listener = listener;
 	}
@@ -65,7 +72,7 @@ public class AISelectionScreen extends TextArea {
 		bmf = new BitmapFont(true);
 		bmf.scale(.5f);
 
-		Label labelTitle = new Label("Select an Opponent", skin);
+		Label labelTitle = new Label("Single Player", skin);
 
 		aiTeamsList = dataSource.getTeamsTableManager().getOpponentTeams();
 		aiTeamsMenu = new List(aiTeamsList.toArray(), skin);
@@ -78,6 +85,11 @@ public class AISelectionScreen extends TextArea {
 		labelTeamDifficulty = new Label("Easy", skin);
 		labelTeamDifficulty.setColor(easyLabelColour);
 
+		labelSelectedTeam = new Label("The Misfits", skin);
+
+		labelGameLength = new Label("30 seconds", skin);
+		labelGameLength.setColor(easyLabelColour);
+
 		Table aiLayout = new Table(skin);
 		aiLayout.defaults().spaceBottom(2.5f).prefHeight(17.5f);
 
@@ -85,12 +97,29 @@ public class AISelectionScreen extends TextArea {
 		aiLayout.add(labelTitle).colspan(2);
 
 		aiLayout.row();
-		aiLayout.add("Select an opponent").prefWidth(resolutionX * 2 / 3);
-		aiLayout.add("Difficulty").prefWidth(resolutionX * 1 / 3);
-
+		aiLayout.add("Select an opponent").prefWidth(resolutionX).colspan(2);
+		
 		aiLayout.row().fillX().expandX().prefHeight(280.5f);
-		aiLayout.add(aiScrollPane).prefWidth(resolutionX * 2 / 3);
+		aiLayout.add(aiScrollPane).prefWidth(resolutionX).colspan(2);
+
+		aiLayout.row();
+		aiLayout.add("Selected opponent");
+		aiLayout.add("Team Difficulty");
+
+		aiLayout.row();
+		aiLayout.add(labelSelectedTeam);
 		aiLayout.add(labelTeamDifficulty);
+
+		aiLayout.row();
+		aiLayout.add();
+
+		aiLayout.row();
+		aiLayout.add("Game Length");
+		aiLayout.add("Time");
+
+		aiLayout.row();
+		aiLayout.add(gameLengthSlider);
+		aiLayout.add(labelGameLength);
 
 		aiLayout.pack();
 		aiLayout.setBackground((Drawable) null);
@@ -161,6 +190,8 @@ public class AISelectionScreen extends TextArea {
 				
 				Team selectedAITeam = aiTeamsList.get(selectedAITeamIndex);
 
+				labelSelectedTeam.setText(selectedAITeam.getTeamName());
+
 				float value = selectedAITeam.getDifficulty();
 				if (value == 1) {
 					labelTeamDifficulty.setText("Easy");
@@ -173,6 +204,29 @@ public class AISelectionScreen extends TextArea {
 					labelTeamDifficulty.setColor(hardLabelColour);
 				}
 
+			}
+		});
+
+		gameLengthSlider.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				float time = gameLengthSlider.getValue();
+
+				// Quick, short, normal, long
+				// 30, 60, 120, 180
+
+				if (time == 0) {
+					labelGameLength.setText("30 seconds");
+					labelGameLength.setColor(easyLabelColour);
+				} else if (time == 60) {
+					labelGameLength.setText("1 minute");
+					labelGameLength.setColor(medLabelColour);
+				} else if (time == 120) {
+					labelGameLength.setText("2 minutes");
+					labelGameLength.setColor(yellowLabelColour);
+				} else if (time == 180) {
+					labelGameLength.setText("3 minutes");
+					labelGameLength.setColor(hardLabelColour);
+				}
 			}
 		});
 	}
@@ -188,6 +242,20 @@ public class AISelectionScreen extends TextArea {
 				.get(selectedAITeamIndex);
 	}
 	
+	public float getSelectedGameLength() {
+		float time = gameLengthSlider.getValue();
+		if (time == 0) {
+			return 30;
+		} else if (time == 60) {
+			return 60;
+		} else if (time == 120) {
+			return 120;
+		} else if (time == 180) {
+			return 180;
+		}
+		return 30;
+	}
+
 	@Override
 	public void update(float time) {
 		stage.act(time);

@@ -63,7 +63,7 @@ public class MainApplication extends Activity {
 				gameIntent.putExtra("Score_Limit", scoreLimit);
 				gameIntent.putExtra("Status_Bar_Top", statusBarAtTop);
 
-				showDialog(MainApplication.this, gameIntent).show();
+				startActivity(gameIntent);
 			}
 		});
 

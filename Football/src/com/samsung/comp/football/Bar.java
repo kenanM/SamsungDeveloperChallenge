@@ -177,7 +177,7 @@ public class Bar extends Rectangle {
 				bmf.setScale(1,-1);
 			}
 			
-			Gdx.app.log("bar", "Bar width = " + bmf.getBounds(text).width);
+			// Gdx.app.log("bar", "Bar width = " + bmf.getBounds(text).width);
 				
 			
 			

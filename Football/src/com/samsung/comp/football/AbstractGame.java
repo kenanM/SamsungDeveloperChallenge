@@ -132,6 +132,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected float elapsedRoundTime = 0;
 	protected float remainingSetupTime = 0;
 	protected float goalScoredDrawTime = 0f;
+	protected float successMessageDrawTime = 0f;
 	protected int redScore = 0;
 	protected int blueScore = 0;
 
@@ -149,7 +150,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected AI ai;
 	protected TextArea textArea;
 	public Bar bar;
-	protected boolean positionStatsAtTop = false;
+	protected boolean positionStatsAtTop = true;
 	protected boolean positionUIBarAtTop = false;
 	private boolean repositionCameraOnUpdate = false;
 
@@ -176,6 +177,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture redSelectTexture;
 	protected Texture blueSelectTexture;
 	protected float selectTextureStateTime = 0f;
+	protected Texture arrowSelectTexture;
 
 	protected Texture ghostSpriteSheet;
 	protected Animation ghostRunAnimation;
@@ -185,6 +187,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture pointer;
 	protected Texture pathArrow;
 	protected Texture pushIndicator;
+	protected Texture successMessage;
 
 	protected Skin skin;
 
@@ -238,6 +241,8 @@ public abstract class AbstractGame implements ApplicationListener,
 		pathArrow = new Texture(Gdx.files.internal("arrowPath.png"));
 		pushIndicator = new Texture(
 				Gdx.files.internal("pushIndicatorOrange.png"));
+		successMessage = new Texture(Gdx.files.internal("successMessage.png"));
+
 		textArea = new NullTextArea();
 		bar = new Bar(this, positionUIBarAtTop);
 		cursor = new Cursor();
@@ -303,6 +308,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
+		arrowSelectTexture = new Texture(
+				Gdx.files.internal("selectionArrow.png"));
 
 		ghostSpriteSheet = new Texture(Gdx.files.internal("shadowPlayer.png"));
 		ghostRunAnimation = new Animation(0.10f, Utils.createTextureRegion(
@@ -381,6 +388,20 @@ public abstract class AbstractGame implements ApplicationListener,
 			textArea.draw(batch, bmf, shapeRenderer);
 			bmf.scale(-.22f);
 		}
+
+		if (successMessageDrawTime > 0) {
+			batch.begin();
+			batch.draw(
+					successMessage,
+					VIRTUAL_SCREEN_WIDTH / 2 - successMessage.getWidth() / 2,
+					(VIRTUAL_SCREEN_HEIGHT / 2 - successMessage.getHeight() / 2)
+							+ (successMessageDrawTime * 20) - (3f * 20), 0, 0,
+					successMessage.getWidth(), successMessage.getHeight(), 1,
+					1, 0, 0, 0, successMessage.getWidth(),
+					successMessage.getHeight(), false, true);
+			batch.end();
+		}
+
 		drawShapeRenderer();
 	}
 
@@ -451,6 +472,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			if (selPlayer != null) {
 				selPlayer.drawSelect(batch, selectTextureStateTime);
+				drawSelectChevron(selPlayer);
 				drawTimeLinePoints(selPlayer);
 				drawGhost(selPlayer, ghostStateTime);
 			}
@@ -479,6 +501,32 @@ public abstract class AbstractGame implements ApplicationListener,
 			ball.draw(batch);
 		}
 		batch.end();
+	}
+
+	private void drawSelectChevron(Player selPlayer) {
+		// Converts the state time into a scale between 0 and 1
+		// using a cosine wave. Draws the selection chevron above
+		// the player.
+		double spinSpeed = selectTextureStateTime * 2;
+		double scaleDouble = (Math.abs(Math.cos(spinSpeed)));
+		float scale = (float) (scaleDouble);
+
+		double bounceSpeed = selectTextureStateTime * 1.5;
+		double yOffsetFactorDouble = (Math.abs(Math.cos(bounceSpeed)));
+		float yOffsetFactor = (float) (yOffsetFactorDouble);
+
+		float textureWidth = arrowSelectTexture.getWidth() * scale;
+		float textureX = selPlayer.getPlayerX() - textureWidth / 2;
+		float yOffset = yOffsetFactor * 64;
+		float textureY = selPlayer.getPlayerY()
+				- arrowSelectTexture.getHeight() - (yOffset);
+
+		batch.draw(arrowSelectTexture, textureX, textureY,
+				(arrowSelectTexture.getWidth() / 2) * scale,
+				arrowSelectTexture.getHeight() / 2, textureWidth,
+				arrowSelectTexture.getHeight(), scale, 1, 0, 0, 0,
+				arrowSelectTexture.getWidth(), arrowSelectTexture.getHeight(),
+				false, true);
 	}
 
 	public void drawTimeLinePoints(Player player) {
@@ -824,7 +872,9 @@ public abstract class AbstractGame implements ApplicationListener,
 					// passing through self)
 					float delta = ball.getSpeed() - player.getSavingSkill();
 					float rn = Utils.randomFloat(rng, 0, 100);
-
+					Gdx.app.log("Game",
+							"Ball Collection (rn > delta for success): delta = "
+									+ delta + ", rn = " + rn);
 					if (rn > delta) {
 						// Clear collection restriction to allow quick repass
 						for (Player p : getAllPlayers()) {
@@ -858,6 +908,9 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected void performTackle(Player player) {
 		float tackleChance = player.getTackleSkill();
 		float rn = Utils.randomFloat(rng, 0, 100);
+		Gdx.app.log("Game",
+				"Tackling (rn < tackleChance for success): tackleChance = "
+						+ tackleChance + ", rn = " + rn);
 		if (rn < tackleChance) {
 			float rotation = 0;
 			rotation = Utils.getMoveVector(ball.getOwner().getPlayerPosition(),
@@ -1258,6 +1311,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		for (Player player : getAllPlayers()) {
 			player.dispose();
 		}
+
+		arrowSelectTexture.dispose();
+		redSelectTexture.dispose();
+		blueSelectTexture.dispose();
+
 		Ball.dispose();
 		Kick.dispose();
 		Move.dispose();

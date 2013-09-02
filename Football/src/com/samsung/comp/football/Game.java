@@ -47,15 +47,6 @@ public class Game extends AbstractGame {
 		createTeams();
 		loadPlayersFromDB();
 
-		remainingMatchTime = (remainingMatchTime <= 0) ? 3 * 60
-				: remainingMatchTime;
-
-		// Set reward multipliers
-		gameLengthScoreMultiplier = (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
-		teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
-		Gdx.app.log("GameOver", "Game Length Multiplier: x"
-				+ gameLengthScoreMultiplier);
-
 		baseReward = 20000;
 
 		controlsActive = true;
@@ -66,12 +57,22 @@ public class Game extends AbstractGame {
 					@Override
 					public void onStartButtonPressed(AISelectionScreen screen) {
 						teamB = screen.getSelectedAITeam();
+						Gdx.app.log("GameDB", "Suceeded assigning Team B");
 						Gdx.app.log("Game", "Loading AI players. Team ID = "
 								+ teamB.getTeamID());
 						loadAiPlayersFromDB(teamB.getTeamID());
 
 						coinFlipForStart();
 						createAI();
+
+						remainingMatchTime = screen.getSelectedGameLength();
+
+						// Set reward multipliers
+						gameLengthScoreMultiplier = (remainingMatchTime == 30) ? 0.4f
+								: (float) (1 + 1.5 * ((remainingMatchTime - 60) / 60));
+						teamDifficultyScoreMultiplier = calculateTeamDifficultyMultiplier();
+						Gdx.app.log("GameOver", "Game Length Multiplier: x"
+								+ gameLengthScoreMultiplier);
 
 						soundManager.play(whistleBlow);
 						playerDatabase.close();
@@ -253,8 +254,9 @@ public class Game extends AbstractGame {
 			Player p = userPlayers.get(i);
 			if (i == 4) {
 				blueGoalie = new Goalie(p.getID(), p.getName(),
-						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
-						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+						p.getShootSpeedBarCount(), p.getRunSpeedBarCount(),
+						p.getTackleSkillBarCount(), p.getSavingSkillBarCount(),
+						p.getTeamID(), p.getPlayerCost());
 				blueGoalie.initialize(this, TeamColour.BLUE);
 			} else {
 				bluePlayers.add(p);
@@ -273,8 +275,9 @@ public class Game extends AbstractGame {
 			Player p = aiPlayers.get(i);
 			if (i == 4) {
 				redGoalie = new Goalie(p.getID(), p.getName(),
-						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
-						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+						p.getShootSpeedBarCount(), p.getRunSpeedBarCount(),
+						p.getTackleSkillBarCount(), p.getSavingSkillBarCount(),
+						p.getTeamID(), p.getPlayerCost());
 				redGoalie.initialize(this, TeamColour.RED);
 			} else {
 				redPlayers.add(p);
@@ -299,11 +302,6 @@ public class Game extends AbstractGame {
 
 		teamA.setTeamName(playerDatabase.getTeamsTableManager()
 				.getTeam(userTeamID).getTeamName());
-		playerDatabase.getTeamsTableManager().alterTeam(teamA);
-
-		teamB = playerDatabase.getTeamsTableManager().getTeam(2);
-		Gdx.app.log("GameDB", "Suceeded assigning Team B");
-
 	}
 
 	private void createMovementCompletedListeners(TeamColour teamColour) {

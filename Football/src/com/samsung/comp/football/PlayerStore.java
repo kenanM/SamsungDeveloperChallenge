@@ -62,7 +62,7 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 
 	protected int fundsDisplay;
 	protected int currentFunds;
-	protected int subtractionVelocity = 4000;
+	protected int subtractionVelocity = 10000;
 	protected Label fundsLabel;
 
 	protected Button backButton;
@@ -267,6 +267,7 @@ public class PlayerStore implements ApplicationListener, InputProcessor,
 
 				// Edit funds display
 				currentFunds -= selectedPlayer.getPlayerCost();
+				subtractionVelocity = selectedPlayer.getPlayerCost() / 2;
 
 			}
 		});

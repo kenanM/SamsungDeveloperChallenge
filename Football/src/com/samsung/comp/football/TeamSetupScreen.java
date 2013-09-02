@@ -118,7 +118,7 @@ public class TeamSetupScreen extends TextArea {
 		TextureRegion switchIconRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("icons/switchIcon.png")));
 
-		Label labelTitle = new Label("Team Setup", skin);
+		Label labelTitle = new Label("Multiplayer", skin);
 
 		java.util.List<Player> allPlayers = dataSource.getPlayersTableManager()
 				.getPlayers(1);
