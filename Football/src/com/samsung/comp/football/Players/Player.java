@@ -63,6 +63,16 @@ public class Player extends Rectangle implements Followable {
 	private int teamID = 0;
 	private int playerCost = 0;
 
+	private static final int minShoot = 350;
+	private static final int minRun = 100;
+	private static final int minTackle = 50;
+	private static final int minSaving = 300;
+
+	private static final int maxShoot = 600;
+	private static final int maxRun = 200;
+	private static final int maxTackle = 100;
+	private static final int maxSaving = 550;
+
 	Vector2[] path;
 	int positionInPath = 0;
 	float rotation;
@@ -87,10 +97,10 @@ public class Player extends Rectangle implements Followable {
 			float tackleSkill, float savingSkill, int teamID, int cost) {
 		this.id = id;
 		this.name = name;
-		this.shootSpeed = shootSpeed;
-		this.runSpeed = runSpeed;
-		this.tackleSkill = tackleSkill;
-		this.savingSkill = savingSkill;
+		this.shootSpeed = minShoot + shootSpeed * getShootSpeedBarValue();
+		this.runSpeed = minRun + runSpeed * getRunSpeedBarValue();
+		this.tackleSkill = minTackle + tackleSkill * getTackleSkillBarValue();
+		this.savingSkill = minSaving + savingSkill * getSavingSkillBarValue();
 		this.teamID = teamID;
 		this.playerCost = cost;
 	}
@@ -500,31 +510,31 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public int getShootSpeedBarCount() {
-		return (int) (shootSpeed / getShootSpeedBarValue());
+		return (int) ((shootSpeed - minShoot) / getShootSpeedBarValue());
 	}
 
 	public int getRunSpeedBarCount() {
-		return (int) (runSpeed / getRunSpeedBarValue());
+		return (int) ((runSpeed - minRun) / getRunSpeedBarValue());
 	}
 
 	public int getTackleSkillBarCount() {
-		return (int) (tackleSkill / getTackleSkillBarValue());
+		return (int) ((tackleSkill - minTackle) / getTackleSkillBarValue());
 	}
 
 	public float getSavingSkillBarCount() {
-		return (int) (savingSkill / getSavingSkillBarValue());
+		return (int) ((savingSkill - minSaving) / getSavingSkillBarValue());
 	}
 
 	public float getShootSpeedBarValue() {
-		return 24;
+		return (maxShoot - minShoot) / 25;
 	}
 
 	public float getRunSpeedBarValue() {
-		return 10;
+		return (maxRun - minRun) / 25;
 	}
 
 	public float getTackleSkillBarValue() {
-		return 4;
+		return (maxTackle - minTackle) / 25;
 	}
 
 	public float getTacklePreventionBarValue() {
@@ -532,7 +542,7 @@ public class Player extends Rectangle implements Followable {
 	}
 
 	public float getSavingSkillBarValue() {
-		return 22;
+		return (maxSaving - minSaving) / 25;
 	}
 
 	public float getShootSpeed() {

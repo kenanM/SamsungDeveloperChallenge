@@ -254,8 +254,9 @@ public class Game extends AbstractGame {
 			Player p = userPlayers.get(i);
 			if (i == 4) {
 				blueGoalie = new Goalie(p.getID(), p.getName(),
-						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
-						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+						p.getShootSpeedBarCount(), p.getRunSpeedBarCount(),
+						p.getTackleSkillBarCount(), p.getSavingSkillBarCount(),
+						p.getTeamID(), p.getPlayerCost());
 				blueGoalie.initialize(this, TeamColour.BLUE);
 			} else {
 				bluePlayers.add(p);
@@ -274,8 +275,9 @@ public class Game extends AbstractGame {
 			Player p = aiPlayers.get(i);
 			if (i == 4) {
 				redGoalie = new Goalie(p.getID(), p.getName(),
-						p.getShootSpeed(), p.getRunSpeed(), p.getTackleSkill(),
-						p.getSavingSkill(), p.getTeamID(), p.getPlayerCost());
+						p.getShootSpeedBarCount(), p.getRunSpeedBarCount(),
+						p.getTackleSkillBarCount(), p.getSavingSkillBarCount(),
+						p.getTeamID(), p.getPlayerCost());
 				redGoalie.initialize(this, TeamColour.RED);
 			} else {
 				redPlayers.add(p);
