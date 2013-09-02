@@ -120,7 +120,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupPassPhase() {
-		beginSetupPhase(4f);
+		beginSetupPhase(2.5f);
 		Player p = new Player(0, 256, TeamColour.BLUE);
 		bluePlayers.add(p);
 
@@ -357,6 +357,7 @@ public class TutorialGame extends AbstractGame {
 			arrows.add(redPush2);
 
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
+
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
 			Arrow ballPush = new Arrow(pushIndicator, ball.getBallX(),
