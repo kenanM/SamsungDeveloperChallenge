@@ -151,7 +151,7 @@ public class TutorialGame extends AbstractGame {
 	}
 
 	private void setupQueuePhase() {
-		beginSetupPhase(3f);
+		beginSetupPhase(2f);
 		Player p = redPlayers.get(0);
 		Player ballOwner = ball.getOwner();
 
@@ -359,7 +359,10 @@ public class TutorialGame extends AbstractGame {
 		} else if (tutorialPhase == TutorialPhase.QUEUEING) {
 
 		} else if (tutorialPhase == TutorialPhase.GOALIE) {
-
+			Arrow ballPush = new Arrow(pushIndicator, ball.getBallX(),
+					ball.getBallY(), arrowTipFactory(pushIndicator));
+			ballPush.follow(ball);
+			arrows.add(ballPush);
 		}
 
 	}
