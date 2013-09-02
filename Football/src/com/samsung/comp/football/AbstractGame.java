@@ -176,6 +176,7 @@ public abstract class AbstractGame implements ApplicationListener,
 	protected Texture redSelectTexture;
 	protected Texture blueSelectTexture;
 	protected float selectTextureStateTime = 0f;
+	protected Texture arrowSelectTexture;
 
 	protected Texture ghostSpriteSheet;
 	protected Animation ghostRunAnimation;
@@ -303,6 +304,8 @@ public abstract class AbstractGame implements ApplicationListener,
 
 		redSelectTexture = new Texture(Gdx.files.internal("redSelect.png"));
 		blueSelectTexture = new Texture(Gdx.files.internal("blueSelect.png"));
+		arrowSelectTexture = new Texture(
+				Gdx.files.internal("selectionArrow.png"));
 
 		ghostSpriteSheet = new Texture(Gdx.files.internal("shadowPlayer.png"));
 		ghostRunAnimation = new Animation(0.10f, Utils.createTextureRegion(
@@ -451,6 +454,7 @@ public abstract class AbstractGame implements ApplicationListener,
 
 			if (selPlayer != null) {
 				selPlayer.drawSelect(batch, selectTextureStateTime);
+				drawSelectChevron(selPlayer);
 				drawTimeLinePoints(selPlayer);
 				drawGhost(selPlayer, ghostStateTime);
 			}
@@ -479,6 +483,32 @@ public abstract class AbstractGame implements ApplicationListener,
 			ball.draw(batch);
 		}
 		batch.end();
+	}
+
+	private void drawSelectChevron(Player selPlayer) {
+		// Converts the state time into a scale between 0 and 1
+		// using a cosine wave. Draws the selection chevron above
+		// the player.
+		double spinSpeed = selectTextureStateTime * 2;
+		double scaleDouble = (Math.abs(Math.cos(spinSpeed)));
+		float scale = (float) (scaleDouble);
+
+		double bounceSpeed = selectTextureStateTime * 1.5;
+		double yOffsetFactorDouble = (Math.abs(Math.cos(bounceSpeed)));
+		float yOffsetFactor = (float) (yOffsetFactorDouble);
+
+		float textureWidth = arrowSelectTexture.getWidth() * scale;
+		float textureX = selPlayer.getPlayerX() - textureWidth / 2;
+		float yOffset = yOffsetFactor * 64;
+		float textureY = selPlayer.getPlayerY()
+				- arrowSelectTexture.getHeight() - (yOffset);
+
+		batch.draw(arrowSelectTexture, textureX, textureY,
+				(arrowSelectTexture.getWidth() / 2) * scale,
+				arrowSelectTexture.getHeight() / 2, textureWidth,
+				arrowSelectTexture.getHeight(), scale, 1, 0, 0, 0,
+				arrowSelectTexture.getWidth(), arrowSelectTexture.getHeight(),
+				false, true);
 	}
 
 	public void drawTimeLinePoints(Player player) {
@@ -1258,6 +1288,11 @@ public abstract class AbstractGame implements ApplicationListener,
 		for (Player player : getAllPlayers()) {
 			player.dispose();
 		}
+
+		arrowSelectTexture.dispose();
+		redSelectTexture.dispose();
+		blueSelectTexture.dispose();
+
 		Ball.dispose();
 		Kick.dispose();
 		Move.dispose();
