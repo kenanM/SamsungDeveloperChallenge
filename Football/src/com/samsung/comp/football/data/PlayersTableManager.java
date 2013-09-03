@@ -91,8 +91,49 @@ public class PlayersTableManager {
 				new Goalie(0, "Rory", 1, 2, 1, 3, 1, 0),
 
 				// Player Store (Team ID 2)
-				new Player(0, "A", 4, 2, 1, 1, 2, 30000),
-				new Goalie(0, "B", 3, 2, 1, 1, 2, 20000),
+				new Player(0, "Harvey", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Aaron", 3, 2, 1, 1, 2, 20000),
+				new Player(0, "Dirty Harry", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Will", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Joules", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Tristan", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "'Cannon Ball' Jake", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "'Lucky'", 7, 7, 7, 7, 2, 30000),
+				new Player(0, "Simon", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Jonathan", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Neil", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Nicholas", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Nick", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Chinese Dave", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Oswald", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Cecil", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Victor", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Quinten", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Alex", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Abel", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "'Cyclone' Seth", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Leo", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Howard", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Geoff", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Mike", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Peter", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "'Quick Shot' Bart", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Chris", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Lee", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Zidane", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Russel", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Nick", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Ken", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "'Rampage' Rufus", 4, 2, 1, 1, 2, 30000),
+
+				new Player(0, "Alex", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "'Apples'", 4, 2, 1, 1, 2, 30000),
 
 				// The Barnsbury Blunderers (Team ID 3)
 				new Player(0, "Luke", 2, 1, 1, 1, 3, 2000),
@@ -102,18 +143,18 @@ public class PlayersTableManager {
 				new Goalie(0, "Amiable Andy", 1, 1, 4, 1, 3, 2000),
 
 				// Scouting for goals (Team ID 4)
-				new Player(0, "Oliver", 520.0f, 150.0f, 100.0f, 420.0f, 4, 2000),
-				new Player(0, "Madman Max", 540.0f, 200.0f, 80.0f, 380.0f, 4, 2000),
-				new Player(0, "Tiny Tom", 550.0f, 100.0f, 100.0f, 420.0f, 4, 2000),
-				new Player(0, "Fred", 530.0f, 150.0f, 80.0f, 420.0f, 4, 2000),
-				new Goalie(0, "David", 520.0f, 150.0f, 100.0f, 500.0f, 4, 2000),
+				new Player(0, "Oliver", 8, 1, 1, 1, 2000),
+				new Player(0, "Madman Max", 4, 4, 1, 1, 4, 2000),
+				new Player(0, "Tiny Tom", 3, 5, 2, 1, 4, 2000),
+				new Player(0, "Fred", 5, 3, 3, 1, 4, 2000),
+				new Goalie(0, "David", 1, 8, 8, 1, 4, 2000),
 
 				// Goal Direction (Team ID 5)
-				new Player(0, "Krazy Kevin", 520.0f, 150.0f, 100.0f, 420.0f, 5, 2000),
-				new Player(0, "Aiden", 540.0f, 200.0f, 80.0f, 380.0f, 5, 2000),
-				new Player(0, "Ryan", 550.0f, 100.0f, 100.0f, 420.0f, 5, 2000),
-				new Player(0, "Scott", 530.0f, 150.0f, 80.0f, 420.0f, 5, 2000),
-				new Goalie(0, "Matthew", 520.0f, 150.0f, 100.0f, 500.0f, 5, 2000),
+				new Player(0, "Krazy Kevin", 7, 7, 7, 4, 5, 2000),
+				new Player(0, "Aiden", 540.0f, 5, 80.0f, 5, 5, 2000),
+				new Player(0, "Ryan", 550.0f, 5, 100.0f, 2, 5, 2000),
+				new Player(0, "Scott", 530.0f, 150.0f, 10, 3, 5, 2000),
+				new Goalie(0, "Matthew", 10, 1, 10, 10, 5, 2000),
 
 				// Random Rovers (Team ID 6)
 				new Player(0, "Mad Michael", 520.0f, 150.0f, 100.0f, 420.0f, 6, 2000),
