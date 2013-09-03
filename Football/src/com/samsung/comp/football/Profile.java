@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import com.samsung.comp.precisionfootball.R;
+
 public class Profile {
 
 	protected int profileID;

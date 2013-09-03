@@ -11,6 +11,7 @@ import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.data.PlayerDataSource;
+import com.samsung.comp.precisionfootball.R;
 
 public class MultiplayerGame extends AbstractGame {
 

@@ -1,6 +1,7 @@
 package com.samsung.comp.football;
 
 import com.badlogic.gdx.math.Vector2;
+import com.samsung.comp.precisionfootball.R;
 
 public class PlayerPositionData {
 

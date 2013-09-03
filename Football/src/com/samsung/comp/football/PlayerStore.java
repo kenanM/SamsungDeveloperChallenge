@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.data.PlayerDataSource;
+import com.samsung.comp.precisionfootball.R;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public class PlayerStore implements ApplicationListener, InputProcessor,

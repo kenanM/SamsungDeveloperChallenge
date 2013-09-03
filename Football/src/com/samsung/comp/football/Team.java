@@ -1,5 +1,7 @@
 package com.samsung.comp.football;
 
+import com.samsung.comp.precisionfootball.R;
+
 public class Team {
 
 	private int teamID = 0;

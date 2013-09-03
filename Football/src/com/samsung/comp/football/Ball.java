@@ -13,6 +13,7 @@ import com.samsung.comp.events.BallOwnerSetListener;
 import com.samsung.comp.football.Actions.Followable;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.precisionfootball.R;
 
 public class Ball extends Rectangle implements Followable {
 

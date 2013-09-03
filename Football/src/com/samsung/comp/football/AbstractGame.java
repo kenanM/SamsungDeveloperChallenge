@@ -42,6 +42,7 @@ import com.samsung.comp.football.Players.Goalie;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
 import com.samsung.comp.football.data.PlayerDataSource;
+import com.samsung.comp.precisionfootball.R;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 
 public abstract class AbstractGame implements ApplicationListener,

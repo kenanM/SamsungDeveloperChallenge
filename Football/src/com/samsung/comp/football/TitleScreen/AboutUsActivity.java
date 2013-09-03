@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.samsung.comp.football.R;
+import com.samsung.comp.precisionfootball.R;
 
 public class AboutUsActivity extends Activity {
 

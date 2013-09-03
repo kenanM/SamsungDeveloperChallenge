@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.samsung.comp.football.AbstractGame.GameState;
+import com.samsung.comp.precisionfootball.R;
 
 public class Bar extends Rectangle {
 

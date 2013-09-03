@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.samsung.comp.precisionfootball.R;
 
 
 public class NullTextArea extends TextArea {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.precisionfootball.R;
 
 public class Squad {
 

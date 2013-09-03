@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.precisionfootball.R;
 
 public class Goal extends Rectangle {
 

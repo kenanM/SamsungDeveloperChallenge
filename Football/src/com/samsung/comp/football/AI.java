@@ -18,6 +18,7 @@ import com.samsung.comp.football.Actions.Pass;
 import com.samsung.comp.football.Actions.Utils;
 import com.samsung.comp.football.Players.Player;
 import com.samsung.comp.football.Players.Player.TeamColour;
+import com.samsung.comp.precisionfootball.R;
 
 public class AI {
 

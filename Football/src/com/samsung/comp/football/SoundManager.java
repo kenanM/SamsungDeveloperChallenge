@@ -3,6 +3,7 @@ package com.samsung.comp.football;
 import android.media.AudioManager;
 
 import com.badlogic.gdx.audio.Sound;
+import com.samsung.comp.precisionfootball.R;
 
 public class SoundManager {
 

@@ -11,7 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
 
-import com.samsung.comp.football.R;
+import com.samsung.comp.precisionfootball.R;
 
 public class InstructionsActivity extends Activity {
 

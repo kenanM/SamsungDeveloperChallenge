@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.samsung.comp.football.Players.Player;
+import com.samsung.comp.precisionfootball.R;
 
 public class StatsDisplay extends Rectangle {
 

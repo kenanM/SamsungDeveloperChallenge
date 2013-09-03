@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.samsung.comp.football.Actions.Followable;
+import com.samsung.comp.precisionfootball.R;
 
 public class Arrow extends Rectangle {
 	protected Texture texture;
