@@ -134,6 +134,7 @@ public class PlayersTableManager {
 
 				new Player(0, "Alex", 4, 2, 1, 1, 2, 30000),
 				new Player(0, "'Apples'", 4, 2, 1, 1, 2, 30000),
+				new Player(0, "Louis", 4, 2, 1, 1, 2, 30000),
 
 				// The Barnsbury Blunderers (Team ID 3)
 				new Player(0, "Luke", 2, 1, 1, 1, 3, 2000),
@@ -143,60 +144,60 @@ public class PlayersTableManager {
 				new Goalie(0, "Amiable Andy", 1, 1, 4, 1, 3, 2000),
 
 				// Scouting for goals (Team ID 4)
-				new Player(0, "Oliver", 8, 1, 1, 1, 2000),
-				new Player(0, "Madman Max", 4, 4, 1, 1, 4, 2000),
-				new Player(0, "Tiny Tom", 3, 5, 2, 1, 4, 2000),
-				new Player(0, "Fred", 5, 3, 3, 1, 4, 2000),
+				new Player(0, "Oliver", 8, 5, 5, 7, 4, 2000),
+				new Player(0, "Madman Max", 7, 6, 6, 6, 4, 2000),
+				new Player(0, "Tiny Tom", 3, 9, 6, 5, 4, 2000),
+				new Player(0, "Fred", 5, 5, 10, 8, 4, 2000),
 				new Goalie(0, "David", 1, 8, 8, 1, 4, 2000),
 
 				// Goal Direction (Team ID 5)
-				new Player(0, "Krazy Kevin", 7, 7, 7, 4, 5, 2000),
-				new Player(0, "Aiden", 540.0f, 5, 80.0f, 5, 5, 2000),
-				new Player(0, "Ryan", 550.0f, 5, 100.0f, 2, 5, 2000),
-				new Player(0, "Scott", 530.0f, 150.0f, 10, 3, 5, 2000),
+				new Player(0, "Krazy Kevin", 11, 11, 6, 4, 5, 2000),
+				new Player(0, "Aiden", 5, 9, 2, 9, 5, 2000),
+				new Player(0, "Ryan", 8, 8, 8, 9, 5, 2000),
+				new Player(0, "Scott", 8, 6, 6, 7, 5, 2000),
 				new Goalie(0, "Matthew", 10, 1, 10, 10, 5, 2000),
 
 				// Random Rovers (Team ID 6)
-				new Player(0, "Mad Michael", 520.0f, 150.0f, 100.0f, 420.0f, 6, 2000),
-				new Player(0, "Riley", 540.0f, 200.0f, 80.0f, 380.0f, 6, 2000),
-				new Player(0, "Ben", 550.0f, 100.0f, 100.0f, 420.0f, 6, 2000),
-				new Player(0, "Dylan", 530.0f, 150.0f, 80.0f, 420.0f, 6, 2000),
-				new Goalie(0, "Frank", 520.0f, 150.0f, 100.0f, 500.0f, 6, 2000),
+				new Player(0, "Mad Michael", 15, 7, 15, 10, 6, 2000),
+				new Player(0, "Riley", 11, 14, 8, 12, 6, 2000),
+				new Player(0, "Ben", 7, 11, 12, 9, 6, 2000),
+				new Player(0, "Dylan", 13, 8, 16, 6, 6, 2000),
+				new Goalie(0, "Frank", 10, 12, 11, 12, 6, 2000),
 
-				// Real Reunited (Team ID 7)
-				new Player(0, "Angry Adam ", 520.0f, 150.0f, 100.0f, 420.0f, 7, 2000),
-				new Player(0, "James ", 540.0f, 200.0f, 80.0f, 380.0f, 7, 2000),
-				new Player(0, "William", 550.0f, 100.0f, 100.0f, 420.0f, 7, 2000),
-				new Player(0, "Zain", 530.0f, 150.0f, 80.0f, 420.0f, 7, 2000),
-				new Goalie(0, "David", 520.0f, 150.0f, 100.0f, 500.0f, 7, 2000),
+				// Real Reunited (Team ID 7) - Medium Difficulty, stats 15+
+				new Player(0, "Angry Adam ", 18, 16, 19, 15, 7, 2000),
+				new Player(0, "James ", 15, 19, 15, 15, 7, 2000),
+				new Player(0, "William", 15, 15, 19, 15, 7, 2000),
+				new Player(0, "Zain", 15, 16, 21, 19, 7, 2000),
+				new Goalie(0, "David", 18, 20, 19, 8, 7, 2000),
 
 				// Fake Madrid (Team ID 8)
-				new Player(0, "Troubled Trevor", 520.0f, 150.0f, 100.0f, 420.0f, 8, 2000),
-				new Player(0, "Felix", 540.0f, 200.0f, 80.0f, 380.0f, 8, 2000),
-				new Player(0, "Nathan", 550.0f, 100.0f, 100.0f, 420.0f, 8, 2000),
-				new Player(0, "Trevor", 530.0f, 150.0f, 80.0f, 420.0f, 8, 2000),
-				new Goalie(0, "Louis", 520.0f, 150.0f, 100.0f, 500.0f, 8, 2000),
+				new Player(0, "Guy", 15, 20, 16, 15, 8, 2000),
+				new Player(0, "Felix", 16, 18, 17, 15, 8, 2000),
+				new Player(0, "Nathan", 17, 17, 16, 16, 8, 2000),
+				new Player(0, "Trevor", 16, 16, 18, 18, 8, 2000),
+				new Goalie(0, "Big Steve", 17, 11, 20, 21, 8, 2000),
 
 				// Men Reunited (Team ID 9)
-				new Player(0, "Naughty Nev", 520.0f, 150.0f, 100.0f, 420.0f, 9, 2000),
-				new Player(0, "Harry", 540.0f, 200.0f, 80.0f, 380.0f, 9, 2000),
-				new Player(0, "Jack", 550.0f, 100.0f, 100.0f, 420.0f, 9, 2000),
-				new Player(0, "Charlie", 530.0f, 150.0f, 80.0f, 420.0f, 9, 2000),
-				new Goalie(0, "Jacob", 520.0f, 150.0f, 100.0f, 500.0f, 9, 2000),
+				new Player(0, "Naughty Nev", 19, 21, 17, 15, 9, 2000),
+				new Player(0, "Harry", 18, 22, 16, 16, 9, 2000),
+				new Player(0, "Jack", 19, 21, 18, 15, 9, 2000),
+				new Player(0, "Charlie", 19, 20, 16, 15, 9, 2000),
+				new Goalie(0, "Jacob", 23, 19, 19, 20, 9, 2000),
 
 				// Malden Mavericks (Team ID 10)
-				new Player(0, "Guy", 520.0f, 150.0f, 100.0f, 420.0f, 10, 2000),
-				new Player(0, "Ross", 540.0f, 200.0f, 80.0f, 380.0f, 10, 2000),
-				new Player(0, "Michael", 550.0f, 100.0f, 100.0f, 420.0f, 10, 2000),
-				new Player(0, "Henry", 530.0f, 150.0f, 80.0f, 420.0f, 10, 2000),
-				new Goalie(0, "Richard", 520.0f, 150.0f, 100.0f, 500.0f, 10, 2000),
+				new Player(0, "Troubled Trevor", 25, 15, 19, 20, 10, 2000),
+				new Player(0, "Ross", 24, 15, 21, 15, 10, 2000),
+				new Player(0, "Michael", 15, 21, 21, 21, 10, 2000),
+				new Player(0, "Henry", 15, 21, 25, 15, 10, 2000),
+				new Goalie(0, "Richard", 15, 22, 25, 21, 10, 2000),
 
 				// Team Null (Team ID 11)
-				new Player(0, "Gavin the Great", 520.0f, 150.0f, 100.0f, 420.0f, 11, 2000),
-				new Player(0, "Kenan the Koder", 540.0f, 200.0f, 80.0f, 380.0f, 11, 2000),
-				new Player(0, "Liz la Artiste", 550.0f, 100.0f, 100.0f, 420.0f, 11, 2000),
-				new Player(0, "Allan the Tackler", 530.0f, 150.0f, 80.0f, 420.0f, 11, 2000),
-				new Goalie(0, "Stephen the Swift", 520.0f, 150.0f, 100.0f, 500.0f, 11, 2000)};
+				new Player(0, "Gavin the Great", 24, 25, 21, 20, 11, 2000),
+				new Player(0, "Kenan the Koder", 21, 23, 21, 23, 11, 2000),
+				new Player(0, "Liz la Artiste", 21, 24, 22, 25, 11, 2000),
+				new Player(0, "Allan the Tackler", 21, 25, 25, 21, 11, 2000),
+				new Goalie(0, "Stephen the Swift", 21, 25, 21, 25, 11, 2000) };
 		
 		for (Player player : players) {
 			insertPlayer(database, player);
