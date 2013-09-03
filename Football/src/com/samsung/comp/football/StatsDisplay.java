@@ -109,6 +109,18 @@ public class StatsDisplay extends Rectangle {
 		String costString = "Player Cost: " + player.getPlayerCost();
 		bmf.draw(batch, costString, x + xOffset, y + 5 + textHeight);
 
+		bmf.draw(batch, "Run", x + this.width - 100, y + 5 + 0 * textHeight + 2
+				* statSavingIcon.getHeight());
+
+		bmf.draw(batch, "Shoot", x + this.width - 100, y + 5 + 1 * textHeight
+				+ 2 * statSavingIcon.getHeight());
+
+		bmf.draw(batch, "Tackle", x + this.width - 100, y + 5 + 2 * textHeight
+				+ 2 * statSavingIcon.getHeight());
+
+		bmf.draw(batch, "Reactions", x + this.width - 100, y + 5 + 3
+				* textHeight + 2 * statSavingIcon.getHeight());
+
 		batch.draw(statRunIcon, x + xOffset, y + 2 * textHeight, 0, 0,
 				statRunIcon.getWidth(), statRunIcon.getHeight(), 1, 1, 0, 0, 0,
 				statRunIcon.getWidth(), statRunIcon.getHeight(), false, flip);
