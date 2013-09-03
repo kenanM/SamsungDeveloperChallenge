@@ -125,13 +125,14 @@ public class TeamSetupScreen extends TextArea {
 
 		fieldedPlayersList = new ArrayList<Player>();
 		benchedPlayersList = new ArrayList<Player>();
+		int i = 0;
 		for (Player player : allPlayers) {
-			int i = 0;
 			if (i < 5) {
 				fieldedPlayersList.add(player);
 			} else {
 				benchedPlayersList.add(player);
 			}
+			i++;
 		}
 
 		playerTeam = null;
