@@ -94,7 +94,7 @@ public class SquadsTableManager {
 	}
 
 	private static void addDefaultSquads(SQLiteDatabase database) {
-		insertSquad(database, 1, 6, 7, 8, 9, 10);
+		insertSquad(database, 1, 1, 2, 3, 4, 5);
 	}
 
 	private static long insertSquad(SQLiteDatabase database, Squad squad) {

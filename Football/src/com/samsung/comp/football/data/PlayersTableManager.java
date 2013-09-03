@@ -84,22 +84,22 @@ public class PlayersTableManager {
 
 				
 				// Human 1 (Team ID 1)
-				new Player(0, "Donald", 520.0f, 150.0f, 100.0f, 420.0f, 1, 0),
-				new Player(0, "Bobby", 540.0f, 200.0f, 80.0f, 380.0f, 1, 0),
-				new Player(0, "Dexter", 550.0f, 100.0f, 100.0f, 420.0f, 1, 0),
-				new Player(0, "Edward", 530.0f, 150.0f, 80.0f, 420.0f, 1, 0),
-				new Goalie(0, "Rory", 520.0f, 150.0f, 100.0f, 500.0f, 1, 0),
+				new Player(0, "Donald", 1, 4, 1, 1, 1, 0),
+				new Player(0, "Bobby", 1, 2, 2, 1, 1, 0),
+				new Player(0, "Dexter", 1, 3, 1, 1, 1, 0),
+				new Player(0, "Edward", 1, 3, 3, 1, 1, 0),
+				new Goalie(0, "Rory", 1, 2, 1, 3, 1, 0),
 
 				// Player Store (Team ID 2)
-				new Player(0, "A", 530.0f, 150.0f, 80.0f, 420.0f, 2, 30000),
-				new Goalie(0, "B", 520.0f, 150.0f, 100.0f, 500.0f, 2, 20000),
+				new Player(0, "A", 4, 2, 1, 1, 2, 30000),
+				new Goalie(0, "B", 3, 2, 1, 1, 2, 20000),
 
 				// The Barnsbury Blunderers (Team ID 3)
-				new Player(0, "Luke", 520.0f, 150.0f, 100.0f, 420.0f, 3, 2000),
-				new Player(0, "Billy", 540.0f, 200.0f, 80.0f, 380.0f, 3, 2000),
-				new Player(0, "Alfie", 550.0f, 100.0f, 100.0f, 420.0f, 3, 2000),
-				new Player(0, "Owen", 530.0f, 150.0f, 80.0f, 420.0f, 3, 2000),
-				new Goalie(0, "Amiable Andy", 520.0f, 150.0f, 100.0f, 500.0f, 3, 2000),
+				new Player(0, "Luke", 2, 1, 1, 1, 3, 2000),
+				new Player(0, "Billy", 2, 1, 1, 1, 3, 2000),
+				new Player(0, "Alfie", 1, 2, 1, 1, 3, 2000),
+				new Player(0, "Owen", 1, 3, 3, 1, 3, 2000),
+				new Goalie(0, "Amiable Andy", 1, 1, 4, 1, 3, 2000),
 
 				// Scouting for goals (Team ID 4)
 				new Player(0, "Oliver", 520.0f, 150.0f, 100.0f, 420.0f, 4, 2000),
@@ -129,7 +129,7 @@ public class PlayersTableManager {
 				new Player(0, "Zain", 530.0f, 150.0f, 80.0f, 420.0f, 7, 2000),
 				new Goalie(0, "David", 520.0f, 150.0f, 100.0f, 500.0f, 7, 2000),
 
-				// Real aphid (Team ID 8)
+				// Fake Madrid (Team ID 8)
 				new Player(0, "Troubled Trevor", 520.0f, 150.0f, 100.0f, 420.0f, 8, 2000),
 				new Player(0, "Felix", 540.0f, 200.0f, 80.0f, 380.0f, 8, 2000),
 				new Player(0, "Nathan", 550.0f, 100.0f, 100.0f, 420.0f, 8, 2000),

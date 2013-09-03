@@ -67,15 +67,16 @@ public class TeamsTableManager {
 
 		Team[] teams = { 
 				new Team(0, 2, "Unnamed Team", 1),
-				new Team(0, 3, "The Store", 1),
-				new Team(0, 3, "Barnsbury Blunderers", 1),
-				new Team(0, 4, "Scouting for goals", 1),
-				new Team(0, 5, "Goal Direction", 1),
-				new Team(0, 6, "Random Rovers", 1),
-				new Team(0, 7, "Real Reunited", 2),
-				new Team(0, 8, "Fake Madrid", 2),
-				new Team(0, 9, "Malden Mavericks", 2),
-				new Team(0, 10, "Team Null", 3) };
+				new Team(0, 1, "The Store", 1),
+				new Team(0, 1, "Barnsbury Blunderers", 1),
+				new Team(0, 1, "Scouting for goals", 1),
+				new Team(0, 1, "Goal Direction", 1),
+				new Team(0, 1, "Random Rovers", 1),
+				new Team(0, 1, "Real Reunited", 2),
+				new Team(0, 1, "Fake Madrid", 2),
+				new Team(0, 1, "Men Reunited", 2),
+				new Team(0, 1, "Malden Mavericks", 2),
+				new Team(0, 1, "Team Null", 3) };
 		for (Team team : teams) {
 			insertTeam(database, team);
 		}
