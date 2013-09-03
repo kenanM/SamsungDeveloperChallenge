@@ -91,62 +91,62 @@ public class PlayersTableManager {
 				new Goalie(0, "Rory", 1, 2, 1, 3, 1, 0),
 
 				// Player Store (Team ID 2)
-				// Stats 1-10
-				new Player(0, "Harvey", 5, 6, 2, 2, 2, 30000),
-				new Player(0, "Aaron", 1, 9, 3, 1, 2, 20000),
-				new Player(0, "Dirty Harry", 3, 2, 10, 2, 2, 30000),
-				new Player(0, "Will", 2, 7, 9, 2, 2, 30000),
-				new Player(0, "Joules", 1, 1, 1, 10, 2, 30000),
+				// Stats 1-10 (10 - 20K)
+				new Player(0, "Harvey", 5, 6, 2, 2, 2, 19100),
+				new Player(0, "Aaron", 1, 9, 3, 1, 2, 19000),
+				new Player(0, "Dirty Harry", 3, 2, 10, 2, 2, 12000),
+				new Player(0, "Will", 2, 7, 9, 2, 2, 10800),
+				new Player(0, "Joules", 1, 1, 1, 10, 2, 8000),
 
-				// Stats 5-10
-				new Player(0, "Tristan", 10, 9, 5, 5, 2, 30000),
-				new Player(0, "'Lucky'", 7, 7, 7, 7, 2, 30000),
-				new Player(0, "Simon", 5, 5, 5, 5, 9, 30000),
-				new Player(0, "'Jester'", 1, 9, 8, 5, 2, 30000),
-				new Player(0, "Joey", 4, 9, 5, 7, 2, 30000),
+				// Stats 5-10 (20 - 40K)
+				new Player(0, "Tristan", 10, 9, 5, 5, 2, 39300),
+				new Player(0, "'Lucky'", 7, 7, 7, 7, 2, 35000),
+				new Player(0, "Simon", 5, 5, 5, 5, 9, 25200),
+				new Player(0, "'Jester'", 1, 9, 8, 5, 2, 30100),
+				new Player(0, "Joey", 4, 9, 5, 7, 2, 30600),
 
-				// Stats 5-15
-				new Player(0, "Jonathan", 14, 8, 6, 9, 2, 30000),
-				new Player(0, "Neil", 12, 11, 6, 7, 2, 30000),
-				new Player(0, "Nicholas", 5, 12, 15, 9, 2, 30000),
-				new Player(0, "Nick", 13, 5, 15, 14, 2, 30000),
-				new Player(0, "Chinese Dave", 8, 12, 10, 12, 2, 30000),
+				// Stats 5-15 (40 - 60K)
+				new Player(0, "Jonathan", 14, 8, 6, 9, 2, 48200),
+				new Player(0, "Neil", 12, 11, 6, 7, 2, 44100),
+				new Player(0, "Nicholas", 5, 12, 15, 9, 2, 51000),
+				new Player(0, "Nick", 13, 5, 15, 14, 2, 42200),
+				new Player(0, "Chinese Dave", 8, 12, 10, 12, 2, 45000),
 
-				// Stats 10-15
-				new Player(0, "Oswald", 15, 11, 10, 10, 2, 30000),
-				new Player(0, "Cecil", 10, 15, 10, 11, 2, 30000),
-				new Player(0, "Victor", 12, 12, 13, 13, 2, 30000),
-				new Player(0, "Quinten", 15, 10, 15, 15, 2, 30000),
-				new Player(0, "Ajay", 10, 13, 11, 15, 2, 30000),
+				// Stats 10-15 (60 - 80K)
+				new Player(0, "Oswald", 15, 11, 10, 10, 2, 65000),
+				new Player(0, "Cecil", 10, 15, 10, 11, 2, 76700),
+				new Player(0, "Victor", 12, 12, 13, 13, 2, 67800),
+				new Player(0, "Quinten", 15, 10, 15, 15, 2, 65000),
+				new Player(0, "Ajay", 10, 13, 11, 15, 2, 71500),
 
-				// Stats 10-20
-				new Player(0, "Abel", 18, 13, 10, 14, 2, 30000),
-				new Player(0, "Leo", 15, 16, 12, 12, 2, 30000),
-				new Player(0, "Howard", 11, 15, 19, 13, 2, 30000),
-				new Player(0, "Geoff", 10, 20, 15, 12, 2, 30000),
-				new Player(0, "'Cyclone' Seth", 20, 20, 20, 16, 2, 30000),
+				// Stats 10-20 (80 - 100K)
+				new Player(0, "Abel", 18, 13, 10, 14, 2, 83500),
+				new Player(0, "Leo", 15, 16, 12, 12, 2, 95400),
+				new Player(0, "Howard", 11, 15, 19, 13, 2, 81600),
+				new Player(0, "Geoff", 10, 20, 15, 12, 2, 87200),
+				new Player(0, "'Cyclone' Seth", 20, 20, 20, 16, 2, 100000),
 
-				// Stats 15-20
-				new Player(0, "'Quick Shot' Bart", 20, 20, 15, 15, 2, 30000),
-				new Player(0, "Peter", 16, 17, 19, 15, 2, 30000),
-				new Player(0, "Mike", 15, 16, 19, 18, 2, 30000),
-				new Player(0, "Chris", 15, 18, 19, 19, 2, 30000),
-				new Player(0, "Lee", 15, 18, 16, 20, 2, 30000),
+				// Stats 15-20 (100 - 120K)
+				new Player(0, "'Quick Shot' Bart", 20, 20, 15, 15, 2, 118000),
+				new Player(0, "Peter", 16, 17, 19, 15, 2, 114200),
+				new Player(0, "Mike", 15, 16, 19, 18, 2, 103900),
+				new Player(0, "Chris", 15, 18, 19, 19, 2, 112200),
+				new Player(0, "Lee", 15, 18, 16, 20, 2, 105200),
 
-				// Stats 15-25
-				new Player(0, "Russel", 24, 17, 16, 16, 2, 30000),
-				new Player(0, "Zidane", 18, 23, 18, 19, 2, 30000),
-				new Player(0, "Nick", 18, 18, 24, 21, 2, 30000),
-				new Player(0, "'Rampage' Rufus", 16, 22, 25, 15, 2, 30000),
-				new Player(0, "Ken", 19, 21, 15, 22, 2, 30000),
+				// Stats 15-25 (120 - 140K)
+				new Player(0, "Russel", 24, 17, 16, 16, 2, 130400),
+				new Player(0, "Zidane", 18, 23, 18, 19, 2, 135400),
+				new Player(0, "Nick", 18, 18, 24, 21, 2, 124400),
+				new Player(0, "'Rampage' Rufus", 16, 22, 25, 15, 2, 135900),
+				new Player(0, "Ken", 19, 21, 15, 22, 2, 128000),
 
-				// Stats 20+
-				new Player(0, "'Cannon Ball' Jake", 25, 25, 20, 20, 2, 30000),
-				new Player(0, "Alex", 25, 22, 20, 21, 2, 30000),
-				new Player(0, "Lance", 25, 20, 21, 23, 2, 30000),
-				new Player(0, "'Apples'", 22, 24, 22, 22, 2, 30000),
-				new Player(0, "Louis", 20, 21, 25, 24, 2, 30000),
-				new Player(0, "Rick", 20, 25, 20, 25, 2, 30000),
+				// Stats 20+ (140 - 160K)
+				new Player(0, "'Cannon Ball' Jake", 25, 25, 20, 20, 2, 160000),
+				new Player(0, "Alex", 25, 22, 20, 21, 2, 159000),
+				new Player(0, "Lance", 25, 20, 21, 23, 2, 158000),
+				new Player(0, "'Apples'", 22, 24, 22, 22, 2, 157000),
+				new Player(0, "Louis", 20, 21, 25, 24, 2, 156000),
+				new Player(0, "Rick", 20, 25, 20, 25, 2, 155000),
 
 				// The Barnsbury Blunderers (Team ID 3)
 				new Player(0, "Luke", 2, 1, 1, 1, 3, 2000),
